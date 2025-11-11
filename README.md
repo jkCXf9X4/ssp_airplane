@@ -1,28 +1,28 @@
 # ssp_airplane
 
-This is a reference SSP of an aircraft
+This repository tracks an SSP for a loyal-wingman style autonomous drone modeled after MQ-28 / Hellsing CA-1 concepts.
 
 # System requirements:
-- it should be equivalent size and shape of a Boing 737
-- it should be using nuclear power for propulsion
-- it should be able to fly london to Beijing without refueling
-- it should be used to optimize the wing area, motor size and carrying capacity
+- MQ-28 class geometry (≈11.7 m length, 7.3 m span) to operate as a loyal wingman
+- Conventional turbofan propulsion with generator support for avionics
+- Accepts pilot-style (game/simulator) control inputs while still supporting an onboard autopilot
+- Optimization focuses on range, loiter/escort scenarios, and payload configuration
 
 # Architecture
 The architecture is captured as SysML v2 textual notation in `architecture/aircraft_architecture.sysml`.  
-This file is parsed with [PySysML2](https://github.com/DAF-Digital-Transformation-Office/PySysML2) and serves as the single source of truth for system composition, connections, and analysis parameters.
+This file is parsed with [PySysML2](https://github.com/DAF-Digital-Transformation-Office/PySysML2) and serves as the single source of truth for the drone's composition (airframe, wings, turbofan propulsion, mission computer, control interface, power system, autopilot), connections, and scenario-planning parameters.
 
 ## Components
 
 The system is defined on a high level of abstraction with low fidelity models
 It contains models for:
- - fuselage
- - reactor
- - wings
- - motors
- - controlling sw 
- - autopilot
- - electric system
+ - composite airframe
+ - adaptive wing system
+ - turbofan propulsion module
+ - mission computer with manual + autonomy inputs
+ - optional autopilot module
+ - power distribution system
+ - control interface for HOTAS / gamepad style inputs
 
 # Build
 
@@ -30,9 +30,7 @@ all sub-systems are to be exported into into Functional mockup units, FMUs. Pack
 
 ## Models
 
-All models are build in modelica nd compiled using OpenModelica compiler, omc
-
-These are located under the folder /models
+All subsystem FMUs are generated from the `models/WingmanDrone` Modelica package using the OpenModelica compiler (`omc`).
 
 ## The SSD
 

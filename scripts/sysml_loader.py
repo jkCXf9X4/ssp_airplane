@@ -9,25 +9,25 @@ from pysysml2.modeling import Model
 
 # Map SysML part names to their canonical component identifiers.
 COMPONENT_ID_MAP: Dict[str, str] = {
-    "SSP_Airframe": "comp.airframe",
-    "Fuselage": "comp.fuselage",
-    "ReactorCore": "comp.reactor",
-    "WingSystem": "comp.wings",
-    "MotorArray": "comp.motors",
-    "ControlSoftware": "comp.control_sw",
+    "WingmanDrone": "comp.airframe",
+    "CompositeAirframe": "comp.fuselage",
+    "TurbofanPropulsion": "comp.propulsion",
+    "AdaptiveWingSystem": "comp.wings",
+    "MissionComputer": "comp.mission_computer",
     "AutopilotModule": "comp.autopilot",
-    "ElectricalSystem": "comp.electrical",
+    "PowerSystem": "comp.power",
+    "ControlInterface": "comp.control_interface",
 }
 
 # Map SysML part names to Modelica classes used when sourcing FMUs.
 MODEL_CLASS_MAP: Dict[str, str] = {
-    "Fuselage": "SSPAirplane.Fuselage",
-    "ReactorCore": "SSPAirplane.ReactorCore",
-    "WingSystem": "SSPAirplane.WingSystem",
-    "MotorArray": "SSPAirplane.MotorArray",
-    "ControlSoftware": "SSPAirplane.ControlSoftware",
-    "AutopilotModule": "SSPAirplane.AutopilotModule",
-    "ElectricalSystem": "SSPAirplane.ElectricalSystem",
+    "CompositeAirframe": "WingmanDrone.CompositeAirframe",
+    "TurbofanPropulsion": "WingmanDrone.TurbofanPropulsion",
+    "AdaptiveWingSystem": "WingmanDrone.AdaptiveWingSystem",
+    "MissionComputer": "WingmanDrone.MissionComputer",
+    "AutopilotModule": "WingmanDrone.AutopilotModule",
+    "PowerSystem": "WingmanDrone.PowerSystem",
+    "ControlInterface": "WingmanDrone.ControlInterface",
 }
 
 _ANALYSIS_PART_NAMES = {"AnalysisParameters", "OptimizationSettings", "VariableRange"}

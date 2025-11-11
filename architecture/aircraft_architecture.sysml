@@ -1,78 +1,57 @@
-package SSP_Airplane {
-  doc /* Nuclear-powered Boeing 737-class aircraft optimized for long range missions. */
-  attribute system_name = "SSP_Airplane";
+package WingmanDrone {
+  doc /* Loyal-wingman autonomous drone modeled after MQ-28 and Hellsing CA-1 Europa with conventional aviation propulsion. */
+  attribute system_name = "WingmanDrone";
   attribute author = "Codex Agent";
   attribute language = "SysML v2";
 
-  comment Requirement_REQ_Size /* Overall geometry equivalent to Boeing 737-800 (39.5 m length, 35.8 m wingspan). */
-  comment Requirement_REQ_Propulsion /* Primary propulsion provided by nuclear reactor powered electric motors. */
-  comment Requirement_REQ_Range /* Must fly London to Beijing (~8140 km) without refueling. */
-  comment Requirement_REQ_Optimization /* Wing area, motor size, and carrying capacity must be tunable for optimization. */
+  comment Requirement_REQ_Profile /* Maintain MQ-28 class geometry (~11.7 m length, 7.3 m wingspan) for loyal wingman compatibility. */
+  comment Requirement_REQ_Propulsion /* Use conventional turbofan propulsion with aviation fuel. */
+  comment Requirement_REQ_Control /* Expose pilot-style inputs (stick, throttle, mode select) while keeping autopilot authority in the loop. */
+  comment Requirement_REQ_Mission /* Support range, loiter, and escort scenario optimization for collaborative missions. */
 
-  part def SSP_Airframe {
-    doc /* Top-level aircraft aggregating fuselage, propulsion, control, and electrical subsystems. */
-    attribute crew_capacity = 8;
-    attribute passenger_capacity = 180;
-    attribute design_range_km = 8500;
+  part def WingmanDrone {
+    doc /* Mission-configurable air vehicle coordinating with crewed fighters or remote operators. */
+    attribute autonomy_mode_default = "loyal-wingman";
+    attribute design_range_km = 3700;
+    attribute crew_capacity = 0;
 
-    part fuselage: Fuselage;
-    part reactor: ReactorCore;
-    part wings: WingSystem;
-    part motors: MotorArray;
-    part control_sw: ControlSoftware;
+    part airframe: CompositeAirframe;
+    part wings: AdaptiveWingSystem;
+    part propulsion: TurbofanPropulsion;
+    part missionComputer: MissionComputer;
     part autopilot: AutopilotModule;
-    part electrical: ElectricalSystem;
+    part power: PowerSystem;
+    part controls: ControlInterface;
   }
 
-  part def Fuselage {
-    doc /* Pressurized cabin and payload bay sized for Boeing 737 class missions. */
-    attribute length_m = 39.5;
-    attribute cabin_diameter_m = 3.76;
-    attribute max_payload_kg = 20000;
-    attribute empty_mass_kg = 22000;
+  part def CompositeAirframe {
+    doc /* Composite fuselage and payload bay sized to MQ-28 proportions. */
+    attribute length_m = 11.7;
+    attribute fuselage_width_m = 1.9;
+    attribute payload_capacity_kg = 1500;
+    attribute hardpoint_count = 4;
 
     port structuralMount {
       attribute kind = "structural";
       attribute direction = "bi";
     }
-    port avionicsBus {
+    port engineMount {
+      attribute kind = "structural";
+      attribute direction = "bi";
+    }
+    port avionicsBay {
       attribute kind = "data";
       attribute direction = "bi";
     }
   }
 
-  part def ReactorCore {
-    doc /* Compact molten-salt nuclear reactor driving closed-loop Brayton cycle generator. */
-    attribute thermal_power_mw = 80;
-    attribute electrical_efficiency = 0.42;
-    attribute shielding_mass_kg = 12000;
-    attribute fuel_endurance_hr = 20;
+  part def AdaptiveWingSystem {
+    doc /* High-efficiency wing with control surfaces for agile escort missions. */
+    attribute reference_area_m2 = 28;
+    attribute span_m = 7.3;
+    attribute aspect_ratio = 5.5;
+    attribute control_authority_deg = 35;
 
-    port thermalOutput {
-      attribute kind = "thermal";
-      attribute direction = "out";
-    }
-    port powerBus {
-      attribute kind = "electrical";
-      attribute direction = "out";
-    }
-    port coolantLoop {
-      attribute kind = "fluid";
-      attribute direction = "bi";
-    }
-  }
-
-  part def WingSystem {
-    doc /* High aspect ratio wings providing lift and fuel pod integration. */
-    attribute reference_area_m2 = 134;
-    attribute span_m = 35.8;
-    attribute aspect_ratio = 9.6;
-    attribute structural_mass_kg = 12000;
-
-    port liftInterface {
-      attribute kind = "aerodynamic";
-      attribute direction = "out";
-    }
     port structuralMount {
       attribute kind = "structural";
       attribute direction = "bi";
@@ -81,86 +60,99 @@ package SSP_Airplane {
       attribute kind = "data";
       attribute direction = "in";
     }
+    port liftInterface {
+      attribute kind = "aerodynamic";
+      attribute direction = "out";
+    }
   }
 
-  part def MotorArray {
-    doc /* Electrically driven ducted fans translating electrical power into thrust. */
-    attribute count = 4;
-    attribute thrust_per_motor_kn = 120;
-    attribute motor_efficiency = 0.9;
-    attribute specific_mass_kg_per_kw = 0.8;
+  part def TurbofanPropulsion {
+    doc /* Conventional turbofan sized for MQ-28-class thrust with onboard generator. */
+    attribute max_thrust_kn = 60;
+    attribute specific_fuel_consumption = 0.8;
+    attribute fuel_capacity_kg = 2000;
+    attribute generator_output_kw = 150;
 
-    in port electricalInput {
-      attribute kind = "electrical";
+    in port throttleCmd {
+      attribute kind = "data";
       attribute direction = "in";
     }
     out port thrustOut {
       attribute kind = "mechanical";
       attribute direction = "out";
     }
-    in port throttleCmd {
-      attribute kind = "data";
-      attribute direction = "in";
-    }
-  }
-
-  part def ControlSoftware {
-    doc /* Flight control computers managing actuators and propulsion. */
-    attribute compute_budget_tops = 30;
-    attribute redundancy_level = 3;
-
-    out port actuatorBus {
-      attribute kind = "data";
+    out port powerBus {
+      attribute kind = "electrical";
       attribute direction = "out";
     }
-    in port telemetryIn {
-      attribute kind = "data";
-      attribute direction = "in";
-    }
-    out port throttleOut {
-      attribute kind = "data";
-      attribute direction = "out";
-    }
-    port autopilotLink {
-      attribute kind = "data";
+    port mountingHardpoint {
+      attribute kind = "structural";
       attribute direction = "bi";
     }
   }
 
+  part def MissionComputer {
+    doc /* Tactical mission computer blending pilot-style inputs with autonomy services. */
+    attribute compute_budget_tops = 20;
+    attribute tactical_ai_level = 4;
+    attribute networked_control_buses = 3;
+
+    in port manualInput {
+      attribute kind = "data";
+      attribute direction = "in";
+    }
+    in port autonomyPort {
+      attribute kind = "data";
+      attribute direction = "in";
+    }
+    out port engineThrottle {
+      attribute kind = "data";
+      attribute direction = "out";
+    }
+    out port surfaceBus {
+      attribute kind = "data";
+      attribute direction = "out";
+    }
+    out port flightStatus {
+      attribute kind = "data";
+      attribute direction = "out";
+    }
+    in port powerIn {
+      attribute kind = "electrical";
+      attribute direction = "in";
+    }
+  }
+
   part def AutopilotModule {
-    doc /* Mission-level guidance autopilot optimizing for range and safety. */
-    attribute sensor_suite = "INS+GNSS+WeatherRadar";
-    attribute update_rate_hz = 20;
+    doc /* Guidance core to execute escort, loiter, and waypoint scripts. */
+    attribute guidance_modes = "escort+loiter+return";
+    attribute update_rate_hz = 25;
 
     out port guidanceCmd {
       attribute kind = "data";
       attribute direction = "out";
     }
-    port controlBus {
+    in port feedbackBus {
       attribute kind = "data";
-      attribute direction = "bi";
+      attribute direction = "in";
     }
-  }
-
-  part def ElectricalSystem {
-    doc /* Power conditioning, storage, and distribution network. */
-    attribute bus_voltage_kv = 5;
-    attribute buffer_capacity_mj = 800;
-    attribute distribution_efficiency = 0.96;
-
-    port primaryBus {
-      attribute kind = "electrical";
-      attribute direction = "bi";
-    }
-    out port avionicsFeed {
-      attribute kind = "electrical";
-      attribute direction = "out";
-    }
-    in port reactorInput {
+    in port powerIn {
       attribute kind = "electrical";
       attribute direction = "in";
     }
-    out port motorFeed {
+  }
+
+  part def PowerSystem {
+    doc /* Hybrid battery and generator bus distributing electrical power to avionics and control interfaces. */
+    attribute bus_voltage_kv = 1.2;
+    attribute battery_capacity_mj = 500;
+    attribute generator_efficiency = 0.92;
+
+    in port generatorInput {
+      attribute kind = "electrical";
+      attribute direction = "in";
+    }
+    out port avionicsFeed {
       attribute kind = "electrical";
       attribute direction = "out";
     }
@@ -168,30 +160,50 @@ package SSP_Airplane {
       attribute kind = "electrical";
       attribute direction = "out";
     }
+    out port autonomyFeed {
+      attribute kind = "electrical";
+      attribute direction = "out";
+    }
+  }
+
+  part def ControlInterface {
+    doc /* HOTAS or gamepad style interface for remote pilots or simulator inputs. */
+    attribute input_scheme = "HOTAS/Gamepad";
+    attribute telemetry_rate_hz = 60;
+
+    out port pilotCommandOut {
+      attribute kind = "data";
+      attribute direction = "out";
+    }
+    in port powerIn {
+      attribute kind = "electrical";
+      attribute direction = "in";
+    }
   }
 
   part def AnalysisParameters {
-    doc /* Design targets and optimization bounds used for high-level analysis. */
-    attribute cruise_speed_mps = 230;
-    attribute design_payload_kg = 20000;
-    attribute target_range_km = 8500;
+    doc /* Scenario planning targets and optimization bounds. */
+    attribute cruise_speed_mps = 250;
+    attribute design_payload_kg = 1200;
+    attribute target_range_km = 3700;
+    attribute loiter_time_minutes = 80;
 
     part optimization: OptimizationSettings;
   }
 
   part def OptimizationSettings {
-    doc /* Tunable variables for range optimization. */
+    doc /* Tunable variables for range and scenario trade studies. */
     part wing_area_scale: VariableRange {
+      attribute min = 0.85;
+      attribute max = 1.15;
+    }
+    part engine_thrust_scale: VariableRange {
       attribute min = 0.8;
       attribute max = 1.2;
     }
-    part motor_power_scale: VariableRange {
-      attribute min = 0.7;
-      attribute max = 1.3;
-    }
     part payload_scale: VariableRange {
-      attribute min = 0.6;
-      attribute max = 1.1;
+      attribute min = 0.5;
+      attribute max = 1.3;
     }
   }
 
@@ -200,12 +212,15 @@ package SSP_Airplane {
     attribute max = 0.0;
   }
 
-  connect ReactorCore.powerBus to ElectricalSystem.reactorInput;
-  connect ElectricalSystem.motorFeed to MotorArray.electricalInput;
-  connect WingSystem.structuralMount to Fuselage.structuralMount;
-  connect ControlSoftware.throttleOut to MotorArray.throttleCmd;
-  connect ControlSoftware.actuatorBus to WingSystem.controlSurfaces;
-  connect AutopilotModule.guidanceCmd to ControlSoftware.autopilotLink;
-  connect ElectricalSystem.controlFeed to ControlSoftware.telemetryIn;
-  connect ElectricalSystem.avionicsFeed to Fuselage.avionicsBus;
+  connect AdaptiveWingSystem.structuralMount to CompositeAirframe.structuralMount;
+  connect TurbofanPropulsion.mountingHardpoint to CompositeAirframe.engineMount;
+  connect TurbofanPropulsion.powerBus to PowerSystem.generatorInput;
+  connect PowerSystem.avionicsFeed to MissionComputer.powerIn;
+  connect PowerSystem.controlFeed to ControlInterface.powerIn;
+  connect PowerSystem.autonomyFeed to AutopilotModule.powerIn;
+  connect MissionComputer.surfaceBus to AdaptiveWingSystem.controlSurfaces;
+  connect MissionComputer.engineThrottle to TurbofanPropulsion.throttleCmd;
+  connect AutopilotModule.guidanceCmd to MissionComputer.autonomyPort;
+  connect MissionComputer.flightStatus to AutopilotModule.feedbackBus;
+  connect ControlInterface.pilotCommandOut to MissionComputer.manualInput;
 }

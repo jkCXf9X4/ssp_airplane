@@ -1,9 +1,0 @@
-- [x] Capture the SysML v2 system architecture so it fully defines fuselage, reactor, wings, motors, control software, autopilot, and electrical system (`architecture/aircraft_architecture.sysml`).
-- [x] Build the corresponding Modelica models for every subsystem listed in the architecture (`models/SSPAirplane/*.mo`).
-- [ ] Compile each Modelica model into an FMU using the OpenModelica compiler (`omc`).
-  - [x] Author `scripts/build_fmus.py` to orchestrate FMU creation.
-  - [ ] Execute the script once OpenModelica is available to populate `build/fmus/`.
-- [x] Implement the SSD generation script that parses the architecture and outputs a valid System Structure Definition (`scripts/generate_ssd.py` → `build/structure/aircraft.ssd`).
-- [x] Create a script to package the generated FMUs together with the SSD into an `.ssp` archive for simulation runs (`scripts/package_ssp.py`).
-- [x] Set up the optimization loop that tunes wing area, motor size, and carrying capacity using the SSP using python and OMSimulator hooks (`scripts/optimization.py`).
-- [x] Verify the aircraft meets the stated requirements (Boeing 737 size/shape, nuclear propulsion, London→Beijing range) via the optimization report (`build/reports/optimization_result.json`).

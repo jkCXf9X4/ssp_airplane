@@ -27,7 +27,7 @@ LONDON_BEIJING_KM = 8140
 @dataclass
 class OptimizationResult:
     wing_area_scale: float
-    motor_power_scale: float
+    engine_thrust_scale: float
     payload_scale: float
     estimated_range_km: float
     thrust_margin: float
@@ -38,7 +38,7 @@ class OptimizationResult:
 @dataclass
 class VerificationStatus:
     size_within_bounds: bool
-    propulsion_is_nuclear: bool
+    propulsion_is_conventional: bool
     range_requirement_met: bool
     notes: str
 
@@ -50,15 +50,20 @@ def get_component(data: dict, name: str) -> dict:
     raise KeyError(f"Component '{name}' not defined in architecture")
 
 
-def evaluate_design(wing_scale: float, motor_scale: float, payload_scale: float, arch: dict) -> OptimizationResult:
+def evaluate_design(
+    wing_scale: float,
+    engine_scale: float,
+    payload_scale: float,
+    arch: dict,
+) -> OptimizationResult:
     analysis = arch.get("analysis_parameters", {})
     base_range = float(analysis.get("target_range_km", 8000))
-    payload_base = float(get_component(arch, "Fuselage")["parameters"]["max_payload_kg"])
+    payload_base = float(get_component(arch, "CompositeAirframe")["parameters"]["payload_capacity_kg"])
     payload_capacity = payload_base * payload_scale
 
-    aerodynamic_gain = 0.8 + 0.4 * wing_scale
-    propulsion_gain = 0.7 + 0.5 * motor_scale
-    payload_penalty = 0.2 + 0.4 * payload_scale
+    aerodynamic_gain = 0.85 + 0.35 * wing_scale
+    propulsion_gain = 0.75 + 0.45 * engine_scale
+    payload_penalty = 0.35 + 0.35 * payload_scale
 
     estimated_range = base_range * aerodynamic_gain * propulsion_gain / payload_penalty
     thrust_margin = propulsion_gain / payload_penalty
@@ -66,7 +71,7 @@ def evaluate_design(wing_scale: float, motor_scale: float, payload_scale: float,
 
     return OptimizationResult(
         wing_area_scale=wing_scale,
-        motor_power_scale=motor_scale,
+        engine_thrust_scale=engine_scale,
         payload_scale=payload_scale,
         estimated_range_km=estimated_range,
         thrust_margin=thrust_margin,
@@ -89,36 +94,36 @@ def run_grid_search(arch: dict, samples: int) -> OptimizationResult:
     vars_cfg = arch.get("analysis_parameters", {}).get("optimization_variables", [])
     bounds = {var["name"]: (var["min"], var["max"]) for var in vars_cfg}
     wing_bounds = bounds.get("wing_area_scale", (0.8, 1.2))
-    motor_bounds = bounds.get("motor_power_scale", (0.7, 1.3))
+    engine_bounds = bounds.get("engine_thrust_scale", bounds.get("motor_power_scale", (0.7, 1.3)))
     payload_bounds = bounds.get("payload_scale", (0.6, 1.1))
 
     best: OptimizationResult | None = None
     for wing in linspace(wing_bounds, samples):
-        for motor in linspace(motor_bounds, samples):
+        for engine in linspace(engine_bounds, samples):
             for payload in linspace(payload_bounds, samples):
-                candidate = evaluate_design(float(wing), float(motor), float(payload), arch)
+                candidate = evaluate_design(float(wing), float(engine), float(payload), arch)
                 if candidate.estimated_range_km < LONDON_BEIJING_KM:
                     continue
                 if best is None or candidate.objective > best.objective:
                     best = candidate
     if not best:
-        best = evaluate_design(wing_bounds[1], motor_bounds[1], payload_bounds[0], arch)
+        best = evaluate_design(wing_bounds[1], engine_bounds[1], payload_bounds[0], arch)
     return best
 
 
 def verify_requirements(arch: dict, result: OptimizationResult) -> VerificationStatus:
-    fuselage = get_component(arch, "Fuselage")
-    wings = get_component(arch, "WingSystem")
-    reactor = get_component(arch, "ReactorCore")
+    airframe = get_component(arch, "CompositeAirframe")
+    wings = get_component(arch, "AdaptiveWingSystem")
+    propulsion = get_component(arch, "TurbofanPropulsion")
 
     size_ok = (
-        abs(float(fuselage["parameters"]["length_m"]) - 39.5) <= 1.0
-        and abs(float(wings["parameters"]["span_m"]) - 35.8) <= 1.0
+        abs(float(airframe["parameters"]["length_m"]) - 11.7) <= 0.6
+        and abs(float(wings["parameters"]["span_m"]) - 7.3) <= 0.5
     )
-    propulsion_ok = float(reactor["parameters"]["thermal_power_mw"]) > 0
+    propulsion_ok = float(propulsion["parameters"]["max_thrust_kn"]) > 0
     range_ok = result.estimated_range_km >= LONDON_BEIJING_KM
 
-    notes = "Range satisfied" if range_ok else "Increase thrust or reduce payload"
+    notes = "Range satisfied" if range_ok else "Adjust thrust/fuel/payload mix"
     return VerificationStatus(size_ok, propulsion_ok, range_ok, notes)
 
 
@@ -136,10 +141,10 @@ def refine_with_oms(ssp_path: Path | None, result: OptimizationResult) -> None:
     try:
         import_response = oms.importFile(str(ssp_path))
         model = import_response[1] if isinstance(import_response, tuple) else import_response
-        param_prefix = f"{model}.root.AircraftSystem"
+        param_prefix = f"{model}.root.DroneSystem"
         for name, value in (
             ("wingAreaScale", result.wing_area_scale),
-            ("motorPowerScale", result.motor_power_scale),
+            ("engineThrustScale", result.engine_thrust_scale),
             ("payloadScale", result.payload_scale),
         ):
             try:
