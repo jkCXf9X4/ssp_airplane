@@ -7,6 +7,7 @@ import os
 import subprocess
 import tempfile
 from pathlib import Path
+import re
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MODELS = [
@@ -24,32 +25,49 @@ DEFAULT_MODELS = [
 def build_mos_script(model_name: str, output_dir: Path) -> str:
     package_path = REPO_ROOT / "models" / "SSPAirplane" / "package.mo"
     return f"""
-loadModel(Modelica);
 loadFile("{package_path.as_posix()}");
-setCommandLineOptions("+simCodeTarget=omsic +d=initialization");
-buildModelFMU({model_name}, version="2.0", includeResources=true,
-  platforms={{"static"}}, outputDirectory="{output_dir.as_posix()}" );
+filename := OpenModelica.Scripting.buildModelFMU({model_name}, version="2.0", fmuType="cs", platforms={{"static"}});
+filename;
 getErrorString();
 """
 
 
-def run_omc(omc_path: str, mos_content: str, dry_run: bool = False) -> None:
+def run_omc(omc_path: str, mos_content: str, dry_run: bool = False) -> str:
     if dry_run:
         print("[dry-run] Would invoke omc with script:\n" + mos_content)
-        return
+        return ""
 
     with tempfile.NamedTemporaryFile("w", suffix=".mos", delete=False) as handle:
         handle.write(mos_content)
         mos_file = Path(handle.name)
 
     try:
-        subprocess.run([omc_path, str(mos_file)], check=True, cwd=REPO_ROOT)
+        proc = subprocess.run(
+            [omc_path, str(mos_file)],
+            check=True,
+            cwd=REPO_ROOT,
+            capture_output=True,
+            text=True,
+        )
     except FileNotFoundError as exc:
         raise SystemExit(
             "omc executable not found. Install OpenModelica or pass --omc-path"
         ) from exc
+    except subprocess.CalledProcessError as exc:
+        raise SystemExit(exc.stderr or exc.stdout) from exc
     finally:
         mos_file.unlink(missing_ok=True)
+
+    if proc.stderr:
+        print(proc.stderr.strip())
+    return proc.stdout
+
+
+def extract_fmu_path(output: str) -> Path | None:
+    matches = re.findall(r"\"([^\"]+\.fmu)\"", output)
+    if not matches:
+        return None
+    return Path(matches[-1])
 
 
 def ensure_dir(path: Path) -> None:
@@ -91,7 +109,19 @@ def main() -> None:
     for model in args.models:
         mos_script = build_mos_script(model, output_dir)
         print(f"Exporting {model} -> {output_dir}")
-        run_omc(args.omc_path, mos_script, dry_run=args.dry_run)
+        stdout = run_omc(args.omc_path, mos_script, dry_run=args.dry_run)
+        if args.dry_run:
+            continue
+        built_path = extract_fmu_path(stdout)
+        if not built_path:
+            raise SystemExit(f"Could not locate FMU emitted for {model}. omc output: {stdout}")
+        target_name = model.replace(".", "_") + ".fmu"
+        target_path = output_dir / target_name
+        try:
+            built_path.replace(target_path)
+        except FileNotFoundError as exc:
+            raise SystemExit(f"FMU file {built_path} missing after omc run for {model}") from exc
+        print(f"  -> {target_path}")
 
     print("FMU build process finished.")
 

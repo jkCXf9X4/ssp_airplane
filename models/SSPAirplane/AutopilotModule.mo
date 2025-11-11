@@ -1,11 +1,12 @@
 within SSPAirplane;
 model AutopilotModule
+  import Interfaces = SSPAirplane.Interfaces;
   parameter Real updateRateHz = 20;
   parameter Real sensorFidelity = 0.95;
-  Modelica.Blocks.Interfaces.RealInput missionAggressiveness "0..1 mission intensity";
-  Modelica.Blocks.Interfaces.RealInput rangeRequestKm;
-  Modelica.Blocks.Interfaces.RealOutput guidanceCommand;
-  Modelica.Blocks.Interfaces.RealOutput missionScore;
+  Interfaces.RealInput missionAggressiveness "0..1 mission intensity";
+  Interfaces.RealInput rangeRequestKm;
+  Interfaces.RealOutput guidanceCommand;
+  Interfaces.RealOutput missionScore;
 protected
   Real rangeFactor;
 equation

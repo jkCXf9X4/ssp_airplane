@@ -1,6 +1,6 @@
 within SSPAirplane;
 model AircraftSystem
-  import Modelica.Constants;
+  import Interfaces = SSPAirplane.Interfaces;
   parameter Real wingAreaScale = 1.0;
   parameter Real motorPowerScale = 1.0;
   parameter Real payloadScale = 1.0;
@@ -11,15 +11,16 @@ model AircraftSystem
   WingSystem wings(wingAreaScale = wingAreaScale);
   ControlSoftware control;
   AutopilotModule autopilot;
-  Modelica.Blocks.Interfaces.RealInput missionAggressiveness;
-  Modelica.Blocks.Interfaces.RealInput rangeRequestKm;
-  Modelica.Blocks.Interfaces.RealOutput thrust_kN;
-  Modelica.Blocks.Interfaces.RealOutput liftCoefficient;
-  Modelica.Blocks.Interfaces.RealOutput payloadCapacityKg;
-  Modelica.Blocks.Interfaces.RealOutput rangeEstimateKm;
+  Interfaces.RealInput missionAggressiveness;
+  Interfaces.RealInput rangeRequestKm;
+  Interfaces.RealOutput thrust_kN;
+  Interfaces.RealOutput liftCoefficient;
+  Interfaces.RealOutput payloadCapacityKg;
+  Interfaces.RealOutput rangeEstimateKm;
 protected
   Real reserveFactor;
   Real thrustToWeight;
+  constant Real g_n = 9.80665;
 equation
   connect(reactor.electricPowerMW, electrical.reactorPowerMW);
   connect(electrical.motorPowerMW, motors.electricalPowerMW);
@@ -34,6 +35,6 @@ equation
   connect(missionAggressiveness, autopilot.missionAggressiveness);
   connect(rangeRequestKm, autopilot.rangeRequestKm);
   reserveFactor = max(0.2, 1.0 - missionAggressiveness);
-  thrustToWeight = (motors.thrust_kN * 1000) / max(1.0, Constants.g_n * (fuselage.emptyMass + fuselage.payloadCapacity));
+  thrustToWeight = (motors.thrust_kN * 1000) / max(1.0, g_n * (fuselage.emptyMass + fuselage.payloadCapacity));
   rangeEstimateKm = (8500 * thrustToWeight * reserveFactor) + 1000 * autopilot.missionScore;
 end AircraftSystem;

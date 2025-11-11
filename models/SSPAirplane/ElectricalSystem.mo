@@ -1,12 +1,13 @@
 within SSPAirplane;
 model ElectricalSystem
+  import Interfaces = SSPAirplane.Interfaces;
   parameter Real busVoltageKV = 5;
   parameter Real bufferCapacityMJ = 800;
   parameter Real distributionEfficiency = 0.96;
-  Modelica.Blocks.Interfaces.RealInput reactorPowerMW;
-  Modelica.Blocks.Interfaces.RealOutput motorPowerMW;
-  Modelica.Blocks.Interfaces.RealOutput controlPowerMW;
-  Modelica.Blocks.Interfaces.RealOutput lossesMW;
+  Interfaces.RealInput reactorPowerMW;
+  Interfaces.RealOutput motorPowerMW;
+  Interfaces.RealOutput controlPowerMW;
+  Interfaces.RealOutput lossesMW;
 protected
   parameter Real controlShare = 0.08;
   Real availableMW;

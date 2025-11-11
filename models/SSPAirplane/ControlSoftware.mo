@@ -1,12 +1,13 @@
 within SSPAirplane;
 model ControlSoftware
+  import Interfaces = SSPAirplane.Interfaces;
   parameter Real redundancyLevel = 3;
   parameter Real computeBudgetTOPS = 30;
-  Modelica.Blocks.Interfaces.RealInput guidanceCommand "0..1 long range guidance";
-  Modelica.Blocks.Interfaces.RealInput payloadCapacityKg;
-  Modelica.Blocks.Interfaces.RealInput avionicsPowerMW;
-  Modelica.Blocks.Interfaces.RealOutput throttleCmd;
-  Modelica.Blocks.Interfaces.RealOutput liftCommand;
+  Interfaces.RealInput guidanceCommand "0..1 long range guidance";
+  Interfaces.RealInput payloadCapacityKg;
+  Interfaces.RealInput avionicsPowerMW;
+  Interfaces.RealOutput throttleCmd;
+  Interfaces.RealOutput liftCommand;
 protected
   Real payloadBias;
 equation
