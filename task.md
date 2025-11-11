@@ -1,2 +1,2 @@
 
-Read the readme and evaluate what tasks need to be completed to fulfill the project, update the todo.md list with these
+Start to go thru the items in the todo.md list, track your work continuously, create subtasks if necessary. Be critical of the tasks, if alterations are needed to reach the main objective specified in README.md, change and tune them as needed.
