@@ -24,8 +24,12 @@ DEFAULT_MODELS = [
 
 def build_mos_script(model_name: str, output_dir: Path) -> str:
     package_path = REPO_ROOT / "models" / "SSPAirplane" / "package.mo"
+    tmp_dir = REPO_ROOT / "build/tmp"
+    tmp_dir.mkdir(parents=True, exist_ok=True)
     return f"""
 loadFile("{package_path.as_posix()}");
+cd("./build/tmp/");
+setCommandLineOptions("--fmiFlags=s:cvode");
 filename := OpenModelica.Scripting.buildModelFMU({model_name}, version="2.0", fmuType="cs", platforms={{"static"}});
 filename;
 getErrorString();
