@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Dict, Tuple
 
 import xml.etree.ElementTree as ET
+# from xml.dom import minidom
 
 from sysml_loader import MODEL_CLASS_MAP, load_architecture
 
