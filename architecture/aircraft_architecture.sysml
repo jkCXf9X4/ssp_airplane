@@ -9,6 +9,34 @@ package WingmanDrone {
   comment Requirement_REQ_Control /* Expose pilot-style inputs (stick, throttle, mode select) while keeping autopilot authority in the loop. */
   comment Requirement_REQ_Mission /* Support range, loiter, and escort scenario optimization for collaborative missions. */
 
+  data def PilotCommandOut {
+    doc /* HOTAS-style control payload shared across control surfaces and mission computer consumers. */
+    attribute stick_pitch_norm: Real;   /* -1..1, aft pull positive */
+    attribute stick_roll_norm: Real;    /* -1..1, left deflection positive */
+    attribute rudder_norm: Real;        /* -1..1, pedal/twist input */
+    attribute throttle_norm: Real;      /* 0..1 primary throttle */
+    attribute throttle_aux_norm: Real;  /* 0..1 aux slider or second throttle */
+    attribute button_mask: Integer;     /* bitfield: trigger1, trigger2, weapon_release, gear, master_arm, autopilot, comms, countermeasure, flaps_up, flaps_down */
+    attribute hat_x: Integer;           /* -1=left,0=center,1=right */
+    attribute hat_y: Integer;           /* -1=down,0=center,1=up */
+    attribute mode_switch: Integer;     /* 0=Manual,1=Assist,2=RTB,3=Auto */
+    attribute reserved: Integer;        /* alignment / future discrete inputs */
+  }
+
+  data def OrientationEuler {
+    doc /* Air vehicle orientation expressed as body-to-earth Euler angles in degrees. */
+    attribute roll_deg: Real;
+    attribute pitch_deg: Real;
+    attribute yaw_deg: Real;
+  }
+
+  data def GeodeticLLA {
+    doc /* Geodetic latitude/longitude (degrees) and altitude (meters) above mean sea level. */
+    attribute latitude_deg: Real;
+    attribute longitude_deg: Real;
+    attribute altitude_m: Real;
+  }
+
   part def WingmanDrone {
     doc /* Mission-configurable air vehicle coordinating with crewed fighters or remote operators. */
     attribute autonomy_mode_default = "loyal-wingman";
@@ -98,6 +126,7 @@ package WingmanDrone {
     attribute networked_control_buses = 3;
 
     in port manualInput {
+      attribute type = PilotCommandOut;
       attribute kind = "data";
       attribute direction = "in";
     }
@@ -117,11 +146,15 @@ package WingmanDrone {
       attribute kind = "data";
       attribute direction = "out";
     }
-    out port orientationDeg {
+    out port orientationEuler {
+      doc /* Body attitude exported as roll/pitch/yaw Euler angles in degrees. */
+      attribute type = OrientationEuler;
       attribute kind = "data";
       attribute direction = "out";
     }
-    out port locationKm {
+    out port locationLLA {
+      doc /* Geodetic latitude, longitude (deg) and altitude (m) for navigation consumers. */
+      attribute type = GeodeticLLA;
       attribute kind = "data";
       attribute direction = "out";
     }
@@ -180,6 +213,8 @@ package WingmanDrone {
     attribute telemetry_rate_hz = 60;
 
     out port pilotCommandOut {
+      doc /* HOTAS-style control bundle typed as PilotCommandOut for downstream consumers. */
+      attribute type = PilotCommandOut;
       attribute kind = "data";
       attribute direction = "out";
     }
