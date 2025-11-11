@@ -1,0 +1,7 @@
+- [ ] Capture the SysML v2 system architecture so it fully defines fuselage, reactor, wings, motors, control software, autopilot, and electrical system.
+- [ ] Build the corresponding Modelica models for every subsystem listed in the architecture.
+- [ ] Compile each Modelica model into an FMU using the OpenModelica compiler (`omc`).
+- [ ] Implement the SSD generation script that parses the architecture and outputs a valid System Structure Definition.
+- [ ] Package the generated FMUs together with the SSD into an `.ssp` archive for simulation runs.
+- [ ] Set up the optimization loop that tunes wing area, motor size, and carrying capacity using the SSP.
+- [ ] Verify the aircraft meets the stated requirements (Boeing 737 size/shape, nuclear propulsion, London→Beijing range).

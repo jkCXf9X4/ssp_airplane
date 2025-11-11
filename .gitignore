@@ -40,3 +40,6 @@ status
 stop
 success
 *.
+
+
+venv/
