@@ -1,4 +1,4 @@
-- [x] Capture the SysML v2 system architecture so it fully defines fuselage, reactor, wings, motors, control software, autopilot, and electrical system (`architecture/aircraft_architecture.sysml.yaml`).
+- [x] Capture the SysML v2 system architecture so it fully defines fuselage, reactor, wings, motors, control software, autopilot, and electrical system (`architecture/aircraft_architecture.sysml`).
 - [x] Build the corresponding Modelica models for every subsystem listed in the architecture (`models/SSPAirplane/*.mo`).
 - [ ] Compile each Modelica model into an FMU using the OpenModelica compiler (`omc`).
   - [x] Author `scripts/build_fmus.py` to orchestrate FMU creation.

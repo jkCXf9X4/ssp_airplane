@@ -9,31 +9,13 @@ from typing import Dict, Tuple
 
 import xml.etree.ElementTree as ET
 
-try:
-    import yaml
-except ModuleNotFoundError as exc:  # pragma: no cover - helpful runtime message
-    raise SystemExit("PyYAML is required. Install dependencies via requirements.txt") from exc
+from sysml_loader import MODEL_CLASS_MAP, load_architecture
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-ARCH_PATH = REPO_ROOT / "architecture" / "aircraft_architecture.sysml.yaml"
+ARCH_PATH = REPO_ROOT / "architecture" / "aircraft_architecture.sysml"
 BUILD_DIR = REPO_ROOT / "build" / "structure"
 SSD_NAMESPACE = "http://www.fmi-standard.org/SSP1/SystemStructureDescription"
 ET.register_namespace("ssd", SSD_NAMESPACE)
-
-MODEL_CLASS_MAP = {
-    "Fuselage": "SSPAirplane.Fuselage",
-    "ReactorCore": "SSPAirplane.ReactorCore",
-    "WingSystem": "SSPAirplane.WingSystem",
-    "MotorArray": "SSPAirplane.MotorArray",
-    "ControlSoftware": "SSPAirplane.ControlSoftware",
-    "AutopilotModule": "SSPAirplane.AutopilotModule",
-    "ElectricalSystem": "SSPAirplane.ElectricalSystem",
-}
-
-
-def load_architecture(path: Path) -> dict:
-    with path.open("r", encoding="utf-8") as handle:
-        return yaml.safe_load(handle)
 
 
 def split_endpoint(endpoint: str) -> Tuple[str, str]:

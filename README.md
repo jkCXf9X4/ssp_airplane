@@ -9,8 +9,8 @@ This is a reference SSP of an aircraft
 - it should be used to optimize the wing area, motor size and carrying capacity
 
 # Architecture
-The architecture is represented in sysml v2
-This is the single source of truth regarding system composition and connection
+The architecture is captured as SysML v2 textual notation in `architecture/aircraft_architecture.sysml`.  
+This file is parsed with [PySysML2](https://github.com/DAF-Digital-Transformation-Office/PySysML2) and serves as the single source of truth for system composition, connections, and analysis parameters.
 
 ## Components
 

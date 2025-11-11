@@ -8,11 +8,6 @@ from dataclasses import dataclass, asdict
 from pathlib import Path
 from typing import Any, Dict, Iterable
 
-try:
-    import yaml
-except ModuleNotFoundError as exc:  # pragma: no cover
-    raise SystemExit("PyYAML is required. Install dependencies via requirements.txt") from exc
-
 try:  # pragma: no cover - optional OMSimulator bindings
     import OMSimulator as oms  # type: ignore
 except ModuleNotFoundError:  # noqa: SIM105
@@ -21,8 +16,10 @@ except ModuleNotFoundError:  # noqa: SIM105
     except ModuleNotFoundError:
         oms = None  # type: ignore
 
+from sysml_loader import load_architecture
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
-ARCH_PATH = REPO_ROOT / "architecture" / "aircraft_architecture.sysml.yaml"
+ARCH_PATH = REPO_ROOT / "architecture" / "aircraft_architecture.sysml"
 DEFAULT_REPORT = REPO_ROOT / "build" / "reports" / "optimization_result.json"
 LONDON_BEIJING_KM = 8140
 
@@ -44,11 +41,6 @@ class VerificationStatus:
     propulsion_is_nuclear: bool
     range_requirement_met: bool
     notes: str
-
-
-def load_architecture(path: Path) -> dict:
-    with path.open("r", encoding="utf-8") as handle:
-        return yaml.safe_load(handle)
 
 
 def get_component(data: dict, name: str) -> dict:
