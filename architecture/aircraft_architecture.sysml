@@ -117,6 +117,14 @@ package WingmanDrone {
       attribute kind = "data";
       attribute direction = "out";
     }
+    out port orientationDeg {
+      attribute kind = "data";
+      attribute direction = "out";
+    }
+    out port locationKm {
+      attribute kind = "data";
+      attribute direction = "out";
+    }
     in port powerIn {
       attribute kind = "electrical";
       attribute direction = "in";

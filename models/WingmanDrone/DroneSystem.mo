@@ -16,6 +16,8 @@ model DroneSystem
   Interfaces.RealOutput liftInterface;
   Interfaces.RealOutput payloadCapacityKg;
   Interfaces.RealOutput rangeEstimateKm;
+  Interfaces.RealOutput orientationDeg;
+  Interfaces.RealOutput locationKm;
 protected
   Real thrustToWeight;
   constant Real g_n = 9.80665;
@@ -33,6 +35,8 @@ equation
   connect(engine.thrustOut, thrust_kN);
   connect(wings.liftInterface, liftInterface);
   connect(airframe.payloadCapacity, payloadCapacityKg);
+  connect(missionComputer.orientationDeg, orientationDeg);
+  connect(missionComputer.locationKm, locationKm);
   thrustToWeight = (engine.thrustOut * 1000) / max(1.0, g_n * (airframe.emptyMass + airframe.payloadCapacity));
   rangeEstimateKm = 3000 * thrustToWeight * wingAreaScale;
 end DroneSystem;

@@ -6,7 +6,7 @@ This repository tracks an SSP for a loyal-wingman style autonomous drone modeled
 - MQ-28 class geometry (≈11.7 m length, 7.3 m span) to operate as a loyal wingman
 - Conventional turbofan propulsion with generator support for avionics
 - Accepts pilot-style (game/simulator) control inputs while still supporting an onboard autopilot
-- Optimization focuses on range, loiter/escort scenarios, and payload configuration
+- Optimization focuses on range, loiter/escort scenarios, payload configuration, and now tracks orientation/location states for scenario planning
 
 # Architecture
 The architecture is captured as SysML v2 textual notation in `architecture/aircraft_architecture.sysml`.  
@@ -19,7 +19,7 @@ It contains models for:
  - composite airframe
  - adaptive wing system
  - turbofan propulsion module
- - mission computer with manual + autonomy inputs
+ - mission computer with manual + autonomy inputs plus orientation/location tracking
  - optional autopilot module
  - power distribution system
  - control interface for HOTAS / gamepad style inputs
