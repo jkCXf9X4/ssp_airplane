@@ -9,8 +9,8 @@ model MissionComputer
   Interfaces.RealOutput engineThrottle;
   Interfaces.RealOutput surfaceBus;
   Interfaces.RealOutput flightStatus;
-  Interfaces.RealOutput orientationDeg;
-  Interfaces.RealOutput locationKm;
+  Interfaces.RealOutput orientationEuler;
+  Interfaces.RealOutput locationLLA;
 protected
   Real blendCmd;
   Real powerFactor;
@@ -23,9 +23,9 @@ equation
   powerFactor = min(1.0, max(0.2, powerIn));
   engineThrottle = min(1.0, max(0.1, blendCmd * powerFactor));
   surfaceBus = min(1.0, engineThrottle + 0.1 * powerFactor);
-  flightStatus = 0.4 * engineThrottle + 0.4 * surfaceBus + 0.2 * (orientationDeg / 360);
+  flightStatus = 0.4 * engineThrottle + 0.4 * surfaceBus + 0.2 * (orientationEuler / 360);
   der(headingDeg) = headingGain * (manualInput - 0.5) + 20 * (autonomyPort - 0.5);
   der(positionKm) = velocityGain * engineThrottle;
-  orientationDeg = headingDeg;
-  locationKm = positionKm;
+  orientationEuler = headingDeg;
+  locationLLA = positionKm;
 end MissionComputer;

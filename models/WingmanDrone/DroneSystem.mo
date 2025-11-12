@@ -11,13 +11,12 @@ model DroneSystem
   MissionComputer missionComputer;
   AutopilotModule autopilot;
   ControlInterface controls;
-  Interfaces.RealInput manualCommand;
   Interfaces.RealOutput thrust_kN;
   Interfaces.RealOutput liftInterface;
   Interfaces.RealOutput payloadCapacityKg;
   Interfaces.RealOutput rangeEstimateKm;
-  Interfaces.RealOutput orientationDeg;
-  Interfaces.RealOutput locationKm;
+  Interfaces.RealOutput orientationEuler;
+  Interfaces.RealOutput locationLLA;
 protected
   Real thrustToWeight;
   constant Real g_n = 9.80665;
@@ -31,12 +30,11 @@ equation
   connect(missionComputer.engineThrottle, engine.throttleCmd);
   connect(missionComputer.surfaceBus, wings.controlSurfaces);
   connect(missionComputer.flightStatus, autopilot.feedbackBus);
-  connect(manualCommand, controls.pilotCommand);
   connect(engine.thrustOut, thrust_kN);
   connect(wings.liftInterface, liftInterface);
-  connect(airframe.payloadCapacity, payloadCapacityKg);
-  connect(missionComputer.orientationDeg, orientationDeg);
-  connect(missionComputer.locationKm, locationKm);
+  payloadCapacityKg = airframe.payloadCapacity;
+  connect(missionComputer.orientationEuler, orientationEuler);
+  connect(missionComputer.locationLLA, locationLLA);
   thrustToWeight = (engine.thrustOut * 1000) / max(1.0, g_n * (airframe.emptyMass + airframe.payloadCapacity));
   rangeEstimateKm = 3000 * thrustToWeight * wingAreaScale;
 end DroneSystem;

@@ -1,6 +1,6 @@
 package WingmanDrone {
   doc /* Loyal-wingman autonomous drone modeled after MQ-28 and Hellsing CA-1 Europa with conventional aviation propulsion. */
-  attribute system_name = "WingmanDrone";
+  attribute system_name = "DroneSystem";
   attribute author = "Codex Agent";
   attribute language = "SysML v2";
 
@@ -37,6 +37,74 @@ package WingmanDrone {
     attribute altitude_m: Real;
   }
 
+  data def StructuralInterface {
+    doc /* Structural mounting loads transferred between assemblies. */
+    attribute axial_load_kn: Real;
+    attribute shear_load_kn: Real;
+    attribute bending_moment_knm: Real;
+  }
+
+  data def AvionicsBayData {
+    doc /* Simplified avionics bay co-simulation payload for maintenance and payload swaps. */
+    attribute payload_id: Integer;
+    attribute payload_mass_kg: Real;
+    attribute data_rate_mbps: Real;
+    attribute cooling_load_kw: Real;
+  }
+
+  data def SurfaceActuationCommand {
+    doc /* Commanded surface deflections in degrees for co-simulation with aerodynamic models. */
+    attribute left_aileron_deg: Real;
+    attribute right_aileron_deg: Real;
+    attribute elevator_deg: Real;
+    attribute rudder_deg: Real;
+    attribute flaperon_deg: Real;
+  }
+
+  data def LiftState {
+    doc /* Aerodynamic state summary exported from wing solver. */
+    attribute lift_kn: Real;
+    attribute drag_kn: Real;
+    attribute pitching_moment_knm: Real;
+  }
+
+  data def ThrottleCommand {
+    doc /* Engine throttle and fuel-enable bit for turbofan co-simulation. */
+    attribute throttle_norm: Real;
+    attribute fuel_enable: Boolean;
+    attribute afterburner_enable: Boolean;
+  }
+
+  data def ThrustState {
+    doc /* Propulsion output shared with performance models. */
+    attribute thrust_kn: Real;
+    attribute mass_flow_kgps: Real;
+    attribute exhaust_velocity_mps: Real;
+  }
+
+  data def ElectricalBusState {
+    doc /* Power bus telemetry for avionics, control, and autonomy loads. */
+    attribute voltage_kv: Real;
+    attribute current_a: Real;
+    attribute available_power_kw: Real;
+  }
+
+  data def AutonomyGuidance {
+    doc /* Autopilot-to-mission-computer guidance cues for co-simulation. */
+    attribute waypoint_heading_deg: Real;
+    attribute waypoint_altitude_m: Real;
+    attribute lateral_accel_mps2: Real;
+    attribute aggressiveness_norm: Real;
+  }
+
+  data def FlightStatusPacket {
+    doc /* Mission computer status feedback consumed by autonomy and analysis models. */
+    attribute airspeed_mps: Real;
+    attribute energy_state_norm: Real;
+    attribute angle_of_attack_deg: Real;
+    attribute health_code: Integer;
+  }
+
   part def WingmanDrone {
     doc /* Mission-configurable air vehicle coordinating with crewed fighters or remote operators. */
     attribute autonomy_mode_default = "loyal-wingman";
@@ -60,14 +128,17 @@ package WingmanDrone {
     attribute hardpoint_count = 4;
 
     port structuralMount {
+      attribute type = StructuralInterface;
       attribute kind = "structural";
       attribute direction = "bi";
     }
     port engineMount {
+      attribute type = StructuralInterface;
       attribute kind = "structural";
       attribute direction = "bi";
     }
     port avionicsBay {
+      attribute type = AvionicsBayData;
       attribute kind = "data";
       attribute direction = "bi";
     }
@@ -81,14 +152,17 @@ package WingmanDrone {
     attribute control_authority_deg = 35;
 
     port structuralMount {
+      attribute type = StructuralInterface;
       attribute kind = "structural";
       attribute direction = "bi";
     }
     port controlSurfaces {
+      attribute type = SurfaceActuationCommand;
       attribute kind = "data";
       attribute direction = "in";
     }
     port liftInterface {
+      attribute type = LiftState;
       attribute kind = "aerodynamic";
       attribute direction = "out";
     }
@@ -102,18 +176,22 @@ package WingmanDrone {
     attribute generator_output_kw = 150;
 
     in port throttleCmd {
+      attribute type = ThrottleCommand;
       attribute kind = "data";
       attribute direction = "in";
     }
     out port thrustOut {
+      attribute type = ThrustState;
       attribute kind = "mechanical";
       attribute direction = "out";
     }
     out port powerBus {
+      attribute type = ElectricalBusState;
       attribute kind = "electrical";
       attribute direction = "out";
     }
     port mountingHardpoint {
+      attribute type = StructuralInterface;
       attribute kind = "structural";
       attribute direction = "bi";
     }
@@ -131,18 +209,22 @@ package WingmanDrone {
       attribute direction = "in";
     }
     in port autonomyPort {
+      attribute type = AutonomyGuidance;
       attribute kind = "data";
       attribute direction = "in";
     }
     out port engineThrottle {
+      attribute type = ThrottleCommand;
       attribute kind = "data";
       attribute direction = "out";
     }
     out port surfaceBus {
+      attribute type = SurfaceActuationCommand;
       attribute kind = "data";
       attribute direction = "out";
     }
     out port flightStatus {
+      attribute type = FlightStatusPacket;
       attribute kind = "data";
       attribute direction = "out";
     }
@@ -153,12 +235,13 @@ package WingmanDrone {
       attribute direction = "out";
     }
     out port locationLLA {
-      doc /* Geodetic latitude, longitude (deg) and altitude (m) for navigation consumers. */
+      doc /* Geodetic latitude, longitude, altitude for navigation co-sim. */
       attribute type = GeodeticLLA;
       attribute kind = "data";
       attribute direction = "out";
     }
     in port powerIn {
+      attribute type = ElectricalBusState;
       attribute kind = "electrical";
       attribute direction = "in";
     }
@@ -170,14 +253,17 @@ package WingmanDrone {
     attribute update_rate_hz = 25;
 
     out port guidanceCmd {
+      attribute type = AutonomyGuidance;
       attribute kind = "data";
       attribute direction = "out";
     }
     in port feedbackBus {
+      attribute type = FlightStatusPacket;
       attribute kind = "data";
       attribute direction = "in";
     }
     in port powerIn {
+      attribute type = ElectricalBusState;
       attribute kind = "electrical";
       attribute direction = "in";
     }
@@ -190,18 +276,22 @@ package WingmanDrone {
     attribute generator_efficiency = 0.92;
 
     in port generatorInput {
+      attribute type = ElectricalBusState;
       attribute kind = "electrical";
       attribute direction = "in";
     }
     out port avionicsFeed {
+      attribute type = ElectricalBusState;
       attribute kind = "electrical";
       attribute direction = "out";
     }
     out port controlFeed {
+      attribute type = ElectricalBusState;
       attribute kind = "electrical";
       attribute direction = "out";
     }
     out port autonomyFeed {
+      attribute type = ElectricalBusState;
       attribute kind = "electrical";
       attribute direction = "out";
     }
@@ -219,6 +309,7 @@ package WingmanDrone {
       attribute direction = "out";
     }
     in port powerIn {
+      attribute type = ElectricalBusState;
       attribute kind = "electrical";
       attribute direction = "in";
     }

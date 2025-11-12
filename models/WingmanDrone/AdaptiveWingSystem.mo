@@ -7,10 +7,8 @@ model AdaptiveWingSystem
   parameter Real aspectRatio = 5.5;
   Interfaces.RealInput controlSurfaces "0..1 command from mission computer";
   Interfaces.RealOutput liftInterface;
-  Interfaces.RealOutput effectiveArea "Scaled wing area";
 protected
   parameter Real baseLiftCoeff = 0.6;
 equation
-  effectiveArea = referenceArea * wingAreaScale;
   liftInterface = baseLiftCoeff * wingAreaScale * controlSurfaces;
 end AdaptiveWingSystem;
