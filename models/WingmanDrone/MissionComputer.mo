@@ -6,6 +6,7 @@ model MissionComputer
   Interfaces.RealInput manualInput;
   Interfaces.RealInput autonomyPort;
   Interfaces.RealInput powerIn;
+  Interfaces.RealInput fuelStatus;
   Interfaces.RealOutput engineThrottle;
   Interfaces.RealOutput surfaceBus;
   Interfaces.RealOutput flightStatus;
@@ -20,10 +21,10 @@ protected
   parameter Real velocityGain = 180;
 equation
   blendCmd = 0.6 * autonomyPort + 0.4 * manualInput;
-  powerFactor = min(1.0, max(0.2, powerIn));
+  powerFactor = min(1.0, max(0.2, powerIn)) * max(0.0, min(1.0, fuelStatus));
   engineThrottle = min(1.0, max(0.1, blendCmd * powerFactor));
   surfaceBus = min(1.0, engineThrottle + 0.1 * powerFactor);
-  flightStatus = 0.4 * engineThrottle + 0.4 * surfaceBus + 0.2 * (orientationEuler / 360);
+  flightStatus = 0.35 * engineThrottle + 0.35 * surfaceBus + 0.15 * (orientationEuler / 360) + 0.15 * fuelStatus;
   der(headingDeg) = headingGain * (manualInput - 0.5) + 20 * (autonomyPort - 0.5);
   der(positionKm) = velocityGain * engineThrottle;
   orientationEuler = headingDeg;

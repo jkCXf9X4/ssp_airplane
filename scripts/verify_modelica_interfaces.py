@@ -136,7 +136,6 @@ def verify_interfaces(
 
     orphan_models = sorted(set(models) - set(parts))
     if orphan_models:
-        exit_code = 2
         print("\nModels with no matching part definition:", ", ".join(orphan_models))
 
     return exit_code

@@ -17,6 +17,7 @@ DEFAULT_MODELS = [
     "WingmanDrone.MissionComputer",
     "WingmanDrone.AutopilotModule",
     "WingmanDrone.PowerSystem",
+    "WingmanDrone.FuelSystem",
     "WingmanDrone.ControlInterface",
     "WingmanDrone.DroneSystem",
 ]

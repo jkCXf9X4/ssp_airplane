@@ -105,6 +105,18 @@ package WingmanDrone {
     attribute health_code: Integer;
   }
 
+  data def FuelConsumptionRate {
+    doc /* Mass flow request or telemetry for turbofan fuel usage (kg/s). */
+    attribute mass_flow_kgps: Real;
+  }
+
+  data def FuelLevelState {
+    doc /* Remaining fuel mass and normalized level for availability tracking. */
+    attribute fuel_remaining_kg: Real;
+    attribute fuel_level_norm: Real;
+    attribute fuel_starved: Boolean;
+  }
+
   part def WingmanDrone {
     doc /* Mission-configurable air vehicle coordinating with crewed fighters or remote operators. */
     attribute autonomy_mode_default = "loyal-wingman";
@@ -117,6 +129,7 @@ package WingmanDrone {
     part missionComputer: MissionComputer;
     part autopilot: AutopilotModule;
     part power: PowerSystem;
+    part fuel: FuelSystem;
     part controls: ControlInterface;
   }
 
@@ -128,17 +141,17 @@ package WingmanDrone {
     attribute hardpoint_count = 4;
 
     port structuralMount {
-      attribute type = StructuralInterface;
+      attribute type = "StructuralInterface";
       attribute kind = "structural";
       attribute direction = "bi";
     }
     port engineMount {
-      attribute type = StructuralInterface;
+      attribute type = "StructuralInterface";
       attribute kind = "structural";
       attribute direction = "bi";
     }
     port avionicsBay {
-      attribute type = AvionicsBayData;
+      attribute type = "AvionicsBayData";
       attribute kind = "data";
       attribute direction = "bi";
     }
@@ -152,17 +165,17 @@ package WingmanDrone {
     attribute control_authority_deg = 35;
 
     port structuralMount {
-      attribute type = StructuralInterface;
+      attribute type = "StructuralInterface";
       attribute kind = "structural";
       attribute direction = "bi";
     }
     port controlSurfaces {
-      attribute type = SurfaceActuationCommand;
+      attribute type = "SurfaceActuationCommand";
       attribute kind = "data";
       attribute direction = "in";
     }
     port liftInterface {
-      attribute type = LiftState;
+      attribute type = "LiftState";
       attribute kind = "aerodynamic";
       attribute direction = "out";
     }
@@ -176,22 +189,32 @@ package WingmanDrone {
     attribute generator_output_kw = 150;
 
     in port throttleCmd {
-      attribute type = ThrottleCommand;
+      attribute type = "ThrottleCommand";
+      attribute kind = "data";
+      attribute direction = "in";
+    }
+    in port fuelStatus {
+      attribute type = "FuelLevelState";
       attribute kind = "data";
       attribute direction = "in";
     }
     out port thrustOut {
-      attribute type = ThrustState;
+      attribute type = "ThrustState";
       attribute kind = "mechanical";
       attribute direction = "out";
     }
+    out port fuelFlow {
+      attribute type = "FuelConsumptionRate";
+      attribute kind = "data";
+      attribute direction = "out";
+    }
     out port powerBus {
-      attribute type = ElectricalBusState;
+      attribute type = "ElectricalBusState";
       attribute kind = "electrical";
       attribute direction = "out";
     }
     port mountingHardpoint {
-      attribute type = StructuralInterface;
+      attribute type = "StructuralInterface";
       attribute kind = "structural";
       attribute direction = "bi";
     }
@@ -204,44 +227,49 @@ package WingmanDrone {
     attribute networked_control_buses = 3;
 
     in port manualInput {
-      attribute type = PilotCommandOut;
+      attribute type = "PilotCommandOut";
       attribute kind = "data";
       attribute direction = "in";
     }
     in port autonomyPort {
-      attribute type = AutonomyGuidance;
+      attribute type = "AutonomyGuidance";
+      attribute kind = "data";
+      attribute direction = "in";
+    }
+    in port fuelStatus {
+      attribute type = "FuelLevelState";
       attribute kind = "data";
       attribute direction = "in";
     }
     out port engineThrottle {
-      attribute type = ThrottleCommand;
+      attribute type = "ThrottleCommand";
       attribute kind = "data";
       attribute direction = "out";
     }
     out port surfaceBus {
-      attribute type = SurfaceActuationCommand;
+      attribute type = "SurfaceActuationCommand";
       attribute kind = "data";
       attribute direction = "out";
     }
     out port flightStatus {
-      attribute type = FlightStatusPacket;
+      attribute type = "FlightStatusPacket";
       attribute kind = "data";
       attribute direction = "out";
     }
     out port orientationEuler {
       doc /* Body attitude exported as roll/pitch/yaw Euler angles in degrees. */
-      attribute type = OrientationEuler;
+      attribute type = "OrientationEuler";
       attribute kind = "data";
       attribute direction = "out";
     }
     out port locationLLA {
       doc /* Geodetic latitude, longitude, altitude for navigation co-sim. */
-      attribute type = GeodeticLLA;
+      attribute type = "GeodeticLLA";
       attribute kind = "data";
       attribute direction = "out";
     }
     in port powerIn {
-      attribute type = ElectricalBusState;
+      attribute type = "ElectricalBusState";
       attribute kind = "electrical";
       attribute direction = "in";
     }
@@ -253,17 +281,17 @@ package WingmanDrone {
     attribute update_rate_hz = 25;
 
     out port guidanceCmd {
-      attribute type = AutonomyGuidance;
+      attribute type = "AutonomyGuidance";
       attribute kind = "data";
       attribute direction = "out";
     }
     in port feedbackBus {
-      attribute type = FlightStatusPacket;
+      attribute type = "FlightStatusPacket";
       attribute kind = "data";
       attribute direction = "in";
     }
     in port powerIn {
-      attribute type = ElectricalBusState;
+      attribute type = "ElectricalBusState";
       attribute kind = "electrical";
       attribute direction = "in";
     }
@@ -276,23 +304,40 @@ package WingmanDrone {
     attribute generator_efficiency = 0.92;
 
     in port generatorInput {
-      attribute type = ElectricalBusState;
+      attribute type = "ElectricalBusState";
       attribute kind = "electrical";
       attribute direction = "in";
     }
     out port avionicsFeed {
-      attribute type = ElectricalBusState;
+      attribute type = "ElectricalBusState";
       attribute kind = "electrical";
       attribute direction = "out";
     }
     out port controlFeed {
-      attribute type = ElectricalBusState;
+      attribute type = "ElectricalBusState";
       attribute kind = "electrical";
       attribute direction = "out";
     }
     out port autonomyFeed {
-      attribute type = ElectricalBusState;
+      attribute type = "ElectricalBusState";
       attribute kind = "electrical";
+      attribute direction = "out";
+    }
+  }
+
+  part def FuelSystem {
+    doc /* Fuel storage and management subsystem feeding the turbofan and publishing remaining range. */
+    attribute fuel_capacity_kg = 2000;
+    attribute reserve_fraction = 0.05;
+
+    in port fuelFlowIn {
+      attribute type = "FuelConsumptionRate";
+      attribute kind = "data";
+      attribute direction = "in";
+    }
+    out port fuelState {
+      attribute type = "FuelLevelState";
+      attribute kind = "data";
       attribute direction = "out";
     }
   }
@@ -304,12 +349,12 @@ package WingmanDrone {
 
     out port pilotCommandOut {
       doc /* HOTAS-style control bundle typed as PilotCommandOut for downstream consumers. */
-      attribute type = PilotCommandOut;
+      attribute type = "PilotCommandOut";
       attribute kind = "data";
       attribute direction = "out";
     }
     in port powerIn {
-      attribute type = ElectricalBusState;
+      attribute type = "ElectricalBusState";
       attribute kind = "electrical";
       attribute direction = "in";
     }
@@ -354,6 +399,9 @@ package WingmanDrone {
   connect PowerSystem.autonomyFeed to AutopilotModule.powerIn;
   connect MissionComputer.surfaceBus to AdaptiveWingSystem.controlSurfaces;
   connect MissionComputer.engineThrottle to TurbofanPropulsion.throttleCmd;
+  connect TurbofanPropulsion.fuelFlow to FuelSystem.fuelFlowIn;
+  connect FuelSystem.fuelState to TurbofanPropulsion.fuelStatus;
+  connect FuelSystem.fuelState to MissionComputer.fuelStatus;
   connect AutopilotModule.guidanceCmd to MissionComputer.autonomyPort;
   connect MissionComputer.flightStatus to AutopilotModule.feedbackBus;
   connect ControlInterface.pilotCommandOut to MissionComputer.manualInput;

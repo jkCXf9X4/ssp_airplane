@@ -45,6 +45,20 @@ FMUs and SSD are packaged into a zip file, renamed *.ssp
 
 Utilize OMSimulator as simulation engine, via python
 
+## Scenario workflow
+
+1. Generate mission waypoints via `python3 scripts/generate_scenario.py --output build/scenarios/demo.json`.
+2. Rebuild the FMUs/SSD/SSP with the helper scripts whenever the models change.
+3. Run `python3 scripts/simulate_scenario.py --scenario build/scenarios/demo.json` to execute OMSimulator (append `--dry-run` to perform the analytic approximation instead of invoking OMSimulator or pass a custom `--ssp`).
+4. Execute `pytest` to run the scenario-based unit tests and validate requirement coverage (range, fuel exhaustion).
+
+## Verification helpers
+
+- `python3 scripts/verify_modelica_interfaces.py`
+- `python3 scripts/verify_connections.py`
+- `python3 scripts/verify_model_equations.py --omc /path/to/omc`
+- `python3 scripts/simulate_scenario.py --scenario ... --ssp ...`
+
 
 # File disposition
 

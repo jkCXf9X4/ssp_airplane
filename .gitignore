@@ -44,3 +44,5 @@ success
 
 venv/
 build/
+third_party/
+.pip_cache/

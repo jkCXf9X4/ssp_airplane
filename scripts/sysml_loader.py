@@ -1,8 +1,14 @@
 """SysML v2 architecture loader backed by PySysML2."""
 from __future__ import annotations
 
+import sys
 from pathlib import Path
+import tempfile
 from typing import Any, Dict, List, Optional, Tuple
+
+THIRD_PARTY = Path(__file__).resolve().parents[1] / "third_party"
+if THIRD_PARTY.exists() and str(THIRD_PARTY) not in sys.path:
+    sys.path.insert(0, str(THIRD_PARTY))
 
 from anytree import PreOrderIter
 from pysysml2.modeling import Model
@@ -16,6 +22,7 @@ COMPONENT_ID_MAP: Dict[str, str] = {
     "MissionComputer": "comp.mission_computer",
     "AutopilotModule": "comp.autopilot",
     "PowerSystem": "comp.power",
+    "FuelSystem": "comp.fuel",
     "ControlInterface": "comp.control_interface",
 }
 
@@ -27,16 +34,45 @@ MODEL_CLASS_MAP: Dict[str, str] = {
     "MissionComputer": "WingmanDrone.MissionComputer",
     "AutopilotModule": "WingmanDrone.AutopilotModule",
     "PowerSystem": "WingmanDrone.PowerSystem",
+    "FuelSystem": "WingmanDrone.FuelSystem",
     "ControlInterface": "WingmanDrone.ControlInterface",
 }
 
 _ANALYSIS_PART_NAMES = {"AnalysisParameters", "OptimizationSettings", "VariableRange"}
 
 
+def _preprocess_sysml_source(path: Path) -> Path:
+    """Strip constructs unsupported by the current PySysML2 grammar (e.g., data def)."""
+    text = path.read_text().splitlines()
+    sanitized_lines: List[str] = []
+    skip_depth = 0
+    skipping = False
+    for line in text:
+        stripped = line.lstrip()
+        if stripped.startswith("data def "):
+            skipping = True
+            skip_depth = stripped.count("{") - stripped.count("}")
+            continue
+        if skipping:
+            skip_depth += line.count("{") - line.count("}")
+            if skip_depth <= 0 and "}" in line:
+                skipping = False
+            continue
+        sanitized_lines.append(line)
+
+    tmp = Path(tempfile.mkstemp(prefix="sysml_sanitized_", suffix=".sysml")[1])
+    tmp.write_text("\n".join(sanitized_lines))
+    return tmp
+
+
 def load_architecture(path: Path) -> Dict[str, Any]:
     """Parse the SysML v2 model and return a dictionary compatible with the former YAML schema."""
     model = Model()
-    model.from_sysml2_file(str(path))
+    sanitized = _preprocess_sysml_source(path)
+    try:
+        model.from_sysml2_file(str(sanitized))
+    finally:
+        sanitized.unlink(missing_ok=True)
     ctx_lookup = {idx: ctx for idx, (_, ctx) in model.sysml2_visitor.element_ctxs.items()}
     package = _find_package(model)
 

@@ -11,6 +11,7 @@ model DroneSystem
   MissionComputer missionComputer;
   AutopilotModule autopilot;
   ControlInterface controls;
+  FuelSystem fuel;
   Interfaces.RealOutput thrust_kN;
   Interfaces.RealOutput liftInterface;
   Interfaces.RealOutput payloadCapacityKg;
@@ -25,6 +26,9 @@ equation
   connect(power.avionicsFeed, missionComputer.powerIn);
   connect(power.controlFeed, controls.powerIn);
   connect(power.autonomyFeed, autopilot.powerIn);
+  connect(engine.fuelFlow, fuel.fuelFlowIn);
+  connect(fuel.fuelState, engine.fuelStatus);
+  connect(fuel.fuelState, missionComputer.fuelStatus);
   connect(controls.pilotCommandOut, missionComputer.manualInput);
   connect(autopilot.guidanceCmd, missionComputer.autonomyPort);
   connect(missionComputer.engineThrottle, engine.throttleCmd);
