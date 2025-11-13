@@ -4,7 +4,7 @@ model AutopilotModule
   parameter Real updateRateHz = 25;
   parameter Real sensorFidelity = 0.95;
   input GI.FlightStatusPacket feedbackBus;
-  input GI.ElectricalBusState powerIn;
+  input GI.GenericElectricalBus powerIn;
   output GI.AutonomyGuidance guidanceCmd;
 protected
   Real stability;

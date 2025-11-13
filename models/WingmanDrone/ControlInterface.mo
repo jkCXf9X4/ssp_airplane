@@ -3,8 +3,8 @@ model ControlInterface
   import GI = WingmanDrone.GeneratedInterfaces;
   parameter Real inputLag = 0.15;
   parameter Real manualCommandDefault(min=0.0, max=1.0) = 0.5;
-  input GI.ElectricalBusState powerIn;
-  output GI.PilotCommandOut pilotCommandOut;
+  input GI.GenericElectricalBus powerIn;
+  output GI.PilotCommand pilotCommandOut;
 protected
   Real effectiveCommand;
 equation

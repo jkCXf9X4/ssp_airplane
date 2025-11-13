@@ -6,11 +6,11 @@ import argparse
 from pathlib import Path
 from typing import Dict, List, Tuple
 
-from scripts.utils.sysmlv2_arch_parser import SysMLArchitecture, SysMLPortDefinition, parse_sysml_folder
+from utils.sysmlv2_arch_parser import SysMLArchitecture, SysMLPortDefinition, parse_sysml_folder
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 ARCH_PATH = REPO_ROOT / "architecture"
-OUTPUT_DIR = REPO_ROOT / "generated" 
+OUTPUT_DIR = REPO_ROOT / "models" /"WingmanDrone"
 
 PRIMITIVE_MAP = {
     "real": "Real",

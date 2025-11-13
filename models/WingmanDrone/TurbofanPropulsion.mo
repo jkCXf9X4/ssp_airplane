@@ -9,7 +9,7 @@ model TurbofanPropulsion
   input GI.FuelLevelState fuelStatus;
   output GI.ThrustState thrustOut;
   output GI.FuelConsumptionRate fuelFlow;
-  output GI.ElectricalBusState powerBus;
+  output GI.GenericElectricalBus powerBus;
 protected
   Real commandedThrust;
   Real throttle;

@@ -9,7 +9,7 @@ from typing import Dict, List, Optional, Tuple
 
 import xml.etree.ElementTree as ET
 
-from scripts.utils.sysmlv2_arch_parser import (
+from utils.sysmlv2_arch_parser import (
     SysMLArchitecture,
     SysMLPortDefinition,
     SysMLPortEndpoint,

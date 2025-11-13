@@ -4,10 +4,10 @@ model PowerSystem
   parameter Real busVoltageKV = 1.2;
   parameter Real bufferCapacityMJ = 500;
   parameter Real distributionEfficiency = 0.95;
-  input GI.ElectricalBusState generatorInput;
-  output GI.ElectricalBusState avionicsFeed;
-  output GI.ElectricalBusState controlFeed;
-  output GI.ElectricalBusState autonomyFeed;
+  input GI.GenericElectricalBus generatorInput;
+  output GI.GenericElectricalBus avionicsFeed;
+  output GI.GenericElectricalBus controlFeed;
+  output GI.GenericElectricalBus autonomyFeed;
 protected
   parameter Real controlShare = 0.2;
   parameter Real autonomyShare = 0.25;

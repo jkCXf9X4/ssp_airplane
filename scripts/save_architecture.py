@@ -6,7 +6,7 @@ import argparse
 from pathlib import Path
 from typing import Optional
 
-from scripts.utils.sysmlv2_arch_parser import parse_sysml_folder
+from utils.sysmlv2_arch_parser import parse_sysml_folder
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_ARCH_DIR = REPO_ROOT / "architecture"

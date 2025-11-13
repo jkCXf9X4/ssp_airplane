@@ -8,7 +8,7 @@ SCRIPTS_DIR = REPO_ROOT / "scripts"
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
-from sysmlv2_arch_parser import parse_sysml_folder  # type: ignore  # noqa: E402
+from utils.sysmlv2_arch_parser import parse_sysml_folder  # type: ignore  # noqa: E402
 
 
 def test_parser_collects_parts_and_ports():

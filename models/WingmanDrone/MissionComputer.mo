@@ -3,9 +3,9 @@ model MissionComputer
   import GI = WingmanDrone.GeneratedInterfaces;
   parameter Real redundancyLevel = 3;
   parameter Real computeBudgetTOPS = 25;
-  input GI.PilotCommandOut manualInput;
+  input GI.PilotCommand manualInput;
   input GI.AutonomyGuidance autonomyPort;
-  input GI.ElectricalBusState powerIn;
+  input GI.GenericElectricalBus powerIn;
   input GI.FuelLevelState fuelStatus;
   output GI.ThrottleCommand engineThrottle;
   output GI.SurfaceActuationCommand surfaceBus;
