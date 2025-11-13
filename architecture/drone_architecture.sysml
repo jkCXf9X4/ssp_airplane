@@ -1,4 +1,7 @@
 package WingmanDrone {
+  doc /* Loyal-wingman autonomous drone modeled after MQ-28 and Hellsing CA-1 Europa with conventional aviation propulsion. */
+  attribute system_name = "DroneSystem";
+
   part def WingmanDrone {
     doc /* Mission-configurable air vehicle coordinating with crewed fighters or remote operators. */
     attribute autonomy_mode_default = "loyal-wingman";
@@ -160,4 +163,5 @@ package WingmanDrone {
     out PilotCommand : PilotCommand;
 
   }
+
 }
