@@ -22,6 +22,9 @@ python3 scripts/verify_modelica_variables.py
 echo "Building FMUs..."
 python3 scripts/build_fmus.py
 
+echo "Verifying FMUs..."
+python3 scripts/verify_fmu_ios.py
+
 echo "Regenerating SSD..."
 python3 scripts/generate_ssd.py
 
