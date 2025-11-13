@@ -31,6 +31,7 @@ def build_mos_script(model_name: str, output_dir: Path) -> str:
 loadFile("{package_path.as_posix()}");
 cd("./build/tmp/");
 setCommandLineOptions("--fmiFlags=s:cvode");
+setCommandLineOptions("--fmuRuntimeDepends=all");
 filename := OpenModelica.Scripting.buildModelFMU({model_name}, version="2.0", fmuType="cs", platforms={{"static"}});
 filename;
 getErrorString();

@@ -48,7 +48,7 @@ def to_modelica_type(sysml_type: str) -> str:
 def generate_modelica_package(defs: Dict[str, List[Tuple[str, str]]]) -> str:
     lines = ["within WingmanDrone;", "package GeneratedInterfaces"]
     for type_name, fields in sorted(defs.items()):
-        lines.append(f"  record {type_name}")
+        lines.append(f"  connector {type_name}")
         if not fields:
             lines.append(f"  end {type_name};")
             continue
