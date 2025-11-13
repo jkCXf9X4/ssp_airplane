@@ -1,5 +1,5 @@
 package WingmanDrone {
-part def WingmanDrone {
+  part def WingmanDrone {
     doc /* Mission-configurable air vehicle coordinating with crewed fighters or remote operators. */
     attribute autonomy_mode_default = "loyal-wingman";
     attribute design_range_km = 3700;
@@ -22,8 +22,6 @@ part def WingmanDrone {
     attribute payload_capacity_kg = 1500;
     attribute hardpoint_count = 4;
 
-    doc /* Wiring/data breakout into the avionics bay for payload integration. */
-    inout avionicsBay : AvionicsBayData;
   }
 
   part def AdaptiveWingSystem {
@@ -35,6 +33,8 @@ part def WingmanDrone {
 
     doc /* Mission computer bus commanding surface deflections per axis. */
     in controlSurfaces : SurfaceActuationCommand;
+
+
     doc /* Aerodynamic load feedback returned to mission computer/autopilot. */
     out liftInterface : LiftState;
   }
@@ -48,12 +48,17 @@ part def WingmanDrone {
 
     doc /* Mission computer throttle command input. */
     in throttleCmd : ThrottleCommand;
+
     doc /* Fuel availability feedback for derating logic. */
     in fuelStatus : FuelLevelState;
+
+
     doc /* Propulsion thrust telemetry exported to airframe. */
     out thrustOut : ThrustState;
+
     doc /* Requested fuel mass-flow shared with storage system. */
     out fuelFlow : FuelConsumptionRate;
+
     doc /* Electrical bus output feeding vehicle power distribution. */
     out powerBus : GenericElectricalBus;
   }
@@ -66,24 +71,32 @@ part def WingmanDrone {
 
     doc /* Manual HOTAS command bundle from control interface. */
     in manualInput : PilotCommand;
+
     doc /* Autopilot/autonomy guidance cue input. */
     in autonomyPort : AutonomyGuidance;
+
     doc /* Fuel telemetry used for command blending and power limiting. */
     in fuelStatus : FuelLevelState;
+
+    doc /* Electrical inlet powering the mission computer. */
+    in powerIn : GenericElectricalBus;
+
+
     doc /* Structured throttle/fuel enable command to propulsion. */
     out engineThrottle : ThrottleCommand;
+
     doc /* Control-surface commands broadcast toward actuators. */
     out surfaceBus : SurfaceActuationCommand;
+
     doc /* Summary of vehicle energy/health for upstream consumers. */
     out flightStatus : FlightStatusPacket;
+
     doc /* Body attitude exported as roll/pitch/yaw Euler angles in degrees. */
     out orientationEuler : OrientationEuler;
+
     doc /* Geodetic latitude/longitude/altitude update for mission/autonomy. */
     out locationLLA : GeodeticLLA;
-    doc /* Electrical inlet powering the mission computer payload. */
-    doc /* Electrical supply for autopilot electronics. */
-    doc /* Electrical inlet powering the manual control interface. */
-    in powerIn : GenericElectricalBus;
+
   }
 
   part def AutopilotModule {
@@ -91,12 +104,16 @@ part def WingmanDrone {
     attribute guidance_modes = "escort+loiter+return";
     attribute update_rate_hz = 25;
 
-    doc /* Autopilot guidance directives to mission computer. */
-    out guidanceCmd : AutonomyGuidance;
     doc /* Mission-computer flight status back into autopilot. */
     in feedbackBus : FlightStatusPacket;
+
     doc /* Electrical supply for autopilot electronics. */
     in powerIn : GenericElectricalBus;
+
+
+    doc /* Autopilot guidance directives to mission computer. */
+    out guidanceCmd : AutonomyGuidance;
+
   }
 
   part def PowerSystem {
@@ -107,10 +124,13 @@ part def WingmanDrone {
 
     doc /* Generator output feed captured as structured electrical telemetry. */
     in generatorInput : GenericElectricalBus;
+
     doc /* Conditioned electrical feed powering avionics and mission computer. */
     out avionicsFeed : GenericElectricalBus;
+
     doc /* Regulated bus powering control interface and actuator electronics. */
     out controlFeed : GenericElectricalBus;
+
     doc /* Dedicated supply for autonomy/autopilot compute payloads. */
     out autonomyFeed : GenericElectricalBus;
 
@@ -123,6 +143,7 @@ part def WingmanDrone {
 
     doc /* Propulsion-requested fuel mass flow entering storage manager. */
     in fuelFlowIn : FuelConsumptionRate;
+
     doc /* Telemetry describing remaining fuel mass/normalized level. */
     out fuelState : FuelLevelState;
   }
@@ -132,10 +153,11 @@ part def WingmanDrone {
     attribute input_scheme = "HOTAS/Gamepad";
     attribute telemetry_rate_hz = 60;
 
+    doc /* General power */
+    in powerIn : GenericElectricalBus;
+
     doc /* HOTAS-control bundle forwarded for mission computer sensor fusion. */
     out PilotCommand : PilotCommand;
 
-    doc /* General power */
-    in powerIn : GenericElectricalBus;
   }
 }

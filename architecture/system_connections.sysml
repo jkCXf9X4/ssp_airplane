@@ -1,5 +1,5 @@
 package WingmanDrone {
-connect AdaptiveWingSystem.structuralMount to CompositeAirframe.structuralMount;
+  connect AdaptiveWingSystem.structuralMount to CompositeAirframe.structuralMount;
   connect TurbofanPropulsion.mountingHardpoint to CompositeAirframe.engineMount;
   connect TurbofanPropulsion.powerBus to PowerSystem.generatorInput;
   connect PowerSystem.avionicsFeed to MissionComputer.powerIn;

@@ -1,5 +1,5 @@
 package WingmanDrone {
-port def PilotCommand {
+  port def PilotCommand {
     doc /* HOTAS-style control payload shared across control surfaces and mission computer consumers. */
     attribute stick_pitch_norm: Real;   /* -1..1, aft pull positive */
     attribute stick_roll_norm: Real;    /* -1..1, left deflection positive */
@@ -32,14 +32,6 @@ port def PilotCommand {
     attribute axial_load_kn: Real;
     attribute shear_load_kn: Real;
     attribute bending_moment_knm: Real;
-  }
-
-  port def AvionicsBayData {
-    doc /* Simplified avionics bay co-simulation payload for maintenance and payload swaps. */
-    attribute payload_id: Integer;
-    attribute payload_mass_kg: Real;
-    attribute data_rate_mbps: Real;
-    attribute cooling_load_kw: Real;
   }
 
   port def SurfaceActuationCommand {
