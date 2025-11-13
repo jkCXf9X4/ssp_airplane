@@ -17,6 +17,7 @@ python3 scripts/verify_connections.py
 
 echo "Verifying models"
 python3 scripts/verify_model_equations.py
+python3 scripts/verify_modelica_variables.py
 
 echo "Building FMUs..."
 python3 scripts/build_fmus.py

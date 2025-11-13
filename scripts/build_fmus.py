@@ -109,6 +109,9 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     output_dir = Path(args.output)
+
+    if output_dir.exists():
+        shutil.rmtree(output_dir)
     ensure_dir(output_dir)
 
     for model in args.models:
