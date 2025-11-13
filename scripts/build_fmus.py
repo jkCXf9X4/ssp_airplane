@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import shutil
 import subprocess
 import tempfile
 from pathlib import Path
@@ -123,7 +124,8 @@ def main() -> None:
         target_name = model.replace(".", "_") + ".fmu"
         target_path = output_dir / target_name
         try:
-            built_path.replace(target_path)
+            target_path.unlink(missing_ok=True)
+            shutil.move(str(built_path), target_path)
         except FileNotFoundError as exc:
             raise SystemExit(f"FMU file {built_path} missing after omc run for {model}") from exc
         print(f"  -> {target_path}")

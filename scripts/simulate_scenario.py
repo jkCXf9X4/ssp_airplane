@@ -63,28 +63,16 @@ class ScenarioResult:
 def run_with_oms(ssp_path: Path, result_file: Path, stop_time: float) -> None:
     ensure_third_party_on_path()
     try:
-        from OMSimulator import OMSimulator  # type: ignore
+        import pyssp4sim
     except ImportError as exc:  # pragma: no cover - dependent on environment
         raise SystemExit(
-            "OMSimulator Python package not available. Install it locally or via pip."
+            "ssp4sim Python package not available. Install it locally or via pip."
         ) from exc
+    
+    sim = pyssp4sim.Simulator("./simulation_config.json")
+    sim.init()
+    sim.simulate()
 
-    api = OMSimulator()
-    api.setCommandLineOption("--suppressPath=true")
-    temp_dir = Path(tempfile.mkdtemp(prefix="oms_run_"))
-    api.setTempDirectory(str(temp_dir))
-
-    model_name = api.importFile(str(ssp_path))
-    if not model_name:
-        raise RuntimeError(f"OMSimulator failed to import SSP: {ssp_path}")
-
-    api.setResultFile(model_name, str(result_file))
-    api.setStopTime(model_name, stop_time)
-    api.instantiate(model_name)
-    api.initialize(model_name)
-    api.simulate(model_name)
-    api.terminate(model_name)
-    api.delete(model_name)
 
 
 def simulate_scenario(

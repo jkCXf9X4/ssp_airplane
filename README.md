@@ -9,8 +9,14 @@ This repository tracks an SSP for a loyal-wingman style autonomous drone modeled
 - Optimization focuses on range, loiter/escort scenarios, payload configuration, and now tracks orientation/location states for scenario planning
 
 # Architecture
-The architecture is captured as SysML v2 textual notation in `architecture/aircraft_architecture.sysml`.  
-This file is parsed with [PySysML2](https://github.com/DAF-Digital-Transformation-Office/PySysML2) and serves as the single source of truth for the drone's composition (airframe, wings, turbofan propulsion, mission computer, control interface, power system, autopilot), connections, and scenario-planning parameters.
+The architecture is captured as SysML v2 textual notation split across:
+
+- `architecture/aircraft_architecture.sysml` – package metadata and requirements
+- `architecture/data_definitions.sysml` – all structured payload definitions
+- `architecture/part_definitions.sysml` – the block/port declarations
+- `architecture/system_connections.sysml` – all `connect` statements
+
+`scripts/sysml_loader.py` stitches these sections together for [PySysML2](https://github.com/DAF-Digital-Transformation-Office/PySysML2) so the package remains the single source of truth for composition, payload schemas, and connectivity.
 
 ## Components
 

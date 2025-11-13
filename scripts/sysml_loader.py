@@ -39,11 +39,17 @@ MODEL_CLASS_MAP: Dict[str, str] = {
 }
 
 _ANALYSIS_PART_NAMES = {"AnalysisParameters", "OptimizationSettings", "VariableRange"}
+ARCHITECTURE_ROOT = Path(__file__).resolve().parents[1] / "architecture"
+ARCH_SECTIONS = [
+    ARCHITECTURE_ROOT / "data_definitions.sysml",
+    ARCHITECTURE_ROOT / "part_definitions.sysml",
+    ARCHITECTURE_ROOT / "system_connections.sysml",
+]
 
 
 def _preprocess_sysml_source(path: Path) -> Path:
     """Strip constructs unsupported by the current PySysML2 grammar (e.g., data def)."""
-    text = path.read_text().splitlines()
+    text = get_architecture_text(path).splitlines()
     sanitized_lines: List[str] = []
     skip_depth = 0
     skipping = False
@@ -63,6 +69,21 @@ def _preprocess_sysml_source(path: Path) -> Path:
     tmp = Path(tempfile.mkstemp(prefix="sysml_sanitized_", suffix=".sysml")[1])
     tmp.write_text("\n".join(sanitized_lines))
     return tmp
+
+
+def get_architecture_text(path: Path) -> str:
+    base_text = path.read_text()
+    insert_idx = base_text.rfind("}")
+    if insert_idx == -1:
+        raise ValueError("Architecture file missing closing brace.")
+    prefix = base_text[:insert_idx].rstrip()
+    suffix = base_text[insert_idx:]
+    sections = []
+    for section in ARCH_SECTIONS:
+        if section.exists():
+            sections.append(section.read_text().strip())
+    combined_sections = "\n\n".join(sections)
+    return f"{prefix}\n{combined_sections}\n{suffix}"
 
 
 def load_architecture(path: Path) -> Dict[str, Any]:
@@ -247,6 +268,7 @@ def _port_definitions(node) -> List[Dict[str, Any]]:
                 "name": _clean_name(child.name),
                 "kind": port_attrs.get("kind"),
                 "direction": port_attrs.get("direction"),
+                "type": port_attrs.get("type"),
             }
         )
     return ports
@@ -310,6 +332,9 @@ def _clean_name(raw: Optional[str]) -> str:
 def _convert_constant(value: Optional[str]) -> Any:
     if value is None:
         return None
+    value = value.strip()
+    if (value.startswith('"') and value.endswith('"')) or (value.startswith("'") and value.endswith("'")):
+        value = value[1:-1]
     lowered = value.lower()
     if lowered in {"true", "false"}:
         return lowered == "true"

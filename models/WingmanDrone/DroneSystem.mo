@@ -1,6 +1,7 @@
 within WingmanDrone;
 model DroneSystem
   import Interfaces = WingmanDrone.Interfaces;
+  import GI = WingmanDrone.GeneratedInterfaces;
   parameter Real wingAreaScale = 1.0;
   parameter Real engineThrustScale = 1.0;
   parameter Real payloadScale = 1.0;
@@ -22,23 +23,27 @@ protected
   Real thrustToWeight;
   constant Real g_n = 9.80665;
 equation
-  connect(engine.powerBus, power.generatorInput);
-  connect(power.avionicsFeed, missionComputer.powerIn);
-  connect(power.controlFeed, controls.powerIn);
-  connect(power.autonomyFeed, autopilot.powerIn);
-  connect(engine.fuelFlow, fuel.fuelFlowIn);
-  connect(fuel.fuelState, engine.fuelStatus);
-  connect(fuel.fuelState, missionComputer.fuelStatus);
-  connect(controls.pilotCommandOut, missionComputer.manualInput);
-  connect(autopilot.guidanceCmd, missionComputer.autonomyPort);
-  connect(missionComputer.engineThrottle, engine.throttleCmd);
-  connect(missionComputer.surfaceBus, wings.controlSurfaces);
-  connect(missionComputer.flightStatus, autopilot.feedbackBus);
-  connect(engine.thrustOut, thrust_kN);
-  connect(wings.liftInterface, liftInterface);
+  power.generatorInput = engine.powerBus;
+  missionComputer.powerIn = power.avionicsFeed;
+  controls.powerIn = power.controlFeed;
+  autopilot.powerIn = power.autonomyFeed;
+
+  fuel.fuelFlowIn = engine.fuelFlow;
+  engine.fuelStatus = fuel.fuelState;
+  missionComputer.fuelStatus = fuel.fuelState;
+
+  missionComputer.manualInput = controls.pilotCommandOut;
+  missionComputer.autonomyPort = autopilot.guidanceCmd;
+  engine.throttleCmd = missionComputer.engineThrottle;
+  wings.controlSurfaces = missionComputer.surfaceBus;
+  autopilot.feedbackBus = missionComputer.flightStatus;
+
+  thrust_kN = engine.thrustOut.thrust_kn;
+  liftInterface = wings.liftInterface.lift_kn;
   payloadCapacityKg = airframe.payloadCapacity;
-  connect(missionComputer.orientationEuler, orientationEuler);
-  connect(missionComputer.locationLLA, locationLLA);
-  thrustToWeight = (engine.thrustOut * 1000) / max(1.0, g_n * (airframe.emptyMass + airframe.payloadCapacity));
+  orientationEuler = missionComputer.orientationEuler.yaw_deg;
+  locationLLA = missionComputer.locationLLA.latitude_deg;
+
+  thrustToWeight = (engine.thrustOut.thrust_kn * 1000) / max(1.0, g_n * (airframe.emptyMass + airframe.payloadCapacity));
   rangeEstimateKm = 3000 * thrustToWeight * wingAreaScale;
 end DroneSystem;

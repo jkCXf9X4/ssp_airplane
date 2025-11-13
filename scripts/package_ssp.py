@@ -38,7 +38,7 @@ def main() -> None:
         archive.writestr("manifest.xml", MANIFEST_TEMPLATE)
         archive.write(args.ssd, arcname="SystemStructure.ssd")
         for fmu in fmu_files:
-            arcname = f"resources/fmus/{fmu.name}"
+            arcname = f"resources/{fmu.name}"
             archive.write(fmu, arcname=arcname)
             print(f"Added {arcname}")
 

@@ -6,5 +6,6 @@ PowerSystem
 CompositeAirframe
 TurbofanPropulsion
 FuelSystem
+GeneratedInterfaces
 ControlInterface
 AdaptiveWingSystem
