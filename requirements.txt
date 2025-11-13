@@ -1,5 +1,3 @@
-anytree>=2.13.0
-pysysml2 @ git+https://github.com/DAF-Digital-Transformation-Office/PySysML2.git
 pytest>=8.0.0
 -e /home/eriro/pwa/2_work/ssp4sim/build/public/python_api
 pyssp-standard

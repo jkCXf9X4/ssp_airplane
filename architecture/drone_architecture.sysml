@@ -35,11 +35,11 @@ package WingmanDrone {
     attribute control_authority_deg = 35;
 
     doc /* Mission computer bus commanding surface deflections per axis. */
-    in controlSurfaces : SurfaceActuationCommand;
+    in port controlSurfaces : SurfaceActuationCommand;
 
 
     doc /* Aerodynamic load feedback returned to mission computer/autopilot. */
-    out liftInterface : LiftState;
+    out port liftInterface : LiftState;
   }
 
   part def TurbofanPropulsion {
@@ -50,20 +50,20 @@ package WingmanDrone {
     attribute generator_output_kw = 150;
 
     doc /* Mission computer throttle command input. */
-    in throttleCmd : ThrottleCommand;
+    in port throttleCmd : ThrottleCommand;
 
     doc /* Fuel availability feedback for derating logic. */
-    in fuelStatus : FuelLevelState;
+    in port fuelStatus : FuelLevelState;
 
 
     doc /* Propulsion thrust telemetry exported to airframe. */
-    out thrustOut : ThrustState;
+    out port thrustOut : ThrustState;
 
     doc /* Requested fuel mass-flow shared with storage system. */
-    out fuelFlow : FuelConsumptionRate;
+    out port fuelFlow : FuelConsumptionRate;
 
     doc /* Electrical bus output feeding vehicle power distribution. */
-    out powerBus : GenericElectricalBus;
+    out port powerBus : GenericElectricalBus;
   }
 
   part def MissionComputer {
@@ -73,32 +73,32 @@ package WingmanDrone {
     attribute networked_control_buses = 3;
 
     doc /* Manual HOTAS command bundle from control interface. */
-    in manualInput : PilotCommand;
+    in port manualInput : PilotCommand;
 
     doc /* Autopilot/autonomy guidance cue input. */
-    in autonomyPort : AutonomyGuidance;
+    in port autonomyPort : AutonomyGuidance;
 
     doc /* Fuel telemetry used for command blending and power limiting. */
-    in fuelStatus : FuelLevelState;
+    in port fuelStatus : FuelLevelState;
 
     doc /* Electrical inlet powering the mission computer. */
-    in powerIn : GenericElectricalBus;
+    in port powerIn : GenericElectricalBus;
 
 
     doc /* Structured throttle/fuel enable command to propulsion. */
-    out engineThrottle : ThrottleCommand;
+    out port engineThrottle : ThrottleCommand;
 
     doc /* Control-surface commands broadcast toward actuators. */
-    out surfaceBus : SurfaceActuationCommand;
+    out port surfaceBus : SurfaceActuationCommand;
 
     doc /* Summary of vehicle energy/health for upstream consumers. */
-    out flightStatus : FlightStatusPacket;
+    out port flightStatus : FlightStatusPacket;
 
     doc /* Body attitude exported as roll/pitch/yaw Euler angles in degrees. */
-    out orientationEuler : OrientationEuler;
+    out port orientationEuler : OrientationEuler;
 
     doc /* Geodetic latitude/longitude/altitude update for mission/autonomy. */
-    out locationLLA : GeodeticLLA;
+    out port locationLLA : GeodeticLLA;
 
   }
 
@@ -108,14 +108,14 @@ package WingmanDrone {
     attribute update_rate_hz = 25;
 
     doc /* Mission-computer flight status back into autopilot. */
-    in feedbackBus : FlightStatusPacket;
+    in port feedbackBus : FlightStatusPacket;
 
     doc /* Electrical supply for autopilot electronics. */
-    in powerIn : GenericElectricalBus;
+    in port powerIn : GenericElectricalBus;
 
 
     doc /* Autopilot guidance directives to mission computer. */
-    out guidanceCmd : AutonomyGuidance;
+    out port guidanceCmd : AutonomyGuidance;
 
   }
 
@@ -126,16 +126,16 @@ package WingmanDrone {
     attribute generator_efficiency = 0.92;
 
     doc /* Generator output feed captured as structured electrical telemetry. */
-    in generatorInput : GenericElectricalBus;
+    in port generatorInput : GenericElectricalBus;
 
     doc /* Conditioned electrical feed powering avionics and mission computer. */
-    out avionicsFeed : GenericElectricalBus;
+    out port avionicsFeed : GenericElectricalBus;
 
     doc /* Regulated bus powering control interface and actuator electronics. */
-    out controlFeed : GenericElectricalBus;
+    out port controlFeed : GenericElectricalBus;
 
     doc /* Dedicated supply for autonomy/autopilot compute payloads. */
-    out autonomyFeed : GenericElectricalBus;
+    out port autonomyFeed : GenericElectricalBus;
 
   }
 
@@ -145,10 +145,10 @@ package WingmanDrone {
     attribute reserve_fraction = 0.05;
 
     doc /* Propulsion-requested fuel mass flow entering storage manager. */
-    in fuelFlowIn : FuelConsumptionRate;
+    in port fuelFlowIn : FuelConsumptionRate;
 
     doc /* Telemetry describing remaining fuel mass/normalized level. */
-    out fuelState : FuelLevelState;
+    out port fuelState : FuelLevelState;
   }
 
   part def ControlInterface {
@@ -157,10 +157,10 @@ package WingmanDrone {
     attribute telemetry_rate_hz = 60;
 
     doc /* General power */
-    in powerIn : GenericElectricalBus;
+    in port powerIn : GenericElectricalBus;
 
     doc /* HOTAS-control bundle forwarded for mission computer sensor fusion. */
-    out PilotCommand : PilotCommand;
+    out port PilotCommand : PilotCommand;
 
   }
 

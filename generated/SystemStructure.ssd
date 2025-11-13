@@ -1,0 +1,371 @@
+<?xml version='1.0' encoding='utf-8'?>
+<ssd:SystemStructureDescription xmlns:ssc="http://ssp-standard.org/SSP1/SystemStructureCommon" xmlns:ssd="http://ssp-standard.org/SSP1/SystemStructureDescription" name="WingmanDrone" version="1.0">
+  <ssd:System name="WingmanDrone">
+    <ssd:Elements>
+      <ssd:Component name="CompositeAirframe" type="application/x-fmu-sharedlibrary" source="resources/WingmanDrone_CompositeAirframe.fmu" />
+      <ssd:Component name="AdaptiveWingSystem" type="application/x-fmu-sharedlibrary" source="resources/WingmanDrone_AdaptiveWingSystem.fmu">
+        <ssd:Connectors>
+          <ssd:Connector name="controlSurfaces.left_aileron_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="controlSurfaces.right_aileron_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="controlSurfaces.elevator_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="controlSurfaces.rudder_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="controlSurfaces.flaperon_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="liftInterface.lift_kn" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="liftInterface.drag_kn" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="liftInterface.pitching_moment_knm" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+        </ssd:Connectors>
+      </ssd:Component>
+      <ssd:Component name="TurbofanPropulsion" type="application/x-fmu-sharedlibrary" source="resources/WingmanDrone_TurbofanPropulsion.fmu">
+        <ssd:Connectors>
+          <ssd:Connector name="throttleCmd.throttle_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="throttleCmd.fuel_enable" kind="input">
+            <ssc:Boolean />
+          </ssd:Connector>
+          <ssd:Connector name="throttleCmd.afterburner_enable" kind="input">
+            <ssc:Boolean />
+          </ssd:Connector>
+          <ssd:Connector name="fuelStatus.fuel_remaining_kg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="fuelStatus.fuel_level_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="fuelStatus.fuel_starved" kind="input">
+            <ssc:Boolean />
+          </ssd:Connector>
+          <ssd:Connector name="thrustOut.thrust_kn" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="thrustOut.mass_flow_kgps" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="thrustOut.exhaust_velocity_mps" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="fuelFlow.mass_flow_kgps" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="powerBus.voltage_kv" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="powerBus.current_a" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="powerBus.available_power_kw" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+        </ssd:Connectors>
+      </ssd:Component>
+      <ssd:Component name="MissionComputer" type="application/x-fmu-sharedlibrary" source="resources/WingmanDrone_MissionComputer.fmu">
+        <ssd:Connectors>
+          <ssd:Connector name="manualInput.stick_pitch_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="manualInput.stick_roll_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="manualInput.rudder_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="manualInput.throttle_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="manualInput.throttle_aux_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="manualInput.button_mask" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="manualInput.hat_x" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="manualInput.hat_y" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="manualInput.mode_switch" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="manualInput.reserved" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="autonomyPort.waypoint_heading_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="autonomyPort.waypoint_altitude_m" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="autonomyPort.lateral_accel_mps2" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="autonomyPort.aggressiveness_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="fuelStatus.fuel_remaining_kg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="fuelStatus.fuel_level_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="fuelStatus.fuel_starved" kind="input">
+            <ssc:Boolean />
+          </ssd:Connector>
+          <ssd:Connector name="powerIn.voltage_kv" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="powerIn.current_a" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="powerIn.available_power_kw" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="engineThrottle.throttle_norm" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="engineThrottle.fuel_enable" kind="output">
+            <ssc:Boolean />
+          </ssd:Connector>
+          <ssd:Connector name="engineThrottle.afterburner_enable" kind="output">
+            <ssc:Boolean />
+          </ssd:Connector>
+          <ssd:Connector name="surfaceBus.left_aileron_deg" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="surfaceBus.right_aileron_deg" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="surfaceBus.elevator_deg" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="surfaceBus.rudder_deg" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="surfaceBus.flaperon_deg" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="flightStatus.airspeed_mps" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="flightStatus.energy_state_norm" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="flightStatus.angle_of_attack_deg" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="flightStatus.health_code" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="orientationEuler.roll_deg" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="orientationEuler.pitch_deg" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="orientationEuler.yaw_deg" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="locationLLA.latitude_deg" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="locationLLA.longitude_deg" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="locationLLA.altitude_m" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+        </ssd:Connectors>
+      </ssd:Component>
+      <ssd:Component name="AutopilotModule" type="application/x-fmu-sharedlibrary" source="resources/WingmanDrone_AutopilotModule.fmu">
+        <ssd:Connectors>
+          <ssd:Connector name="feedbackBus.airspeed_mps" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="feedbackBus.energy_state_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="feedbackBus.angle_of_attack_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="feedbackBus.health_code" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="powerIn.voltage_kv" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="powerIn.current_a" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="powerIn.available_power_kw" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="guidanceCmd.waypoint_heading_deg" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="guidanceCmd.waypoint_altitude_m" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="guidanceCmd.lateral_accel_mps2" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="guidanceCmd.aggressiveness_norm" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+        </ssd:Connectors>
+      </ssd:Component>
+      <ssd:Component name="PowerSystem" type="application/x-fmu-sharedlibrary" source="resources/WingmanDrone_PowerSystem.fmu">
+        <ssd:Connectors>
+          <ssd:Connector name="generatorInput.voltage_kv" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="generatorInput.current_a" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="generatorInput.available_power_kw" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="avionicsFeed.voltage_kv" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="avionicsFeed.current_a" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="avionicsFeed.available_power_kw" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="controlFeed.voltage_kv" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="controlFeed.current_a" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="controlFeed.available_power_kw" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="autonomyFeed.voltage_kv" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="autonomyFeed.current_a" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="autonomyFeed.available_power_kw" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+        </ssd:Connectors>
+      </ssd:Component>
+      <ssd:Component name="FuelSystem" type="application/x-fmu-sharedlibrary" source="resources/WingmanDrone_FuelSystem.fmu">
+        <ssd:Connectors>
+          <ssd:Connector name="fuelFlowIn.mass_flow_kgps" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="fuelState.fuel_remaining_kg" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="fuelState.fuel_level_norm" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="fuelState.fuel_starved" kind="output">
+            <ssc:Boolean />
+          </ssd:Connector>
+        </ssd:Connectors>
+      </ssd:Component>
+      <ssd:Component name="ControlInterface" type="application/x-fmu-sharedlibrary" source="resources/WingmanDrone_ControlInterface.fmu">
+        <ssd:Connectors>
+          <ssd:Connector name="powerIn.voltage_kv" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="powerIn.current_a" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="powerIn.available_power_kw" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="PilotCommand.stick_pitch_norm" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="PilotCommand.stick_roll_norm" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="PilotCommand.rudder_norm" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="PilotCommand.throttle_norm" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="PilotCommand.throttle_aux_norm" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="PilotCommand.button_mask" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="PilotCommand.hat_x" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="PilotCommand.hat_y" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="PilotCommand.mode_switch" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="PilotCommand.reserved" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+        </ssd:Connectors>
+      </ssd:Component>
+    </ssd:Elements>
+    <ssd:Connections>
+      <ssd:Connection startElement="TurbofanPropulsion" startConnector="powerBus.voltage_kv" endElement="PowerSystem" endConnector="generatorInput.voltage_kv" />
+      <ssd:Connection startElement="TurbofanPropulsion" startConnector="powerBus.current_a" endElement="PowerSystem" endConnector="generatorInput.current_a" />
+      <ssd:Connection startElement="TurbofanPropulsion" startConnector="powerBus.available_power_kw" endElement="PowerSystem" endConnector="generatorInput.available_power_kw" />
+      <ssd:Connection startElement="PowerSystem" startConnector="avionicsFeed.voltage_kv" endElement="MissionComputer" endConnector="powerIn.voltage_kv" />
+      <ssd:Connection startElement="PowerSystem" startConnector="avionicsFeed.current_a" endElement="MissionComputer" endConnector="powerIn.current_a" />
+      <ssd:Connection startElement="PowerSystem" startConnector="avionicsFeed.available_power_kw" endElement="MissionComputer" endConnector="powerIn.available_power_kw" />
+      <ssd:Connection startElement="PowerSystem" startConnector="controlFeed.voltage_kv" endElement="ControlInterface" endConnector="powerIn.voltage_kv" />
+      <ssd:Connection startElement="PowerSystem" startConnector="controlFeed.current_a" endElement="ControlInterface" endConnector="powerIn.current_a" />
+      <ssd:Connection startElement="PowerSystem" startConnector="controlFeed.available_power_kw" endElement="ControlInterface" endConnector="powerIn.available_power_kw" />
+      <ssd:Connection startElement="PowerSystem" startConnector="autonomyFeed.voltage_kv" endElement="AutopilotModule" endConnector="powerIn.voltage_kv" />
+      <ssd:Connection startElement="PowerSystem" startConnector="autonomyFeed.current_a" endElement="AutopilotModule" endConnector="powerIn.current_a" />
+      <ssd:Connection startElement="PowerSystem" startConnector="autonomyFeed.available_power_kw" endElement="AutopilotModule" endConnector="powerIn.available_power_kw" />
+      <ssd:Connection startElement="MissionComputer" startConnector="surfaceBus.left_aileron_deg" endElement="AdaptiveWingSystem" endConnector="controlSurfaces.left_aileron_deg" />
+      <ssd:Connection startElement="MissionComputer" startConnector="surfaceBus.right_aileron_deg" endElement="AdaptiveWingSystem" endConnector="controlSurfaces.right_aileron_deg" />
+      <ssd:Connection startElement="MissionComputer" startConnector="surfaceBus.elevator_deg" endElement="AdaptiveWingSystem" endConnector="controlSurfaces.elevator_deg" />
+      <ssd:Connection startElement="MissionComputer" startConnector="surfaceBus.rudder_deg" endElement="AdaptiveWingSystem" endConnector="controlSurfaces.rudder_deg" />
+      <ssd:Connection startElement="MissionComputer" startConnector="surfaceBus.flaperon_deg" endElement="AdaptiveWingSystem" endConnector="controlSurfaces.flaperon_deg" />
+      <ssd:Connection startElement="MissionComputer" startConnector="engineThrottle.throttle_norm" endElement="TurbofanPropulsion" endConnector="throttleCmd.throttle_norm" />
+      <ssd:Connection startElement="MissionComputer" startConnector="engineThrottle.fuel_enable" endElement="TurbofanPropulsion" endConnector="throttleCmd.fuel_enable" />
+      <ssd:Connection startElement="MissionComputer" startConnector="engineThrottle.afterburner_enable" endElement="TurbofanPropulsion" endConnector="throttleCmd.afterburner_enable" />
+      <ssd:Connection startElement="TurbofanPropulsion" startConnector="fuelFlow.mass_flow_kgps" endElement="FuelSystem" endConnector="fuelFlowIn.mass_flow_kgps" />
+      <ssd:Connection startElement="FuelSystem" startConnector="fuelState.fuel_remaining_kg" endElement="TurbofanPropulsion" endConnector="fuelStatus.fuel_remaining_kg" />
+      <ssd:Connection startElement="FuelSystem" startConnector="fuelState.fuel_level_norm" endElement="TurbofanPropulsion" endConnector="fuelStatus.fuel_level_norm" />
+      <ssd:Connection startElement="FuelSystem" startConnector="fuelState.fuel_starved" endElement="TurbofanPropulsion" endConnector="fuelStatus.fuel_starved" />
+      <ssd:Connection startElement="FuelSystem" startConnector="fuelState.fuel_remaining_kg" endElement="MissionComputer" endConnector="fuelStatus.fuel_remaining_kg" />
+      <ssd:Connection startElement="FuelSystem" startConnector="fuelState.fuel_level_norm" endElement="MissionComputer" endConnector="fuelStatus.fuel_level_norm" />
+      <ssd:Connection startElement="FuelSystem" startConnector="fuelState.fuel_starved" endElement="MissionComputer" endConnector="fuelStatus.fuel_starved" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="guidanceCmd.waypoint_heading_deg" endElement="MissionComputer" endConnector="autonomyPort.waypoint_heading_deg" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="guidanceCmd.waypoint_altitude_m" endElement="MissionComputer" endConnector="autonomyPort.waypoint_altitude_m" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="guidanceCmd.lateral_accel_mps2" endElement="MissionComputer" endConnector="autonomyPort.lateral_accel_mps2" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="guidanceCmd.aggressiveness_norm" endElement="MissionComputer" endConnector="autonomyPort.aggressiveness_norm" />
+      <ssd:Connection startElement="MissionComputer" startConnector="flightStatus.airspeed_mps" endElement="AutopilotModule" endConnector="feedbackBus.airspeed_mps" />
+      <ssd:Connection startElement="MissionComputer" startConnector="flightStatus.energy_state_norm" endElement="AutopilotModule" endConnector="feedbackBus.energy_state_norm" />
+      <ssd:Connection startElement="MissionComputer" startConnector="flightStatus.angle_of_attack_deg" endElement="AutopilotModule" endConnector="feedbackBus.angle_of_attack_deg" />
+      <ssd:Connection startElement="MissionComputer" startConnector="flightStatus.health_code" endElement="AutopilotModule" endConnector="feedbackBus.health_code" />
+    </ssd:Connections>
+  </ssd:System>
+  <ssd:DefaultExperiment startTime="0" stopTime="3600" />
+</ssd:SystemStructureDescription>

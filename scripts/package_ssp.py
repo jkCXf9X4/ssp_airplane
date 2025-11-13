@@ -7,12 +7,9 @@ import zipfile
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_SSD = REPO_ROOT / "generate" / "SystemStructure.ssd"
 DEFAULT_FMU_DIR = REPO_ROOT / "build" / "fmus"
-DEFAULT_SSD = REPO_ROOT / "build" / "structure" / "aircraft.ssd"
 DEFAULT_OUTPUT = REPO_ROOT / "build" / "ssp" / "wingman_drone.ssp"
-
-MANIFEST_TEMPLATE = """<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ssc:Manifest xmlns:ssc=\"http://www.fmi-standard.org/SSP1/SystemStructureCommon\">\n  <ssc:Description text=\"Autonomous loyal wingman drone SSP\"/>\n</ssc:Manifest>\n"""
-
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -35,7 +32,6 @@ def main() -> None:
         raise SystemExit(f"No FMUs found under {args.fmu_dir}")
 
     with zipfile.ZipFile(args.output, "w", compression=zipfile.ZIP_DEFLATED) as archive:
-        archive.writestr("manifest.xml", MANIFEST_TEMPLATE)
         archive.write(args.ssd, arcname="SystemStructure.ssd")
         for fmu in fmu_files:
             arcname = f"resources/{fmu.name}"

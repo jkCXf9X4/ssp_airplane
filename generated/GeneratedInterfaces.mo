@@ -7,19 +7,6 @@ package GeneratedInterfaces
     Real aggressiveness_norm;
   end AutonomyGuidance;
 
-  record AvionicsBayData
-    Integer payload_id;
-    Real payload_mass_kg;
-    Real data_rate_mbps;
-    Real cooling_load_kw;
-  end AvionicsBayData;
-
-  record ElectricalBusState
-    Real voltage_kv;
-    Real current_a;
-    Real available_power_kw;
-  end ElectricalBusState;
-
   record FlightStatusPacket
     Real airspeed_mps;
     Real energy_state_norm;
@@ -36,6 +23,12 @@ package GeneratedInterfaces
     Real fuel_level_norm;
     Boolean fuel_starved;
   end FuelLevelState;
+
+  record GenericElectricalBus
+    Real voltage_kv;
+    Real current_a;
+    Real available_power_kw;
+  end GenericElectricalBus;
 
   record GeodeticLLA
     Real latitude_deg;
@@ -55,7 +48,7 @@ package GeneratedInterfaces
     Real yaw_deg;
   end OrientationEuler;
 
-  record PilotCommandOut
+  record PilotCommand
     Real stick_pitch_norm;
     Real stick_roll_norm;
     Real rudder_norm;
@@ -66,7 +59,7 @@ package GeneratedInterfaces
     Integer hat_y;
     Integer mode_switch;
     Integer reserved;
-  end PilotCommandOut;
+  end PilotCommand;
 
   record StructuralInterface
     Real axial_load_kn;

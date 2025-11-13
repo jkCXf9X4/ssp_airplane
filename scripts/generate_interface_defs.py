@@ -3,14 +3,14 @@
 from __future__ import annotations
 
 import argparse
-import re
 from pathlib import Path
 from typing import Dict, List, Tuple
 
-from sysml_loader import get_architecture_text
+from scripts.utils.sysmlv2_arch_parser import SysMLArchitecture, SysMLPortDefinition, parse_sysml_folder
 
-ARCH_PATH = Path(__file__).resolve().parents[1] / "architecture" / "aircraft_architecture.sysml"
-OUTPUT_DIR = Path(__file__).resolve().parents[1] / "build" / "interfaces"
+REPO_ROOT = Path(__file__).resolve().parents[1]
+ARCH_PATH = REPO_ROOT / "architecture"
+OUTPUT_DIR = REPO_ROOT / "generated" 
 
 PRIMITIVE_MAP = {
     "real": "Real",
@@ -26,54 +26,18 @@ PRIMITIVE_MAP = {
 }
 
 
-def parse_data_defs(text: str) -> Dict[str, List[Tuple[str, str]]]:
-    """Return {type_name: [(field, field_type), ...]} extracted from SysML."""
+def _collect_data_defs(architecture: SysMLArchitecture) -> Dict[str, List[Tuple[str, str]]]:
     defs: Dict[str, List[Tuple[str, str]]] = {}
-    token = "data def"
-    idx = 0
-    while True:
-        start = text.find(token, idx)
-        if start == -1:
-            break
-        brace_start = text.find("{", start)
-        if brace_start == -1:
-            break
-        header = text[start + len(token) : brace_start].strip()
-        type_name = header.split()[0]
-        depth = 0
-        pos = brace_start
-        while pos < len(text):
-            char = text[pos]
-            if char == "{":
-                depth += 1
-            elif char == "}":
-                depth -= 1
-                if depth == 0:
-                    block = text[brace_start + 1 : pos]
-                    defs[type_name] = _extract_attributes(block)
-                    idx = pos + 1
-                    break
-            pos += 1
-        else:
-            break
+    for name, port_def in architecture.port_definitions.items():
+        defs[name] = _port_attributes(port_def)
     return defs
 
 
-def _extract_attributes(block: str) -> List[Tuple[str, str]]:
-    block = re.sub(r"/\*.*?\*/", "", block, flags=re.S)
+def _port_attributes(port_def: SysMLPortDefinition) -> List[Tuple[str, str]]:
     attrs: List[Tuple[str, str]] = []
-    for raw_line in block.splitlines():
-        line = raw_line.strip()
-        if not line.startswith("attribute "):
-            continue
-        payload = line[len("attribute ") :]
-        if ":" not in payload:
-            continue
-        name_part, remainder = payload.split(":", 1)
-        attr = name_part.strip()
-        value_part = remainder.split(";", 1)[0].strip()
-        if attr and value_part:
-            attrs.append((attr, value_part))
+    for attr in port_def.attributes.values():
+        attr_type = attr.type or "Real"
+        attrs.append((attr.name, attr_type))
     return attrs
 
 
@@ -86,7 +50,7 @@ def generate_modelica_package(defs: Dict[str, List[Tuple[str, str]]]) -> str:
     for type_name, fields in sorted(defs.items()):
         lines.append(f"  record {type_name}")
         if not fields:
-            lines.append("  end {type_name};")
+            lines.append(f"  end {type_name};")
             continue
         for field, field_type in fields:
             mo_type = to_modelica_type(field_type)
@@ -103,8 +67,8 @@ def main() -> None:
     parser.add_argument("--output", type=Path, default=OUTPUT_DIR / "GeneratedInterfaces.mo")
     args = parser.parse_args()
 
-    architecture_text = get_architecture_text(args.architecture)
-    data_defs = parse_data_defs(architecture_text)
+    architecture = parse_sysml_folder(args.architecture)
+    data_defs = _collect_data_defs(architecture)
     if not data_defs:
         raise SystemExit("No data definitions found; nothing to generate.")
 
