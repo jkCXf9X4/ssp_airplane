@@ -296,34 +296,34 @@
           <ssd:Connector name="powerIn.available_power_kw" kind="input">
             <ssc:Real />
           </ssd:Connector>
-          <ssd:Connector name="PilotCommand.stick_pitch_norm" kind="output">
+          <ssd:Connector name="pilotCommand.stick_pitch_norm" kind="output">
             <ssc:Real />
           </ssd:Connector>
-          <ssd:Connector name="PilotCommand.stick_roll_norm" kind="output">
+          <ssd:Connector name="pilotCommand.stick_roll_norm" kind="output">
             <ssc:Real />
           </ssd:Connector>
-          <ssd:Connector name="PilotCommand.rudder_norm" kind="output">
+          <ssd:Connector name="pilotCommand.rudder_norm" kind="output">
             <ssc:Real />
           </ssd:Connector>
-          <ssd:Connector name="PilotCommand.throttle_norm" kind="output">
+          <ssd:Connector name="pilotCommand.throttle_norm" kind="output">
             <ssc:Real />
           </ssd:Connector>
-          <ssd:Connector name="PilotCommand.throttle_aux_norm" kind="output">
+          <ssd:Connector name="pilotCommand.throttle_aux_norm" kind="output">
             <ssc:Real />
           </ssd:Connector>
-          <ssd:Connector name="PilotCommand.button_mask" kind="output">
+          <ssd:Connector name="pilotCommand.button_mask" kind="output">
             <ssc:Integer />
           </ssd:Connector>
-          <ssd:Connector name="PilotCommand.hat_x" kind="output">
+          <ssd:Connector name="pilotCommand.hat_x" kind="output">
             <ssc:Integer />
           </ssd:Connector>
-          <ssd:Connector name="PilotCommand.hat_y" kind="output">
+          <ssd:Connector name="pilotCommand.hat_y" kind="output">
             <ssc:Integer />
           </ssd:Connector>
-          <ssd:Connector name="PilotCommand.mode_switch" kind="output">
+          <ssd:Connector name="pilotCommand.mode_switch" kind="output">
             <ssc:Integer />
           </ssd:Connector>
-          <ssd:Connector name="PilotCommand.reserved" kind="output">
+          <ssd:Connector name="pilotCommand.reserved" kind="output">
             <ssc:Integer />
           </ssd:Connector>
         </ssd:Connectors>
@@ -365,6 +365,16 @@
       <ssd:Connection startElement="MissionComputer" startConnector="flightStatus.energy_state_norm" endElement="AutopilotModule" endConnector="feedbackBus.energy_state_norm" />
       <ssd:Connection startElement="MissionComputer" startConnector="flightStatus.angle_of_attack_deg" endElement="AutopilotModule" endConnector="feedbackBus.angle_of_attack_deg" />
       <ssd:Connection startElement="MissionComputer" startConnector="flightStatus.health_code" endElement="AutopilotModule" endConnector="feedbackBus.health_code" />
+      <ssd:Connection startElement="ControlInterface" startConnector="pilotCommand.stick_pitch_norm" endElement="MissionComputer" endConnector="manualInput.stick_pitch_norm" />
+      <ssd:Connection startElement="ControlInterface" startConnector="pilotCommand.stick_roll_norm" endElement="MissionComputer" endConnector="manualInput.stick_roll_norm" />
+      <ssd:Connection startElement="ControlInterface" startConnector="pilotCommand.rudder_norm" endElement="MissionComputer" endConnector="manualInput.rudder_norm" />
+      <ssd:Connection startElement="ControlInterface" startConnector="pilotCommand.throttle_norm" endElement="MissionComputer" endConnector="manualInput.throttle_norm" />
+      <ssd:Connection startElement="ControlInterface" startConnector="pilotCommand.throttle_aux_norm" endElement="MissionComputer" endConnector="manualInput.throttle_aux_norm" />
+      <ssd:Connection startElement="ControlInterface" startConnector="pilotCommand.button_mask" endElement="MissionComputer" endConnector="manualInput.button_mask" />
+      <ssd:Connection startElement="ControlInterface" startConnector="pilotCommand.hat_x" endElement="MissionComputer" endConnector="manualInput.hat_x" />
+      <ssd:Connection startElement="ControlInterface" startConnector="pilotCommand.hat_y" endElement="MissionComputer" endConnector="manualInput.hat_y" />
+      <ssd:Connection startElement="ControlInterface" startConnector="pilotCommand.mode_switch" endElement="MissionComputer" endConnector="manualInput.mode_switch" />
+      <ssd:Connection startElement="ControlInterface" startConnector="pilotCommand.reserved" endElement="MissionComputer" endConnector="manualInput.reserved" />
     </ssd:Connections>
   </ssd:System>
   <ssd:DefaultExperiment startTime="0" stopTime="3600" />

@@ -1,22 +1,5 @@
 package WingmanDrone {
   doc /* Loyal-wingman autonomous drone modeled after MQ-28 and Hellsing CA-1 Europa with conventional aviation propulsion. */
-  attribute system_name = "DroneSystem";
-
-  part def WingmanDrone {
-    doc /* Mission-configurable air vehicle coordinating with crewed fighters or remote operators. */
-    attribute autonomy_mode_default = "loyal-wingman";
-    attribute design_range_km = 3700;
-    attribute crew_capacity = 0;
-
-    part airframe: CompositeAirframe;
-    part wings: AdaptiveWingSystem;
-    part propulsion: TurbofanPropulsion;
-    part missionComputer: MissionComputer;
-    part autopilot: AutopilotModule;
-    part power: PowerSystem;
-    part fuel: FuelSystem;
-    part controls: ControlInterface;
-  }
 
   part def CompositeAirframe {
     doc /* Composite fuselage and payload bay sized to MQ-28 proportions. */
@@ -24,7 +7,6 @@ package WingmanDrone {
     attribute fuselage_width_m = 1.9;
     attribute payload_capacity_kg = 1500;
     attribute hardpoint_count = 4;
-
   }
 
   part def AdaptiveWingSystem {
@@ -36,7 +18,6 @@ package WingmanDrone {
 
     doc /* Mission computer bus commanding surface deflections per axis. */
     in port controlSurfaces : SurfaceActuationCommand;
-
 
     doc /* Aerodynamic load feedback returned to mission computer/autopilot. */
     out port liftInterface : LiftState;
@@ -104,6 +85,7 @@ package WingmanDrone {
 
   part def AutopilotModule {
     doc /* Guidance core to execute escort, loiter, and waypoint scripts. */
+    attribute autonomy_mode_default = "loyal-wingman";
     attribute guidance_modes = "escort+loiter+return";
     attribute update_rate_hz = 25;
 
@@ -160,7 +142,7 @@ package WingmanDrone {
     in port powerIn : GenericElectricalBus;
 
     doc /* HOTAS-control bundle forwarded for mission computer sensor fusion. */
-    out port PilotCommand : PilotCommand;
+    out port pilotCommand : PilotCommand;
 
   }
 

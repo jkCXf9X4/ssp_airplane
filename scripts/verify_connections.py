@@ -6,7 +6,7 @@ import argparse
 from pathlib import Path
 from typing import Dict, List, Tuple
 
-from scripts.utils.sysmlv2_arch_parser import SysMLArchitecture, SysMLPortEndpoint, parse_sysml_folder
+from utils.sysmlv2_arch_parser import SysMLArchitecture, SysMLPortEndpoint, parse_sysml_folder
 
 
 def _build_port_index(architecture: SysMLArchitecture) -> Dict[Tuple[str, str], SysMLPortEndpoint]:

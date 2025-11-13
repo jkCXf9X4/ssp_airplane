@@ -7,7 +7,7 @@ import zipfile
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_SSD = REPO_ROOT / "generate" / "SystemStructure.ssd"
+DEFAULT_SSD = REPO_ROOT / "generated" / "SystemStructure.ssd"
 DEFAULT_FMU_DIR = REPO_ROOT / "build" / "fmus"
 DEFAULT_OUTPUT = REPO_ROOT / "build" / "ssp" / "wingman_drone.ssp"
 

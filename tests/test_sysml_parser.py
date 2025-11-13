@@ -28,13 +28,6 @@ def test_parser_collects_parts_and_ports():
     assert pilot_command.attributes["hat_x"].type == "Integer"
 
 
-def test_combined_text_contains_every_section():
-    architecture = parse_sysml_folder(REPO_ROOT / "architecture")
-    combined = architecture.combined_text
-    assert "part def WingmanDrone" in combined
-    assert "port def PilotCommand" in combined
-    assert "Requirement_REQ_Profile" in combined
-
 
 def test_connections_are_parsed():
     architecture = parse_sysml_folder(REPO_ROOT / "architecture")

@@ -1,11 +1,10 @@
-DroneSystem
 Interfaces
+GeneratedInterfaces
 AutopilotModule
 MissionComputer
 PowerSystem
 CompositeAirframe
 TurbofanPropulsion
 FuelSystem
-GeneratedInterfaces
 ControlInterface
 AdaptiveWingSystem

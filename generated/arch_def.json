@@ -182,6 +182,12 @@
     },
     "AutopilotModule": {
       "attributes": {
+        "autonomy_mode_default": {
+          "doc": null,
+          "name": "autonomy_mode_default",
+          "type": null,
+          "value": "\"loyal-wingman\""
+        },
         "guidance_modes": {
           "doc": null,
           "name": "guidance_modes",
@@ -387,7 +393,7 @@
         {
           "direction": "out",
           "doc": "HOTAS-control bundle forwarded for mission computer sensor fusion.",
-          "name": "PilotCommand",
+          "name": "pilotCommand",
           "payload": "PilotCommand",
           "payload_def": {
             "attributes": {
@@ -1207,73 +1213,6 @@
           }
         }
       ]
-    },
-    "WingmanDrone": {
-      "attributes": {
-        "autonomy_mode_default": {
-          "doc": null,
-          "name": "autonomy_mode_default",
-          "type": null,
-          "value": "\"loyal-wingman\""
-        },
-        "crew_capacity": {
-          "doc": null,
-          "name": "crew_capacity",
-          "type": null,
-          "value": "0"
-        },
-        "design_range_km": {
-          "doc": null,
-          "name": "design_range_km",
-          "type": null,
-          "value": "3700"
-        }
-      },
-      "doc": "Mission-configurable air vehicle coordinating with crewed fighters or remote operators.",
-      "name": "WingmanDrone",
-      "parts": [
-        {
-          "doc": null,
-          "name": "airframe",
-          "target": "CompositeAirframe"
-        },
-        {
-          "doc": null,
-          "name": "wings",
-          "target": "AdaptiveWingSystem"
-        },
-        {
-          "doc": null,
-          "name": "propulsion",
-          "target": "TurbofanPropulsion"
-        },
-        {
-          "doc": null,
-          "name": "missionComputer",
-          "target": "MissionComputer"
-        },
-        {
-          "doc": null,
-          "name": "autopilot",
-          "target": "AutopilotModule"
-        },
-        {
-          "doc": null,
-          "name": "power",
-          "target": "PowerSystem"
-        },
-        {
-          "doc": null,
-          "name": "fuel",
-          "target": "FuelSystem"
-        },
-        {
-          "doc": null,
-          "name": "controls",
-          "target": "ControlInterface"
-        }
-      ],
-      "ports": []
     }
   },
   "port_definitions": {

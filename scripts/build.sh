@@ -6,25 +6,31 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO_ROOT"
 source venv/bin/activate
 
-echo "[1/7] Generating Modelica interfaces..."
+echo "Exporting architecture"
+python3 scripts/save_architecture.py
+
+echo "Generating Modelica interfaces..."
 python3 scripts/generate_interface_defs.py
 
-echo "[2/7] Building FMUs..."
-python3 scripts/build_fmus.py
-
-echo "[3/7] Regenerating SSD..."
-python3 scripts/generate_ssd.py
-
-echo "[4/7] Validating SSD schema..."
-python scripts/verify_ssd.py
-
-echo "[5/7] Packaging SSP..."
-python3 scripts/package_ssp.py
-
-echo "[6/7] Verifying Modelica interfaces and SysML connections..."
+echo "Verifying Modelica interfaces and SysML connections..."
 python3 scripts/verify_connections.py
 
-echo "[7/7] Running pytest scenarios..."
+echo "Verifying models"
+python3 scripts/verify_model_equations.py
+
+echo "Building FMUs..."
+python3 scripts/build_fmus.py
+
+echo "Regenerating SSD..."
+python3 scripts/generate_ssd.py
+
+echo "Validating SSD schema..."
+python scripts/verify_ssd_xml_compliance.py
+
+echo "Packaging SSP..."
+python3 scripts/package_ssp.py
+
+echo "Running pytest scenarios..."
 pytest -q
 
 echo "Build pipeline completed successfully."
