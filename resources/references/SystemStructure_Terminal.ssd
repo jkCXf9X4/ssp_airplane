@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ssd:SystemStructureDescription xmlns:ssc="http://ssp-standard.org/SSP1/SystemStructureCommon" xmlns:ssd="http://ssp-standard.org/SSP1/SystemStructureDescription" xmlns:ssv="http://ssp-standard.org/SSP1/SystemStructureParameterValues" xmlns:ssm="http://ssp-standard.org/SSP1/SystemStructureParameterMapping" xmlns:ssb="http://ssp-standard.org/SSP1/SystemStructureSignalDictionary" xmlns:oms="https://raw.githubusercontent.com/OpenModelica/OMSimulator/master/schema/oms.xsd" name="embrace" version="1.0">
+	<ssd:System name="root">
+		<ssd:Elements>
+			<ssd:Component name="Consumer" type="application/x-fmu-sharedlibrary" source="resources/0003_Consumer.fmu">
+				<ssd:Connectors>
+					<ssd:Connector name="consumerRet.m" kind="input">
+						<ssc:Real />
+					</ssd:Connector>
+				</ssd:Connectors>
+			</ssd:Component>
+			<ssd:Component name="Atmos" type="application/x-fmu-sharedlibrary" source="resources/0004_Atmos.fmu">
+				<ssd:Connectors>
+					<ssd:Connector name="Aircraft_State" kind="input">
+						<ssc:Terminal />
+					</ssd:Connector>
+					<ssd:Connector name="Ma" kind="input">
+						<ssc:Real />
+					</ssd:Connector>
+				</ssd:Connectors>
+			</ssd:Component>
+			<ssd:Component name="AdaptionUnit" type="application/x-fmu-sharedlibrary" source="resources/0005_AdaptionUnit.fmu">
+				<ssd:Connectors>
+					<ssd:Connector name="Aircraft_State" kind="output">
+						<ssc:Terminal />
+					</ssd:Connector>
+					<ssd:Connector name="LHexTout" kind="input">
+						<ssc:Real />
+					</ssd:Connector>
+				</ssd:Connectors>
+			</ssd:Component>
+		</ssd:Elements>
+		<ssd:Connections>
+			<ssd:Connection startElement="AdaptionUnit" startConnector="Aircraft_State" endElement="Atmos" endConnector="Aircraft_State" />
+			<ssd:Connection startElement="Consumer" startConnector="consumerFeed.h" endElement="ECS_HW" endConnector="consumerFeed.h" />
+		</ssd:Connections>
+	</ssd:System>
+	<ssd:DefaultExperiment startTime="0.000000" stopTime="1.000000">
+	</ssd:DefaultExperiment>
+</ssd:SystemStructureDescription>
