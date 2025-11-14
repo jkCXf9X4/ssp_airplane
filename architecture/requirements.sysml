@@ -1,4 +1,4 @@
-package WingmanDrone {
+package Aircraft {
   comment Requirement_REQ_Profile /* Match F-16 Fighting Falcon geometry: ≈15 m length, 10 m wingspan, single-seat cockpit. */
   comment Requirement_REQ_Performance /* Provide Mach 2 dash capability with sustained 9 g maneuver envelope. */
   comment Requirement_REQ_Propulsion /* Integrate an F100/F110 class augmented turbofan with afterburner throttle control. */

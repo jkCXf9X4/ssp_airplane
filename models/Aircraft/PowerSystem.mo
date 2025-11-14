@@ -1,6 +1,6 @@
-within WingmanDrone;
+within Aircraft;
 model PowerSystem
-  import GI = WingmanDrone.GeneratedInterfaces;
+  import GI = Aircraft.GeneratedInterfaces;
   parameter Real busVoltageKV = 0.27;
   parameter Real bufferCapacityMJ = 650;
   parameter Real distributionEfficiency = 0.97;

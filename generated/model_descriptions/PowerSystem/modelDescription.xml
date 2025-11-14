@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<fmiModelDescription fmiVersion="2.0" modelName="WingmanDrone.PowerSystem" guid="{2b5b646a-6bd2-562d-a29d-d4721bea7a27}" description="F-16 270 VDC / 115 VAC hybrid electrical system for avionics, flight control, and weapon systems." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2025-11-14T11:34:44Z" variableNamingConvention="structured" numberOfEventIndicators="0">
+<fmiModelDescription fmiVersion="2.0" modelName="Aircraft.PowerSystem" guid="{2b5b646a-6bd2-562d-a29d-d4721bea7a27}" description="F-16 270 VDC / 115 VAC hybrid electrical system for avionics, flight control, and weapon systems." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2025-11-14T11:34:44Z" variableNamingConvention="structured" numberOfEventIndicators="0">
   <CoSimulation modelIdentifier="PowerSystem" />
   <ModelVariables>
     <ScalarVariable name="autonomyFeed.available_power_kw" valueReference="1" causality="output" description="Dedicated supply for autonomy/autopilot compute payloads.">

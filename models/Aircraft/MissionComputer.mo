@@ -1,6 +1,6 @@
-within WingmanDrone;
+within Aircraft;
 model MissionComputer
-  import GI = WingmanDrone.GeneratedInterfaces;
+  import GI = Aircraft.GeneratedInterfaces;
   parameter Integer flyByWireChannels = 3;
   parameter Real computeBudgetTOPS = 35;
   parameter Integer storesBuses = 2;

@@ -36,7 +36,7 @@ all sub-systems are to be exported into into Functional mockup units, FMUs. Pack
 
 ## Models
 
-All subsystem FMUs are generated from the `models/WingmanDrone` Modelica package using the OpenModelica compiler (`omc`).
+All subsystem FMUs are generated from the `models/Aircraft` Modelica package using the OpenModelica compiler (`omc`).
 
 ## The SSD
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run OpenModelica checkModel across the WingmanDrone package."""
+"""Run OpenModelica checkModel across the Aircraft package."""
 from __future__ import annotations
 
 import argparse
@@ -9,16 +9,16 @@ from pathlib import Path
 from typing import Iterable
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-PACKAGE_FILE = REPO_ROOT / "models" / "WingmanDrone" / "package.mo"
+PACKAGE_FILE = REPO_ROOT / "models" / "Aircraft" / "package.mo"
 DEFAULT_MODELS = [
-    "WingmanDrone.CompositeAirframe",
-    "WingmanDrone.TurbofanPropulsion",
-    "WingmanDrone.AdaptiveWingSystem",
-    "WingmanDrone.MissionComputer",
-    "WingmanDrone.AutopilotModule",
-    "WingmanDrone.PowerSystem",
-    "WingmanDrone.FuelSystem",
-    "WingmanDrone.ControlInterface",
+    "Aircraft.CompositeAirframe",
+    "Aircraft.TurbofanPropulsion",
+    "Aircraft.AdaptiveWingSystem",
+    "Aircraft.MissionComputer",
+    "Aircraft.AutopilotModule",
+    "Aircraft.PowerSystem",
+    "Aircraft.FuelSystem",
+    "Aircraft.ControlInterface",
 ]
 
 

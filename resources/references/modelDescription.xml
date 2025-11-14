@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <fmiModelDescription
   fmiVersion="2.0"
-  modelName="WingmanDrone.AdaptiveWingSystem"
+  modelName="Aircraft.AdaptiveWingSystem"
   guid="{7d865131-6438-4c73-8202-f3141e728143}"
   description=""
   version=""

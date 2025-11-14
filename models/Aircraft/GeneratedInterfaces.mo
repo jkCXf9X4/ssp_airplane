@@ -1,4 +1,4 @@
-within WingmanDrone;
+within Aircraft;
 package GeneratedInterfaces
   connector AutonomyGuidance
     Real waypoint_heading_deg;

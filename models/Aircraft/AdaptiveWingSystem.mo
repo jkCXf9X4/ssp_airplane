@@ -1,6 +1,6 @@
-within WingmanDrone;
+within Aircraft;
 model AdaptiveWingSystem
-  import GI = WingmanDrone.GeneratedInterfaces;
+  import GI = Aircraft.GeneratedInterfaces;
   parameter Real referenceArea = 28 "m2";
   parameter Real span = 10 "m";
   parameter Real wingAreaScale(min=0.7, max=1.3) = 1.0;

@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<ssd:SystemStructureDescription xmlns:ssc="http://ssp-standard.org/SSP1/SystemStructureCommon" xmlns:ssd="http://ssp-standard.org/SSP1/SystemStructureDescription" name="WingmanDrone" version="1.0">
-  <ssd:System name="WingmanDrone">
+<ssd:SystemStructureDescription xmlns:ssc="http://ssp-standard.org/SSP1/SystemStructureCommon" xmlns:ssd="http://ssp-standard.org/SSP1/SystemStructureDescription" name="Aircraft" version="1.0">
+  <ssd:System name="Aircraft">
     <ssd:Elements>
-      <ssd:Component name="CompositeAirframe" type="application/x-fmu-sharedlibrary" source="resources/WingmanDrone_CompositeAirframe.fmu" />
-      <ssd:Component name="AdaptiveWingSystem" type="application/x-fmu-sharedlibrary" source="resources/WingmanDrone_AdaptiveWingSystem.fmu">
+      <ssd:Component name="CompositeAirframe" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_CompositeAirframe.fmu" />
+      <ssd:Component name="AdaptiveWingSystem" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_AdaptiveWingSystem.fmu">
         <ssd:Connectors>
           <ssd:Connector name="controlSurfaces.left_aileron_deg" kind="input">
             <ssc:Real />
@@ -31,7 +31,7 @@
           </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
-      <ssd:Component name="TurbofanPropulsion" type="application/x-fmu-sharedlibrary" source="resources/WingmanDrone_TurbofanPropulsion.fmu">
+      <ssd:Component name="TurbofanPropulsion" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_TurbofanPropulsion.fmu">
         <ssd:Connectors>
           <ssd:Connector name="throttleCmd.throttle_norm" kind="input">
             <ssc:Real />
@@ -74,7 +74,7 @@
           </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
-      <ssd:Component name="MissionComputer" type="application/x-fmu-sharedlibrary" source="resources/WingmanDrone_MissionComputer.fmu">
+      <ssd:Component name="MissionComputer" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_MissionComputer.fmu">
         <ssd:Connectors>
           <ssd:Connector name="manualInput.stick_pitch_norm" kind="input">
             <ssc:Real />
@@ -192,7 +192,7 @@
           </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
-      <ssd:Component name="AutopilotModule" type="application/x-fmu-sharedlibrary" source="resources/WingmanDrone_AutopilotModule.fmu">
+      <ssd:Component name="AutopilotModule" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_AutopilotModule.fmu">
         <ssd:Connectors>
           <ssd:Connector name="feedbackBus.airspeed_mps" kind="input">
             <ssc:Real />
@@ -229,7 +229,7 @@
           </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
-      <ssd:Component name="PowerSystem" type="application/x-fmu-sharedlibrary" source="resources/WingmanDrone_PowerSystem.fmu">
+      <ssd:Component name="PowerSystem" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_PowerSystem.fmu">
         <ssd:Connectors>
           <ssd:Connector name="generatorInput.voltage_kv" kind="input">
             <ssc:Real />
@@ -269,7 +269,7 @@
           </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
-      <ssd:Component name="FuelSystem" type="application/x-fmu-sharedlibrary" source="resources/WingmanDrone_FuelSystem.fmu">
+      <ssd:Component name="FuelSystem" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_FuelSystem.fmu">
         <ssd:Connectors>
           <ssd:Connector name="fuelFlowIn.mass_flow_kgps" kind="input">
             <ssc:Real />
@@ -285,7 +285,7 @@
           </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
-      <ssd:Component name="ControlInterface" type="application/x-fmu-sharedlibrary" source="resources/WingmanDrone_ControlInterface.fmu">
+      <ssd:Component name="ControlInterface" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_ControlInterface.fmu">
         <ssd:Connectors>
           <ssd:Connector name="powerIn.voltage_kv" kind="input">
             <ssc:Real />

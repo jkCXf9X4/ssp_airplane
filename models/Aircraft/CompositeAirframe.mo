@@ -1,6 +1,6 @@
-within WingmanDrone;
+within Aircraft;
 model CompositeAirframe
-  import Interfaces = WingmanDrone.Interfaces;
+  import Interfaces = Aircraft.Interfaces;
   parameter Real length = 15.0 "Fuselage length (m)";
   parameter Real fuselageWidth = 3.0 "Average fuselage width (m)";
   parameter Real wingspan = 10.0 "Wing span (m)";

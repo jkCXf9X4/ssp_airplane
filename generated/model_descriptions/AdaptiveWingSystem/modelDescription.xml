@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<fmiModelDescription fmiVersion="2.0" modelName="WingmanDrone.AdaptiveWingSystem" guid="{87155fae-919a-5bdb-abc9-fcbdc2762c7d}" description="Leading-edge strake and cropped-delta wing sized to F-16 Block 50 geometry with 9g capability." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2025-11-14T11:34:44Z" variableNamingConvention="structured" numberOfEventIndicators="0">
+<fmiModelDescription fmiVersion="2.0" modelName="Aircraft.AdaptiveWingSystem" guid="{87155fae-919a-5bdb-abc9-fcbdc2762c7d}" description="Leading-edge strake and cropped-delta wing sized to F-16 Block 50 geometry with 9g capability." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2025-11-14T11:34:44Z" variableNamingConvention="structured" numberOfEventIndicators="0">
   <CoSimulation modelIdentifier="AdaptiveWingSystem" />
   <ModelVariables>
     <ScalarVariable name="controlSurfaces.elevator_deg" valueReference="1" causality="input" description="Flight-control computer commands for elevator, tailerons, and rudder.">

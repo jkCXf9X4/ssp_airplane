@@ -1,6 +1,6 @@
-within WingmanDrone;
+within Aircraft;
 model TurbofanPropulsion
-  import GI = WingmanDrone.GeneratedInterfaces;
+  import GI = Aircraft.GeneratedInterfaces;
   parameter Real maxThrust_kN = 129.7;
   parameter Real dryThrust_kN = 79.0;
   parameter Real generatorOutputKW = 80;

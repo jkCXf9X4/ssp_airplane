@@ -29,14 +29,14 @@ ET.register_namespace("ssb", SSB_NAMESPACE)
 ET.register_namespace("oms", OMS_NAMESPACE)
 
 MODEL_CLASS_MAP: Dict[str, str] = {
-    "CompositeAirframe": "WingmanDrone.CompositeAirframe",
-    "TurbofanPropulsion": "WingmanDrone.TurbofanPropulsion",
-    "AdaptiveWingSystem": "WingmanDrone.AdaptiveWingSystem",
-    "MissionComputer": "WingmanDrone.MissionComputer",
-    "AutopilotModule": "WingmanDrone.AutopilotModule",
-    "PowerSystem": "WingmanDrone.PowerSystem",
-    "FuelSystem": "WingmanDrone.FuelSystem",
-    "ControlInterface": "WingmanDrone.ControlInterface",
+    "CompositeAirframe": "Aircraft.CompositeAirframe",
+    "TurbofanPropulsion": "Aircraft.TurbofanPropulsion",
+    "AdaptiveWingSystem": "Aircraft.AdaptiveWingSystem",
+    "MissionComputer": "Aircraft.MissionComputer",
+    "AutopilotModule": "Aircraft.AutopilotModule",
+    "PowerSystem": "Aircraft.PowerSystem",
+    "FuelSystem": "Aircraft.FuelSystem",
+    "ControlInterface": "Aircraft.ControlInterface",
 }
 
 

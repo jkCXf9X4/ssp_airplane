@@ -73,7 +73,7 @@
       "src_port": "pilotCommand"
     }
   ],
-  "package": "WingmanDrone",
+  "package": "Aircraft",
   "parts": {
     "AdaptiveWingSystem": {
       "attributes": {

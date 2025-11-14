@@ -13,7 +13,7 @@ from utils.sysmlv2_arch_parser import parse_sysml_folder  # type: ignore  # noqa
 
 def test_parser_collects_parts_and_ports():
     architecture = parse_sysml_folder(REPO_ROOT / "architecture")
-    assert architecture.package == "WingmanDrone"
+    assert architecture.package == "Aircraft"
     assert "MissionComputer" in architecture.parts
 
     mission_computer = architecture.part("MissionComputer")

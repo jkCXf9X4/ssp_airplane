@@ -76,7 +76,7 @@ def verify_fmu_ios(arch_path: Path, fmu_dir: Path, parts: Sequence[str] | None =
                 expected.append((f"{port.name}.{attr_name}", port.direction, port.name))
         if not expected:
             continue
-        fmu_path = fmu_dir / f"WingmanDrone_{part_name}.fmu"
+        fmu_path = fmu_dir / f"Aircraft_{part_name}.fmu"
         if not fmu_path.exists():
             issues.append(f"Missing FMU for part {part_name}: {fmu_path}")
             continue

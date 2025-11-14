@@ -1,6 +1,6 @@
-within WingmanDrone;
+within Aircraft;
 model AutopilotModule
-  import GI = WingmanDrone.GeneratedInterfaces;
+  import GI = Aircraft.GeneratedInterfaces;
   parameter Real updateRateHz = 40;
   parameter Real sensorFidelity = 0.98;
   parameter Real targetAltitude_m = 6000;

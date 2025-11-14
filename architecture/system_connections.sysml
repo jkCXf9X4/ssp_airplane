@@ -1,4 +1,4 @@
-package WingmanDrone {
+package Aircraft {
   connect TurbofanPropulsion.powerBus to PowerSystem.generatorInput;
   connect PowerSystem.dcBus270 to MissionComputer.powerIn;
   connect PowerSystem.acBus115 to ControlInterface.powerIn;

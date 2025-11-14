@@ -10,7 +10,7 @@ from utils.sysmlv2_arch_parser import SysMLArchitecture, SysMLPortDefinition, pa
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 ARCH_PATH = REPO_ROOT / "architecture"
-OUTPUT_DIR = REPO_ROOT / "models" /"WingmanDrone"
+OUTPUT_DIR = REPO_ROOT / "models" /"Aircraft"
 
 PRIMITIVE_MAP = {
     "real": "Real",
@@ -46,7 +46,7 @@ def to_modelica_type(sysml_type: str) -> str:
 
 
 def generate_modelica_package(defs: Dict[str, List[Tuple[str, str]]]) -> str:
-    lines = ["within WingmanDrone;", "package GeneratedInterfaces"]
+    lines = ["within Aircraft;", "package GeneratedInterfaces"]
     for type_name, fields in sorted(defs.items()):
         lines.append(f"  connector {type_name}")
         if not fields:

@@ -48,14 +48,14 @@ PRIMITIVE_TYPE_MAP = {
 }
 
 MODEL_CLASS_MAP: Dict[str, str] = {
-    "CompositeAirframe": "WingmanDrone.CompositeAirframe",
-    "TurbofanPropulsion": "WingmanDrone.TurbofanPropulsion",
-    "AdaptiveWingSystem": "WingmanDrone.AdaptiveWingSystem",
-    "MissionComputer": "WingmanDrone.MissionComputer",
-    "AutopilotModule": "WingmanDrone.AutopilotModule",
-    "PowerSystem": "WingmanDrone.PowerSystem",
-    "FuelSystem": "WingmanDrone.FuelSystem",
-    "ControlInterface": "WingmanDrone.ControlInterface",
+    "CompositeAirframe": "Aircraft.CompositeAirframe",
+    "TurbofanPropulsion": "Aircraft.TurbofanPropulsion",
+    "AdaptiveWingSystem": "Aircraft.AdaptiveWingSystem",
+    "MissionComputer": "Aircraft.MissionComputer",
+    "AutopilotModule": "Aircraft.AutopilotModule",
+    "PowerSystem": "Aircraft.PowerSystem",
+    "FuelSystem": "Aircraft.FuelSystem",
+    "ControlInterface": "Aircraft.ControlInterface",
 }
 
 
@@ -135,7 +135,7 @@ def _expand_port_entries(
 
 def build_ssd_tree(architecture: SysMLArchitecture) -> ET.ElementTree:
     system_name = architecture.package
-    components = [(name, part) for name, part in architecture.parts.items() if name != "WingmanDrone"]
+    components = [(name, part) for name, part in architecture.parts.items() if name != "Aircraft"]
     component_names: Dict[str, str] = {}
     connector_lookup: Dict[str, Dict[str, Dict[str, str]]] = {}
 

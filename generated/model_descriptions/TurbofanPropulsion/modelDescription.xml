@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<fmiModelDescription fmiVersion="2.0" modelName="WingmanDrone.TurbofanPropulsion" guid="{abe0d1aa-047c-5094-acf3-ba4271a661d8}" description="Pratt &amp; Whitney F100 / GE F110 class augmented turbofan powering the F-16." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2025-11-14T11:34:44Z" variableNamingConvention="structured" numberOfEventIndicators="0">
+<fmiModelDescription fmiVersion="2.0" modelName="Aircraft.TurbofanPropulsion" guid="{abe0d1aa-047c-5094-acf3-ba4271a661d8}" description="Pratt &amp; Whitney F100 / GE F110 class augmented turbofan powering the F-16." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2025-11-14T11:34:44Z" variableNamingConvention="structured" numberOfEventIndicators="0">
   <CoSimulation modelIdentifier="TurbofanPropulsion" />
   <ModelVariables>
     <ScalarVariable name="fuelFlow.mass_flow_kgps" valueReference="1" causality="output" description="Requested fuel mass-flow shared with storage system.">

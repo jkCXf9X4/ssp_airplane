@@ -1,4 +1,4 @@
-package WingmanDrone {
+package Aircraft {
   port def PilotCommand {
     doc /* HOTAS-style control payload shared across control surfaces and mission computer consumers. */
     attribute stick_pitch_norm: Real;   /* -1..1, aft pull positive */

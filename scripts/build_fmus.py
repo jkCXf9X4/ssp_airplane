@@ -12,19 +12,19 @@ import re
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MODELS = [
-    "WingmanDrone.CompositeAirframe",
-    "WingmanDrone.TurbofanPropulsion",
-    "WingmanDrone.AdaptiveWingSystem",
-    "WingmanDrone.MissionComputer",
-    "WingmanDrone.AutopilotModule",
-    "WingmanDrone.PowerSystem",
-    "WingmanDrone.FuelSystem",
-    "WingmanDrone.ControlInterface",
+    "Aircraft.CompositeAirframe",
+    "Aircraft.TurbofanPropulsion",
+    "Aircraft.AdaptiveWingSystem",
+    "Aircraft.MissionComputer",
+    "Aircraft.AutopilotModule",
+    "Aircraft.PowerSystem",
+    "Aircraft.FuelSystem",
+    "Aircraft.ControlInterface",
 ]
 
 
 def build_mos_script(model_name: str, output_dir: Path) -> str:
-    package_path = REPO_ROOT / "models" / "WingmanDrone" / "package.mo"
+    package_path = REPO_ROOT / "models" / "Aircraft" / "package.mo"
     tmp_dir = REPO_ROOT / "build/tmp"
     tmp_dir.mkdir(parents=True, exist_ok=True)
     return f"""

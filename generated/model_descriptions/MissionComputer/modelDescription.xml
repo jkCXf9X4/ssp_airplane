@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<fmiModelDescription fmiVersion="2.0" modelName="WingmanDrone.MissionComputer" guid="{ce1af575-0fdf-5e1e-839f-9483141f0954}" description="F-16C/D mission computer blending pilot HOTAS inputs with fly-by-wire control laws and stores management." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2025-11-14T11:34:44Z" variableNamingConvention="structured" numberOfEventIndicators="0">
+<fmiModelDescription fmiVersion="2.0" modelName="Aircraft.MissionComputer" guid="{ce1af575-0fdf-5e1e-839f-9483141f0954}" description="F-16C/D mission computer blending pilot HOTAS inputs with fly-by-wire control laws and stores management." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2025-11-14T11:34:44Z" variableNamingConvention="structured" numberOfEventIndicators="0">
   <CoSimulation modelIdentifier="MissionComputer" />
   <ModelVariables>
     <ScalarVariable name="autonomyPort.aggressiveness_norm" valueReference="1" causality="input" description="Autopilot/autonomy guidance cue input.">

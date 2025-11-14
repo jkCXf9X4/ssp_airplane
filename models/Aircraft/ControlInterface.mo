@@ -1,6 +1,6 @@
-within WingmanDrone;
+within Aircraft;
 model ControlInterface
-  import GI = WingmanDrone.GeneratedInterfaces;
+  import GI = Aircraft.GeneratedInterfaces;
   parameter Real inputLag = 0.05;
   parameter Real manualCommandDefault(min=0.0, max=1.0) = 0.6;
   input GI.GenericElectricalBus powerIn;

@@ -104,7 +104,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--models-dir",
         type=Path,
-        default=REPO_ROOT / "models" / "WingmanDrone",
+        default=REPO_ROOT / "models" / "Aircraft",
         help="Directory containing Modelica models to check.",
     )
     return parser.parse_args()
