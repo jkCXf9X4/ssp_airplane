@@ -1,5 +1,6 @@
 Interfaces
 GeneratedInterfaces
+AirDataAndInertialSuite
 AutopilotModule
 MissionComputer
 PowerSystem
@@ -8,3 +9,7 @@ TurbofanPropulsion
 FuelSystem
 ControlInterface
 AdaptiveWingSystem
+EmergencyPowerUnit
+FlyByWireController
+StructuralLoadsAndPerformanceMonitor
+StoresManagementSystem

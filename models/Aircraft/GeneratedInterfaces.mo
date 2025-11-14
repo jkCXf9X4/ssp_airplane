@@ -1,5 +1,18 @@
 within Aircraft;
 package GeneratedInterfaces
+  connector AirDataInertialState
+    Real mach_number;
+    Real true_airspeed_mps;
+    Real indicated_airspeed_mps;
+    Real pressure_altitude_m;
+    Real vertical_speed_mps;
+    Real angle_of_attack_deg;
+    Real sideslip_deg;
+    Real roll_rate_degps;
+    Real pitch_rate_degps;
+    Real yaw_rate_degps;
+  end AirDataInertialState;
+
   connector AutonomyGuidance
     Real waypoint_heading_deg;
     Real waypoint_altitude_m;
@@ -67,6 +80,14 @@ package GeneratedInterfaces
     Real bending_moment_knm;
   end StructuralInterface;
 
+  connector StructuralPerformanceState
+    Real load_factor_g;
+    Real mach_estimate;
+    Real structural_margin_norm;
+    Boolean stores_release_inhibit;
+    Integer autopilot_limit_code;
+  end StructuralPerformanceState;
+
   connector SurfaceActuationCommand
     Real left_aileron_deg;
     Real right_aileron_deg;
@@ -86,5 +107,22 @@ package GeneratedInterfaces
     Real mass_flow_kgps;
     Real exhaust_velocity_mps;
   end ThrustState;
+
+  connector StoresCommandBus
+    Integer selected_station;
+    Boolean release_enable;
+    Boolean pickle_command;
+    Boolean jettison_all;
+    Integer power_mode_mask;
+    Integer config_checksum;
+  end StoresCommandBus;
+
+  connector StoresStatusBus
+    Integer store_present_mask;
+    Integer weapon_ready_mask;
+    Real store_mass_total_kg;
+    Real cooling_demand_kw;
+    Integer fault_code;
+  end StoresStatusBus;
 
 end GeneratedInterfaces;

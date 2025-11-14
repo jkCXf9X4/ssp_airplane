@@ -11,12 +11,10 @@ This repository tracks an SSP for an F-16 Fighting Falcon inspired single-seat m
 # Architecture
 The architecture is captured as SysML v2 textual notation split across:
 
-- `architecture/drone_architecture.sysml` – package metadata and part definitions
+- `architecture/architecture.sysml` – package metadata and part definitions
 - `architecture/data_definitions.sysml` – all structured payload definitions
 - `architecture/system_connections.sysml` – all `connect` statements
 - `architecture/requirements.sysml` – top-level capability requirements
-
-`scripts/sysml_loader.py` stitches these sections together for [PySysML2](https://github.com/DAF-Digital-Transformation-Office/PySysML2) so the package remains the single source of truth for composition, payload schemas, and connectivity.
 
 ## Components
 
