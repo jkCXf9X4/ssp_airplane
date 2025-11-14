@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='utf-8'?>
+<ssv:ParameterSet xmlns:ssv="http://ssp-standard.org/SSP1/ParameterValues" name="ArchitecturalDefaults" version="1.0">
+  <ssv:Parameters>
+    <ssv:Parameter name="AdaptiveWingSystem.aspect_ratio">
+      <ssv:Real value="5.5" />
+    </ssv:Parameter>
+    <ssv:Parameter name="AdaptiveWingSystem.control_authority_deg">
+      <ssv:Integer value="35" />
+    </ssv:Parameter>
+    <ssv:Parameter name="AdaptiveWingSystem.reference_area_m2">
+      <ssv:Integer value="28" />
+    </ssv:Parameter>
+    <ssv:Parameter name="AdaptiveWingSystem.span_m">
+      <ssv:Real value="7.3" />
+    </ssv:Parameter>
+    <ssv:Parameter name="AutopilotModule.autonomy_mode_default">
+      <ssv:String value="loyal-wingman" />
+    </ssv:Parameter>
+    <ssv:Parameter name="AutopilotModule.guidance_modes">
+      <ssv:String value="escort+loiter+return" />
+    </ssv:Parameter>
+    <ssv:Parameter name="AutopilotModule.update_rate_hz">
+      <ssv:Integer value="25" />
+    </ssv:Parameter>
+    <ssv:Parameter name="CompositeAirframe.fuselage_width_m">
+      <ssv:Real value="1.9" />
+    </ssv:Parameter>
+    <ssv:Parameter name="CompositeAirframe.hardpoint_count">
+      <ssv:Integer value="4" />
+    </ssv:Parameter>
+    <ssv:Parameter name="CompositeAirframe.length_m">
+      <ssv:Real value="11.7" />
+    </ssv:Parameter>
+    <ssv:Parameter name="CompositeAirframe.payload_capacity_kg">
+      <ssv:Integer value="1500" />
+    </ssv:Parameter>
+    <ssv:Parameter name="ControlInterface.input_scheme">
+      <ssv:String value="HOTAS/Gamepad" />
+    </ssv:Parameter>
+    <ssv:Parameter name="ControlInterface.telemetry_rate_hz">
+      <ssv:Integer value="60" />
+    </ssv:Parameter>
+    <ssv:Parameter name="FuelSystem.fuel_capacity_kg">
+      <ssv:Integer value="2000" />
+    </ssv:Parameter>
+    <ssv:Parameter name="FuelSystem.reserve_fraction">
+      <ssv:Real value="0.05" />
+    </ssv:Parameter>
+    <ssv:Parameter name="MissionComputer.compute_budget_tops">
+      <ssv:Integer value="20" />
+    </ssv:Parameter>
+    <ssv:Parameter name="MissionComputer.networked_control_buses">
+      <ssv:Integer value="3" />
+    </ssv:Parameter>
+    <ssv:Parameter name="MissionComputer.tactical_ai_level">
+      <ssv:Integer value="4" />
+    </ssv:Parameter>
+    <ssv:Parameter name="PowerSystem.battery_capacity_mj">
+      <ssv:Integer value="500" />
+    </ssv:Parameter>
+    <ssv:Parameter name="PowerSystem.bus_voltage_kv">
+      <ssv:Real value="1.2" />
+    </ssv:Parameter>
+    <ssv:Parameter name="PowerSystem.generator_efficiency">
+      <ssv:Real value="0.92" />
+    </ssv:Parameter>
+    <ssv:Parameter name="TurbofanPropulsion.fuel_capacity_kg">
+      <ssv:Integer value="2000" />
+    </ssv:Parameter>
+    <ssv:Parameter name="TurbofanPropulsion.generator_output_kw">
+      <ssv:Integer value="150" />
+    </ssv:Parameter>
+    <ssv:Parameter name="TurbofanPropulsion.max_thrust_kn">
+      <ssv:Integer value="60" />
+    </ssv:Parameter>
+    <ssv:Parameter name="TurbofanPropulsion.specific_fuel_consumption">
+      <ssv:Real value="0.8" />
+    </ssv:Parameter>
+  </ssv:Parameters>
+</ssv:ParameterSet>
