@@ -2,7 +2,19 @@
 <ssd:SystemStructureDescription xmlns:ssc="http://ssp-standard.org/SSP1/SystemStructureCommon" xmlns:ssd="http://ssp-standard.org/SSP1/SystemStructureDescription" name="Aircraft" version="1.0">
   <ssd:System name="Aircraft">
     <ssd:Elements>
-      <ssd:Component name="CompositeAirframe" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_CompositeAirframe.fmu" />
+      <ssd:Component name="CompositeAirframe" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_CompositeAirframe.fmu">
+        <ssd:Connectors>
+          <ssd:Connector name="storesMounts.axial_load_kn" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="storesMounts.shear_load_kn" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="storesMounts.bending_moment_knm" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+        </ssd:Connectors>
+      </ssd:Component>
       <ssd:Component name="AdaptiveWingSystem" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_AdaptiveWingSystem.fmu">
         <ssd:Connectors>
           <ssd:Connector name="controlSurfaces.left_aileron_deg" kind="input">
@@ -118,6 +130,36 @@
           <ssd:Connector name="autonomyPort.aggressiveness_norm" kind="input">
             <ssc:Real />
           </ssd:Connector>
+          <ssd:Connector name="airDataIn.mach_number" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataIn.true_airspeed_mps" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataIn.indicated_airspeed_mps" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataIn.pressure_altitude_m" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataIn.vertical_speed_mps" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataIn.angle_of_attack_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataIn.sideslip_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataIn.roll_rate_degps" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataIn.pitch_rate_degps" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataIn.yaw_rate_degps" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
           <ssd:Connector name="fuelStatus.fuel_remaining_kg" kind="input">
             <ssc:Real />
           </ssd:Connector>
@@ -134,6 +176,15 @@
             <ssc:Real />
           </ssd:Connector>
           <ssd:Connector name="powerIn.available_power_kw" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="backupPower.voltage_kv" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="backupPower.current_a" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="backupPower.available_power_kw" kind="input">
             <ssc:Real />
           </ssd:Connector>
           <ssd:Connector name="engineThrottle.throttle_norm" kind="output">
@@ -190,6 +241,54 @@
           <ssd:Connector name="locationLLA.altitude_m" kind="output">
             <ssc:Real />
           </ssd:Connector>
+          <ssd:Connector name="storesCommand.selected_station" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="storesCommand.release_enable" kind="output">
+            <ssc:Boolean />
+          </ssd:Connector>
+          <ssd:Connector name="storesCommand.pickle_command" kind="output">
+            <ssc:Boolean />
+          </ssd:Connector>
+          <ssd:Connector name="storesCommand.jettison_all" kind="output">
+            <ssc:Boolean />
+          </ssd:Connector>
+          <ssd:Connector name="storesCommand.power_mode_mask" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="storesCommand.config_checksum" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="storesStatus.store_present_mask" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="storesStatus.weapon_ready_mask" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="storesStatus.store_mass_total_kg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="storesStatus.cooling_demand_kw" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="storesStatus.fault_code" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="performanceStatus.load_factor_g" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="performanceStatus.mach_estimate" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="performanceStatus.structural_margin_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="performanceStatus.stores_release_inhibit" kind="input">
+            <ssc:Boolean />
+          </ssd:Connector>
+          <ssd:Connector name="performanceStatus.autopilot_limit_code" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
       <ssd:Component name="AutopilotModule" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_AutopilotModule.fmu">
@@ -206,6 +305,51 @@
           <ssd:Connector name="feedbackBus.health_code" kind="input">
             <ssc:Integer />
           </ssd:Connector>
+          <ssd:Connector name="airDataIn.mach_number" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataIn.true_airspeed_mps" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataIn.indicated_airspeed_mps" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataIn.pressure_altitude_m" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataIn.vertical_speed_mps" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataIn.angle_of_attack_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataIn.sideslip_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataIn.roll_rate_degps" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataIn.pitch_rate_degps" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataIn.yaw_rate_degps" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="performanceStatus.load_factor_g" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="performanceStatus.mach_estimate" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="performanceStatus.structural_margin_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="performanceStatus.stores_release_inhibit" kind="input">
+            <ssc:Boolean />
+          </ssd:Connector>
+          <ssd:Connector name="performanceStatus.autopilot_limit_code" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
           <ssd:Connector name="powerIn.voltage_kv" kind="input">
             <ssc:Real />
           </ssd:Connector>
@@ -213,6 +357,15 @@
             <ssc:Real />
           </ssd:Connector>
           <ssd:Connector name="powerIn.available_power_kw" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="backupPower.voltage_kv" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="backupPower.current_a" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="backupPower.available_power_kw" kind="input">
             <ssc:Real />
           </ssd:Connector>
           <ssd:Connector name="guidanceCmd.waypoint_heading_deg" kind="output">
@@ -249,6 +402,24 @@
           <ssd:Connector name="avionicsFeed.available_power_kw" kind="output">
             <ssc:Real />
           </ssd:Connector>
+          <ssd:Connector name="dcBus270.voltage_kv" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="dcBus270.current_a" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="dcBus270.available_power_kw" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="acBus115.voltage_kv" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="acBus115.current_a" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="acBus115.available_power_kw" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
           <ssd:Connector name="controlFeed.voltage_kv" kind="output">
             <ssc:Real />
           </ssd:Connector>
@@ -267,6 +438,33 @@
           <ssd:Connector name="autonomyFeed.available_power_kw" kind="output">
             <ssc:Real />
           </ssd:Connector>
+          <ssd:Connector name="storesFeed.voltage_kv" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="storesFeed.current_a" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="storesFeed.available_power_kw" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="emergencyInput.voltage_kv" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="emergencyInput.current_a" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="emergencyInput.available_power_kw" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="emergencyBus.voltage_kv" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="emergencyBus.current_a" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="emergencyBus.available_power_kw" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
       <ssd:Component name="FuelSystem" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_FuelSystem.fmu">
@@ -282,6 +480,70 @@
           </ssd:Connector>
           <ssd:Connector name="fuelState.fuel_starved" kind="output">
             <ssc:Boolean />
+          </ssd:Connector>
+        </ssd:Connectors>
+      </ssd:Component>
+      <ssd:Component name="FlyByWireController" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_FlyByWireController.fmu">
+        <ssd:Connectors>
+          <ssd:Connector name="commandBus.left_aileron_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="commandBus.right_aileron_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="commandBus.elevator_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="commandBus.rudder_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="commandBus.flaperon_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="flightFeedback.airspeed_mps" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="flightFeedback.energy_state_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="flightFeedback.angle_of_attack_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="flightFeedback.health_code" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="aeroFeedback.lift_kn" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="aeroFeedback.drag_kn" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="aeroFeedback.pitching_moment_knm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="powerIn.voltage_kv" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="powerIn.current_a" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="powerIn.available_power_kw" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="actuatorDrive.left_aileron_deg" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="actuatorDrive.right_aileron_deg" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="actuatorDrive.elevator_deg" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="actuatorDrive.rudder_deg" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="actuatorDrive.flaperon_deg" kind="output">
+            <ssc:Real />
           </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
@@ -328,25 +590,239 @@
           </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
+      <ssd:Component name="AirDataAndInertialSuite" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_AirDataAndInertialSuite.fmu">
+        <ssd:Connectors>
+          <ssd:Connector name="powerIn.voltage_kv" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="powerIn.current_a" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="powerIn.available_power_kw" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataOut.mach_number" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataOut.true_airspeed_mps" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataOut.indicated_airspeed_mps" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataOut.pressure_altitude_m" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataOut.vertical_speed_mps" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataOut.angle_of_attack_deg" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataOut.sideslip_deg" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataOut.roll_rate_degps" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataOut.pitch_rate_degps" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataOut.yaw_rate_degps" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+        </ssd:Connectors>
+      </ssd:Component>
+      <ssd:Component name="EmergencyPowerUnit" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_EmergencyPowerUnit.fmu">
+        <ssd:Connectors>
+          <ssd:Connector name="fuelState.fuel_remaining_kg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="fuelState.fuel_level_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="fuelState.fuel_starved" kind="input">
+            <ssc:Boolean />
+          </ssd:Connector>
+          <ssd:Connector name="emergencyOutput.voltage_kv" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="emergencyOutput.current_a" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="emergencyOutput.available_power_kw" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+        </ssd:Connectors>
+      </ssd:Component>
+      <ssd:Component name="StructuralLoadsAndPerformanceMonitor" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_StructuralLoadsAndPerformanceMonitor.fmu">
+        <ssd:Connectors>
+          <ssd:Connector name="liftIn.lift_kn" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="liftIn.drag_kn" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="liftIn.pitching_moment_knm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="thrustIn.thrust_kn" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="thrustIn.mass_flow_kgps" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="thrustIn.exhaust_velocity_mps" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataIn.mach_number" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataIn.true_airspeed_mps" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataIn.indicated_airspeed_mps" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataIn.pressure_altitude_m" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataIn.vertical_speed_mps" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataIn.angle_of_attack_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataIn.sideslip_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataIn.roll_rate_degps" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataIn.pitch_rate_degps" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airDataIn.yaw_rate_degps" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="performanceStatus.load_factor_g" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="performanceStatus.mach_estimate" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="performanceStatus.structural_margin_norm" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="performanceStatus.stores_release_inhibit" kind="output">
+            <ssc:Boolean />
+          </ssd:Connector>
+          <ssd:Connector name="performanceStatus.autopilot_limit_code" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+        </ssd:Connectors>
+      </ssd:Component>
+      <ssd:Component name="StoresManagementSystem" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_StoresManagementSystem.fmu">
+        <ssd:Connectors>
+          <ssd:Connector name="storesBusIn.selected_station" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="storesBusIn.release_enable" kind="input">
+            <ssc:Boolean />
+          </ssd:Connector>
+          <ssd:Connector name="storesBusIn.pickle_command" kind="input">
+            <ssc:Boolean />
+          </ssd:Connector>
+          <ssd:Connector name="storesBusIn.jettison_all" kind="input">
+            <ssc:Boolean />
+          </ssd:Connector>
+          <ssd:Connector name="storesBusIn.power_mode_mask" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="storesBusIn.config_checksum" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="storesTelemetry.store_present_mask" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="storesTelemetry.weapon_ready_mask" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="storesTelemetry.store_mass_total_kg" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="storesTelemetry.cooling_demand_kw" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="storesTelemetry.fault_code" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="powerIn.voltage_kv" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="powerIn.current_a" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="powerIn.available_power_kw" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airframeMount.axial_load_kn" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airframeMount.shear_load_kn" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="airframeMount.bending_moment_knm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="performanceStatus.load_factor_g" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="performanceStatus.mach_estimate" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="performanceStatus.structural_margin_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="performanceStatus.stores_release_inhibit" kind="input">
+            <ssc:Boolean />
+          </ssd:Connector>
+          <ssd:Connector name="performanceStatus.autopilot_limit_code" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+        </ssd:Connectors>
+      </ssd:Component>
     </ssd:Elements>
     <ssd:Connections>
       <ssd:Connection startElement="TurbofanPropulsion" startConnector="powerBus.voltage_kv" endElement="PowerSystem" endConnector="generatorInput.voltage_kv" />
       <ssd:Connection startElement="TurbofanPropulsion" startConnector="powerBus.current_a" endElement="PowerSystem" endConnector="generatorInput.current_a" />
       <ssd:Connection startElement="TurbofanPropulsion" startConnector="powerBus.available_power_kw" endElement="PowerSystem" endConnector="generatorInput.available_power_kw" />
-      <ssd:Connection startElement="PowerSystem" startConnector="avionicsFeed.voltage_kv" endElement="MissionComputer" endConnector="powerIn.voltage_kv" />
-      <ssd:Connection startElement="PowerSystem" startConnector="avionicsFeed.current_a" endElement="MissionComputer" endConnector="powerIn.current_a" />
-      <ssd:Connection startElement="PowerSystem" startConnector="avionicsFeed.available_power_kw" endElement="MissionComputer" endConnector="powerIn.available_power_kw" />
-      <ssd:Connection startElement="PowerSystem" startConnector="controlFeed.voltage_kv" endElement="ControlInterface" endConnector="powerIn.voltage_kv" />
-      <ssd:Connection startElement="PowerSystem" startConnector="controlFeed.current_a" endElement="ControlInterface" endConnector="powerIn.current_a" />
-      <ssd:Connection startElement="PowerSystem" startConnector="controlFeed.available_power_kw" endElement="ControlInterface" endConnector="powerIn.available_power_kw" />
+      <ssd:Connection startElement="PowerSystem" startConnector="dcBus270.voltage_kv" endElement="MissionComputer" endConnector="powerIn.voltage_kv" />
+      <ssd:Connection startElement="PowerSystem" startConnector="dcBus270.current_a" endElement="MissionComputer" endConnector="powerIn.current_a" />
+      <ssd:Connection startElement="PowerSystem" startConnector="dcBus270.available_power_kw" endElement="MissionComputer" endConnector="powerIn.available_power_kw" />
+      <ssd:Connection startElement="PowerSystem" startConnector="acBus115.voltage_kv" endElement="ControlInterface" endConnector="powerIn.voltage_kv" />
+      <ssd:Connection startElement="PowerSystem" startConnector="acBus115.current_a" endElement="ControlInterface" endConnector="powerIn.current_a" />
+      <ssd:Connection startElement="PowerSystem" startConnector="acBus115.available_power_kw" endElement="ControlInterface" endConnector="powerIn.available_power_kw" />
       <ssd:Connection startElement="PowerSystem" startConnector="autonomyFeed.voltage_kv" endElement="AutopilotModule" endConnector="powerIn.voltage_kv" />
       <ssd:Connection startElement="PowerSystem" startConnector="autonomyFeed.current_a" endElement="AutopilotModule" endConnector="powerIn.current_a" />
       <ssd:Connection startElement="PowerSystem" startConnector="autonomyFeed.available_power_kw" endElement="AutopilotModule" endConnector="powerIn.available_power_kw" />
-      <ssd:Connection startElement="MissionComputer" startConnector="surfaceBus.left_aileron_deg" endElement="AdaptiveWingSystem" endConnector="controlSurfaces.left_aileron_deg" />
-      <ssd:Connection startElement="MissionComputer" startConnector="surfaceBus.right_aileron_deg" endElement="AdaptiveWingSystem" endConnector="controlSurfaces.right_aileron_deg" />
-      <ssd:Connection startElement="MissionComputer" startConnector="surfaceBus.elevator_deg" endElement="AdaptiveWingSystem" endConnector="controlSurfaces.elevator_deg" />
-      <ssd:Connection startElement="MissionComputer" startConnector="surfaceBus.rudder_deg" endElement="AdaptiveWingSystem" endConnector="controlSurfaces.rudder_deg" />
-      <ssd:Connection startElement="MissionComputer" startConnector="surfaceBus.flaperon_deg" endElement="AdaptiveWingSystem" endConnector="controlSurfaces.flaperon_deg" />
+      <ssd:Connection startElement="PowerSystem" startConnector="controlFeed.voltage_kv" endElement="FlyByWireController" endConnector="powerIn.voltage_kv" />
+      <ssd:Connection startElement="PowerSystem" startConnector="controlFeed.current_a" endElement="FlyByWireController" endConnector="powerIn.current_a" />
+      <ssd:Connection startElement="PowerSystem" startConnector="controlFeed.available_power_kw" endElement="FlyByWireController" endConnector="powerIn.available_power_kw" />
+      <ssd:Connection startElement="PowerSystem" startConnector="avionicsFeed.voltage_kv" endElement="AirDataAndInertialSuite" endConnector="powerIn.voltage_kv" />
+      <ssd:Connection startElement="PowerSystem" startConnector="avionicsFeed.current_a" endElement="AirDataAndInertialSuite" endConnector="powerIn.current_a" />
+      <ssd:Connection startElement="PowerSystem" startConnector="avionicsFeed.available_power_kw" endElement="AirDataAndInertialSuite" endConnector="powerIn.available_power_kw" />
+      <ssd:Connection startElement="PowerSystem" startConnector="emergencyBus.voltage_kv" endElement="MissionComputer" endConnector="backupPower.voltage_kv" />
+      <ssd:Connection startElement="PowerSystem" startConnector="emergencyBus.current_a" endElement="MissionComputer" endConnector="backupPower.current_a" />
+      <ssd:Connection startElement="PowerSystem" startConnector="emergencyBus.available_power_kw" endElement="MissionComputer" endConnector="backupPower.available_power_kw" />
+      <ssd:Connection startElement="PowerSystem" startConnector="emergencyBus.voltage_kv" endElement="AutopilotModule" endConnector="backupPower.voltage_kv" />
+      <ssd:Connection startElement="PowerSystem" startConnector="emergencyBus.current_a" endElement="AutopilotModule" endConnector="backupPower.current_a" />
+      <ssd:Connection startElement="PowerSystem" startConnector="emergencyBus.available_power_kw" endElement="AutopilotModule" endConnector="backupPower.available_power_kw" />
+      <ssd:Connection startElement="MissionComputer" startConnector="surfaceBus.left_aileron_deg" endElement="FlyByWireController" endConnector="commandBus.left_aileron_deg" />
+      <ssd:Connection startElement="MissionComputer" startConnector="surfaceBus.right_aileron_deg" endElement="FlyByWireController" endConnector="commandBus.right_aileron_deg" />
+      <ssd:Connection startElement="MissionComputer" startConnector="surfaceBus.elevator_deg" endElement="FlyByWireController" endConnector="commandBus.elevator_deg" />
+      <ssd:Connection startElement="MissionComputer" startConnector="surfaceBus.rudder_deg" endElement="FlyByWireController" endConnector="commandBus.rudder_deg" />
+      <ssd:Connection startElement="MissionComputer" startConnector="surfaceBus.flaperon_deg" endElement="FlyByWireController" endConnector="commandBus.flaperon_deg" />
       <ssd:Connection startElement="MissionComputer" startConnector="engineThrottle.throttle_norm" endElement="TurbofanPropulsion" endConnector="throttleCmd.throttle_norm" />
       <ssd:Connection startElement="MissionComputer" startConnector="engineThrottle.fuel_enable" endElement="TurbofanPropulsion" endConnector="throttleCmd.fuel_enable" />
       <ssd:Connection startElement="MissionComputer" startConnector="engineThrottle.afterburner_enable" endElement="TurbofanPropulsion" endConnector="throttleCmd.afterburner_enable" />
@@ -357,6 +833,9 @@
       <ssd:Connection startElement="FuelSystem" startConnector="fuelState.fuel_remaining_kg" endElement="MissionComputer" endConnector="fuelStatus.fuel_remaining_kg" />
       <ssd:Connection startElement="FuelSystem" startConnector="fuelState.fuel_level_norm" endElement="MissionComputer" endConnector="fuelStatus.fuel_level_norm" />
       <ssd:Connection startElement="FuelSystem" startConnector="fuelState.fuel_starved" endElement="MissionComputer" endConnector="fuelStatus.fuel_starved" />
+      <ssd:Connection startElement="FuelSystem" startConnector="fuelState.fuel_remaining_kg" endElement="EmergencyPowerUnit" endConnector="fuelState.fuel_remaining_kg" />
+      <ssd:Connection startElement="FuelSystem" startConnector="fuelState.fuel_level_norm" endElement="EmergencyPowerUnit" endConnector="fuelState.fuel_level_norm" />
+      <ssd:Connection startElement="FuelSystem" startConnector="fuelState.fuel_starved" endElement="EmergencyPowerUnit" endConnector="fuelState.fuel_starved" />
       <ssd:Connection startElement="AutopilotModule" startConnector="guidanceCmd.waypoint_heading_deg" endElement="MissionComputer" endConnector="autonomyPort.waypoint_heading_deg" />
       <ssd:Connection startElement="AutopilotModule" startConnector="guidanceCmd.waypoint_altitude_m" endElement="MissionComputer" endConnector="autonomyPort.waypoint_altitude_m" />
       <ssd:Connection startElement="AutopilotModule" startConnector="guidanceCmd.lateral_accel_mps2" endElement="MissionComputer" endConnector="autonomyPort.lateral_accel_mps2" />
@@ -365,6 +844,10 @@
       <ssd:Connection startElement="MissionComputer" startConnector="flightStatus.energy_state_norm" endElement="AutopilotModule" endConnector="feedbackBus.energy_state_norm" />
       <ssd:Connection startElement="MissionComputer" startConnector="flightStatus.angle_of_attack_deg" endElement="AutopilotModule" endConnector="feedbackBus.angle_of_attack_deg" />
       <ssd:Connection startElement="MissionComputer" startConnector="flightStatus.health_code" endElement="AutopilotModule" endConnector="feedbackBus.health_code" />
+      <ssd:Connection startElement="MissionComputer" startConnector="flightStatus.airspeed_mps" endElement="FlyByWireController" endConnector="flightFeedback.airspeed_mps" />
+      <ssd:Connection startElement="MissionComputer" startConnector="flightStatus.energy_state_norm" endElement="FlyByWireController" endConnector="flightFeedback.energy_state_norm" />
+      <ssd:Connection startElement="MissionComputer" startConnector="flightStatus.angle_of_attack_deg" endElement="FlyByWireController" endConnector="flightFeedback.angle_of_attack_deg" />
+      <ssd:Connection startElement="MissionComputer" startConnector="flightStatus.health_code" endElement="FlyByWireController" endConnector="flightFeedback.health_code" />
       <ssd:Connection startElement="ControlInterface" startConnector="pilotCommand.stick_pitch_norm" endElement="MissionComputer" endConnector="manualInput.stick_pitch_norm" />
       <ssd:Connection startElement="ControlInterface" startConnector="pilotCommand.stick_roll_norm" endElement="MissionComputer" endConnector="manualInput.stick_roll_norm" />
       <ssd:Connection startElement="ControlInterface" startConnector="pilotCommand.rudder_norm" endElement="MissionComputer" endConnector="manualInput.rudder_norm" />
@@ -375,6 +858,85 @@
       <ssd:Connection startElement="ControlInterface" startConnector="pilotCommand.hat_y" endElement="MissionComputer" endConnector="manualInput.hat_y" />
       <ssd:Connection startElement="ControlInterface" startConnector="pilotCommand.mode_switch" endElement="MissionComputer" endConnector="manualInput.mode_switch" />
       <ssd:Connection startElement="ControlInterface" startConnector="pilotCommand.reserved" endElement="MissionComputer" endConnector="manualInput.reserved" />
+      <ssd:Connection startElement="AdaptiveWingSystem" startConnector="liftInterface.lift_kn" endElement="FlyByWireController" endConnector="aeroFeedback.lift_kn" />
+      <ssd:Connection startElement="AdaptiveWingSystem" startConnector="liftInterface.drag_kn" endElement="FlyByWireController" endConnector="aeroFeedback.drag_kn" />
+      <ssd:Connection startElement="AdaptiveWingSystem" startConnector="liftInterface.pitching_moment_knm" endElement="FlyByWireController" endConnector="aeroFeedback.pitching_moment_knm" />
+      <ssd:Connection startElement="AdaptiveWingSystem" startConnector="liftInterface.lift_kn" endElement="StructuralLoadsAndPerformanceMonitor" endConnector="liftIn.lift_kn" />
+      <ssd:Connection startElement="AdaptiveWingSystem" startConnector="liftInterface.drag_kn" endElement="StructuralLoadsAndPerformanceMonitor" endConnector="liftIn.drag_kn" />
+      <ssd:Connection startElement="AdaptiveWingSystem" startConnector="liftInterface.pitching_moment_knm" endElement="StructuralLoadsAndPerformanceMonitor" endConnector="liftIn.pitching_moment_knm" />
+      <ssd:Connection startElement="TurbofanPropulsion" startConnector="thrustOut.thrust_kn" endElement="StructuralLoadsAndPerformanceMonitor" endConnector="thrustIn.thrust_kn" />
+      <ssd:Connection startElement="TurbofanPropulsion" startConnector="thrustOut.mass_flow_kgps" endElement="StructuralLoadsAndPerformanceMonitor" endConnector="thrustIn.mass_flow_kgps" />
+      <ssd:Connection startElement="TurbofanPropulsion" startConnector="thrustOut.exhaust_velocity_mps" endElement="StructuralLoadsAndPerformanceMonitor" endConnector="thrustIn.exhaust_velocity_mps" />
+      <ssd:Connection startElement="AirDataAndInertialSuite" startConnector="airDataOut.mach_number" endElement="MissionComputer" endConnector="airDataIn.mach_number" />
+      <ssd:Connection startElement="AirDataAndInertialSuite" startConnector="airDataOut.true_airspeed_mps" endElement="MissionComputer" endConnector="airDataIn.true_airspeed_mps" />
+      <ssd:Connection startElement="AirDataAndInertialSuite" startConnector="airDataOut.indicated_airspeed_mps" endElement="MissionComputer" endConnector="airDataIn.indicated_airspeed_mps" />
+      <ssd:Connection startElement="AirDataAndInertialSuite" startConnector="airDataOut.pressure_altitude_m" endElement="MissionComputer" endConnector="airDataIn.pressure_altitude_m" />
+      <ssd:Connection startElement="AirDataAndInertialSuite" startConnector="airDataOut.vertical_speed_mps" endElement="MissionComputer" endConnector="airDataIn.vertical_speed_mps" />
+      <ssd:Connection startElement="AirDataAndInertialSuite" startConnector="airDataOut.angle_of_attack_deg" endElement="MissionComputer" endConnector="airDataIn.angle_of_attack_deg" />
+      <ssd:Connection startElement="AirDataAndInertialSuite" startConnector="airDataOut.sideslip_deg" endElement="MissionComputer" endConnector="airDataIn.sideslip_deg" />
+      <ssd:Connection startElement="AirDataAndInertialSuite" startConnector="airDataOut.roll_rate_degps" endElement="MissionComputer" endConnector="airDataIn.roll_rate_degps" />
+      <ssd:Connection startElement="AirDataAndInertialSuite" startConnector="airDataOut.pitch_rate_degps" endElement="MissionComputer" endConnector="airDataIn.pitch_rate_degps" />
+      <ssd:Connection startElement="AirDataAndInertialSuite" startConnector="airDataOut.yaw_rate_degps" endElement="MissionComputer" endConnector="airDataIn.yaw_rate_degps" />
+      <ssd:Connection startElement="AirDataAndInertialSuite" startConnector="airDataOut.mach_number" endElement="AutopilotModule" endConnector="airDataIn.mach_number" />
+      <ssd:Connection startElement="AirDataAndInertialSuite" startConnector="airDataOut.true_airspeed_mps" endElement="AutopilotModule" endConnector="airDataIn.true_airspeed_mps" />
+      <ssd:Connection startElement="AirDataAndInertialSuite" startConnector="airDataOut.indicated_airspeed_mps" endElement="AutopilotModule" endConnector="airDataIn.indicated_airspeed_mps" />
+      <ssd:Connection startElement="AirDataAndInertialSuite" startConnector="airDataOut.pressure_altitude_m" endElement="AutopilotModule" endConnector="airDataIn.pressure_altitude_m" />
+      <ssd:Connection startElement="AirDataAndInertialSuite" startConnector="airDataOut.vertical_speed_mps" endElement="AutopilotModule" endConnector="airDataIn.vertical_speed_mps" />
+      <ssd:Connection startElement="AirDataAndInertialSuite" startConnector="airDataOut.angle_of_attack_deg" endElement="AutopilotModule" endConnector="airDataIn.angle_of_attack_deg" />
+      <ssd:Connection startElement="AirDataAndInertialSuite" startConnector="airDataOut.sideslip_deg" endElement="AutopilotModule" endConnector="airDataIn.sideslip_deg" />
+      <ssd:Connection startElement="AirDataAndInertialSuite" startConnector="airDataOut.roll_rate_degps" endElement="AutopilotModule" endConnector="airDataIn.roll_rate_degps" />
+      <ssd:Connection startElement="AirDataAndInertialSuite" startConnector="airDataOut.pitch_rate_degps" endElement="AutopilotModule" endConnector="airDataIn.pitch_rate_degps" />
+      <ssd:Connection startElement="AirDataAndInertialSuite" startConnector="airDataOut.yaw_rate_degps" endElement="AutopilotModule" endConnector="airDataIn.yaw_rate_degps" />
+      <ssd:Connection startElement="AirDataAndInertialSuite" startConnector="airDataOut.mach_number" endElement="StructuralLoadsAndPerformanceMonitor" endConnector="airDataIn.mach_number" />
+      <ssd:Connection startElement="AirDataAndInertialSuite" startConnector="airDataOut.true_airspeed_mps" endElement="StructuralLoadsAndPerformanceMonitor" endConnector="airDataIn.true_airspeed_mps" />
+      <ssd:Connection startElement="AirDataAndInertialSuite" startConnector="airDataOut.indicated_airspeed_mps" endElement="StructuralLoadsAndPerformanceMonitor" endConnector="airDataIn.indicated_airspeed_mps" />
+      <ssd:Connection startElement="AirDataAndInertialSuite" startConnector="airDataOut.pressure_altitude_m" endElement="StructuralLoadsAndPerformanceMonitor" endConnector="airDataIn.pressure_altitude_m" />
+      <ssd:Connection startElement="AirDataAndInertialSuite" startConnector="airDataOut.vertical_speed_mps" endElement="StructuralLoadsAndPerformanceMonitor" endConnector="airDataIn.vertical_speed_mps" />
+      <ssd:Connection startElement="AirDataAndInertialSuite" startConnector="airDataOut.angle_of_attack_deg" endElement="StructuralLoadsAndPerformanceMonitor" endConnector="airDataIn.angle_of_attack_deg" />
+      <ssd:Connection startElement="AirDataAndInertialSuite" startConnector="airDataOut.sideslip_deg" endElement="StructuralLoadsAndPerformanceMonitor" endConnector="airDataIn.sideslip_deg" />
+      <ssd:Connection startElement="AirDataAndInertialSuite" startConnector="airDataOut.roll_rate_degps" endElement="StructuralLoadsAndPerformanceMonitor" endConnector="airDataIn.roll_rate_degps" />
+      <ssd:Connection startElement="AirDataAndInertialSuite" startConnector="airDataOut.pitch_rate_degps" endElement="StructuralLoadsAndPerformanceMonitor" endConnector="airDataIn.pitch_rate_degps" />
+      <ssd:Connection startElement="AirDataAndInertialSuite" startConnector="airDataOut.yaw_rate_degps" endElement="StructuralLoadsAndPerformanceMonitor" endConnector="airDataIn.yaw_rate_degps" />
+      <ssd:Connection startElement="StructuralLoadsAndPerformanceMonitor" startConnector="performanceStatus.load_factor_g" endElement="MissionComputer" endConnector="performanceStatus.load_factor_g" />
+      <ssd:Connection startElement="StructuralLoadsAndPerformanceMonitor" startConnector="performanceStatus.mach_estimate" endElement="MissionComputer" endConnector="performanceStatus.mach_estimate" />
+      <ssd:Connection startElement="StructuralLoadsAndPerformanceMonitor" startConnector="performanceStatus.structural_margin_norm" endElement="MissionComputer" endConnector="performanceStatus.structural_margin_norm" />
+      <ssd:Connection startElement="StructuralLoadsAndPerformanceMonitor" startConnector="performanceStatus.stores_release_inhibit" endElement="MissionComputer" endConnector="performanceStatus.stores_release_inhibit" />
+      <ssd:Connection startElement="StructuralLoadsAndPerformanceMonitor" startConnector="performanceStatus.autopilot_limit_code" endElement="MissionComputer" endConnector="performanceStatus.autopilot_limit_code" />
+      <ssd:Connection startElement="StructuralLoadsAndPerformanceMonitor" startConnector="performanceStatus.load_factor_g" endElement="AutopilotModule" endConnector="performanceStatus.load_factor_g" />
+      <ssd:Connection startElement="StructuralLoadsAndPerformanceMonitor" startConnector="performanceStatus.mach_estimate" endElement="AutopilotModule" endConnector="performanceStatus.mach_estimate" />
+      <ssd:Connection startElement="StructuralLoadsAndPerformanceMonitor" startConnector="performanceStatus.structural_margin_norm" endElement="AutopilotModule" endConnector="performanceStatus.structural_margin_norm" />
+      <ssd:Connection startElement="StructuralLoadsAndPerformanceMonitor" startConnector="performanceStatus.stores_release_inhibit" endElement="AutopilotModule" endConnector="performanceStatus.stores_release_inhibit" />
+      <ssd:Connection startElement="StructuralLoadsAndPerformanceMonitor" startConnector="performanceStatus.autopilot_limit_code" endElement="AutopilotModule" endConnector="performanceStatus.autopilot_limit_code" />
+      <ssd:Connection startElement="StructuralLoadsAndPerformanceMonitor" startConnector="performanceStatus.load_factor_g" endElement="StoresManagementSystem" endConnector="performanceStatus.load_factor_g" />
+      <ssd:Connection startElement="StructuralLoadsAndPerformanceMonitor" startConnector="performanceStatus.mach_estimate" endElement="StoresManagementSystem" endConnector="performanceStatus.mach_estimate" />
+      <ssd:Connection startElement="StructuralLoadsAndPerformanceMonitor" startConnector="performanceStatus.structural_margin_norm" endElement="StoresManagementSystem" endConnector="performanceStatus.structural_margin_norm" />
+      <ssd:Connection startElement="StructuralLoadsAndPerformanceMonitor" startConnector="performanceStatus.stores_release_inhibit" endElement="StoresManagementSystem" endConnector="performanceStatus.stores_release_inhibit" />
+      <ssd:Connection startElement="StructuralLoadsAndPerformanceMonitor" startConnector="performanceStatus.autopilot_limit_code" endElement="StoresManagementSystem" endConnector="performanceStatus.autopilot_limit_code" />
+      <ssd:Connection startElement="FlyByWireController" startConnector="actuatorDrive.left_aileron_deg" endElement="AdaptiveWingSystem" endConnector="controlSurfaces.left_aileron_deg" />
+      <ssd:Connection startElement="FlyByWireController" startConnector="actuatorDrive.right_aileron_deg" endElement="AdaptiveWingSystem" endConnector="controlSurfaces.right_aileron_deg" />
+      <ssd:Connection startElement="FlyByWireController" startConnector="actuatorDrive.elevator_deg" endElement="AdaptiveWingSystem" endConnector="controlSurfaces.elevator_deg" />
+      <ssd:Connection startElement="FlyByWireController" startConnector="actuatorDrive.rudder_deg" endElement="AdaptiveWingSystem" endConnector="controlSurfaces.rudder_deg" />
+      <ssd:Connection startElement="FlyByWireController" startConnector="actuatorDrive.flaperon_deg" endElement="AdaptiveWingSystem" endConnector="controlSurfaces.flaperon_deg" />
+      <ssd:Connection startElement="MissionComputer" startConnector="storesCommand.selected_station" endElement="StoresManagementSystem" endConnector="storesBusIn.selected_station" />
+      <ssd:Connection startElement="MissionComputer" startConnector="storesCommand.release_enable" endElement="StoresManagementSystem" endConnector="storesBusIn.release_enable" />
+      <ssd:Connection startElement="MissionComputer" startConnector="storesCommand.pickle_command" endElement="StoresManagementSystem" endConnector="storesBusIn.pickle_command" />
+      <ssd:Connection startElement="MissionComputer" startConnector="storesCommand.jettison_all" endElement="StoresManagementSystem" endConnector="storesBusIn.jettison_all" />
+      <ssd:Connection startElement="MissionComputer" startConnector="storesCommand.power_mode_mask" endElement="StoresManagementSystem" endConnector="storesBusIn.power_mode_mask" />
+      <ssd:Connection startElement="MissionComputer" startConnector="storesCommand.config_checksum" endElement="StoresManagementSystem" endConnector="storesBusIn.config_checksum" />
+      <ssd:Connection startElement="StoresManagementSystem" startConnector="storesTelemetry.store_present_mask" endElement="MissionComputer" endConnector="storesStatus.store_present_mask" />
+      <ssd:Connection startElement="StoresManagementSystem" startConnector="storesTelemetry.weapon_ready_mask" endElement="MissionComputer" endConnector="storesStatus.weapon_ready_mask" />
+      <ssd:Connection startElement="StoresManagementSystem" startConnector="storesTelemetry.store_mass_total_kg" endElement="MissionComputer" endConnector="storesStatus.store_mass_total_kg" />
+      <ssd:Connection startElement="StoresManagementSystem" startConnector="storesTelemetry.cooling_demand_kw" endElement="MissionComputer" endConnector="storesStatus.cooling_demand_kw" />
+      <ssd:Connection startElement="StoresManagementSystem" startConnector="storesTelemetry.fault_code" endElement="MissionComputer" endConnector="storesStatus.fault_code" />
+      <ssd:Connection startElement="PowerSystem" startConnector="storesFeed.voltage_kv" endElement="StoresManagementSystem" endConnector="powerIn.voltage_kv" />
+      <ssd:Connection startElement="PowerSystem" startConnector="storesFeed.current_a" endElement="StoresManagementSystem" endConnector="powerIn.current_a" />
+      <ssd:Connection startElement="PowerSystem" startConnector="storesFeed.available_power_kw" endElement="StoresManagementSystem" endConnector="powerIn.available_power_kw" />
+      <ssd:Connection startElement="CompositeAirframe" startConnector="storesMounts.axial_load_kn" endElement="StoresManagementSystem" endConnector="airframeMount.axial_load_kn" />
+      <ssd:Connection startElement="CompositeAirframe" startConnector="storesMounts.shear_load_kn" endElement="StoresManagementSystem" endConnector="airframeMount.shear_load_kn" />
+      <ssd:Connection startElement="CompositeAirframe" startConnector="storesMounts.bending_moment_knm" endElement="StoresManagementSystem" endConnector="airframeMount.bending_moment_knm" />
+      <ssd:Connection startElement="EmergencyPowerUnit" startConnector="emergencyOutput.voltage_kv" endElement="PowerSystem" endConnector="emergencyInput.voltage_kv" />
+      <ssd:Connection startElement="EmergencyPowerUnit" startConnector="emergencyOutput.current_a" endElement="PowerSystem" endConnector="emergencyInput.current_a" />
+      <ssd:Connection startElement="EmergencyPowerUnit" startConnector="emergencyOutput.available_power_kw" endElement="PowerSystem" endConnector="emergencyInput.available_power_kw" />
     </ssd:Connections>
   </ssd:System>
   <ssd:DefaultExperiment startTime="0" stopTime="3600" />

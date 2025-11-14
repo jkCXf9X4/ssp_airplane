@@ -20,6 +20,11 @@ DEFAULT_MODELS = [
     "Aircraft.PowerSystem",
     "Aircraft.FuelSystem",
     "Aircraft.ControlInterface",
+    "Aircraft.AirDataAndInertialSuite",
+    "Aircraft.EmergencyPowerUnit",
+    "Aircraft.FlyByWireController",
+    "Aircraft.StructuralLoadsAndPerformanceMonitor",
+    "Aircraft.StoresManagementSystem",
 ]
 
 

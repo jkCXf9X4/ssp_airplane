@@ -74,6 +74,23 @@ package GeneratedInterfaces
     Integer reserved;
   end PilotCommand;
 
+  connector StoresCommandBus
+    Integer selected_station;
+    Boolean release_enable;
+    Boolean pickle_command;
+    Boolean jettison_all;
+    Integer power_mode_mask;
+    Integer config_checksum;
+  end StoresCommandBus;
+
+  connector StoresStatusBus
+    Integer store_present_mask;
+    Integer weapon_ready_mask;
+    Real store_mass_total_kg;
+    Real cooling_demand_kw;
+    Integer fault_code;
+  end StoresStatusBus;
+
   connector StructuralInterface
     Real axial_load_kn;
     Real shear_load_kn;
@@ -107,22 +124,5 @@ package GeneratedInterfaces
     Real mass_flow_kgps;
     Real exhaust_velocity_mps;
   end ThrustState;
-
-  connector StoresCommandBus
-    Integer selected_station;
-    Boolean release_enable;
-    Boolean pickle_command;
-    Boolean jettison_all;
-    Integer power_mode_mask;
-    Integer config_checksum;
-  end StoresCommandBus;
-
-  connector StoresStatusBus
-    Integer store_present_mask;
-    Integer weapon_ready_mask;
-    Real store_mass_total_kg;
-    Real cooling_demand_kw;
-    Integer fault_code;
-  end StoresStatusBus;
 
 end GeneratedInterfaces;
