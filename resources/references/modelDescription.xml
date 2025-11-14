@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fmiModelDescription
+  fmiVersion="2.0"
+  modelName="WingmanDrone.AdaptiveWingSystem"
+  guid="{7d865131-6438-4c73-8202-f3141e728143}"
+  description=""
+  version=""
+  generationTool="OpenModelica Compiler OpenModelica 1.25.5"
+  generationDateAndTime="2025-11-14T08:52:42Z"
+  variableNamingConvention="structured"
+  numberOfEventIndicators="0">
+  <CoSimulation
+    modelIdentifier="AdaptiveWingSystem"
+    needsExecutionTool="false"
+    canHandleVariableCommunicationStepSize="true"
+    canInterpolateInputs="true"
+    maxOutputDerivativeOrder="1"
+    canRunAsynchronuously = "false"
+    canBeInstantiatedOnlyOncePerProcess="false"
+    canNotUseMemoryManagementFunctions="false"
+    canGetAndSetFMUstate="false"
+    canSerializeFMUstate="false"
+    providesDirectionalDerivative="false">
+  </CoSimulation>
+  <DefaultExperiment startTime="0.0" stopTime="1.0" tolerance="1e-6" stepSize="0.002"/>
+  <ModelVariables>
+  <!-- Index of variable = "1" -->
+  <ScalarVariable
+    name="der(_D_outputAlias_liftInterface.drag_kn)"
+    valueReference="0"
+    >
+    <Real/>
+  </ScalarVariable>
+  <!-- Index of variable = "2" -->
+  <ScalarVariable
+    name="der(_D_outputAlias_liftInterface.lift_kn)"
+    valueReference="1"
+    >
+    <Real/>
+  </ScalarVariable>
+  <!-- Index of variable = "3" -->
+  <ScalarVariable
+    name="der(_D_outputAlias_liftInterface.pitching_moment_knm)"
+    valueReference="2"
+    >
+    <Real/>
+  </ScalarVariable>
+  <!-- Index of variable = "4" -->
+  <ScalarVariable
+    name="controlSurfaces.elevator_deg"
+    valueReference="10"
+    causality="input"
+    >
+    <Real start="0.0"/>
+  </ScalarVariable>
+  <!-- Index of variable = "5" -->
+  <ScalarVariable
+    name="controlSurfaces.flaperon_deg"
+    valueReference="11"
+    causality="input"
+    >
+    <Real start="0.0"/>
+  </ScalarVariable>
+  <!-- Index of variable = "6" -->
+  <ScalarVariable
+    name="controlSurfaces.left_aileron_deg"
+    valueReference="12"
+    causality="input"
+    >
+    <Real start="0.0"/>
+  </ScalarVariable>
+  <!-- Index of variable = "7" -->
+  <ScalarVariable
+    name="controlSurfaces.right_aileron_deg"
+    valueReference="13"
+    causality="input"
+    >
+    <Real start="0.0"/>
+  </ScalarVariable>
+  <!-- Index of variable = "8" -->
+  <ScalarVariable
+    name="controlSurfaces.rudder_deg"
+    valueReference="14"
+    causality="input"
+    >
+    <Real start="0.0"/>
+  </ScalarVariable>
+  <!-- Index of variable = "9" -->
+  <ScalarVariable
+    name="liftInterface.drag_kn"
+    valueReference="16"
+    causality="output"
+    >
+    <Real/>
+  </ScalarVariable>
+  <!-- Index of variable = "10" -->
+  <ScalarVariable
+    name="liftInterface.lift_kn"
+    valueReference="17"
+    causality="output"
+    >
+    <Real/>
+  </ScalarVariable>
+  <!-- Index of variable = "11" -->
+  <ScalarVariable
+    name="liftInterface.pitching_moment_knm"
+    valueReference="18"
+    causality="output"
+    >
+    <Real/>
+  </ScalarVariable>
+  <!-- Index of variable = "12" -->
+  <ScalarVariable
+    name="aspectRatio"
+    valueReference="19"
+    variability="fixed"
+    causality="parameter"
+    >
+    <Real start="5.5"/>
+  </ScalarVariable>
+  <!-- Index of variable = "13" -->
+  <ScalarVariable
+    name="referenceArea"
+    valueReference="21"
+    description="m2"
+    variability="fixed"
+    causality="parameter"
+    >
+    <Real start="28.0"/>
+  </ScalarVariable>
+  <!-- Index of variable = "14" -->
+  <ScalarVariable
+    name="span"
+    valueReference="22"
+    description="m"
+    variability="fixed"
+    causality="parameter"
+    >
+    <Real start="7.3"/>
+  </ScalarVariable>
+  <!-- Index of variable = "15" -->
+  <ScalarVariable
+    name="wingAreaScale"
+    valueReference="23"
+    variability="fixed"
+    causality="parameter"
+    >
+    <Real start="1.0" min="0.7" max="1.3"/>
+  </ScalarVariable>
+  </ModelVariables>
+  <ModelStructure>
+    <Outputs>
+      <Unknown index="9" dependencies="4 6 7" dependenciesKind="dependent dependent dependent" />
+      <Unknown index="10" dependencies="4 6 7" dependenciesKind="dependent dependent dependent" />
+      <Unknown index="11" dependencies="4" dependenciesKind="dependent" />
+    </Outputs>
+    <InitialUnknowns>
+      <Unknown index="9" dependencies="4 6 7 15" dependenciesKind="dependent dependent dependent dependent" />
+      <Unknown index="10" dependencies="4 6 7 15" dependenciesKind="dependent dependent dependent dependent" />
+      <Unknown index="11" dependencies="4 12 13" dependenciesKind="dependent dependent dependent" />
+    </InitialUnknowns>
+  </ModelStructure>
+</fmiModelDescription>

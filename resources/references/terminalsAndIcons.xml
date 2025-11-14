@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fmiTerminalsAndIcons fmiVersion="3.0">
+  <Terminals>
+    <Terminal name="Powertrain" matchingRule="plug"
+        description="Powertrain CAN Bus Terminal definition">
+      <TerminalMemberVariable variableKind="signal"
+        variableName="Powertrain.Rx_Clock" memberName="Rx_Clock" />
+      <TerminalMemberVariable variableKind="signal"
+        variableName="Powertrain.Rx_Data" memberName="Rx_Data" />
+      <TerminalMemberVariable variableKind="signal"
+        variableName="Powertrain.Tx_Clock" memberName="Tx_Clock" />
+      <TerminalMemberVariable variableKind="signal"
+        variableName="Powertrain.Tx_Data" memberName="Tx_Data" />
+      <Terminal name="Configuration" matchingRule="bus">
+        <TerminalMemberVariable variableKind="signal" 
+        variableName="Powertrain.Configuration.BusNotification" memberName="BusNotification" />
+      </Terminal>
+    </Terminal>
+  </Terminals>
+</fmiTerminalsAndIcons>
