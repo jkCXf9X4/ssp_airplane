@@ -1,0 +1,43 @@
+{
+  "name": "deep_strike_penetration",
+  "description": "Long-range, high-altitude ingress and egress to engage defended targets while preserving mandated fuel reserves.",
+  "requirements": ["REQ_Performance", "REQ_Fuel", "REQ_Mission"],
+  "simulation_overrides": {
+    "cruise_speed_mps": 260.0,
+    "fuel_capacity_kg": 3400.0,
+    "fuel_burn_rate_kgps": 0.24
+  },
+  "points": [
+    {
+      "latitude_deg": -6.502762,
+      "longitude_deg": 84.209966,
+      "altitude_m": 0.0
+    },
+    {
+      "latitude_deg": -0.379646,
+      "longitude_deg": 85.619303,
+      "altitude_m": 8694.5
+    },
+    {
+      "latitude_deg": 0.908216,
+      "longitude_deg": 89.719206,
+      "altitude_m": 8459.86
+    },
+    {
+      "latitude_deg": -1.016651,
+      "longitude_deg": 88.10127,
+      "altitude_m": 10991.36
+    },
+    {
+      "latitude_deg": -7.499873,
+      "longitude_deg": 87.153036,
+      "altitude_m": 11081.87
+    },
+    {
+      "latitude_deg": -11.596598,
+      "longitude_deg": 95.303783,
+      "altitude_m": 0.0
+    }
+  ],
+  "total_distance_km": 3187.49
+}

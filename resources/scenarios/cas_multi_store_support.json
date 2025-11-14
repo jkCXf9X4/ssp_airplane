@@ -1,0 +1,43 @@
+{
+  "name": "cas_multi_store_support",
+  "description": "Close air support patrol with repeated target passes demanding full HOTAS integration and nine-station stores availability.",
+  "requirements": ["REQ_Control", "REQ_Mission"],
+  "mission_profile": {
+    "role": "CAS",
+    "stores_payload_kg": 5400,
+    "stations_used": 9
+  },
+  "simulation_overrides": {
+    "cruise_speed_mps": 220.0,
+    "fuel_capacity_kg": 2400.0,
+    "fuel_burn_rate_kgps": 0.5
+  },
+  "points": [
+    {
+      "latitude_deg": -21.719144,
+      "longitude_deg": 3.903943,
+      "altitude_m": 0.0
+    },
+    {
+      "latitude_deg": -23.057182,
+      "longitude_deg": 4.987483,
+      "altitude_m": 2635.34
+    },
+    {
+      "latitude_deg": -22.942624,
+      "longitude_deg": 4.502144,
+      "altitude_m": 5018.06
+    },
+    {
+      "latitude_deg": -23.002112,
+      "longitude_deg": 6.360034,
+      "altitude_m": 3400.3
+    },
+    {
+      "latitude_deg": -23.634193,
+      "longitude_deg": 4.71562,
+      "altitude_m": 0.0
+    }
+  ],
+  "total_distance_km": 609.5
+}
