@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <fmiTerminalsAndIcons fmiVersion="3.0">
   <Terminals>
-    <Terminal name="Powertrain" matchingRule="plug"
-        description="Powertrain CAN Bus Terminal definition">
+    <!-- name is arbitrary, must be unique, terminalKind should connect to the arch::port_definition -->
+     <!-- Terminal name="<fmu_identifier>_<port_name>_<idx>" -->
+    <Terminal name="fmu1_powertrain_1" terminalKind="PowertrainBus" matchingRule="plug"
+        description="Powertrain Bus Terminal definition">
+        <!-- variableName must match ScalarVariable::name in Model description  -->
+         <!-- variableName should be x.memberName where x must match arch::part definition::port_name for interfaces to match-->
+         <!-- Member name should match the arch::port_attribute -->
       <TerminalMemberVariable variableKind="signal"
-        variableName="Powertrain.Rx_Clock" memberName="Rx_Clock" />
+        variableName="powertrain.Rx_Clock" memberName="Rx_Clock" />
       <TerminalMemberVariable variableKind="signal"
-        variableName="Powertrain.Rx_Data" memberName="Rx_Data" />
+        variableName="powertrain.Rx_Data" memberName="Rx_Data" />
       <TerminalMemberVariable variableKind="signal"
-        variableName="Powertrain.Tx_Clock" memberName="Tx_Clock" />
+        variableName="powertrain.Tx_Clock" memberName="Tx_Clock" />
       <TerminalMemberVariable variableKind="signal"
-        variableName="Powertrain.Tx_Data" memberName="Tx_Data" />
+        variableName="powertrain.Tx_Data" memberName="Tx_Data" />
       <Terminal name="Configuration" matchingRule="bus">
         <TerminalMemberVariable variableKind="signal" 
-        variableName="Powertrain.Configuration.BusNotification" memberName="BusNotification" />
+        variableName="powertrain.Configuration.BusNotification" memberName="BusNotification" />
       </Terminal>
     </Terminal>
   </Terminals>
