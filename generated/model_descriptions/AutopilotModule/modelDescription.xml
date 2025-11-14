@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='utf-8'?>
+<fmiModelDescription fmiVersion="2.0" modelName="WingmanDrone.AutopilotModule" guid="{f3fb6e5b-6330-5a89-92d8-481258b22503}" description="Guidance core to execute escort, loiter, and waypoint scripts." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2025-11-14T09:37:10Z" variableNamingConvention="structured" numberOfEventIndicators="0">
+  <CoSimulation modelIdentifier="AutopilotModule" />
+  <ModelVariables>
+    <ScalarVariable name="feedbackBus.airspeed_mps" valueReference="1" causality="input" description="Mission-computer flight status back into autopilot.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="feedbackBus.angle_of_attack_deg" valueReference="2" causality="input" description="Mission-computer flight status back into autopilot.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="feedbackBus.energy_state_norm" valueReference="3" causality="input" description="Mission-computer flight status back into autopilot.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="feedbackBus.health_code" valueReference="4" causality="input" description="Mission-computer flight status back into autopilot.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="guidanceCmd.aggressiveness_norm" valueReference="5" causality="output" description="Autopilot guidance directives to mission computer.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="guidanceCmd.lateral_accel_mps2" valueReference="6" causality="output" description="Autopilot guidance directives to mission computer.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="guidanceCmd.waypoint_altitude_m" valueReference="7" causality="output" description="Autopilot guidance directives to mission computer.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="guidanceCmd.waypoint_heading_deg" valueReference="8" causality="output" description="Autopilot guidance directives to mission computer.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="powerIn.available_power_kw" valueReference="9" causality="input" description="Electrical supply for autopilot electronics.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="powerIn.current_a" valueReference="10" causality="input" description="Electrical supply for autopilot electronics.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="powerIn.voltage_kv" valueReference="11" causality="input" description="Electrical supply for autopilot electronics.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="autonomy_mode_default" valueReference="12" causality="parameter" variability="fixed">
+      <String start="loyal-wingman" />
+    </ScalarVariable>
+    <ScalarVariable name="guidance_modes" valueReference="13" causality="parameter" variability="fixed">
+      <String start="escort+loiter+return" />
+    </ScalarVariable>
+    <ScalarVariable name="update_rate_hz" valueReference="14" causality="parameter" variability="fixed">
+      <Integer start="25" />
+    </ScalarVariable>
+  </ModelVariables>
+  <ModelStructure>
+    <Outputs>
+      <Unknown index="5" />
+      <Unknown index="6" />
+      <Unknown index="7" />
+      <Unknown index="8" />
+    </Outputs>
+    <InitialUnknowns>
+      <Unknown index="5" />
+      <Unknown index="6" />
+      <Unknown index="7" />
+      <Unknown index="8" />
+    </InitialUnknowns>
+  </ModelStructure>
+</fmiModelDescription>

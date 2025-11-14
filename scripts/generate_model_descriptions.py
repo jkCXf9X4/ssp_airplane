@@ -1,0 +1,312 @@
+#!/usr/bin/env python3
+"""Generate FMI 2.0 `modelDescription.xml` stubs for every component in the SysML architecture."""
+from __future__ import annotations
+
+import argparse
+from dataclasses import dataclass
+from datetime import datetime, timezone
+import sys
+from pathlib import Path
+from typing import Iterable, Optional
+from uuid import NAMESPACE_URL, uuid5
+import xml.etree.ElementTree as ET
+import zipfile
+
+from utils.sysmlv2_arch_parser import SysMLArchitecture, SysMLAttribute, SysMLPartDefinition, parse_sysml_folder
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_ARCH_PATH = REPO_ROOT / "architecture"
+DEFAULT_OUTPUT_DIR = REPO_ROOT / "generated" / "model_descriptions"
+BUILD_DIR = REPO_ROOT / "build"
+
+CO_SIMULATION_ATTRS = {
+    "modelIdentifier": "",
+}
+
+PRIMITIVE_TYPE_MAP = {
+    "real": "Real",
+    "float": "Real",
+    "float32": "Real",
+    "float64": "Real",
+    "double": "Real",
+    "integer": "Integer",
+    "int": "Integer",
+    "int32": "Integer",
+    "uint32": "Integer",
+    "boolean": "Boolean",
+    "bool": "Boolean",
+    "string": "String",
+}
+
+
+@dataclass
+class VariableSpec:
+    name: str
+    causality: str
+    value_reference: int
+    fmi_type: str
+    variability: Optional[str] = None
+    description: Optional[str] = None
+    start_value: Optional[str] = None
+
+
+def _indent(tree: ET.ElementTree) -> None:
+    """Indent the XML tree for readability."""
+    ET.indent(tree, space="  ", level=0)
+
+
+def _normalize_type(type_name: Optional[str]) -> Optional[str]:
+    if not type_name:
+        return None
+    return PRIMITIVE_TYPE_MAP.get(type_name.strip().lower())
+
+
+def _parse_literal(value: Optional[str]) -> Optional[object]:
+    if value is None:
+        return None
+    raw = value.strip()
+    if not raw:
+        return None
+    if raw.startswith('"') and raw.endswith('"'):
+        return raw[1:-1]
+    lowered = raw.lower()
+    if lowered in {"true", "false"}:
+        return lowered == "true"
+    try:
+        if any(ch in raw for ch in (".", "e", "E")):
+            return float(raw)
+        return int(raw)
+    except ValueError:
+        return raw
+
+
+def _format_start_value(fmi_type: str, literal: Optional[object]) -> Optional[str]:
+    if literal is None:
+        return None
+    if fmi_type == "Real":
+        return f"{float(literal):g}"
+    if fmi_type == "Integer":
+        return str(int(literal))
+    if fmi_type == "Boolean":
+        return "true" if bool(literal) else "false"
+    if fmi_type == "String":
+        return str(literal)
+    return None
+
+
+def _resolve_fmi_type(attribute: SysMLAttribute, literal: Optional[object]) -> str:
+    explicit_type = _normalize_type(attribute.type)
+    if explicit_type:
+        return explicit_type
+    if isinstance(literal, bool):
+        return "Boolean"
+    if isinstance(literal, int):
+        return "Integer"
+    if isinstance(literal, float):
+        return "Real"
+    if isinstance(literal, str):
+        return "String"
+    return "Real"
+
+
+def _port_attribute_variables(part: SysMLPartDefinition, starting_ref: int) -> tuple[list[VariableSpec], int, list[int]]:
+    variables: list[VariableSpec] = []
+    output_indexes: list[int] = []
+    value_ref = starting_ref
+    for port in sorted(part.ports, key=lambda item: item.name):
+        payload_def = port.payload_def
+        attributes = (
+            [payload_def.attributes[name] for name in sorted(payload_def.attributes)]
+            if payload_def
+            else []
+        )
+        if not attributes:
+            spec = VariableSpec(
+                name=port.name,
+                causality="input" if port.direction == "in" else "output",
+                value_reference=value_ref,
+                fmi_type="Real",
+                description=port.doc,
+            )
+            variables.append(spec)
+            if port.direction == "out":
+                output_indexes.append(value_ref)
+            value_ref += 1
+            continue
+
+        for attr in attributes:
+            var_name = f"{port.name}.{attr.name}"
+            literal = _parse_literal(attr.value)
+            fmi_type = _normalize_type(attr.type) or "Real"
+            description = attr.doc or port.doc or (payload_def.doc if payload_def else None)
+            spec = VariableSpec(
+                name=var_name,
+                causality="input" if port.direction == "in" else "output",
+                value_reference=value_ref,
+                fmi_type=fmi_type,
+                description=description,
+            )
+            variables.append(spec)
+            if port.direction == "out":
+                output_indexes.append(value_ref)
+            value_ref += 1
+    return variables, value_ref, output_indexes
+
+
+def _parameter_variables(part: SysMLPartDefinition, starting_ref: int) -> tuple[list[VariableSpec], int]:
+    variables: list[VariableSpec] = []
+    value_ref = starting_ref
+    for attr_name in sorted(part.attributes):
+        attr = part.attributes[attr_name]
+        literal = _parse_literal(attr.value)
+        fmi_type = _resolve_fmi_type(attr, literal)
+        spec = VariableSpec(
+            name=attr.name,
+            causality="parameter",
+            value_reference=value_ref,
+            fmi_type=fmi_type,
+            variability="fixed",
+            description=attr.doc,
+            start_value=_format_start_value(fmi_type, literal),
+        )
+        variables.append(spec)
+        value_ref += 1
+    return variables, value_ref
+
+
+def _write_scalar_variable(parent: ET.Element, spec: VariableSpec) -> None:
+    attrib = {
+        "name": spec.name,
+        "valueReference": str(spec.value_reference),
+    }
+    if spec.causality:
+        attrib["causality"] = spec.causality
+    if spec.variability:
+        attrib["variability"] = spec.variability
+    if spec.description:
+        attrib["description"] = spec.description
+    scalar = ET.SubElement(parent, "ScalarVariable", attrib=attrib)
+    data_type = ET.SubElement(scalar, spec.fmi_type)
+    if spec.start_value is not None:
+        data_type.set("start", spec.start_value)
+
+
+def _build_model_description_tree(part: SysMLPartDefinition, architecture: SysMLArchitecture) -> ET.ElementTree:
+    timestamp = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    guid = str(uuid5(NAMESPACE_URL, f"ssp_airplane/{architecture.package}/{part.name}"))
+
+    root = ET.Element(
+        "fmiModelDescription",
+        attrib={
+            "fmiVersion": "2.0",
+            "modelName": f"{architecture.package}.{part.name}",
+            "guid": f"{{{guid}}}",
+            "description": part.doc or "",
+            "version": "1.0",
+            "generationTool": "ssp_airplane tooling",
+            "generationDateAndTime": timestamp,
+            "variableNamingConvention": "structured",
+            "numberOfEventIndicators": "0",
+        },
+    )
+
+    co_sim_attrs = dict(CO_SIMULATION_ATTRS)
+    co_sim_attrs["modelIdentifier"] = part.name
+    ET.SubElement(root, "CoSimulation", attrib=co_sim_attrs)
+
+    model_vars = ET.SubElement(root, "ModelVariables")
+    value_ref = 1
+    port_vars, value_ref, output_indexes = _port_attribute_variables(part, value_ref)
+    parameter_vars, value_ref = _parameter_variables(part, value_ref)
+
+    for spec in port_vars + parameter_vars:
+        _write_scalar_variable(model_vars, spec)
+
+    model_structure = ET.SubElement(root, "ModelStructure")
+    if output_indexes:
+        outputs_elem = ET.SubElement(model_structure, "Outputs")
+        initial_elem = ET.SubElement(model_structure, "InitialUnknowns")
+        for idx in output_indexes:
+            ET.SubElement(outputs_elem, "Unknown", attrib={"index": str(idx)})
+            ET.SubElement(initial_elem, "Unknown", attrib={"index": str(idx)})
+
+    tree = ET.ElementTree(root)
+    _indent(tree)
+    return tree
+
+
+def _component_targets(architecture: SysMLArchitecture, include: Optional[Iterable[str]]) -> list[SysMLPartDefinition]:
+    if include:
+        ordered: list[SysMLPartDefinition] = []
+        seen: set[str] = set()
+        for name in include:
+            name = name.strip()
+            if not name or name in seen or name not in architecture.parts:
+                continue
+            ordered.append(architecture.parts[name])
+            seen.add(name)
+        return ordered
+    return [architecture.parts[name] for name in sorted(architecture.parts)]
+
+
+def generate_model_descriptions(
+    architecture_path: Path,
+    output_dir: Path,
+    components: Optional[Iterable[str]] = None,
+) -> list[Path]:
+    if architecture_path.is_file():
+        architecture_path = architecture_path.parent
+    architecture = parse_sysml_folder(architecture_path)
+    targets = _component_targets(architecture, components)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    written: list[Path] = []
+    for part in targets:
+        tree = _build_model_description_tree(part, architecture)
+        component_dir = output_dir / part.name
+        component_dir.mkdir(parents=True, exist_ok=True)
+        output_path = component_dir / "modelDescription.xml"
+        tree.write(output_path, encoding="utf-8", xml_declaration=True)
+        written.append(output_path)
+        fmu_dir = BUILD_DIR / "fmu_pre"
+        fmu_dir.mkdir(parents=True, exist_ok=True)
+        zipfile.ZipFile(fmu_dir /f"{part.name}.fmu", mode='w').write(output_path.as_posix(), arcname="modelDescription.xml")
+    return written
+
+
+def main(argv: Optional[list[str]] = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--architecture",
+        type=Path,
+        default=DEFAULT_ARCH_PATH,
+        help="Path to the SysML architecture directory or a file within it.",
+    )
+    parser.add_argument(
+        "--output-dir",
+        type=Path,
+        default=DEFAULT_OUTPUT_DIR,
+        help="Directory that will contain one sub-folder per component, each with a modelDescription.xml.",
+    )
+    parser.add_argument(
+        "--components",
+        nargs="*",
+        help="Optional subset of component names to generate (defaults to all parts).",
+    )
+    args = parser.parse_args(argv)
+
+    try:
+        written = generate_model_descriptions(args.architecture, args.output_dir, args.components)
+    except Exception as exc:  # noqa: BLE001
+        print(f"[error] {exc}", file=sys.stderr)
+        return 1
+    if not written:
+        print("No components matched the provided criteria.")
+        return 1
+    for path in written:
+        print(f"Wrote {path}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

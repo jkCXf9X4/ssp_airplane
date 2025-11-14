@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<fmiModelDescription fmiVersion="2.0" modelName="WingmanDrone.CompositeAirframe" guid="{aeab7fbc-1016-5a98-9825-0e033530680b}" description="Composite fuselage and payload bay sized to MQ-28 proportions." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2025-11-14T09:37:10Z" variableNamingConvention="structured" numberOfEventIndicators="0">
+  <CoSimulation modelIdentifier="CompositeAirframe" />
+  <ModelVariables>
+    <ScalarVariable name="fuselage_width_m" valueReference="1" causality="parameter" variability="fixed">
+      <Real start="1.9" />
+    </ScalarVariable>
+    <ScalarVariable name="hardpoint_count" valueReference="2" causality="parameter" variability="fixed">
+      <Integer start="4" />
+    </ScalarVariable>
+    <ScalarVariable name="length_m" valueReference="3" causality="parameter" variability="fixed">
+      <Real start="11.7" />
+    </ScalarVariable>
+    <ScalarVariable name="payload_capacity_kg" valueReference="4" causality="parameter" variability="fixed">
+      <Integer start="1500" />
+    </ScalarVariable>
+  </ModelVariables>
+  <ModelStructure />
+</fmiModelDescription>

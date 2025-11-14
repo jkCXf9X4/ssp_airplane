@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='utf-8'?>
+<fmiModelDescription fmiVersion="2.0" modelName="WingmanDrone.FuelSystem" guid="{72e2a9a2-f334-5491-9222-429a2883eb67}" description="Fuel storage and management subsystem feeding the turbofan and publishing remaining range." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2025-11-14T09:37:10Z" variableNamingConvention="structured" numberOfEventIndicators="0">
+  <CoSimulation modelIdentifier="FuelSystem" />
+  <ModelVariables>
+    <ScalarVariable name="fuelFlowIn.mass_flow_kgps" valueReference="1" causality="input" description="Propulsion-requested fuel mass flow entering storage manager.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="fuelState.fuel_level_norm" valueReference="2" causality="output" description="Telemetry describing remaining fuel mass/normalized level.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="fuelState.fuel_remaining_kg" valueReference="3" causality="output" description="Telemetry describing remaining fuel mass/normalized level.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="fuelState.fuel_starved" valueReference="4" causality="output" description="Telemetry describing remaining fuel mass/normalized level.">
+      <Boolean />
+    </ScalarVariable>
+    <ScalarVariable name="fuel_capacity_kg" valueReference="5" causality="parameter" variability="fixed">
+      <Integer start="2000" />
+    </ScalarVariable>
+    <ScalarVariable name="reserve_fraction" valueReference="6" causality="parameter" variability="fixed">
+      <Real start="0.05" />
+    </ScalarVariable>
+  </ModelVariables>
+  <ModelStructure>
+    <Outputs>
+      <Unknown index="2" />
+      <Unknown index="3" />
+      <Unknown index="4" />
+    </Outputs>
+    <InitialUnknowns>
+      <Unknown index="2" />
+      <Unknown index="3" />
+      <Unknown index="4" />
+    </InitialUnknowns>
+  </ModelStructure>
+</fmiModelDescription>

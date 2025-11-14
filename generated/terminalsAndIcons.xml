@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='utf-8'?>
+<fmiTerminalsAndIcons fmiVersion="3.0">
+  <Terminals>
+    <Terminal name="AutonomyGuidance" matchingRule="plug" description="Autopilot-to-mission-computer guidance cues for co-simulation.">
+      <TerminalMemberVariable variableKind="signal" variableName="AutonomyGuidance.aggressiveness_norm" memberName="aggressiveness_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="AutonomyGuidance.lateral_accel_mps2" memberName="lateral_accel_mps2" />
+      <TerminalMemberVariable variableKind="signal" variableName="AutonomyGuidance.waypoint_altitude_m" memberName="waypoint_altitude_m" />
+      <TerminalMemberVariable variableKind="signal" variableName="AutonomyGuidance.waypoint_heading_deg" memberName="waypoint_heading_deg" />
+    </Terminal>
+    <Terminal name="FlightStatusPacket" matchingRule="plug" description="Mission computer status feedback consumed by autonomy and analysis models.">
+      <TerminalMemberVariable variableKind="signal" variableName="FlightStatusPacket.airspeed_mps" memberName="airspeed_mps" />
+      <TerminalMemberVariable variableKind="signal" variableName="FlightStatusPacket.angle_of_attack_deg" memberName="angle_of_attack_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="FlightStatusPacket.energy_state_norm" memberName="energy_state_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="FlightStatusPacket.health_code" memberName="health_code" />
+    </Terminal>
+    <Terminal name="FuelConsumptionRate" matchingRule="plug" description="Mass flow request or telemetry for turbofan fuel usage (kg/s).">
+      <TerminalMemberVariable variableKind="signal" variableName="FuelConsumptionRate.mass_flow_kgps" memberName="mass_flow_kgps" />
+    </Terminal>
+    <Terminal name="FuelLevelState" matchingRule="plug" description="Remaining fuel mass and normalized level for availability tracking.">
+      <TerminalMemberVariable variableKind="signal" variableName="FuelLevelState.fuel_level_norm" memberName="fuel_level_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="FuelLevelState.fuel_remaining_kg" memberName="fuel_remaining_kg" />
+      <TerminalMemberVariable variableKind="signal" variableName="FuelLevelState.fuel_starved" memberName="fuel_starved" />
+    </Terminal>
+    <Terminal name="GenericElectricalBus" matchingRule="plug" description="Power bus telemetry for avionics, control, and autonomy loads.">
+      <TerminalMemberVariable variableKind="signal" variableName="GenericElectricalBus.available_power_kw" memberName="available_power_kw" />
+      <TerminalMemberVariable variableKind="signal" variableName="GenericElectricalBus.current_a" memberName="current_a" />
+      <TerminalMemberVariable variableKind="signal" variableName="GenericElectricalBus.voltage_kv" memberName="voltage_kv" />
+    </Terminal>
+    <Terminal name="GeodeticLLA" matchingRule="plug" description="Geodetic latitude/longitude (degrees) and altitude (meters) above mean sea level.">
+      <TerminalMemberVariable variableKind="signal" variableName="GeodeticLLA.altitude_m" memberName="altitude_m" />
+      <TerminalMemberVariable variableKind="signal" variableName="GeodeticLLA.latitude_deg" memberName="latitude_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="GeodeticLLA.longitude_deg" memberName="longitude_deg" />
+    </Terminal>
+    <Terminal name="LiftState" matchingRule="plug" description="Aerodynamic state summary exported from wing solver.">
+      <TerminalMemberVariable variableKind="signal" variableName="LiftState.drag_kn" memberName="drag_kn" />
+      <TerminalMemberVariable variableKind="signal" variableName="LiftState.lift_kn" memberName="lift_kn" />
+      <TerminalMemberVariable variableKind="signal" variableName="LiftState.pitching_moment_knm" memberName="pitching_moment_knm" />
+    </Terminal>
+    <Terminal name="OrientationEuler" matchingRule="plug" description="Air vehicle orientation expressed as body-to-earth Euler angles in degrees.">
+      <TerminalMemberVariable variableKind="signal" variableName="OrientationEuler.pitch_deg" memberName="pitch_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="OrientationEuler.roll_deg" memberName="roll_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="OrientationEuler.yaw_deg" memberName="yaw_deg" />
+    </Terminal>
+    <Terminal name="PilotCommand" matchingRule="plug" description="HOTAS-style control payload shared across control surfaces and mission computer consumers.">
+      <TerminalMemberVariable variableKind="signal" variableName="PilotCommand.button_mask" memberName="button_mask" />
+      <TerminalMemberVariable variableKind="signal" variableName="PilotCommand.hat_x" memberName="hat_x" />
+      <TerminalMemberVariable variableKind="signal" variableName="PilotCommand.hat_y" memberName="hat_y" />
+      <TerminalMemberVariable variableKind="signal" variableName="PilotCommand.mode_switch" memberName="mode_switch" />
+      <TerminalMemberVariable variableKind="signal" variableName="PilotCommand.reserved" memberName="reserved" />
+      <TerminalMemberVariable variableKind="signal" variableName="PilotCommand.rudder_norm" memberName="rudder_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="PilotCommand.stick_pitch_norm" memberName="stick_pitch_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="PilotCommand.stick_roll_norm" memberName="stick_roll_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="PilotCommand.throttle_aux_norm" memberName="throttle_aux_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="PilotCommand.throttle_norm" memberName="throttle_norm" />
+    </Terminal>
+    <Terminal name="StructuralInterface" matchingRule="plug" description="Structural mounting loads transferred between assemblies.">
+      <TerminalMemberVariable variableKind="signal" variableName="StructuralInterface.axial_load_kn" memberName="axial_load_kn" />
+      <TerminalMemberVariable variableKind="signal" variableName="StructuralInterface.bending_moment_knm" memberName="bending_moment_knm" />
+      <TerminalMemberVariable variableKind="signal" variableName="StructuralInterface.shear_load_kn" memberName="shear_load_kn" />
+    </Terminal>
+    <Terminal name="SurfaceActuationCommand" matchingRule="plug" description="Commanded surface deflections in degrees for co-simulation with aerodynamic models.">
+      <TerminalMemberVariable variableKind="signal" variableName="SurfaceActuationCommand.elevator_deg" memberName="elevator_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="SurfaceActuationCommand.flaperon_deg" memberName="flaperon_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="SurfaceActuationCommand.left_aileron_deg" memberName="left_aileron_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="SurfaceActuationCommand.right_aileron_deg" memberName="right_aileron_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="SurfaceActuationCommand.rudder_deg" memberName="rudder_deg" />
+    </Terminal>
+    <Terminal name="ThrottleCommand" matchingRule="plug" description="Engine throttle and fuel-enable bit for turbofan co-simulation.">
+      <TerminalMemberVariable variableKind="signal" variableName="ThrottleCommand.afterburner_enable" memberName="afterburner_enable" />
+      <TerminalMemberVariable variableKind="signal" variableName="ThrottleCommand.fuel_enable" memberName="fuel_enable" />
+      <TerminalMemberVariable variableKind="signal" variableName="ThrottleCommand.throttle_norm" memberName="throttle_norm" />
+    </Terminal>
+    <Terminal name="ThrustState" matchingRule="plug" description="Propulsion output shared with performance models.">
+      <TerminalMemberVariable variableKind="signal" variableName="ThrustState.exhaust_velocity_mps" memberName="exhaust_velocity_mps" />
+      <TerminalMemberVariable variableKind="signal" variableName="ThrustState.mass_flow_kgps" memberName="mass_flow_kgps" />
+      <TerminalMemberVariable variableKind="signal" variableName="ThrustState.thrust_kn" memberName="thrust_kn" />
+    </Terminal>
+  </Terminals>
+</fmiTerminalsAndIcons>
