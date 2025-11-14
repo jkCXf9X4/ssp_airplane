@@ -1,14 +1,35 @@
 package WingmanDrone {
   connect TurbofanPropulsion.powerBus to PowerSystem.generatorInput;
-  connect PowerSystem.avionicsFeed to MissionComputer.powerIn;
-  connect PowerSystem.controlFeed to ControlInterface.powerIn;
+  connect PowerSystem.dcBus270 to MissionComputer.powerIn;
+  connect PowerSystem.acBus115 to ControlInterface.powerIn;
   connect PowerSystem.autonomyFeed to AutopilotModule.powerIn;
-  connect MissionComputer.surfaceBus to AdaptiveWingSystem.controlSurfaces;
+  connect PowerSystem.controlFeed to FlyByWireController.powerIn;
+  connect PowerSystem.avionicsFeed to AirDataAndInertialSuite.powerIn;
+  connect PowerSystem.emergencyBus to MissionComputer.backupPower;
+  connect PowerSystem.emergencyBus to AutopilotModule.backupPower;
+  connect MissionComputer.surfaceBus to FlyByWireController.commandBus;
   connect MissionComputer.engineThrottle to TurbofanPropulsion.throttleCmd;
   connect TurbofanPropulsion.fuelFlow to FuelSystem.fuelFlowIn;
   connect FuelSystem.fuelState to TurbofanPropulsion.fuelStatus;
   connect FuelSystem.fuelState to MissionComputer.fuelStatus;
+  connect FuelSystem.fuelState to EmergencyPowerUnit.fuelState;
   connect AutopilotModule.guidanceCmd to MissionComputer.autonomyPort;
   connect MissionComputer.flightStatus to AutopilotModule.feedbackBus;
+  connect MissionComputer.flightStatus to FlyByWireController.flightFeedback;
   connect ControlInterface.pilotCommand to MissionComputer.manualInput;
+  connect AdaptiveWingSystem.liftInterface to FlyByWireController.aeroFeedback;
+  connect AdaptiveWingSystem.liftInterface to StructuralLoadsAndPerformanceMonitor.liftIn;
+  connect TurbofanPropulsion.thrustOut to StructuralLoadsAndPerformanceMonitor.thrustIn;
+  connect AirDataAndInertialSuite.airDataOut to MissionComputer.airDataIn;
+  connect AirDataAndInertialSuite.airDataOut to AutopilotModule.airDataIn;
+  connect AirDataAndInertialSuite.airDataOut to StructuralLoadsAndPerformanceMonitor.airDataIn;
+  connect StructuralLoadsAndPerformanceMonitor.performanceStatus to MissionComputer.performanceStatus;
+  connect StructuralLoadsAndPerformanceMonitor.performanceStatus to AutopilotModule.performanceStatus;
+  connect StructuralLoadsAndPerformanceMonitor.performanceStatus to StoresManagementSystem.performanceStatus;
+  connect FlyByWireController.actuatorDrive to AdaptiveWingSystem.controlSurfaces;
+  connect MissionComputer.storesCommand to StoresManagementSystem.storesBusIn;
+  connect StoresManagementSystem.storesTelemetry to MissionComputer.storesStatus;
+  connect PowerSystem.storesFeed to StoresManagementSystem.powerIn;
+  connect CompositeAirframe.storesMounts to StoresManagementSystem.airframeMount;
+  connect EmergencyPowerUnit.emergencyOutput to PowerSystem.emergencyInput;
 }
