@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<fmiModelDescription fmiVersion="2.0" modelName="WingmanDrone.ControlInterface" guid="{4ac833e5-55dc-517e-abac-aed57da5fb36}" description="HOTAS or gamepad style interface for remote pilots or simulator inputs." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2025-11-14T09:37:10Z" variableNamingConvention="structured" numberOfEventIndicators="0">
+<fmiModelDescription fmiVersion="2.0" modelName="WingmanDrone.ControlInterface" guid="{4ac833e5-55dc-517e-abac-aed57da5fb36}" description="F-16 HOTAS + side-stick interface for pilot inputs and trim switches." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2025-11-14T11:34:44Z" variableNamingConvention="structured" numberOfEventIndicators="0">
   <CoSimulation modelIdentifier="ControlInterface" />
   <ModelVariables>
     <ScalarVariable name="pilotCommand.button_mask" valueReference="1" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
@@ -42,10 +42,10 @@
       <Real />
     </ScalarVariable>
     <ScalarVariable name="input_scheme" valueReference="14" causality="parameter" variability="fixed">
-      <String start="HOTAS/Gamepad" />
+      <String start="HOTAS" />
     </ScalarVariable>
     <ScalarVariable name="telemetry_rate_hz" valueReference="15" causality="parameter" variability="fixed">
-      <Integer start="60" />
+      <Integer start="120" />
     </ScalarVariable>
   </ModelVariables>
   <ModelStructure>

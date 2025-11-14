@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<fmiModelDescription fmiVersion="2.0" modelName="WingmanDrone.PowerSystem" guid="{2b5b646a-6bd2-562d-a29d-d4721bea7a27}" description="Hybrid battery and generator bus distributing electrical power to avionics and control interfaces." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2025-11-14T09:37:10Z" variableNamingConvention="structured" numberOfEventIndicators="0">
+<fmiModelDescription fmiVersion="2.0" modelName="WingmanDrone.PowerSystem" guid="{2b5b646a-6bd2-562d-a29d-d4721bea7a27}" description="F-16 270 VDC / 115 VAC hybrid electrical system for avionics, flight control, and weapon systems." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2025-11-14T11:34:44Z" variableNamingConvention="structured" numberOfEventIndicators="0">
   <CoSimulation modelIdentifier="PowerSystem" />
   <ModelVariables>
     <ScalarVariable name="autonomyFeed.available_power_kw" valueReference="1" causality="output" description="Dedicated supply for autonomy/autopilot compute payloads.">
@@ -39,13 +39,13 @@
       <Real />
     </ScalarVariable>
     <ScalarVariable name="battery_capacity_mj" valueReference="13" causality="parameter" variability="fixed">
-      <Integer start="500" />
+      <Integer start="650" />
     </ScalarVariable>
     <ScalarVariable name="bus_voltage_kv" valueReference="14" causality="parameter" variability="fixed">
-      <Real start="1.2" />
+      <Real start="0.27" />
     </ScalarVariable>
     <ScalarVariable name="generator_efficiency" valueReference="15" causality="parameter" variability="fixed">
-      <Real start="0.92" />
+      <Real start="0.95" />
     </ScalarVariable>
   </ModelVariables>
   <ModelStructure>

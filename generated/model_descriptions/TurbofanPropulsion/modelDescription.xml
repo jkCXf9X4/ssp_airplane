@@ -1,17 +1,17 @@
 <?xml version='1.0' encoding='utf-8'?>
-<fmiModelDescription fmiVersion="2.0" modelName="WingmanDrone.TurbofanPropulsion" guid="{abe0d1aa-047c-5094-acf3-ba4271a661d8}" description="Conventional turbofan sized for MQ-28-class thrust with onboard generator." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2025-11-14T09:37:10Z" variableNamingConvention="structured" numberOfEventIndicators="0">
+<fmiModelDescription fmiVersion="2.0" modelName="WingmanDrone.TurbofanPropulsion" guid="{abe0d1aa-047c-5094-acf3-ba4271a661d8}" description="Pratt &amp; Whitney F100 / GE F110 class augmented turbofan powering the F-16." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2025-11-14T11:34:44Z" variableNamingConvention="structured" numberOfEventIndicators="0">
   <CoSimulation modelIdentifier="TurbofanPropulsion" />
   <ModelVariables>
     <ScalarVariable name="fuelFlow.mass_flow_kgps" valueReference="1" causality="output" description="Requested fuel mass-flow shared with storage system.">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="fuelStatus.fuel_level_norm" valueReference="2" causality="input" description="Fuel availability feedback for derating logic.">
+    <ScalarVariable name="fuelStatus.fuel_level_norm" valueReference="2" causality="input" description="Fuel availability feedback for power scheduling and afterburner inhibit.">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="fuelStatus.fuel_remaining_kg" valueReference="3" causality="input" description="Fuel availability feedback for derating logic.">
+    <ScalarVariable name="fuelStatus.fuel_remaining_kg" valueReference="3" causality="input" description="Fuel availability feedback for power scheduling and afterburner inhibit.">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="fuelStatus.fuel_starved" valueReference="4" causality="input" description="Fuel availability feedback for derating logic.">
+    <ScalarVariable name="fuelStatus.fuel_starved" valueReference="4" causality="input" description="Fuel availability feedback for power scheduling and afterburner inhibit.">
       <Boolean />
     </ScalarVariable>
     <ScalarVariable name="powerBus.available_power_kw" valueReference="5" causality="output" description="Electrical bus output feeding vehicle power distribution.">
@@ -23,13 +23,13 @@
     <ScalarVariable name="powerBus.voltage_kv" valueReference="7" causality="output" description="Electrical bus output feeding vehicle power distribution.">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="throttleCmd.afterburner_enable" valueReference="8" causality="input" description="Mission computer throttle command input.">
+    <ScalarVariable name="throttleCmd.afterburner_enable" valueReference="8" causality="input" description="Mission computer throttle + afterburner command input.">
       <Boolean />
     </ScalarVariable>
-    <ScalarVariable name="throttleCmd.fuel_enable" valueReference="9" causality="input" description="Mission computer throttle command input.">
+    <ScalarVariable name="throttleCmd.fuel_enable" valueReference="9" causality="input" description="Mission computer throttle + afterburner command input.">
       <Boolean />
     </ScalarVariable>
-    <ScalarVariable name="throttleCmd.throttle_norm" valueReference="10" causality="input" description="Mission computer throttle command input.">
+    <ScalarVariable name="throttleCmd.throttle_norm" valueReference="10" causality="input" description="Mission computer throttle + afterburner command input.">
       <Real />
     </ScalarVariable>
     <ScalarVariable name="thrustOut.exhaust_velocity_mps" valueReference="11" causality="output" description="Propulsion thrust telemetry exported to airframe.">
@@ -41,17 +41,20 @@
     <ScalarVariable name="thrustOut.thrust_kn" valueReference="13" causality="output" description="Propulsion thrust telemetry exported to airframe.">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="fuel_capacity_kg" valueReference="14" causality="parameter" variability="fixed">
-      <Integer start="2000" />
+    <ScalarVariable name="dry_thrust_kn" valueReference="14" causality="parameter" variability="fixed">
+      <Real start="79" />
     </ScalarVariable>
-    <ScalarVariable name="generator_output_kw" valueReference="15" causality="parameter" variability="fixed">
-      <Integer start="150" />
+    <ScalarVariable name="fuel_capacity_kg" valueReference="15" causality="parameter" variability="fixed">
+      <Integer start="3160" />
     </ScalarVariable>
-    <ScalarVariable name="max_thrust_kn" valueReference="16" causality="parameter" variability="fixed">
-      <Integer start="60" />
+    <ScalarVariable name="generator_output_kw" valueReference="16" causality="parameter" variability="fixed">
+      <Integer start="80" />
     </ScalarVariable>
-    <ScalarVariable name="specific_fuel_consumption" valueReference="17" causality="parameter" variability="fixed">
-      <Real start="0.8" />
+    <ScalarVariable name="max_thrust_kn" valueReference="17" causality="parameter" variability="fixed">
+      <Real start="129.7" />
+    </ScalarVariable>
+    <ScalarVariable name="specific_fuel_consumption" valueReference="18" causality="parameter" variability="fixed">
+      <Real start="0.76" />
     </ScalarVariable>
   </ModelVariables>
   <ModelStructure>

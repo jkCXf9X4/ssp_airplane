@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<fmiModelDescription fmiVersion="2.0" modelName="WingmanDrone.FuelSystem" guid="{72e2a9a2-f334-5491-9222-429a2883eb67}" description="Fuel storage and management subsystem feeding the turbofan and publishing remaining range." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2025-11-14T09:37:10Z" variableNamingConvention="structured" numberOfEventIndicators="0">
+<fmiModelDescription fmiVersion="2.0" modelName="WingmanDrone.FuelSystem" guid="{72e2a9a2-f334-5491-9222-429a2883eb67}" description="Internal + conformal fuel storage management with transfer pumps feeding engine feed tanks." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2025-11-14T11:34:44Z" variableNamingConvention="structured" numberOfEventIndicators="0">
   <CoSimulation modelIdentifier="FuelSystem" />
   <ModelVariables>
     <ScalarVariable name="fuelFlowIn.mass_flow_kgps" valueReference="1" causality="input" description="Propulsion-requested fuel mass flow entering storage manager.">
@@ -15,10 +15,10 @@
       <Boolean />
     </ScalarVariable>
     <ScalarVariable name="fuel_capacity_kg" valueReference="5" causality="parameter" variability="fixed">
-      <Integer start="2000" />
+      <Integer start="3160" />
     </ScalarVariable>
     <ScalarVariable name="reserve_fraction" valueReference="6" causality="parameter" variability="fixed">
-      <Real start="0.05" />
+      <Real start="0.08" />
     </ScalarVariable>
   </ModelVariables>
   <ModelStructure>

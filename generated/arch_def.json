@@ -81,34 +81,40 @@
           "doc": null,
           "name": "aspect_ratio",
           "type": null,
-          "value": "5.5"
+          "value": "3.6"
         },
         "control_authority_deg": {
           "doc": null,
           "name": "control_authority_deg",
           "type": null,
-          "value": "35"
+          "value": "25"
+        },
+        "load_factor_limit_g": {
+          "doc": null,
+          "name": "load_factor_limit_g",
+          "type": null,
+          "value": "9"
         },
         "reference_area_m2": {
           "doc": null,
           "name": "reference_area_m2",
           "type": null,
-          "value": "28"
+          "value": "28.0"
         },
         "span_m": {
           "doc": null,
           "name": "span_m",
           "type": null,
-          "value": "7.3"
+          "value": "10.0"
         }
       },
-      "doc": "High-efficiency wing with control surfaces for agile escort missions.",
+      "doc": "Leading-edge strake and cropped-delta wing sized to F-16 Block 50 geometry with 9g capability.",
       "name": "AdaptiveWingSystem",
       "parts": [],
       "ports": [
         {
           "direction": "in",
-          "doc": "Mission computer bus commanding surface deflections per axis.",
+          "doc": "Flight-control computer commands for elevator, tailerons, and rudder.",
           "name": "controlSurfaces",
           "payload": "SurfaceActuationCommand",
           "payload_def": {
@@ -150,7 +156,7 @@
         },
         {
           "direction": "out",
-          "doc": "Aerodynamic load feedback returned to mission computer/autopilot.",
+          "doc": "Aerodynamic loads + moments returned to flight-control computers.",
           "name": "liftInterface",
           "payload": "LiftState",
           "payload_def": {
@@ -186,22 +192,22 @@
           "doc": null,
           "name": "autonomy_mode_default",
           "type": null,
-          "value": "\"loyal-wingman\""
+          "value": "\"altitude-hold\""
         },
         "guidance_modes": {
           "doc": null,
           "name": "guidance_modes",
           "type": null,
-          "value": "\"escort+loiter+return\""
+          "value": "\"att_hold+hdg_hold+auto_throttle\""
         },
         "update_rate_hz": {
           "doc": null,
           "name": "update_rate_hz",
           "type": null,
-          "value": "25"
+          "value": "40"
         }
       },
-      "doc": "Guidance core to execute escort, loiter, and waypoint scripts.",
+      "doc": "F-16 autopilot providing hold modes (attitude, altitude, heading) with auto-throttle coordination.",
       "name": "AutopilotModule",
       "parts": [],
       "ports": [
@@ -311,32 +317,44 @@
     },
     "CompositeAirframe": {
       "attributes": {
+        "empty_weight_kg": {
+          "doc": null,
+          "name": "empty_weight_kg",
+          "type": null,
+          "value": "8573"
+        },
         "fuselage_width_m": {
           "doc": null,
           "name": "fuselage_width_m",
           "type": null,
-          "value": "1.9"
+          "value": "3.0"
         },
         "hardpoint_count": {
           "doc": null,
           "name": "hardpoint_count",
           "type": null,
-          "value": "4"
+          "value": "9"
         },
         "length_m": {
           "doc": null,
           "name": "length_m",
           "type": null,
-          "value": "11.7"
+          "value": "15.0"
         },
         "payload_capacity_kg": {
           "doc": null,
           "name": "payload_capacity_kg",
           "type": null,
-          "value": "1500"
+          "value": "7700"
+        },
+        "wingspan_m": {
+          "doc": null,
+          "name": "wingspan_m",
+          "type": null,
+          "value": "10.0"
         }
       },
-      "doc": "Composite fuselage and payload bay sized to MQ-28 proportions.",
+      "doc": "F-16 aluminum/composite fuselage sized for high-supersonic operations with dorsal spine for avionics.",
       "name": "CompositeAirframe",
       "parts": [],
       "ports": []
@@ -347,16 +365,16 @@
           "doc": null,
           "name": "input_scheme",
           "type": null,
-          "value": "\"HOTAS/Gamepad\""
+          "value": "\"HOTAS\""
         },
         "telemetry_rate_hz": {
           "doc": null,
           "name": "telemetry_rate_hz",
           "type": null,
-          "value": "60"
+          "value": "120"
         }
       },
-      "doc": "HOTAS or gamepad style interface for remote pilots or simulator inputs.",
+      "doc": "F-16 HOTAS + side-stick interface for pilot inputs and trim switches.",
       "name": "ControlInterface",
       "parts": [],
       "ports": [
@@ -470,16 +488,16 @@
           "doc": null,
           "name": "fuel_capacity_kg",
           "type": null,
-          "value": "2000"
+          "value": "3160"
         },
         "reserve_fraction": {
           "doc": null,
           "name": "reserve_fraction",
           "type": null,
-          "value": "0.05"
+          "value": "0.08"
         }
       },
-      "doc": "Fuel storage and management subsystem feeding the turbofan and publishing remaining range.",
+      "doc": "Internal + conformal fuel storage management with transfer pumps feeding engine feed tanks.",
       "name": "FuelSystem",
       "parts": [],
       "ports": [
@@ -539,28 +557,28 @@
           "doc": null,
           "name": "compute_budget_tops",
           "type": null,
-          "value": "20"
+          "value": "35"
         },
-        "networked_control_buses": {
+        "digital_fly_by_wire_channels": {
           "doc": null,
-          "name": "networked_control_buses",
+          "name": "digital_fly_by_wire_channels",
           "type": null,
           "value": "3"
         },
-        "tactical_ai_level": {
+        "stores_management_buses": {
           "doc": null,
-          "name": "tactical_ai_level",
+          "name": "stores_management_buses",
           "type": null,
-          "value": "4"
+          "value": "2"
         }
       },
-      "doc": "Tactical mission computer blending pilot-style inputs with autonomy services.",
+      "doc": "F-16C/D mission computer blending pilot HOTAS inputs with fly-by-wire control laws and stores management.",
       "name": "MissionComputer",
       "parts": [],
       "ports": [
         {
           "direction": "in",
-          "doc": "Manual HOTAS command bundle from control interface.",
+          "doc": "Manual HOTAS command bundle from cockpit controls.",
           "name": "manualInput",
           "payload": "PilotCommand",
           "payload_def": {
@@ -902,22 +920,22 @@
           "doc": null,
           "name": "battery_capacity_mj",
           "type": null,
-          "value": "500"
+          "value": "650"
         },
         "bus_voltage_kv": {
           "doc": null,
           "name": "bus_voltage_kv",
           "type": null,
-          "value": "1.2"
+          "value": "0.27"
         },
         "generator_efficiency": {
           "doc": null,
           "name": "generator_efficiency",
           "type": null,
-          "value": "0.92"
+          "value": "0.95"
         }
       },
-      "doc": "Hybrid battery and generator bus distributing electrical power to avionics and control interfaces.",
+      "doc": "F-16 270 VDC / 115 VAC hybrid electrical system for avionics, flight control, and weapon systems.",
       "name": "PowerSystem",
       "parts": [],
       "ports": [
@@ -1045,38 +1063,44 @@
     },
     "TurbofanPropulsion": {
       "attributes": {
+        "dry_thrust_kn": {
+          "doc": null,
+          "name": "dry_thrust_kn",
+          "type": null,
+          "value": "79.0"
+        },
         "fuel_capacity_kg": {
           "doc": null,
           "name": "fuel_capacity_kg",
           "type": null,
-          "value": "2000"
+          "value": "3160"
         },
         "generator_output_kw": {
           "doc": null,
           "name": "generator_output_kw",
           "type": null,
-          "value": "150"
+          "value": "80"
         },
         "max_thrust_kn": {
           "doc": null,
           "name": "max_thrust_kn",
           "type": null,
-          "value": "60"
+          "value": "129.7"
         },
         "specific_fuel_consumption": {
           "doc": null,
           "name": "specific_fuel_consumption",
           "type": null,
-          "value": "0.8"
+          "value": "0.76"
         }
       },
-      "doc": "Conventional turbofan sized for MQ-28-class thrust with onboard generator.",
+      "doc": "Pratt & Whitney F100 / GE F110 class augmented turbofan powering the F-16.",
       "name": "TurbofanPropulsion",
       "parts": [],
       "ports": [
         {
           "direction": "in",
-          "doc": "Mission computer throttle command input.",
+          "doc": "Mission computer throttle + afterburner command input.",
           "name": "throttleCmd",
           "payload": "ThrottleCommand",
           "payload_def": {
@@ -1106,7 +1130,7 @@
         },
         {
           "direction": "in",
-          "doc": "Fuel availability feedback for derating logic.",
+          "doc": "Fuel availability feedback for power scheduling and afterburner inhibit.",
           "name": "fuelStatus",
           "payload": "FuelLevelState",
           "payload_def": {
@@ -1586,19 +1610,27 @@
   "requirements": [
     {
       "identifier": "Requirement_REQ_Profile",
-      "text": "Maintain MQ-28 class geometry (~11.7 m length, 7.3 m wingspan) for loyal wingman compatibility."
+      "text": "Match F-16 Fighting Falcon geometry: \u224815 m length, 10 m wingspan, single-seat cockpit."
+    },
+    {
+      "identifier": "Requirement_REQ_Performance",
+      "text": "Provide Mach 2 dash capability with sustained 9 g maneuver envelope."
     },
     {
       "identifier": "Requirement_REQ_Propulsion",
-      "text": "Use conventional turbofan propulsion with aviation fuel."
+      "text": "Integrate an F100/F110 class augmented turbofan with afterburner throttle control."
+    },
+    {
+      "identifier": "Requirement_REQ_Fuel",
+      "text": "Carry at least 3,100 kg of internal fuel with 8% reserve margin for recovery."
     },
     {
       "identifier": "Requirement_REQ_Control",
-      "text": "Expose pilot-style inputs (stick, throttle, mode select) while keeping autopilot authority in the loop."
+      "text": "Provide full HOTAS pilot controls, digital fly-by-wire channels, and autopilot hold modes."
     },
     {
       "identifier": "Requirement_REQ_Mission",
-      "text": "Support range, loiter, and escort scenario optimization for collaborative missions."
+      "text": "Support multirole loadouts across nine hardpoints with mission computer stores management."
     }
   ]
 }

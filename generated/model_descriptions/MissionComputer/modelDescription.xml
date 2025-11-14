@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<fmiModelDescription fmiVersion="2.0" modelName="WingmanDrone.MissionComputer" guid="{ce1af575-0fdf-5e1e-839f-9483141f0954}" description="Tactical mission computer blending pilot-style inputs with autonomy services." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2025-11-14T09:37:10Z" variableNamingConvention="structured" numberOfEventIndicators="0">
+<fmiModelDescription fmiVersion="2.0" modelName="WingmanDrone.MissionComputer" guid="{ce1af575-0fdf-5e1e-839f-9483141f0954}" description="F-16C/D mission computer blending pilot HOTAS inputs with fly-by-wire control laws and stores management." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2025-11-14T11:34:44Z" variableNamingConvention="structured" numberOfEventIndicators="0">
   <CoSimulation modelIdentifier="MissionComputer" />
   <ModelVariables>
     <ScalarVariable name="autonomyPort.aggressiveness_norm" valueReference="1" causality="input" description="Autopilot/autonomy guidance cue input.">
@@ -53,34 +53,34 @@
     <ScalarVariable name="locationLLA.longitude_deg" valueReference="17" causality="output" description="Geodetic latitude/longitude/altitude update for mission/autonomy.">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="manualInput.button_mask" valueReference="18" causality="input" description="Manual HOTAS command bundle from control interface.">
+    <ScalarVariable name="manualInput.button_mask" valueReference="18" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="manualInput.hat_x" valueReference="19" causality="input" description="Manual HOTAS command bundle from control interface.">
+    <ScalarVariable name="manualInput.hat_x" valueReference="19" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="manualInput.hat_y" valueReference="20" causality="input" description="Manual HOTAS command bundle from control interface.">
+    <ScalarVariable name="manualInput.hat_y" valueReference="20" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="manualInput.mode_switch" valueReference="21" causality="input" description="Manual HOTAS command bundle from control interface.">
+    <ScalarVariable name="manualInput.mode_switch" valueReference="21" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="manualInput.reserved" valueReference="22" causality="input" description="Manual HOTAS command bundle from control interface.">
+    <ScalarVariable name="manualInput.reserved" valueReference="22" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="manualInput.rudder_norm" valueReference="23" causality="input" description="Manual HOTAS command bundle from control interface.">
+    <ScalarVariable name="manualInput.rudder_norm" valueReference="23" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="manualInput.stick_pitch_norm" valueReference="24" causality="input" description="Manual HOTAS command bundle from control interface.">
+    <ScalarVariable name="manualInput.stick_pitch_norm" valueReference="24" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="manualInput.stick_roll_norm" valueReference="25" causality="input" description="Manual HOTAS command bundle from control interface.">
+    <ScalarVariable name="manualInput.stick_roll_norm" valueReference="25" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="manualInput.throttle_aux_norm" valueReference="26" causality="input" description="Manual HOTAS command bundle from control interface.">
+    <ScalarVariable name="manualInput.throttle_aux_norm" valueReference="26" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="manualInput.throttle_norm" valueReference="27" causality="input" description="Manual HOTAS command bundle from control interface.">
+    <ScalarVariable name="manualInput.throttle_norm" valueReference="27" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
       <Real />
     </ScalarVariable>
     <ScalarVariable name="orientationEuler.pitch_deg" valueReference="28" causality="output" description="Body attitude exported as roll/pitch/yaw Euler angles in degrees.">
@@ -117,13 +117,13 @@
       <Real />
     </ScalarVariable>
     <ScalarVariable name="compute_budget_tops" valueReference="39" causality="parameter" variability="fixed">
-      <Integer start="20" />
+      <Integer start="35" />
     </ScalarVariable>
-    <ScalarVariable name="networked_control_buses" valueReference="40" causality="parameter" variability="fixed">
+    <ScalarVariable name="digital_fly_by_wire_channels" valueReference="40" causality="parameter" variability="fixed">
       <Integer start="3" />
     </ScalarVariable>
-    <ScalarVariable name="tactical_ai_level" valueReference="41" causality="parameter" variability="fixed">
-      <Integer start="4" />
+    <ScalarVariable name="stores_management_buses" valueReference="41" causality="parameter" variability="fixed">
+      <Integer start="2" />
     </ScalarVariable>
   </ModelVariables>
   <ModelStructure>

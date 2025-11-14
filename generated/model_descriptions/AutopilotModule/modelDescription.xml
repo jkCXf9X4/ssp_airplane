@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<fmiModelDescription fmiVersion="2.0" modelName="WingmanDrone.AutopilotModule" guid="{f3fb6e5b-6330-5a89-92d8-481258b22503}" description="Guidance core to execute escort, loiter, and waypoint scripts." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2025-11-14T09:37:10Z" variableNamingConvention="structured" numberOfEventIndicators="0">
+<fmiModelDescription fmiVersion="2.0" modelName="WingmanDrone.AutopilotModule" guid="{f3fb6e5b-6330-5a89-92d8-481258b22503}" description="F-16 autopilot providing hold modes (attitude, altitude, heading) with auto-throttle coordination." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2025-11-14T11:34:44Z" variableNamingConvention="structured" numberOfEventIndicators="0">
   <CoSimulation modelIdentifier="AutopilotModule" />
   <ModelVariables>
     <ScalarVariable name="feedbackBus.airspeed_mps" valueReference="1" causality="input" description="Mission-computer flight status back into autopilot.">
@@ -36,13 +36,13 @@
       <Real />
     </ScalarVariable>
     <ScalarVariable name="autonomy_mode_default" valueReference="12" causality="parameter" variability="fixed">
-      <String start="loyal-wingman" />
+      <String start="altitude-hold" />
     </ScalarVariable>
     <ScalarVariable name="guidance_modes" valueReference="13" causality="parameter" variability="fixed">
-      <String start="escort+loiter+return" />
+      <String start="att_hold+hdg_hold+auto_throttle" />
     </ScalarVariable>
     <ScalarVariable name="update_rate_hz" valueReference="14" causality="parameter" variability="fixed">
-      <Integer start="25" />
+      <Integer start="40" />
     </ScalarVariable>
   </ModelVariables>
   <ModelStructure>

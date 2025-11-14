@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='utf-8'?>
 <fmiTerminalsAndIcons fmiVersion="3.0">
   <Terminals>
-    <Terminal name="AdaptiveWingSystem_controlSurfaces_1" matchingRule="plug" terminalKind="SurfaceActuationCommand" description="Mission computer bus commanding surface deflections per axis.">
+    <Terminal name="AdaptiveWingSystem_controlSurfaces_1" matchingRule="plug" terminalKind="SurfaceActuationCommand" description="Flight-control computer commands for elevator, tailerons, and rudder.">
       <TerminalMemberVariable variableKind="signal" variableName="controlSurfaces.elevator_deg" memberName="elevator_deg" />
       <TerminalMemberVariable variableKind="signal" variableName="controlSurfaces.flaperon_deg" memberName="flaperon_deg" />
       <TerminalMemberVariable variableKind="signal" variableName="controlSurfaces.left_aileron_deg" memberName="left_aileron_deg" />
       <TerminalMemberVariable variableKind="signal" variableName="controlSurfaces.right_aileron_deg" memberName="right_aileron_deg" />
       <TerminalMemberVariable variableKind="signal" variableName="controlSurfaces.rudder_deg" memberName="rudder_deg" />
     </Terminal>
-    <Terminal name="AdaptiveWingSystem_liftInterface_1" matchingRule="plug" terminalKind="LiftState" description="Aerodynamic load feedback returned to mission computer/autopilot.">
+    <Terminal name="AdaptiveWingSystem_liftInterface_1" matchingRule="plug" terminalKind="LiftState" description="Aerodynamic loads + moments returned to flight-control computers.">
       <TerminalMemberVariable variableKind="signal" variableName="liftInterface.drag_kn" memberName="drag_kn" />
       <TerminalMemberVariable variableKind="signal" variableName="liftInterface.lift_kn" memberName="lift_kn" />
       <TerminalMemberVariable variableKind="signal" variableName="liftInterface.pitching_moment_knm" memberName="pitching_moment_knm" />
@@ -55,7 +55,7 @@
       <TerminalMemberVariable variableKind="signal" variableName="fuelState.fuel_remaining_kg" memberName="fuel_remaining_kg" />
       <TerminalMemberVariable variableKind="signal" variableName="fuelState.fuel_starved" memberName="fuel_starved" />
     </Terminal>
-    <Terminal name="MissionComputer_manualInput_1" matchingRule="plug" terminalKind="PilotCommand" description="Manual HOTAS command bundle from control interface.">
+    <Terminal name="MissionComputer_manualInput_1" matchingRule="plug" terminalKind="PilotCommand" description="Manual HOTAS command bundle from cockpit controls.">
       <TerminalMemberVariable variableKind="signal" variableName="manualInput.button_mask" memberName="button_mask" />
       <TerminalMemberVariable variableKind="signal" variableName="manualInput.hat_x" memberName="hat_x" />
       <TerminalMemberVariable variableKind="signal" variableName="manualInput.hat_y" memberName="hat_y" />
@@ -131,12 +131,12 @@
       <TerminalMemberVariable variableKind="signal" variableName="autonomyFeed.current_a" memberName="current_a" />
       <TerminalMemberVariable variableKind="signal" variableName="autonomyFeed.voltage_kv" memberName="voltage_kv" />
     </Terminal>
-    <Terminal name="TurbofanPropulsion_throttleCmd_1" matchingRule="plug" terminalKind="ThrottleCommand" description="Mission computer throttle command input.">
+    <Terminal name="TurbofanPropulsion_throttleCmd_1" matchingRule="plug" terminalKind="ThrottleCommand" description="Mission computer throttle + afterburner command input.">
       <TerminalMemberVariable variableKind="signal" variableName="throttleCmd.afterburner_enable" memberName="afterburner_enable" />
       <TerminalMemberVariable variableKind="signal" variableName="throttleCmd.fuel_enable" memberName="fuel_enable" />
       <TerminalMemberVariable variableKind="signal" variableName="throttleCmd.throttle_norm" memberName="throttle_norm" />
     </Terminal>
-    <Terminal name="TurbofanPropulsion_fuelStatus_1" matchingRule="plug" terminalKind="FuelLevelState" description="Fuel availability feedback for derating logic.">
+    <Terminal name="TurbofanPropulsion_fuelStatus_1" matchingRule="plug" terminalKind="FuelLevelState" description="Fuel availability feedback for power scheduling and afterburner inhibit.">
       <TerminalMemberVariable variableKind="signal" variableName="fuelStatus.fuel_level_norm" memberName="fuel_level_norm" />
       <TerminalMemberVariable variableKind="signal" variableName="fuelStatus.fuel_remaining_kg" memberName="fuel_remaining_kg" />
       <TerminalMemberVariable variableKind="signal" variableName="fuelStatus.fuel_starved" memberName="fuel_starved" />

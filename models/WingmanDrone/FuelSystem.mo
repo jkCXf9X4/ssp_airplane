@@ -1,8 +1,8 @@
 within WingmanDrone;
 model FuelSystem
   import GI = WingmanDrone.GeneratedInterfaces;
-  parameter Real fuelCapacityKg = 2000 "Total available fuel mass (kg)";
-  parameter Real reserveFraction(min=0, max=0.5) = 0.05 "Unusable reserve fraction";
+  parameter Real fuelCapacityKg = 3160 "Total available fuel mass (kg)";
+  parameter Real reserveFraction(min=0, max=0.5) = 0.08 "Unusable reserve fraction";
   input GI.FuelConsumptionRate fuelFlowIn "Fuel mass flow drawn by propulsion (kg/s)";
   output GI.FuelLevelState fuelState "Remaining fuel telemetry";
 protected

@@ -1,8 +1,9 @@
 within WingmanDrone;
 model MissionComputer
   import GI = WingmanDrone.GeneratedInterfaces;
-  parameter Real redundancyLevel = 3;
-  parameter Real computeBudgetTOPS = 25;
+  parameter Integer flyByWireChannels = 3;
+  parameter Real computeBudgetTOPS = 35;
+  parameter Integer storesBuses = 2;
   input GI.PilotCommand manualInput;
   input GI.AutonomyGuidance autonomyPort;
   input GI.GenericElectricalBus powerIn;
@@ -17,34 +18,36 @@ protected
   Real powerFactor;
   Real headingDeg(start=0);
   Real positionKm(start=0);
-  parameter Real headingGain = 60;
-  parameter Real velocityGain = 180;
+  parameter Real headingGain = 75;
+  parameter Real velocityGain = 230;
   Real manualScalar;
   Real autonomyScalar;
   Real electricalScalar;
   Real fuelScalar;
+  Real fbwAuthority;
 equation
   manualScalar = min(1.0, max(0.0, manualInput.throttle_norm));
   autonomyScalar = min(1.0, max(0.0, autonomyPort.aggressiveness_norm));
-  electricalScalar = min(1.0, max(0.2, powerIn.available_power_kw / 100.0));
+  electricalScalar = min(1.0, max(0.2, powerIn.available_power_kw / 80.0));
   fuelScalar = min(1.0, max(0.0, fuelStatus.fuel_level_norm));
+  fbwAuthority = min(1.0, flyByWireChannels / 3.0);
 
-  blendCmd = 0.6 * autonomyScalar + 0.4 * manualScalar;
+  blendCmd = 0.5 * autonomyScalar + 0.5 * manualScalar;
   powerFactor = electricalScalar * fuelScalar;
-  engineThrottle.throttle_norm = min(1.0, max(0.1, blendCmd * powerFactor));
+  engineThrottle.throttle_norm = min(1.0, max(0.12, blendCmd * powerFactor * fbwAuthority));
   engineThrottle.fuel_enable = not fuelStatus.fuel_starved;
-  engineThrottle.afterburner_enable = engineThrottle.throttle_norm > 0.9;
+  engineThrottle.afterburner_enable = engineThrottle.throttle_norm > 0.85 and manualInput.throttle_aux_norm > 0.5;
 
-  surfaceBus.left_aileron_deg = 10 * (manualInput.stick_roll_norm);
+  surfaceBus.left_aileron_deg = 12 * (manualInput.stick_roll_norm);
   surfaceBus.right_aileron_deg = -surfaceBus.left_aileron_deg;
-  surfaceBus.elevator_deg = 8 * manualInput.stick_pitch_norm;
-  surfaceBus.rudder_deg = 5 * manualInput.rudder_norm;
-  surfaceBus.flaperon_deg = 4 * (engineThrottle.throttle_norm - 0.5);
+  surfaceBus.elevator_deg = 12 * manualInput.stick_pitch_norm;
+  surfaceBus.rudder_deg = 7 * manualInput.rudder_norm;
+  surfaceBus.flaperon_deg = 6 * (engineThrottle.throttle_norm - 0.5);
 
-  flightStatus.airspeed_mps = 200 * engineThrottle.throttle_norm;
+  flightStatus.airspeed_mps = 250 * engineThrottle.throttle_norm;
   flightStatus.energy_state_norm = fuelScalar;
-  flightStatus.angle_of_attack_deg = surfaceBus.elevator_deg / 4;
-  flightStatus.health_code = if fuelStatus.fuel_starved then 1 else 0;
+  flightStatus.angle_of_attack_deg = surfaceBus.elevator_deg / 3.5;
+  flightStatus.health_code = if fuelStatus.fuel_starved then 2 else storesBuses;
 
   der(headingDeg) = headingGain * (manualInput.stick_roll_norm / 2) + 20 * (autonomyScalar - 0.5);
   der(positionKm) = velocityGain * engineThrottle.throttle_norm;

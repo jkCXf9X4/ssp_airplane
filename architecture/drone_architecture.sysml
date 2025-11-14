@@ -1,39 +1,43 @@
 package WingmanDrone {
-  doc /* Loyal-wingman autonomous drone modeled after MQ-28 and Hellsing CA-1 Europa with conventional aviation propulsion. */
+  doc /* Reconfigured to model an F-16 Fighting Falcon multirole fighter with single-engine propulsion and manned cockpit. */
 
   part def CompositeAirframe {
-    doc /* Composite fuselage and payload bay sized to MQ-28 proportions. */
-    attribute length_m = 11.7;
-    attribute fuselage_width_m = 1.9;
-    attribute payload_capacity_kg = 1500;
-    attribute hardpoint_count = 4;
+    doc /* F-16 aluminum/composite fuselage sized for high-supersonic operations with dorsal spine for avionics. */
+    attribute length_m = 15.0;
+    attribute fuselage_width_m = 3.0;
+    attribute wingspan_m = 10.0;
+    attribute empty_weight_kg = 8573;
+    attribute payload_capacity_kg = 7700;
+    attribute hardpoint_count = 9;
   }
 
   part def AdaptiveWingSystem {
-    doc /* High-efficiency wing with control surfaces for agile escort missions. */
-    attribute reference_area_m2 = 28;
-    attribute span_m = 7.3;
-    attribute aspect_ratio = 5.5;
-    attribute control_authority_deg = 35;
+    doc /* Leading-edge strake and cropped-delta wing sized to F-16 Block 50 geometry with 9g capability. */
+    attribute reference_area_m2 = 28.0;
+    attribute span_m = 10.0;
+    attribute aspect_ratio = 3.6;
+    attribute control_authority_deg = 25;
+    attribute load_factor_limit_g = 9;
 
-    doc /* Mission computer bus commanding surface deflections per axis. */
+    doc /* Flight-control computer commands for elevator, tailerons, and rudder. */
     in port controlSurfaces : SurfaceActuationCommand;
 
-    doc /* Aerodynamic load feedback returned to mission computer/autopilot. */
+    doc /* Aerodynamic loads + moments returned to flight-control computers. */
     out port liftInterface : LiftState;
   }
 
   part def TurbofanPropulsion {
-    doc /* Conventional turbofan sized for MQ-28-class thrust with onboard generator. */
-    attribute max_thrust_kn = 60;
-    attribute specific_fuel_consumption = 0.8;
-    attribute fuel_capacity_kg = 2000;
-    attribute generator_output_kw = 150;
+    doc /* Pratt & Whitney F100 / GE F110 class augmented turbofan powering the F-16. */
+    attribute max_thrust_kn = 129.7;
+    attribute dry_thrust_kn = 79.0;
+    attribute specific_fuel_consumption = 0.76;
+    attribute fuel_capacity_kg = 3160;
+    attribute generator_output_kw = 80;
 
-    doc /* Mission computer throttle command input. */
+    doc /* Mission computer throttle + afterburner command input. */
     in port throttleCmd : ThrottleCommand;
 
-    doc /* Fuel availability feedback for derating logic. */
+    doc /* Fuel availability feedback for power scheduling and afterburner inhibit. */
     in port fuelStatus : FuelLevelState;
 
 
@@ -48,12 +52,12 @@ package WingmanDrone {
   }
 
   part def MissionComputer {
-    doc /* Tactical mission computer blending pilot-style inputs with autonomy services. */
-    attribute compute_budget_tops = 20;
-    attribute tactical_ai_level = 4;
-    attribute networked_control_buses = 3;
+    doc /* F-16C/D mission computer blending pilot HOTAS inputs with fly-by-wire control laws and stores management. */
+    attribute compute_budget_tops = 35;
+    attribute digital_fly_by_wire_channels = 3;
+    attribute stores_management_buses = 2;
 
-    doc /* Manual HOTAS command bundle from control interface. */
+    doc /* Manual HOTAS command bundle from cockpit controls. */
     in port manualInput : PilotCommand;
 
     doc /* Autopilot/autonomy guidance cue input. */
@@ -84,10 +88,10 @@ package WingmanDrone {
   }
 
   part def AutopilotModule {
-    doc /* Guidance core to execute escort, loiter, and waypoint scripts. */
-    attribute autonomy_mode_default = "loyal-wingman";
-    attribute guidance_modes = "escort+loiter+return";
-    attribute update_rate_hz = 25;
+    doc /* F-16 autopilot providing hold modes (attitude, altitude, heading) with auto-throttle coordination. */
+    attribute autonomy_mode_default = "altitude-hold";
+    attribute guidance_modes = "att_hold+hdg_hold+auto_throttle";
+    attribute update_rate_hz = 40;
 
     doc /* Mission-computer flight status back into autopilot. */
     in port feedbackBus : FlightStatusPacket;
@@ -102,10 +106,10 @@ package WingmanDrone {
   }
 
   part def PowerSystem {
-    doc /* Hybrid battery and generator bus distributing electrical power to avionics and control interfaces. */
-    attribute bus_voltage_kv = 1.2;
-    attribute battery_capacity_mj = 500;
-    attribute generator_efficiency = 0.92;
+    doc /* F-16 270 VDC / 115 VAC hybrid electrical system for avionics, flight control, and weapon systems. */
+    attribute bus_voltage_kv = 0.27;
+    attribute battery_capacity_mj = 650;
+    attribute generator_efficiency = 0.95;
 
     doc /* Generator output feed captured as structured electrical telemetry. */
     in port generatorInput : GenericElectricalBus;
@@ -122,9 +126,9 @@ package WingmanDrone {
   }
 
   part def FuelSystem {
-    doc /* Fuel storage and management subsystem feeding the turbofan and publishing remaining range. */
-    attribute fuel_capacity_kg = 2000;
-    attribute reserve_fraction = 0.05;
+    doc /* Internal + conformal fuel storage management with transfer pumps feeding engine feed tanks. */
+    attribute fuel_capacity_kg = 3160;
+    attribute reserve_fraction = 0.08;
 
     doc /* Propulsion-requested fuel mass flow entering storage manager. */
     in port fuelFlowIn : FuelConsumptionRate;
@@ -134,9 +138,9 @@ package WingmanDrone {
   }
 
   part def ControlInterface {
-    doc /* HOTAS or gamepad style interface for remote pilots or simulator inputs. */
-    attribute input_scheme = "HOTAS/Gamepad";
-    attribute telemetry_rate_hz = 60;
+    doc /* F-16 HOTAS + side-stick interface for pilot inputs and trim switches. */
+    attribute input_scheme = "HOTAS";
+    attribute telemetry_rate_hz = 120;
 
     doc /* General power */
     in port powerIn : GenericElectricalBus;

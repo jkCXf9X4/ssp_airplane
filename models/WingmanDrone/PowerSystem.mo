@@ -1,16 +1,16 @@
 within WingmanDrone;
 model PowerSystem
   import GI = WingmanDrone.GeneratedInterfaces;
-  parameter Real busVoltageKV = 1.2;
-  parameter Real bufferCapacityMJ = 500;
-  parameter Real distributionEfficiency = 0.95;
+  parameter Real busVoltageKV = 0.27;
+  parameter Real bufferCapacityMJ = 650;
+  parameter Real distributionEfficiency = 0.97;
   input GI.GenericElectricalBus generatorInput;
   output GI.GenericElectricalBus avionicsFeed;
   output GI.GenericElectricalBus controlFeed;
   output GI.GenericElectricalBus autonomyFeed;
 protected
-  parameter Real controlShare = 0.2;
-  parameter Real autonomyShare = 0.25;
+  parameter Real controlShare = 0.25;
+  parameter Real autonomyShare = 0.2;
   Real availableKW;
 equation
   availableKW = generatorInput.available_power_kw * distributionEfficiency + bufferCapacityMJ * 0.277777;

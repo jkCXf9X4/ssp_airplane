@@ -1,17 +1,20 @@
 within WingmanDrone;
 model AutopilotModule
   import GI = WingmanDrone.GeneratedInterfaces;
-  parameter Real updateRateHz = 25;
-  parameter Real sensorFidelity = 0.95;
+  parameter Real updateRateHz = 40;
+  parameter Real sensorFidelity = 0.98;
+  parameter Real targetAltitude_m = 6000;
   input GI.FlightStatusPacket feedbackBus;
   input GI.GenericElectricalBus powerIn;
   output GI.AutonomyGuidance guidanceCmd;
 protected
   Real stability;
+  Real altitudeError;
 equation
-  stability = min(1.0, max(0.2, powerIn.available_power_kw / 100.0)) * sensorFidelity * max(0.2, feedbackBus.energy_state_norm);
-  guidanceCmd.waypoint_heading_deg = 360 * stability;
-  guidanceCmd.waypoint_altitude_m = 1000 + 500 * feedbackBus.angle_of_attack_deg;
-  guidanceCmd.lateral_accel_mps2 = 2 * feedbackBus.airspeed_mps / 200;
+  stability = min(1.0, max(0.3, powerIn.available_power_kw / 60.0)) * sensorFidelity * max(0.25, feedbackBus.energy_state_norm);
+  altitudeError = targetAltitude_m - (feedbackBus.airspeed_mps * 3);
+  guidanceCmd.waypoint_heading_deg = 90 + 45 * sin(time / 30);
+  guidanceCmd.waypoint_altitude_m = targetAltitude_m + altitudeError * 0.05;
+  guidanceCmd.lateral_accel_mps2 = min(30, max(5, feedbackBus.airspeed_mps / 10));
   guidanceCmd.aggressiveness_norm = stability;
 end AutopilotModule;
