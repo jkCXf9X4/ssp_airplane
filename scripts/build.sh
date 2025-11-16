@@ -40,5 +40,5 @@ pytest -q
 echo "Build pipeline completed successfully."
 
 echo "Simulate scenario!"
-python3 scripts/simulate_scenario.py --scenario build/scenarios/test_scenario.json --ssp build/ssp/wingman_drone.ssp
+python3 scripts/simulate_scenario.py --scenario build/scenarios/test_scenario.json
 

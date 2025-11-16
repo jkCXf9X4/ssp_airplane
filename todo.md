@@ -1,6 +1,7 @@
 
+[] evaluate how to best evaluate the results from the simulation to check for requirement evaluation
 
-[x] outline a few use case scenarios that connect to the requirements
-[x] extend simulation test scenarios to fulfill the use cases 
+[] Utilize the full ssp4sim simulation results as basis for evaluating the requirements
 
-[x] create simulation unit tests to verify requirement fulfillment of use-case simulations towards requirements
+[] Add unit tests for some basic functionality of the aircraft models, utilize the ssp4sim as a basis for the integration testing 
+
