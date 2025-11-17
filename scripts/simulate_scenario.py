@@ -9,7 +9,7 @@ import json
 import math
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Sequence
+from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 import pyssp4sim
 
@@ -77,6 +77,62 @@ def _read_result_rows(result_file: Path) -> List[Dict[str, str]]:
         return list(reader)
 
 
+def scenario_to_string(points: List[Dict[str, float]]) -> str:
+    values: List[str] = []
+    for point in points:
+        values.append(f"{point['latitude_deg']:.6f}")
+        values.append(f"{point['longitude_deg']:.6f}")
+        values.append(f"{point.get('altitude_m', 0.0):.2f}")
+    return ",".join(values)
+
+
+def validate_scenario_points(points: List[Dict[str, float]]) -> None:
+    for idx, point in enumerate(points):
+        if "latitude_deg" not in point or "longitude_deg" not in point:
+            raise ValueError(f"Point {idx} missing latitude or longitude")
+        lat = float(point["latitude_deg"])
+        lon = float(point["longitude_deg"])
+        if not -90.0 <= lat <= 90.0 or not -180.0 <= lon <= 180.0:
+            raise ValueError(f"Point {idx} has implausible lat/lon: {lat}, {lon}")
+        if "altitude_m" in point:
+            alt = float(point["altitude_m"])
+            if alt < -500 or alt > 25000:
+                raise ValueError(f"Point {idx} has implausible altitude: {alt}")
+
+
+def plot_flight_path(
+    result_file: Path, scenario_points: List[Dict[str, float]], output_path: Path
+) -> Optional[Path]:
+    try:
+        import matplotlib.pyplot as plt
+    except ImportError:
+        return None
+
+    rows = _read_result_rows(result_file)
+    latitudes = _numeric_series(rows, "MissionComputer.locationLLA.latitude_deg")
+    longitudes = _numeric_series(rows, "MissionComputer.locationLLA.longitude_deg")
+    if not latitudes or not longitudes:
+        return None
+
+    fig, ax = plt.subplots(figsize=(6, 5))
+    ax.plot(longitudes, latitudes, label="Flight path", color="#1f77b4")
+
+    if scenario_points:
+        wp_lats = [p["latitude_deg"] for p in scenario_points]
+        wp_lons = [p["longitude_deg"] for p in scenario_points]
+        ax.plot(wp_lons, wp_lats, "o--", label="Waypoints", color="#d62728")
+
+    ax.set_xlabel("Longitude [deg]")
+    ax.set_ylabel("Latitude [deg]")
+    ax.set_title("Flight path vs waypoints")
+    ax.legend()
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    fig.tight_layout()
+    fig.savefig(output_path, dpi=150)
+    plt.close(fig)
+    return output_path
+
+
 @dataclass
 class RequirementEvaluation:
     identifier: str
@@ -98,6 +154,8 @@ class ScenarioResult:
     result_file: Optional[Path]
     metrics: Dict[str, float] = field(default_factory=dict)
     requirement_evaluations: List[RequirementEvaluation] = field(default_factory=list)
+    scenario_string: str = ""
+    plot_path: Optional[Path] = None
 
 
 def summarize_result_file(result_file: Path) -> Dict[str, float]:
@@ -273,11 +331,14 @@ def simulate_scenario(
     results_dir: Path = DEFAULT_RESULTS,
     reuse_results: bool = True,
     stop_time: Optional[float] = None,
+    plot: bool = False,
 ) -> ScenarioResult:
     scenario = load_json(scenario_path)
     if "points" not in scenario:
         raise ValueError("Scenario file must contain a 'points' list.")
+    validate_scenario_points(scenario["points"])
 
+    scenario_string = scenario_to_string(scenario["points"])
     overrides = scenario.get("simulation_overrides", {})
     cruise_speed = float(overrides.get("cruise_speed_mps", 250.0))
     total_distance = scenario.get("total_distance_km") or haversine_distance_km(
@@ -286,6 +347,8 @@ def simulate_scenario(
 
     results_dir.mkdir(parents=True, exist_ok=True)
     result_file = results_dir / f"{scenario_path.stem}_results.csv"
+    waypoints_file = results_dir / f"{scenario_path.stem}_waypoints.txt"
+    waypoints_file.write_text(scenario_string)
 
     if stop_time is None:
         stop_time = max(estimate_duration(total_distance, cruise_speed) * 1.1, 120.0)
@@ -321,6 +384,7 @@ def simulate_scenario(
     meets_range_requirement = fuel_required <= max(fuel_capacity - reserve, 0.0) and not fuel_exhausted
 
     requirement_evaluations = evaluate_requirements(metrics, fuel_capacity)
+    plot_path = None
 
     summary = {
         "scenario": scenario.get("name", scenario_path.stem),
@@ -328,6 +392,7 @@ def simulate_scenario(
         "duration_s": estimated_duration,
         "fuel_capacity_kg": fuel_capacity,
         "fuel_required_kg": fuel_required,
+        "scenario_string": scenario_string,
         "requirements": [
             {"id": eval_.identifier, "passed": eval_.passed, "evidence": eval_.evidence}
             for eval_ in requirement_evaluations
@@ -350,6 +415,12 @@ def simulate_scenario(
         },
     }
 
+    if plot:
+        requested_plot = results_dir / f"{scenario_path.stem}_path.png"
+        plot_path = plot_flight_path(result_file, scenario["points"], requested_plot)
+        if plot_path:
+            summary["plot_path"] = str(plot_path)
+
     summary_path = results_dir / f"{scenario_path.stem}_summary.json"
     summary_path.write_text(json.dumps(summary, indent=2))
 
@@ -366,6 +437,8 @@ def simulate_scenario(
         result_file=result_file,
         metrics=metrics,
         requirement_evaluations=requirement_evaluations,
+        scenario_string=scenario_string,
+        plot_path=plot_path,
     )
 
 
@@ -389,6 +462,11 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Override OMSimulator stop time in seconds.",
     )
+    parser.add_argument(
+        "--plot",
+        action="store_true",
+        help="Generate a flight-path plot comparing simulated track to waypoints.",
+    )
 
     return parser.parse_args()
 
@@ -401,6 +479,7 @@ def main() -> None:
         results_dir=args.results_dir,
         reuse_results=args.reuse_results,
         stop_time=args.stop_time,
+        plot=args.plot,
     )
     print(
         json.dumps(
@@ -413,6 +492,8 @@ def main() -> None:
                 "meets_range_requirement": result.meets_range_requirement,
                 "used_oms": result.used_oms,
                 "result_file": str(result.result_file) if result.result_file else None,
+                "scenario_string": result.scenario_string,
+                "plot_path": str(result.plot_path) if result.plot_path else None,
                 "requirements": [
                     {"id": eval_.identifier, "passed": eval_.passed}
                     for eval_ in result.requirement_evaluations

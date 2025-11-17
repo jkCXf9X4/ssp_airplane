@@ -49,6 +49,14 @@ package GeneratedInterfaces
     Real altitude_m;
   end GeodeticLLA;
 
+  connector MissionStatus
+    Integer waypoint_index;
+    Integer total_waypoints;
+    Real distance_to_waypoint_km;
+    Boolean arrived;
+    Boolean complete;
+  end MissionStatus;
+
   connector LiftState
     Real lift_kn;
     Real drag_kn;

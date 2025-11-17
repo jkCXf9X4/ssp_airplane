@@ -44,6 +44,11 @@ When `scripts/simulate_scenario.py` runs, it always writes two artifacts into `b
 - `autopilot_limit_max` and `control_surface_excursion_deg` ensure control authority and fly-by-wire activity for REQ_Control.
 - `thrust_kn_max` and `mass_flow_kgps_max` provide propulsion evidence.
 
+### Waypoint strings and plots
+
+- Each scenario’s waypoints are also exported to `build/results/<scenario>_waypoints.txt` as a comma-separated `lat,lon,alt,...` string, ready for Modelica `stringToRealVector` consumption (`AutopilotModule.scenarioData`).
+- Passing `--plot` to `simulate_scenario.py` generates `build/results/<scenario>_path.png`, overlaying the simulated latitude/longitude path against the supplied waypoints for a quick visual verification.
+
 ## Reusing results vs. re-simulating
 
 - Use `--reuse-results` to only post-process an existing `<scenario>_results.csv` without invoking OMSimulator. This keeps CI fast and allows offline exploration of prior runs.

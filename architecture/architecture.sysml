@@ -63,6 +63,12 @@ package Aircraft {
     doc /* Manual HOTAS command bundle from cockpit controls. */
     in port manualInput : PilotCommand;
 
+    doc /* Autopilot command bundle using same HOTAS signal structure. */
+    in port autopilotInput : PilotCommand;
+
+    doc /* Mission status feedback from autopilot waypoint driver. */
+    in port autopilotStatus : MissionStatus;
+
     doc /* Autopilot/autonomy guidance cue input. */
     in port autonomyPort : AutonomyGuidance;
 
@@ -112,6 +118,12 @@ package Aircraft {
     doc /* Mission-computer flight status back into autopilot. */
     in port feedbackBus : FlightStatusPacket;
 
+    doc /* Current geodetic position from mission computer. */
+    in port currentLocation : GeodeticLLA;
+
+    doc /* Current attitude from mission computer. */
+    in port currentOrientation : OrientationEuler;
+
     doc /* Air-data/INS feed for hold modes and envelope limits. */
     in port airDataIn : AirDataInertialState;
 
@@ -124,9 +136,14 @@ package Aircraft {
     doc /* Backup/emergency electrical bus input. */
     in port backupPower : GenericElectricalBus;
 
-
     doc /* Autopilot guidance directives to mission computer. */
     out port guidanceCmd : AutonomyGuidance;
+
+    doc /* HOTAS-equivalent command stream for mission computer blending. */
+    out port autopilotCmd : PilotCommand;
+
+    doc /* Tracking of waypoint progress for mission supervision. */
+    out port missionStatus : MissionStatus;
 
   }
 

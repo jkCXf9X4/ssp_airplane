@@ -14,7 +14,11 @@ package Aircraft {
   connect FuelSystem.fuelState to MissionComputer.fuelStatus;
   connect FuelSystem.fuelState to EmergencyPowerUnit.fuelState;
   connect AutopilotModule.guidanceCmd to MissionComputer.autonomyPort;
+  connect AutopilotModule.autopilotCmd to MissionComputer.autopilotInput;
+  connect AutopilotModule.missionStatus to MissionComputer.autopilotStatus;
   connect MissionComputer.flightStatus to AutopilotModule.feedbackBus;
+  connect MissionComputer.locationLLA to AutopilotModule.currentLocation;
+  connect MissionComputer.orientationEuler to AutopilotModule.currentOrientation;
   connect MissionComputer.flightStatus to FlyByWireController.flightFeedback;
   connect ControlInterface.pilotCommand to MissionComputer.manualInput;
   connect AdaptiveWingSystem.liftInterface to FlyByWireController.aeroFeedback;

@@ -140,4 +140,13 @@ package Aircraft {
     attribute stores_release_inhibit: Boolean;
     attribute autopilot_limit_code: Integer;
   }
+
+  port def MissionStatus {
+    doc /* Waypoint-tracking telemetry from the autopilot navigation loop. */
+    attribute waypoint_index : Integer;
+    attribute total_waypoints : Integer;
+    attribute distance_to_waypoint_km : Real;
+    attribute arrived : Boolean;
+    attribute complete : Boolean;
+  }
 }

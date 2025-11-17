@@ -74,6 +74,8 @@ Utilize OMSimulator as simulation engine, via python
 - Summaries include pass/fail for REQ_Performance/REQ_Fuel/REQ_Control/REQ_Mission/REQ_Propulsion plus evidence strings and key metrics (max Mach, g-load, fuel used, stores available, thrust).
 - See `docs/results_and_evaluation.md` for the metric/summary fields and how to interpret them.
 - Pre-generated data exists for `build/scenarios/test_scenario.json`, enabling tests to run without a fresh simulation.
+- Waypoints are exported as a comma-separated string to `build/results/<scenario>_waypoints.txt` (format: `lat,lon,alt,...`) that feeds the Autopilot `scenarioData` parameter via `stringToRealVector`.
+- Add `--plot` to emit `build/results/<scenario>_path.png`, overlaying simulated latitude/longitude traces against mission waypoints.
 
 ## Verification helpers
 

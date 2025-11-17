@@ -1,7 +1,11 @@
 
-[x] evaluate how to best evaluate the results from the simulation to check for requirement evaluation (post-process OMS CSVs into metrics and requirement checks)
-[x] - evaluate if there is any postprocess to the result to make the data more accessible and understandable to human and llm agent (added summary JSON artifacts and requirement evidence strings)
-
-[x] Utilize the full ssp4sim simulation results as basis for evaluating the requirements (summaries are derived from OMS result CSVs; reuse without re-running sims)
-
-[x] Add unit tests for some basic functionality of the aircraft models, utilize the ssp4sim as a basis for the integration testing (tests cover OMS result post-processing, reuse pipeline, and requirement detection)
+[x] Enable handling scenario data to the simulation
+ - [x] Review how the scenario data is structured, evaluate plausibility (scenario validation added in simulate_scenario.py)
+ - [x] The scenario data should be a string parameter to enable utilizing different parameter sets as basis for switching scenario, preferably a comma separated string, there is a modelica function "stringToRealVector" to help parse the string into usable values (waypoint string writer + AutopilotModule.scenarioData driven by stringToRealVector)
+ - [x] Track the mission status under the AutopilotModule (new MissionStatus connector and missionStatus output)
+ - [x] The AutopilotModule should interface with the MissionComputer using the same PilotCommand used by the manual input to enable seamless switching. (autopilotCmd to MissionComputer.autopilotInput)
+ - [x] Implement a simple control loop to steer the aircraft towards the next location point, when close enough switch to the next point. (heading/altitude loop in AutopilotModule)
+ - [x] after the simulation, enable plotting the aircraft position during flight to verify that the aircraft has passed all the points (plotting flag in simulate_scenario.py outputs path PNG)
+ - [] add metric that you can understand to the simulation to verify that the aircraft is doing what it is supposed to do
+ - [] add this aspect to the verification flight to enable verifying that the aircraft is following the waypoints
+ - [] iterate until the aircraft is flying as it should, if you need additional information from within the simulation to evaluate or debug usage, add these as debug ports and create a InputOutput sub-system that acts as a sink for simulation input/output 
