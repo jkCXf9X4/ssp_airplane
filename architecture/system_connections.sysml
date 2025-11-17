@@ -1,38 +1,31 @@
 package Aircraft {
-
-  connect MissionComputer.surfaceBus to FlyByWireController.commandBus;
-  connect MissionComputer.engineThrottle to TurbofanPropulsion.throttleCmd;
-  connect TurbofanPropulsion.fuelFlow to FuelSystem.fuelFlowIn;
-  connect FuelSystem.fuelState to TurbofanPropulsion.fuelStatus;
-  connect FuelSystem.fuelState to MissionComputer.fuelStatus;
-  connect FuelSystem.fuelState to EmergencyPowerUnit.fuelState;
-  connect AutopilotModule.guidanceCmd to MissionComputer.autonomyPort;
-  connect AutopilotModule.autopilotCmd to MissionComputer.autopilotInput;
-  connect AutopilotModule.missionStatus to MissionComputer.autopilotStatus;
-  connect MissionComputer.flightStatus to AutopilotModule.feedbackBus;
-  connect MissionComputer.locationLLA to AutopilotModule.currentLocation;
-  connect MissionComputer.orientationEuler to AutopilotModule.currentOrientation;
-  connect MissionComputer.flightStatus to FlyByWireController.flightFeedback;
-  connect MissionComputer.locationLLA to InputOutput.locationLLA;
-  connect MissionComputer.orientationEuler to InputOutput.orientation;
-  connect AutopilotModule.missionStatus to InputOutput.missionStatus;
-  connect AutopilotModule.autopilotCmd to InputOutput.autopilotCmd;
-  connect AutopilotModule.guidanceCmd to InputOutput.guidance;
-  connect MissionComputer.flightStatus to InputOutput.flightStatus;
+  doc /* ControlInterface */
   connect ControlInterface.pilotCommand to MissionComputer.manualInput;
-  connect AdaptiveWingSystem.liftInterface to FlyByWireController.aeroFeedback;
-  connect AdaptiveWingSystem.liftInterface to StructuralLoadsAndPerformanceMonitor.liftIn;
-  connect TurbofanPropulsion.thrustOut to StructuralLoadsAndPerformanceMonitor.thrustIn;
-  connect AirDataAndInertialSuite.airDataOut to MissionComputer.airDataIn;
-  connect AirDataAndInertialSuite.airDataOut to AutopilotModule.airDataIn;
-  connect AirDataAndInertialSuite.airDataOut to StructuralLoadsAndPerformanceMonitor.airDataIn;
-  connect StructuralLoadsAndPerformanceMonitor.performanceStatus to MissionComputer.performanceStatus;
-  connect StructuralLoadsAndPerformanceMonitor.performanceStatus to AutopilotModule.performanceStatus;
-  connect StructuralLoadsAndPerformanceMonitor.performanceStatus to StoresManagementSystem.performanceStatus;
-  connect FlyByWireController.actuatorDrive to AdaptiveWingSystem.controlSurfaces;
-  connect MissionComputer.storesCommand to StoresManagementSystem.storesBusIn;
-  connect StoresManagementSystem.storesTelemetry to MissionComputer.storesStatus;
-  connect PowerSystem.storesFeed to StoresManagementSystem.powerIn;
-  connect CompositeAirframe.storesMounts to StoresManagementSystem.airframeMount;
-  connect EmergencyPowerUnit.emergencyOutput to PowerSystem.emergencyInput;
+
+  doc /* AutopilotModule */
+  connect AutopilotModule.autopilotCmd to MissionComputer.autopilotInput;
+
+  doc /* TurbofanPropulsion */
+  connect TurbofanPropulsion.thrustOut to Environment.thrust_in;
+  connect TurbofanPropulsion.fuel_consumption to FuelSystem.fuel_consumption_rate;
+
+  doc /* MissionComputer */
+  connect MissionComputer.engineThrottle to TurbofanPropulsion.throttleCmd;
+  connect MissionComputer.speed_vector_change to AdaptiveWingSystem.velocity_vector_alteration;
+
+  doc /* FuelSystem */
+  connect FuelSystem.fuelState to MissionComputer.fuelStatus;
+
+  doc /* AdaptiveWingSystem */
+  connect AdaptiveWingSystem.actuation_command to Environment.actuation_command;
+  connect AdaptiveWingSystem.lift_state to Environment.lift_state;
+
+  doc /* Environment */
+  connect Environment.orientation to AutopilotModule.currentOrientation;
+  connect Environment.location to AutopilotModule.currentLocation;
+  connect Environment.flight_status to AutopilotModule.feedbackBus;
+  connect Environment.flight_status to AdaptiveWingSystem.flight_speed;
 }
+
+
+

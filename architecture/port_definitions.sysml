@@ -14,7 +14,7 @@ package Aircraft {
   }
 
   port def OrientationEuler {
-    doc /* Air vehicle orientation expressed as body-to-earth Euler angles in degrees. */
+    doc /* Air vehicle orientation expressed as Euler angles in degrees. */
     attribute roll_deg: Real;
     attribute pitch_deg: Real;
     attribute yaw_deg: Real;
@@ -62,6 +62,11 @@ package Aircraft {
     attribute fuel_remaining_kg: Real;
     attribute fuel_level_norm: Real;
     attribute fuel_starved: Boolean;
+  }
+
+  port def FuelConsumptionRate {
+    doc /* Mass flow request or telemetry for turbofan fuel usage (kg/s). */
+    attribute mass_flow_kgps: Real;
   }
 
   port def FlightStatusPacket {

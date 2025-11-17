@@ -12,12 +12,9 @@ package Aircraft {
 
   }
 
-
   part def AutopilotModule {
-    doc /* F-16 autopilot providing hold modes (attitude, altitude, heading) with auto-throttle coordination. */
-    attribute autonomy_mode_default = "altitude-hold";
-    attribute guidance_modes = "att_hold+hdg_hold+auto_throttle";
-    attribute update_rate_hz = 40;
+    doc /* F-16 autopilot, takes in sensor data and translates it into a equivalent hotas command. */
+    attribute comment = "uses waypoint tracking";
 
     doc /* Mission-computer flight status back into autopilot. */
     in port feedbackBus : FlightStatusPacket;
@@ -55,18 +52,15 @@ package Aircraft {
     doc /* Mission computer throttle + afterburner command input. */
     in port throttleCmd : ThrottleCommand;
 
-    doc /* Fuel availability feedback for power scheduling and afterburner inhibit. */
-    in port fuelStatus : FuelLevelState;
-
     doc /* Propulsion thrust telemetry exported to airframe. */
     out port thrustOut : ThrustState;
+
+    doc /* Mass flow telemetry  */
+    out port fuel_consumption : FuelConsumptionRate;
   }
 
   part def MissionComputer {
     doc /* F-16C/D mission computer blending pilot HOTAS inputs with fly-by-wire control laws and stores management. */
-    attribute compute_budget_tops = 35;
-    attribute digital_fly_by_wire_channels = 3;
-    attribute stores_management_buses = 2;
 
     doc /* Manual HOTAS command bundle from cockpit controls. */
     in port manualInput : PilotCommand;
@@ -79,6 +73,9 @@ package Aircraft {
 
     doc /* Structured throttle/fuel enable command to propulsion. */
     out port engineThrottle : ThrottleCommand;
+
+    doc /* Command how to alter the current velocity vector, pith, yaw, roll  */
+    out port speed_vector_change : OrientationEuler;
   }
 
 
@@ -88,37 +85,39 @@ package Aircraft {
     attribute reserve_fraction = 0.08;
 
     doc /* Propulsion-requested fuel mass flow entering storage manager. */
-    in port fuelFlowIn : FuelConsumptionRate;
+    in port fuel_consumption_rate : FuelConsumptionRate;
 
     doc /* Telemetry describing remaining fuel mass/normalized level. */
     out port fuelState : FuelLevelState;
   }
 
   part def AdaptiveWingSystem {
-    doc /* Leading-edge strake and cropped-delta wing sized to F-16 Block 50 geometry with 9g capability. */
+    doc /* Leading-edge strake and cropped-delta wing sized to F-16 Block 50 geometry with 9g capability. This model includes the control system */
     attribute reference_area_m2 = 28.0;
     attribute span_m = 10.0;
     attribute aspect_ratio = 3.6;
     attribute control_authority_deg = 25;
     attribute load_factor_limit_g = 9;
 
-    doc /* Mission-computer command bus input. Change in speed vector */
-    in port movement_command : OrientationEuler;
+    doc /* Mission-computer command bus input. Desired change in speed vector */
+    in port velocity_vector_alteration : OrientationEuler;
 
-    doc /* Aerodynamic loads + moments returned to flight-control computers. */
-    out port liftInterface : LiftState;
+    in port flight_speed : FlightStatusPacket;
 
-    doc /* Actuation commands, sent to environment to track position */
+    doc /* Actuation commands, sent to environment to track and calculate new position */
     out port actuation_command : SurfaceActuationCommand;
+
+    doc /* Tracking of lift, drag*/
+    out port lift_state : LiftState;
   }
 
   part def Environment {
     doc /* Tracking position and velocities of the aircraft and feeds the sensors */
 
-    doc /* Reads the actuation, lift and thrust commands to calculate the current position and velocities */
+    doc /* Reads the actuation and thrust commands to calculate the position, rotation and velocities */
 
     in port actuation_command : SurfaceActuationCommand;
-    in port lift : LiftState;
+    in port lift_state : LiftState;
     in port thrust : ThrustState;
 
     doc /* Feedback for simulated sensors */
@@ -126,14 +125,6 @@ package Aircraft {
     out port location : GeodeticLLA;
     out port flight_status : FlightStatusPacket
 
-  }
-
-  part def InputOutput {
-    doc /* Simulation sink for debugging and recording mission/autopilot telemetry. */
-    in port locationLLA : GeodeticLLA;
-    in port orientation : OrientationEuler;
-    in port autopilotCmd : PilotCommand;
-    in port flightStatus : FlightStatusPacket;
   }
 
 }
