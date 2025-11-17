@@ -5,6 +5,5 @@ model InputOutput
   input GI.OrientationEuler orientation;
   input GI.MissionStatus missionStatus;
   input GI.PilotCommand autopilotCmd;
-  input GI.AutonomyGuidance guidance;
   input GI.FlightStatusPacket flightStatus;
 end InputOutput;

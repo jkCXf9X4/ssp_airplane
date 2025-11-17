@@ -10,6 +10,7 @@ This repository tracks an SSP for an F-16 Fighting Falcon inspired single-seat m
   python3 -m venv venv
   venv/bin/pip install -r requirements.txt
   ```
+- Always use the virtual environment when running helper scripts to avoid missing `pyssp4sim` (`venv/bin/python scripts/...` or `source venv/bin/activate` first).
 - Prebuilt SSPs live in `build/ssp/`; the default is `build/ssp/aircraft.ssp`.
 - Curated mission scenarios live in `resources/scenarios/` (see `docs/use_cases.md` for requirement linkage).
 
@@ -38,7 +39,9 @@ It contains models for:
  - optional autopilot module (attitude/altitude/heading hold)
  - power distribution system sized for 270 VDC generation
  - cockpit HOTAS interface
+ - telemetry sink (`InputOutput`) that taps the environment state, autopilot outputs (pilot command + mission status), and flight status for logging and validation
 
+Key architectural signals include a LiftState feed from the AdaptiveWingSystem into the Environment and a detailed FlightStatusPacket (airspeed, energy state, angle of attack, health code) used by both the autopilot and mission computer.
 # Build
 
 all sub-systems are to be exported into into Functional mockup units, FMUs. Packaged into a SSP for executing the simulation in the optimization loop.

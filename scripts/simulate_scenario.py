@@ -212,27 +212,18 @@ def emit_waypoint_parameter_set(
         value_elem = ET.SubElement(param_elem, f"{{{ns}}}{type_tag}")
         value_elem.set("value", value)
 
-    for idx, point in enumerate(scenario_points, start=1):
+    for idx, point in enumerate(scenario_points[1:], start=1):
         add_param(f"{component}.waypointLat[{idx}]", "Real", f"{float(point['latitude_deg']):.6f}")
         add_param(f"{component}.waypointLon[{idx}]", "Real", f"{float(point['longitude_deg']):.6f}")
         alt = float(point.get("altitude_m", 0.0))
         add_param(f"{component}.waypointAlt[{idx}]", "Real", f"{alt:.2f}")
-    add_param(f"{component}.waypointCount", "Integer", str(len(scenario_points)))
+
+    add_param(f"{component}.waypointCount", "Integer", str(len(scenario_points)-1))
     if scenario_points:
         first = scenario_points[0]
         add_param("MissionComputer.initLatitude_deg", "Real", f"{float(first['latitude_deg']):.6f}")
         add_param("MissionComputer.initLongitude_deg", "Real", f"{float(first['longitude_deg']):.6f}")
         # precompute switch times based on cumulative distance and nominal speed
-        cumulative = [0.0]
-        for i in range(len(scenario_points) - 1):
-            leg = haversine_distance_km([scenario_points[i], scenario_points[i + 1]])
-            cumulative.append(cumulative[-1] + leg)
-        nominal_speed = 250.0  # m/s
-        switch_times = []
-        for dist_km in cumulative[1:]:
-            switch_times.append(dist_km * 1000.0 / nominal_speed)
-        for idx, tsec in enumerate(switch_times, start=1):
-            add_param(f"{component}.waypointSwitch_s[{idx}]", "Real", f"{tsec:.1f}")
 
     tree = ET.ElementTree(root)
     output_path.parent.mkdir(parents=True, exist_ok=True)

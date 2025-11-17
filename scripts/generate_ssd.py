@@ -54,14 +54,9 @@ MODEL_CLASS_MAP: Dict[str, str] = {
     "MissionComputer": "Aircraft.MissionComputer",
     "AutopilotModule": "Aircraft.AutopilotModule",
     "InputOutput": "Aircraft.InputOutput",
-    "PowerSystem": "Aircraft.PowerSystem",
     "FuelSystem": "Aircraft.FuelSystem",
     "ControlInterface": "Aircraft.ControlInterface",
-    "AirDataAndInertialSuite": "Aircraft.AirDataAndInertialSuite",
-    "EmergencyPowerUnit": "Aircraft.EmergencyPowerUnit",
-    "FlyByWireController": "Aircraft.FlyByWireController",
-    "StructuralLoadsAndPerformanceMonitor": "Aircraft.StructuralLoadsAndPerformanceMonitor",
-    "StoresManagementSystem": "Aircraft.StoresManagementSystem",
+    "Environment": "Aircraft.Environment",
 }
 
 

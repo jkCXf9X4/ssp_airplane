@@ -18,14 +18,9 @@ DEFAULT_MODELS = [
     "Aircraft.MissionComputer",
     "Aircraft.AutopilotModule",
     "Aircraft.InputOutput",
-    "Aircraft.PowerSystem",
     "Aircraft.FuelSystem",
+    "Aircraft.Environment",
     "Aircraft.ControlInterface",
-    "Aircraft.AirDataAndInertialSuite",
-    "Aircraft.EmergencyPowerUnit",
-    "Aircraft.FlyByWireController",
-    "Aircraft.StructuralLoadsAndPerformanceMonitor",
-    "Aircraft.StoresManagementSystem",
 ]
 
 

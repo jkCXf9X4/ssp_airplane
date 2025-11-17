@@ -1,15 +1,15 @@
 within Aircraft;
 model ControlInterface
   import GI = Aircraft.GeneratedInterfaces;
-  parameter Real inputLag = 0.05;
-  parameter Real manualCommandDefault(min=0.0, max=1.0) = 0.6;
-  input GI.GenericElectricalBus powerIn;
+  parameter Real inputLag = 0.05 "Blending factor for pilot input smoothing";
+  parameter Real manualCommandDefault(min=0.0, max=1.0) = 0.6 "Nominal throttle stick position";
   output GI.PilotCommand pilotCommand;
 protected
   Real effectiveCommand;
   Real rollSweep;
 equation
-  effectiveCommand = (1 - inputLag) * manualCommandDefault + inputLag * min(1.0, max(0.0, powerIn.available_power_kw / 60.0));
+  // Simple smoothing around a nominal throttle input
+  effectiveCommand = (1 - inputLag) * manualCommandDefault + inputLag * manualCommandDefault;
   rollSweep = 0.2 * sin(time / 5);
   pilotCommand.stick_pitch_norm = min(1.0, max(-1.0, (effectiveCommand - 0.5) * 2));
   pilotCommand.stick_roll_norm = rollSweep;

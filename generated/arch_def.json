@@ -1,94 +1,10 @@
 {
   "connections": [
     {
-      "dst_component": "PowerSystem",
-      "dst_port": "generatorInput",
-      "src_component": "TurbofanPropulsion",
-      "src_port": "powerBus"
-    },
-    {
       "dst_component": "MissionComputer",
-      "dst_port": "powerIn",
-      "src_component": "PowerSystem",
-      "src_port": "dcBus270"
-    },
-    {
-      "dst_component": "ControlInterface",
-      "dst_port": "powerIn",
-      "src_component": "PowerSystem",
-      "src_port": "acBus115"
-    },
-    {
-      "dst_component": "AutopilotModule",
-      "dst_port": "powerIn",
-      "src_component": "PowerSystem",
-      "src_port": "autonomyFeed"
-    },
-    {
-      "dst_component": "FlyByWireController",
-      "dst_port": "powerIn",
-      "src_component": "PowerSystem",
-      "src_port": "controlFeed"
-    },
-    {
-      "dst_component": "AirDataAndInertialSuite",
-      "dst_port": "powerIn",
-      "src_component": "PowerSystem",
-      "src_port": "avionicsFeed"
-    },
-    {
-      "dst_component": "MissionComputer",
-      "dst_port": "backupPower",
-      "src_component": "PowerSystem",
-      "src_port": "emergencyBus"
-    },
-    {
-      "dst_component": "AutopilotModule",
-      "dst_port": "backupPower",
-      "src_component": "PowerSystem",
-      "src_port": "emergencyBus"
-    },
-    {
-      "dst_component": "FlyByWireController",
-      "dst_port": "commandBus",
-      "src_component": "MissionComputer",
-      "src_port": "surfaceBus"
-    },
-    {
-      "dst_component": "TurbofanPropulsion",
-      "dst_port": "throttleCmd",
-      "src_component": "MissionComputer",
-      "src_port": "engineThrottle"
-    },
-    {
-      "dst_component": "FuelSystem",
-      "dst_port": "fuelFlowIn",
-      "src_component": "TurbofanPropulsion",
-      "src_port": "fuelFlow"
-    },
-    {
-      "dst_component": "TurbofanPropulsion",
-      "dst_port": "fuelStatus",
-      "src_component": "FuelSystem",
-      "src_port": "fuelState"
-    },
-    {
-      "dst_component": "MissionComputer",
-      "dst_port": "fuelStatus",
-      "src_component": "FuelSystem",
-      "src_port": "fuelState"
-    },
-    {
-      "dst_component": "EmergencyPowerUnit",
-      "dst_port": "fuelState",
-      "src_component": "FuelSystem",
-      "src_port": "fuelState"
-    },
-    {
-      "dst_component": "MissionComputer",
-      "dst_port": "autonomyPort",
-      "src_component": "AutopilotModule",
-      "src_port": "guidanceCmd"
+      "dst_port": "manualInput",
+      "src_component": "ControlInterface",
+      "src_port": "pilotCommand"
     },
     {
       "dst_component": "MissionComputer",
@@ -97,52 +13,82 @@
       "src_port": "autopilotCmd"
     },
     {
+      "dst_component": "Environment",
+      "dst_port": "thrust_in",
+      "src_component": "TurbofanPropulsion",
+      "src_port": "thrustOut"
+    },
+    {
+      "dst_component": "FuelSystem",
+      "dst_port": "fuel_consumption_rate",
+      "src_component": "TurbofanPropulsion",
+      "src_port": "fuel_consumption"
+    },
+    {
+      "dst_component": "TurbofanPropulsion",
+      "dst_port": "throttleCmd",
+      "src_component": "MissionComputer",
+      "src_port": "engineThrottle"
+    },
+    {
+      "dst_component": "AdaptiveWingSystem",
+      "dst_port": "velocity_vector_alteration",
+      "src_component": "MissionComputer",
+      "src_port": "speed_vector_change"
+    },
+    {
       "dst_component": "MissionComputer",
-      "dst_port": "autopilotStatus",
-      "src_component": "AutopilotModule",
-      "src_port": "missionStatus"
+      "dst_port": "fuelStatus",
+      "src_component": "FuelSystem",
+      "src_port": "fuelState"
     },
     {
-      "dst_component": "AutopilotModule",
-      "dst_port": "feedbackBus",
-      "src_component": "MissionComputer",
-      "src_port": "flightStatus"
+      "dst_component": "Environment",
+      "dst_port": "actuation_command",
+      "src_component": "AdaptiveWingSystem",
+      "src_port": "actuation_command"
     },
     {
-      "dst_component": "AutopilotModule",
-      "dst_port": "currentLocation",
-      "src_component": "MissionComputer",
-      "src_port": "locationLLA"
+      "dst_component": "Environment",
+      "dst_port": "lift",
+      "src_component": "AdaptiveWingSystem",
+      "src_port": "liftInterface"
     },
     {
       "dst_component": "AutopilotModule",
       "dst_port": "currentOrientation",
-      "src_component": "MissionComputer",
-      "src_port": "orientationEuler"
+      "src_component": "Environment",
+      "src_port": "orientation"
     },
     {
-      "dst_component": "FlyByWireController",
-      "dst_port": "flightFeedback",
-      "src_component": "MissionComputer",
-      "src_port": "flightStatus"
+      "dst_component": "AutopilotModule",
+      "dst_port": "currentLocation",
+      "src_component": "Environment",
+      "src_port": "location"
+    },
+    {
+      "dst_component": "AutopilotModule",
+      "dst_port": "feedbackBus",
+      "src_component": "Environment",
+      "src_port": "flight_status"
+    },
+    {
+      "dst_component": "AdaptiveWingSystem",
+      "dst_port": "flight_speed",
+      "src_component": "Environment",
+      "src_port": "flight_status"
     },
     {
       "dst_component": "InputOutput",
       "dst_port": "locationLLA",
-      "src_component": "MissionComputer",
-      "src_port": "locationLLA"
+      "src_component": "Environment",
+      "src_port": "location"
     },
     {
       "dst_component": "InputOutput",
       "dst_port": "orientation",
-      "src_component": "MissionComputer",
-      "src_port": "orientationEuler"
-    },
-    {
-      "dst_component": "InputOutput",
-      "dst_port": "missionStatus",
-      "src_component": "AutopilotModule",
-      "src_port": "missionStatus"
+      "src_component": "Environment",
+      "src_port": "orientation"
     },
     {
       "dst_component": "InputOutput",
@@ -152,111 +98,15 @@
     },
     {
       "dst_component": "InputOutput",
-      "dst_port": "guidance",
-      "src_component": "AutopilotModule",
-      "src_port": "guidanceCmd"
+      "dst_port": "flightStatus",
+      "src_component": "Environment",
+      "src_port": "flight_status"
     },
     {
       "dst_component": "InputOutput",
-      "dst_port": "flightStatus",
-      "src_component": "MissionComputer",
-      "src_port": "flightStatus"
-    },
-    {
-      "dst_component": "MissionComputer",
-      "dst_port": "manualInput",
-      "src_component": "ControlInterface",
-      "src_port": "pilotCommand"
-    },
-    {
-      "dst_component": "FlyByWireController",
-      "dst_port": "aeroFeedback",
-      "src_component": "AdaptiveWingSystem",
-      "src_port": "liftInterface"
-    },
-    {
-      "dst_component": "StructuralLoadsAndPerformanceMonitor",
-      "dst_port": "liftIn",
-      "src_component": "AdaptiveWingSystem",
-      "src_port": "liftInterface"
-    },
-    {
-      "dst_component": "StructuralLoadsAndPerformanceMonitor",
-      "dst_port": "thrustIn",
-      "src_component": "TurbofanPropulsion",
-      "src_port": "thrustOut"
-    },
-    {
-      "dst_component": "MissionComputer",
-      "dst_port": "airDataIn",
-      "src_component": "AirDataAndInertialSuite",
-      "src_port": "airDataOut"
-    },
-    {
-      "dst_component": "AutopilotModule",
-      "dst_port": "airDataIn",
-      "src_component": "AirDataAndInertialSuite",
-      "src_port": "airDataOut"
-    },
-    {
-      "dst_component": "StructuralLoadsAndPerformanceMonitor",
-      "dst_port": "airDataIn",
-      "src_component": "AirDataAndInertialSuite",
-      "src_port": "airDataOut"
-    },
-    {
-      "dst_component": "MissionComputer",
-      "dst_port": "performanceStatus",
-      "src_component": "StructuralLoadsAndPerformanceMonitor",
-      "src_port": "performanceStatus"
-    },
-    {
-      "dst_component": "AutopilotModule",
-      "dst_port": "performanceStatus",
-      "src_component": "StructuralLoadsAndPerformanceMonitor",
-      "src_port": "performanceStatus"
-    },
-    {
-      "dst_component": "StoresManagementSystem",
-      "dst_port": "performanceStatus",
-      "src_component": "StructuralLoadsAndPerformanceMonitor",
-      "src_port": "performanceStatus"
-    },
-    {
-      "dst_component": "AdaptiveWingSystem",
-      "dst_port": "controlSurfaces",
-      "src_component": "FlyByWireController",
-      "src_port": "actuatorDrive"
-    },
-    {
-      "dst_component": "StoresManagementSystem",
-      "dst_port": "storesBusIn",
-      "src_component": "MissionComputer",
-      "src_port": "storesCommand"
-    },
-    {
-      "dst_component": "MissionComputer",
-      "dst_port": "storesStatus",
-      "src_component": "StoresManagementSystem",
-      "src_port": "storesTelemetry"
-    },
-    {
-      "dst_component": "StoresManagementSystem",
-      "dst_port": "powerIn",
-      "src_component": "PowerSystem",
-      "src_port": "storesFeed"
-    },
-    {
-      "dst_component": "StoresManagementSystem",
-      "dst_port": "airframeMount",
-      "src_component": "CompositeAirframe",
-      "src_port": "storesMounts"
-    },
-    {
-      "dst_component": "PowerSystem",
-      "dst_port": "emergencyInput",
-      "src_component": "EmergencyPowerUnit",
-      "src_port": "emergencyOutput"
+      "dst_port": "missionStatus",
+      "src_component": "AutopilotModule",
+      "src_port": "missionStatus"
     }
   ],
   "package": "Aircraft",
@@ -294,14 +144,80 @@
           "value": "10.0"
         }
       },
-      "doc": "Leading-edge strake and cropped-delta wing sized to F-16 Block 50 geometry with 9g capability.",
+      "doc": "Leading-edge strake and cropped-delta wing sized to F-16 Block 50 geometry with 9g capability. This model includes the control system",
       "name": "AdaptiveWingSystem",
       "parts": [],
       "ports": [
         {
           "direction": "in",
-          "doc": "Flight-control computer commands for elevator, tailerons, and rudder.",
-          "name": "controlSurfaces",
+          "doc": "Mission-computer command bus input. Desired change in speed vector",
+          "name": "velocity_vector_alteration",
+          "payload": "OrientationEuler",
+          "payload_def": {
+            "attributes": {
+              "pitch_deg": {
+                "doc": null,
+                "name": "pitch_deg",
+                "type": "Real",
+                "value": null
+              },
+              "roll_deg": {
+                "doc": null,
+                "name": "roll_deg",
+                "type": "Real",
+                "value": null
+              },
+              "yaw_deg": {
+                "doc": null,
+                "name": "yaw_deg",
+                "type": "Real",
+                "value": null
+              }
+            },
+            "doc": "Air vehicle orientation expressed as Euler angles in degrees.",
+            "name": "OrientationEuler"
+          }
+        },
+        {
+          "direction": "in",
+          "doc": null,
+          "name": "flight_speed",
+          "payload": "FlightStatusPacket",
+          "payload_def": {
+            "attributes": {
+              "airspeed_mps": {
+                "doc": null,
+                "name": "airspeed_mps",
+                "type": "Real",
+                "value": null
+              },
+              "angle_of_attack_deg": {
+                "doc": null,
+                "name": "angle_of_attack_deg",
+                "type": "Real",
+                "value": null
+              },
+              "energy_state_norm": {
+                "doc": null,
+                "name": "energy_state_norm",
+                "type": "Real",
+                "value": null
+              },
+              "health_code": {
+                "doc": null,
+                "name": "health_code",
+                "type": "Integer",
+                "value": null
+              }
+            },
+            "doc": "Mission computer status feedback consumed by autonomy and analysis models.",
+            "name": "FlightStatusPacket"
+          }
+        },
+        {
+          "direction": "out",
+          "doc": "Actuation commands, sent to environment to track and calculate new position",
+          "name": "actuation_command",
           "payload": "SurfaceActuationCommand",
           "payload_def": {
             "attributes": {
@@ -342,7 +258,7 @@
         },
         {
           "direction": "out",
-          "doc": "Aerodynamic loads + moments returned to flight-control computers.",
+          "doc": "Tracking of lift, drag",
           "name": "liftInterface",
           "payload": "LiftState",
           "payload_def": {
@@ -372,157 +288,16 @@
         }
       ]
     },
-    "AirDataAndInertialSuite": {
-      "attributes": {
-        "ins_grade": {
-          "doc": null,
-          "name": "ins_grade",
-          "type": null,
-          "value": "\"ring-laser\""
-        },
-        "pitot_count": {
-          "doc": null,
-          "name": "pitot_count",
-          "type": null,
-          "value": "3"
-        },
-        "update_rate_hz": {
-          "doc": null,
-          "name": "update_rate_hz",
-          "type": null,
-          "value": "200"
-        }
-      },
-      "doc": "Triple redundant ADC, INS, and GPS sensors providing Mach/attitude states.",
-      "name": "AirDataAndInertialSuite",
-      "parts": [],
-      "ports": [
-        {
-          "direction": "in",
-          "doc": "Avionics-bus power input for sensors and air-data computers.",
-          "name": "powerIn",
-          "payload": "GenericElectricalBus",
-          "payload_def": {
-            "attributes": {
-              "available_power_kw": {
-                "doc": null,
-                "name": "available_power_kw",
-                "type": "Real",
-                "value": null
-              },
-              "current_a": {
-                "doc": null,
-                "name": "current_a",
-                "type": "Real",
-                "value": null
-              },
-              "voltage_kv": {
-                "doc": null,
-                "name": "voltage_kv",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Power bus telemetry for avionics, control, and autonomy loads.",
-            "name": "GenericElectricalBus"
-          }
-        },
-        {
-          "direction": "out",
-          "doc": "Air-data and inertial solution output shared with consumers.",
-          "name": "airDataOut",
-          "payload": "AirDataInertialState",
-          "payload_def": {
-            "attributes": {
-              "angle_of_attack_deg": {
-                "doc": null,
-                "name": "angle_of_attack_deg",
-                "type": "Real",
-                "value": null
-              },
-              "indicated_airspeed_mps": {
-                "doc": null,
-                "name": "indicated_airspeed_mps",
-                "type": "Real",
-                "value": null
-              },
-              "mach_number": {
-                "doc": null,
-                "name": "mach_number",
-                "type": "Real",
-                "value": null
-              },
-              "pitch_rate_degps": {
-                "doc": null,
-                "name": "pitch_rate_degps",
-                "type": "Real",
-                "value": null
-              },
-              "pressure_altitude_m": {
-                "doc": null,
-                "name": "pressure_altitude_m",
-                "type": "Real",
-                "value": null
-              },
-              "roll_rate_degps": {
-                "doc": null,
-                "name": "roll_rate_degps",
-                "type": "Real",
-                "value": null
-              },
-              "sideslip_deg": {
-                "doc": null,
-                "name": "sideslip_deg",
-                "type": "Real",
-                "value": null
-              },
-              "true_airspeed_mps": {
-                "doc": null,
-                "name": "true_airspeed_mps",
-                "type": "Real",
-                "value": null
-              },
-              "vertical_speed_mps": {
-                "doc": null,
-                "name": "vertical_speed_mps",
-                "type": "Real",
-                "value": null
-              },
-              "yaw_rate_degps": {
-                "doc": null,
-                "name": "yaw_rate_degps",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "High-rate pitot-static + INS fused navigation state for control-law inputs.",
-            "name": "AirDataInertialState"
-          }
-        }
-      ]
-    },
     "AutopilotModule": {
       "attributes": {
-        "autonomy_mode_default": {
+        "comment": {
           "doc": null,
-          "name": "autonomy_mode_default",
+          "name": "comment",
           "type": null,
-          "value": "\"altitude-hold\""
-        },
-        "guidance_modes": {
-          "doc": null,
-          "name": "guidance_modes",
-          "type": null,
-          "value": "\"att_hold+hdg_hold+auto_throttle\""
-        },
-        "update_rate_hz": {
-          "doc": null,
-          "name": "update_rate_hz",
-          "type": null,
-          "value": "40"
+          "value": "\"uses waypoint tracking\""
         }
       },
-      "doc": "F-16 autopilot providing hold modes (attitude, altitude, heading) with auto-throttle coordination.",
+      "doc": "F-16 autopilot, takes in sensor data and translates it into a equivalent hotas command.",
       "name": "AutopilotModule",
       "parts": [],
       "ports": [
@@ -564,7 +339,7 @@
         },
         {
           "direction": "in",
-          "doc": "Current geodetic position from mission computer.",
+          "doc": "Current geodetic position from sensors",
           "name": "currentLocation",
           "payload": "GeodeticLLA",
           "payload_def": {
@@ -594,7 +369,7 @@
         },
         {
           "direction": "in",
-          "doc": "Current attitude from mission computer.",
+          "doc": "Current attitude from sensors.",
           "name": "currentOrientation",
           "payload": "OrientationEuler",
           "payload_def": {
@@ -618,218 +393,8 @@
                 "value": null
               }
             },
-            "doc": "Air vehicle orientation expressed as body-to-earth Euler angles in degrees.",
+            "doc": "Air vehicle orientation expressed as Euler angles in degrees.",
             "name": "OrientationEuler"
-          }
-        },
-        {
-          "direction": "in",
-          "doc": "Air-data/INS feed for hold modes and envelope limits.",
-          "name": "airDataIn",
-          "payload": "AirDataInertialState",
-          "payload_def": {
-            "attributes": {
-              "angle_of_attack_deg": {
-                "doc": null,
-                "name": "angle_of_attack_deg",
-                "type": "Real",
-                "value": null
-              },
-              "indicated_airspeed_mps": {
-                "doc": null,
-                "name": "indicated_airspeed_mps",
-                "type": "Real",
-                "value": null
-              },
-              "mach_number": {
-                "doc": null,
-                "name": "mach_number",
-                "type": "Real",
-                "value": null
-              },
-              "pitch_rate_degps": {
-                "doc": null,
-                "name": "pitch_rate_degps",
-                "type": "Real",
-                "value": null
-              },
-              "pressure_altitude_m": {
-                "doc": null,
-                "name": "pressure_altitude_m",
-                "type": "Real",
-                "value": null
-              },
-              "roll_rate_degps": {
-                "doc": null,
-                "name": "roll_rate_degps",
-                "type": "Real",
-                "value": null
-              },
-              "sideslip_deg": {
-                "doc": null,
-                "name": "sideslip_deg",
-                "type": "Real",
-                "value": null
-              },
-              "true_airspeed_mps": {
-                "doc": null,
-                "name": "true_airspeed_mps",
-                "type": "Real",
-                "value": null
-              },
-              "vertical_speed_mps": {
-                "doc": null,
-                "name": "vertical_speed_mps",
-                "type": "Real",
-                "value": null
-              },
-              "yaw_rate_degps": {
-                "doc": null,
-                "name": "yaw_rate_degps",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "High-rate pitot-static + INS fused navigation state for control-law inputs.",
-            "name": "AirDataInertialState"
-          }
-        },
-        {
-          "direction": "in",
-          "doc": "Structural envelope monitoring input to gate holds.",
-          "name": "performanceStatus",
-          "payload": "StructuralPerformanceState",
-          "payload_def": {
-            "attributes": {
-              "autopilot_limit_code": {
-                "doc": null,
-                "name": "autopilot_limit_code",
-                "type": "Integer",
-                "value": null
-              },
-              "load_factor_g": {
-                "doc": null,
-                "name": "load_factor_g",
-                "type": "Real",
-                "value": null
-              },
-              "mach_estimate": {
-                "doc": null,
-                "name": "mach_estimate",
-                "type": "Real",
-                "value": null
-              },
-              "stores_release_inhibit": {
-                "doc": null,
-                "name": "stores_release_inhibit",
-                "type": "Boolean",
-                "value": null
-              },
-              "structural_margin_norm": {
-                "doc": null,
-                "name": "structural_margin_norm",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Structural and performance envelope monitoring for g-limit and Mach supervision.",
-            "name": "StructuralPerformanceState"
-          }
-        },
-        {
-          "direction": "in",
-          "doc": "Electrical supply for autopilot electronics.",
-          "name": "powerIn",
-          "payload": "GenericElectricalBus",
-          "payload_def": {
-            "attributes": {
-              "available_power_kw": {
-                "doc": null,
-                "name": "available_power_kw",
-                "type": "Real",
-                "value": null
-              },
-              "current_a": {
-                "doc": null,
-                "name": "current_a",
-                "type": "Real",
-                "value": null
-              },
-              "voltage_kv": {
-                "doc": null,
-                "name": "voltage_kv",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Power bus telemetry for avionics, control, and autonomy loads.",
-            "name": "GenericElectricalBus"
-          }
-        },
-        {
-          "direction": "in",
-          "doc": "Backup/emergency electrical bus input.",
-          "name": "backupPower",
-          "payload": "GenericElectricalBus",
-          "payload_def": {
-            "attributes": {
-              "available_power_kw": {
-                "doc": null,
-                "name": "available_power_kw",
-                "type": "Real",
-                "value": null
-              },
-              "current_a": {
-                "doc": null,
-                "name": "current_a",
-                "type": "Real",
-                "value": null
-              },
-              "voltage_kv": {
-                "doc": null,
-                "name": "voltage_kv",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Power bus telemetry for avionics, control, and autonomy loads.",
-            "name": "GenericElectricalBus"
-          }
-        },
-        {
-          "direction": "out",
-          "doc": "Autopilot guidance directives to mission computer.",
-          "name": "guidanceCmd",
-          "payload": "AutonomyGuidance",
-          "payload_def": {
-            "attributes": {
-              "aggressiveness_norm": {
-                "doc": null,
-                "name": "aggressiveness_norm",
-                "type": "Real",
-                "value": null
-              },
-              "lateral_accel_mps2": {
-                "doc": null,
-                "name": "lateral_accel_mps2",
-                "type": "Real",
-                "value": null
-              },
-              "waypoint_altitude_m": {
-                "doc": null,
-                "name": "waypoint_altitude_m",
-                "type": "Real",
-                "value": null
-              },
-              "waypoint_heading_deg": {
-                "doc": null,
-                "name": "waypoint_heading_deg",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Autopilot-to-mission-computer guidance cues for co-simulation.",
-            "name": "AutonomyGuidance"
           }
         },
         {
@@ -906,7 +471,7 @@
         },
         {
           "direction": "out",
-          "doc": "Tracking of waypoint progress for mission supervision.",
+          "doc": "Waypoint progression for logging and verification.",
           "name": "missionStatus",
           "payload": "MissionStatus",
           "payload_def": {
@@ -942,7 +507,7 @@
                 "value": null
               }
             },
-            "doc": "Waypoint-tracking telemetry from the autopilot navigation loop.",
+            "doc": "Waypoint-tracking status produced by the autopilot for logging and requirement evaluation.",
             "name": "MissionStatus"
           }
         }
@@ -990,38 +555,7 @@
       "doc": "F-16 aluminum/composite fuselage sized for high-supersonic operations with dorsal spine for avionics.",
       "name": "CompositeAirframe",
       "parts": [],
-      "ports": [
-        {
-          "direction": "out",
-          "doc": "Structural attachment interface feeding stores racks and pylons.",
-          "name": "storesMounts",
-          "payload": "StructuralInterface",
-          "payload_def": {
-            "attributes": {
-              "axial_load_kn": {
-                "doc": null,
-                "name": "axial_load_kn",
-                "type": "Real",
-                "value": null
-              },
-              "bending_moment_knm": {
-                "doc": null,
-                "name": "bending_moment_knm",
-                "type": "Real",
-                "value": null
-              },
-              "shear_load_kn": {
-                "doc": null,
-                "name": "shear_load_kn",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Structural mounting loads transferred between assemblies.",
-            "name": "StructuralInterface"
-          }
-        }
-      ]
+      "ports": []
     },
     "ControlInterface": {
       "attributes": {
@@ -1042,36 +576,6 @@
       "name": "ControlInterface",
       "parts": [],
       "ports": [
-        {
-          "direction": "in",
-          "doc": "General power",
-          "name": "powerIn",
-          "payload": "GenericElectricalBus",
-          "payload_def": {
-            "attributes": {
-              "available_power_kw": {
-                "doc": null,
-                "name": "available_power_kw",
-                "type": "Real",
-                "value": null
-              },
-              "current_a": {
-                "doc": null,
-                "name": "current_a",
-                "type": "Real",
-                "value": null
-              },
-              "voltage_kv": {
-                "doc": null,
-                "name": "voltage_kv",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Power bus telemetry for avionics, control, and autonomy loads.",
-            "name": "GenericElectricalBus"
-          }
-        },
         {
           "direction": "out",
           "doc": "HOTAS-control bundle forwarded for mission computer sensor fusion.",
@@ -1146,128 +650,16 @@
         }
       ]
     },
-    "EmergencyPowerUnit": {
-      "attributes": {
-        "duration_minutes": {
-          "doc": null,
-          "name": "duration_minutes",
-          "type": null,
-          "value": "10"
-        },
-        "fuel_type": {
-          "doc": null,
-          "name": "fuel_type",
-          "type": null,
-          "value": "\"hydrazine\""
-        },
-        "generator_output_kw": {
-          "doc": null,
-          "name": "generator_output_kw",
-          "type": null,
-          "value": "25"
-        }
-      },
-      "doc": "Hydrazine-driven emergency power unit sustaining avionics/control loads after generator loss.",
-      "name": "EmergencyPowerUnit",
+    "Environment": {
+      "attributes": {},
+      "doc": "Tracking position and velocities of the aircraft and feeds the sensors",
+      "name": "Environment",
       "parts": [],
       "ports": [
         {
           "direction": "in",
-          "doc": "Shared fuel telemetry for EPU reactant state tracking.",
-          "name": "fuelState",
-          "payload": "FuelLevelState",
-          "payload_def": {
-            "attributes": {
-              "fuel_level_norm": {
-                "doc": null,
-                "name": "fuel_level_norm",
-                "type": "Real",
-                "value": null
-              },
-              "fuel_remaining_kg": {
-                "doc": null,
-                "name": "fuel_remaining_kg",
-                "type": "Real",
-                "value": null
-              },
-              "fuel_starved": {
-                "doc": null,
-                "name": "fuel_starved",
-                "type": "Boolean",
-                "value": null
-              }
-            },
-            "doc": "Remaining fuel mass and normalized level for availability tracking.",
-            "name": "FuelLevelState"
-          }
-        },
-        {
-          "direction": "out",
-          "doc": "Emergency electrical bus output.",
-          "name": "emergencyOutput",
-          "payload": "GenericElectricalBus",
-          "payload_def": {
-            "attributes": {
-              "available_power_kw": {
-                "doc": null,
-                "name": "available_power_kw",
-                "type": "Real",
-                "value": null
-              },
-              "current_a": {
-                "doc": null,
-                "name": "current_a",
-                "type": "Real",
-                "value": null
-              },
-              "voltage_kv": {
-                "doc": null,
-                "name": "voltage_kv",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Power bus telemetry for avionics, control, and autonomy loads.",
-            "name": "GenericElectricalBus"
-          }
-        }
-      ]
-    },
-    "FlyByWireController": {
-      "attributes": {
-        "control_law": {
-          "doc": null,
-          "name": "control_law",
-          "type": null,
-          "value": "\"CCV+gain-scheduled\""
-        },
-        "redundant_channels": {
-          "doc": null,
-          "name": "redundant_channels",
-          "type": null,
-          "value": "3"
-        },
-        "stability_margin_deg": {
-          "doc": null,
-          "name": "stability_margin_deg",
-          "type": null,
-          "value": "15"
-        },
-        "update_rate_hz": {
-          "doc": null,
-          "name": "update_rate_hz",
-          "type": null,
-          "value": "200"
-        }
-      },
-      "doc": "Triple-redundant fly-by-wire computers that stabilize the relaxed-static-stability F-16 airframe.",
-      "name": "FlyByWireController",
-      "parts": [],
-      "ports": [
-        {
-          "direction": "in",
-          "doc": "Mission-computer command bus input.",
-          "name": "commandBus",
+          "doc": "Reads the actuation and thrust commands to calculate the position, rotation and velocities",
+          "name": "actuation_command",
           "payload": "SurfaceActuationCommand",
           "payload_def": {
             "attributes": {
@@ -1308,8 +700,128 @@
         },
         {
           "direction": "in",
-          "doc": "High-rate flight status feedback for gain scheduling.",
-          "name": "flightFeedback",
+          "doc": null,
+          "name": "lift",
+          "payload": "LiftState",
+          "payload_def": {
+            "attributes": {
+              "drag_kn": {
+                "doc": null,
+                "name": "drag_kn",
+                "type": "Real",
+                "value": null
+              },
+              "lift_kn": {
+                "doc": null,
+                "name": "lift_kn",
+                "type": "Real",
+                "value": null
+              },
+              "pitching_moment_knm": {
+                "doc": null,
+                "name": "pitching_moment_knm",
+                "type": "Real",
+                "value": null
+              }
+            },
+            "doc": "Aerodynamic state summary exported from wing solver.",
+            "name": "LiftState"
+          }
+        },
+        {
+          "direction": "in",
+          "doc": null,
+          "name": "thrust_in",
+          "payload": "ThrustState",
+          "payload_def": {
+            "attributes": {
+              "exhaust_velocity_mps": {
+                "doc": null,
+                "name": "exhaust_velocity_mps",
+                "type": "Real",
+                "value": null
+              },
+              "mass_flow_kgps": {
+                "doc": null,
+                "name": "mass_flow_kgps",
+                "type": "Real",
+                "value": null
+              },
+              "thrust_kn": {
+                "doc": null,
+                "name": "thrust_kn",
+                "type": "Real",
+                "value": null
+              }
+            },
+            "doc": "Propulsion output shared with performance models.",
+            "name": "ThrustState"
+          }
+        },
+        {
+          "direction": "out",
+          "doc": "Feedback for simulated sensors",
+          "name": "orientation",
+          "payload": "OrientationEuler",
+          "payload_def": {
+            "attributes": {
+              "pitch_deg": {
+                "doc": null,
+                "name": "pitch_deg",
+                "type": "Real",
+                "value": null
+              },
+              "roll_deg": {
+                "doc": null,
+                "name": "roll_deg",
+                "type": "Real",
+                "value": null
+              },
+              "yaw_deg": {
+                "doc": null,
+                "name": "yaw_deg",
+                "type": "Real",
+                "value": null
+              }
+            },
+            "doc": "Air vehicle orientation expressed as Euler angles in degrees.",
+            "name": "OrientationEuler"
+          }
+        },
+        {
+          "direction": "out",
+          "doc": null,
+          "name": "location",
+          "payload": "GeodeticLLA",
+          "payload_def": {
+            "attributes": {
+              "altitude_m": {
+                "doc": null,
+                "name": "altitude_m",
+                "type": "Real",
+                "value": null
+              },
+              "latitude_deg": {
+                "doc": null,
+                "name": "latitude_deg",
+                "type": "Real",
+                "value": null
+              },
+              "longitude_deg": {
+                "doc": null,
+                "name": "longitude_deg",
+                "type": "Real",
+                "value": null
+              }
+            },
+            "doc": "Geodetic latitude/longitude (degrees) and altitude (meters) above mean sea level.",
+            "name": "GeodeticLLA"
+          }
+        },
+        {
+          "direction": "out",
+          "doc": null,
+          "name": "flight_status",
           "payload": "FlightStatusPacket",
           "payload_def": {
             "attributes": {
@@ -1341,108 +853,6 @@
             "doc": "Mission computer status feedback consumed by autonomy and analysis models.",
             "name": "FlightStatusPacket"
           }
-        },
-        {
-          "direction": "in",
-          "doc": "Direct aerodynamic feedback from wing solver for structural damping.",
-          "name": "aeroFeedback",
-          "payload": "LiftState",
-          "payload_def": {
-            "attributes": {
-              "drag_kn": {
-                "doc": null,
-                "name": "drag_kn",
-                "type": "Real",
-                "value": null
-              },
-              "lift_kn": {
-                "doc": null,
-                "name": "lift_kn",
-                "type": "Real",
-                "value": null
-              },
-              "pitching_moment_knm": {
-                "doc": null,
-                "name": "pitching_moment_knm",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Aerodynamic state summary exported from wing solver.",
-            "name": "LiftState"
-          }
-        },
-        {
-          "direction": "in",
-          "doc": "Conditioned electrical feed for actuator drive computers.",
-          "name": "powerIn",
-          "payload": "GenericElectricalBus",
-          "payload_def": {
-            "attributes": {
-              "available_power_kw": {
-                "doc": null,
-                "name": "available_power_kw",
-                "type": "Real",
-                "value": null
-              },
-              "current_a": {
-                "doc": null,
-                "name": "current_a",
-                "type": "Real",
-                "value": null
-              },
-              "voltage_kv": {
-                "doc": null,
-                "name": "voltage_kv",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Power bus telemetry for avionics, control, and autonomy loads.",
-            "name": "GenericElectricalBus"
-          }
-        },
-        {
-          "direction": "out",
-          "doc": "Filtered actuator drive outputs dispatched to wing/tail surfaces.",
-          "name": "actuatorDrive",
-          "payload": "SurfaceActuationCommand",
-          "payload_def": {
-            "attributes": {
-              "elevator_deg": {
-                "doc": null,
-                "name": "elevator_deg",
-                "type": "Real",
-                "value": null
-              },
-              "flaperon_deg": {
-                "doc": null,
-                "name": "flaperon_deg",
-                "type": "Real",
-                "value": null
-              },
-              "left_aileron_deg": {
-                "doc": null,
-                "name": "left_aileron_deg",
-                "type": "Real",
-                "value": null
-              },
-              "right_aileron_deg": {
-                "doc": null,
-                "name": "right_aileron_deg",
-                "type": "Real",
-                "value": null
-              },
-              "rudder_deg": {
-                "doc": null,
-                "name": "rudder_deg",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Commanded surface deflections in degrees for co-simulation with aerodynamic models.",
-            "name": "SurfaceActuationCommand"
-          }
         }
       ]
     },
@@ -1468,7 +878,7 @@
         {
           "direction": "in",
           "doc": "Propulsion-requested fuel mass flow entering storage manager.",
-          "name": "fuelFlowIn",
+          "name": "fuel_consumption_rate",
           "payload": "FuelConsumptionRate",
           "payload_def": {
             "attributes": {
@@ -1577,50 +987,8 @@
                 "value": null
               }
             },
-            "doc": "Air vehicle orientation expressed as body-to-earth Euler angles in degrees.",
+            "doc": "Air vehicle orientation expressed as Euler angles in degrees.",
             "name": "OrientationEuler"
-          }
-        },
-        {
-          "direction": "in",
-          "doc": null,
-          "name": "missionStatus",
-          "payload": "MissionStatus",
-          "payload_def": {
-            "attributes": {
-              "arrived": {
-                "doc": null,
-                "name": "arrived",
-                "type": "Boolean",
-                "value": null
-              },
-              "complete": {
-                "doc": null,
-                "name": "complete",
-                "type": "Boolean",
-                "value": null
-              },
-              "distance_to_waypoint_km": {
-                "doc": null,
-                "name": "distance_to_waypoint_km",
-                "type": "Real",
-                "value": null
-              },
-              "total_waypoints": {
-                "doc": null,
-                "name": "total_waypoints",
-                "type": "Integer",
-                "value": null
-              },
-              "waypoint_index": {
-                "doc": null,
-                "name": "waypoint_index",
-                "type": "Integer",
-                "value": null
-              }
-            },
-            "doc": "Waypoint-tracking telemetry from the autopilot navigation loop.",
-            "name": "MissionStatus"
           }
         },
         {
@@ -1698,42 +1066,6 @@
         {
           "direction": "in",
           "doc": null,
-          "name": "guidance",
-          "payload": "AutonomyGuidance",
-          "payload_def": {
-            "attributes": {
-              "aggressiveness_norm": {
-                "doc": null,
-                "name": "aggressiveness_norm",
-                "type": "Real",
-                "value": null
-              },
-              "lateral_accel_mps2": {
-                "doc": null,
-                "name": "lateral_accel_mps2",
-                "type": "Real",
-                "value": null
-              },
-              "waypoint_altitude_m": {
-                "doc": null,
-                "name": "waypoint_altitude_m",
-                "type": "Real",
-                "value": null
-              },
-              "waypoint_heading_deg": {
-                "doc": null,
-                "name": "waypoint_heading_deg",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Autopilot-to-mission-computer guidance cues for co-simulation.",
-            "name": "AutonomyGuidance"
-          }
-        },
-        {
-          "direction": "in",
-          "doc": null,
           "name": "flightStatus",
           "payload": "FlightStatusPacket",
           "payload_def": {
@@ -1766,30 +1098,53 @@
             "doc": "Mission computer status feedback consumed by autonomy and analysis models.",
             "name": "FlightStatusPacket"
           }
+        },
+        {
+          "direction": "in",
+          "doc": null,
+          "name": "missionStatus",
+          "payload": "MissionStatus",
+          "payload_def": {
+            "attributes": {
+              "arrived": {
+                "doc": null,
+                "name": "arrived",
+                "type": "Boolean",
+                "value": null
+              },
+              "complete": {
+                "doc": null,
+                "name": "complete",
+                "type": "Boolean",
+                "value": null
+              },
+              "distance_to_waypoint_km": {
+                "doc": null,
+                "name": "distance_to_waypoint_km",
+                "type": "Real",
+                "value": null
+              },
+              "total_waypoints": {
+                "doc": null,
+                "name": "total_waypoints",
+                "type": "Integer",
+                "value": null
+              },
+              "waypoint_index": {
+                "doc": null,
+                "name": "waypoint_index",
+                "type": "Integer",
+                "value": null
+              }
+            },
+            "doc": "Waypoint-tracking status produced by the autopilot for logging and requirement evaluation.",
+            "name": "MissionStatus"
+          }
         }
       ]
     },
     "MissionComputer": {
-      "attributes": {
-        "compute_budget_tops": {
-          "doc": null,
-          "name": "compute_budget_tops",
-          "type": null,
-          "value": "35"
-        },
-        "digital_fly_by_wire_channels": {
-          "doc": null,
-          "name": "digital_fly_by_wire_channels",
-          "type": null,
-          "value": "3"
-        },
-        "stores_management_buses": {
-          "doc": null,
-          "name": "stores_management_buses",
-          "type": null,
-          "value": "2"
-        }
-      },
+      "attributes": {},
       "doc": "F-16C/D mission computer blending pilot HOTAS inputs with fly-by-wire control laws and stores management.",
       "name": "MissionComputer",
       "parts": [],
@@ -1940,156 +1295,6 @@
         },
         {
           "direction": "in",
-          "doc": "Mission status feedback from autopilot waypoint driver.",
-          "name": "autopilotStatus",
-          "payload": "MissionStatus",
-          "payload_def": {
-            "attributes": {
-              "arrived": {
-                "doc": null,
-                "name": "arrived",
-                "type": "Boolean",
-                "value": null
-              },
-              "complete": {
-                "doc": null,
-                "name": "complete",
-                "type": "Boolean",
-                "value": null
-              },
-              "distance_to_waypoint_km": {
-                "doc": null,
-                "name": "distance_to_waypoint_km",
-                "type": "Real",
-                "value": null
-              },
-              "total_waypoints": {
-                "doc": null,
-                "name": "total_waypoints",
-                "type": "Integer",
-                "value": null
-              },
-              "waypoint_index": {
-                "doc": null,
-                "name": "waypoint_index",
-                "type": "Integer",
-                "value": null
-              }
-            },
-            "doc": "Waypoint-tracking telemetry from the autopilot navigation loop.",
-            "name": "MissionStatus"
-          }
-        },
-        {
-          "direction": "in",
-          "doc": "Autopilot/autonomy guidance cue input.",
-          "name": "autonomyPort",
-          "payload": "AutonomyGuidance",
-          "payload_def": {
-            "attributes": {
-              "aggressiveness_norm": {
-                "doc": null,
-                "name": "aggressiveness_norm",
-                "type": "Real",
-                "value": null
-              },
-              "lateral_accel_mps2": {
-                "doc": null,
-                "name": "lateral_accel_mps2",
-                "type": "Real",
-                "value": null
-              },
-              "waypoint_altitude_m": {
-                "doc": null,
-                "name": "waypoint_altitude_m",
-                "type": "Real",
-                "value": null
-              },
-              "waypoint_heading_deg": {
-                "doc": null,
-                "name": "waypoint_heading_deg",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Autopilot-to-mission-computer guidance cues for co-simulation.",
-            "name": "AutonomyGuidance"
-          }
-        },
-        {
-          "direction": "in",
-          "doc": "Pitot-static/INS fused air-data ingress for flight-control laws.",
-          "name": "airDataIn",
-          "payload": "AirDataInertialState",
-          "payload_def": {
-            "attributes": {
-              "angle_of_attack_deg": {
-                "doc": null,
-                "name": "angle_of_attack_deg",
-                "type": "Real",
-                "value": null
-              },
-              "indicated_airspeed_mps": {
-                "doc": null,
-                "name": "indicated_airspeed_mps",
-                "type": "Real",
-                "value": null
-              },
-              "mach_number": {
-                "doc": null,
-                "name": "mach_number",
-                "type": "Real",
-                "value": null
-              },
-              "pitch_rate_degps": {
-                "doc": null,
-                "name": "pitch_rate_degps",
-                "type": "Real",
-                "value": null
-              },
-              "pressure_altitude_m": {
-                "doc": null,
-                "name": "pressure_altitude_m",
-                "type": "Real",
-                "value": null
-              },
-              "roll_rate_degps": {
-                "doc": null,
-                "name": "roll_rate_degps",
-                "type": "Real",
-                "value": null
-              },
-              "sideslip_deg": {
-                "doc": null,
-                "name": "sideslip_deg",
-                "type": "Real",
-                "value": null
-              },
-              "true_airspeed_mps": {
-                "doc": null,
-                "name": "true_airspeed_mps",
-                "type": "Real",
-                "value": null
-              },
-              "vertical_speed_mps": {
-                "doc": null,
-                "name": "vertical_speed_mps",
-                "type": "Real",
-                "value": null
-              },
-              "yaw_rate_degps": {
-                "doc": null,
-                "name": "yaw_rate_degps",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "High-rate pitot-static + INS fused navigation state for control-law inputs.",
-            "name": "AirDataInertialState"
-          }
-        },
-        {
-          "direction": "in",
           "doc": "Fuel telemetry used for command blending and power limiting.",
           "name": "fuelStatus",
           "payload": "FuelLevelState",
@@ -2116,66 +1321,6 @@
             },
             "doc": "Remaining fuel mass and normalized level for availability tracking.",
             "name": "FuelLevelState"
-          }
-        },
-        {
-          "direction": "in",
-          "doc": "Electrical inlet powering the mission computer.",
-          "name": "powerIn",
-          "payload": "GenericElectricalBus",
-          "payload_def": {
-            "attributes": {
-              "available_power_kw": {
-                "doc": null,
-                "name": "available_power_kw",
-                "type": "Real",
-                "value": null
-              },
-              "current_a": {
-                "doc": null,
-                "name": "current_a",
-                "type": "Real",
-                "value": null
-              },
-              "voltage_kv": {
-                "doc": null,
-                "name": "voltage_kv",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Power bus telemetry for avionics, control, and autonomy loads.",
-            "name": "GenericElectricalBus"
-          }
-        },
-        {
-          "direction": "in",
-          "doc": "Redundant emergency-bus feed for backup avionics power.",
-          "name": "backupPower",
-          "payload": "GenericElectricalBus",
-          "payload_def": {
-            "attributes": {
-              "available_power_kw": {
-                "doc": null,
-                "name": "available_power_kw",
-                "type": "Real",
-                "value": null
-              },
-              "current_a": {
-                "doc": null,
-                "name": "current_a",
-                "type": "Real",
-                "value": null
-              },
-              "voltage_kv": {
-                "doc": null,
-                "name": "voltage_kv",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Power bus telemetry for avionics, control, and autonomy loads.",
-            "name": "GenericElectricalBus"
           }
         },
         {
@@ -2210,86 +1355,8 @@
         },
         {
           "direction": "out",
-          "doc": "Control-surface commands broadcast toward actuators.",
-          "name": "surfaceBus",
-          "payload": "SurfaceActuationCommand",
-          "payload_def": {
-            "attributes": {
-              "elevator_deg": {
-                "doc": null,
-                "name": "elevator_deg",
-                "type": "Real",
-                "value": null
-              },
-              "flaperon_deg": {
-                "doc": null,
-                "name": "flaperon_deg",
-                "type": "Real",
-                "value": null
-              },
-              "left_aileron_deg": {
-                "doc": null,
-                "name": "left_aileron_deg",
-                "type": "Real",
-                "value": null
-              },
-              "right_aileron_deg": {
-                "doc": null,
-                "name": "right_aileron_deg",
-                "type": "Real",
-                "value": null
-              },
-              "rudder_deg": {
-                "doc": null,
-                "name": "rudder_deg",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Commanded surface deflections in degrees for co-simulation with aerodynamic models.",
-            "name": "SurfaceActuationCommand"
-          }
-        },
-        {
-          "direction": "out",
-          "doc": "Summary of vehicle energy/health for upstream consumers.",
-          "name": "flightStatus",
-          "payload": "FlightStatusPacket",
-          "payload_def": {
-            "attributes": {
-              "airspeed_mps": {
-                "doc": null,
-                "name": "airspeed_mps",
-                "type": "Real",
-                "value": null
-              },
-              "angle_of_attack_deg": {
-                "doc": null,
-                "name": "angle_of_attack_deg",
-                "type": "Real",
-                "value": null
-              },
-              "energy_state_norm": {
-                "doc": null,
-                "name": "energy_state_norm",
-                "type": "Real",
-                "value": null
-              },
-              "health_code": {
-                "doc": null,
-                "name": "health_code",
-                "type": "Integer",
-                "value": null
-              }
-            },
-            "doc": "Mission computer status feedback consumed by autonomy and analysis models.",
-            "name": "FlightStatusPacket"
-          }
-        },
-        {
-          "direction": "out",
-          "doc": "Body attitude exported as roll/pitch/yaw Euler angles in degrees.",
-          "name": "orientationEuler",
+          "doc": "Command how to alter the current velocity vector, pith, yaw, roll",
+          "name": "speed_vector_change",
           "payload": "OrientationEuler",
           "payload_def": {
             "attributes": {
@@ -2312,911 +1379,8 @@
                 "value": null
               }
             },
-            "doc": "Air vehicle orientation expressed as body-to-earth Euler angles in degrees.",
+            "doc": "Air vehicle orientation expressed as Euler angles in degrees.",
             "name": "OrientationEuler"
-          }
-        },
-        {
-          "direction": "out",
-          "doc": "Geodetic latitude/longitude/altitude update for mission/autonomy.",
-          "name": "locationLLA",
-          "payload": "GeodeticLLA",
-          "payload_def": {
-            "attributes": {
-              "altitude_m": {
-                "doc": null,
-                "name": "altitude_m",
-                "type": "Real",
-                "value": null
-              },
-              "latitude_deg": {
-                "doc": null,
-                "name": "latitude_deg",
-                "type": "Real",
-                "value": null
-              },
-              "longitude_deg": {
-                "doc": null,
-                "name": "longitude_deg",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Geodetic latitude/longitude (degrees) and altitude (meters) above mean sea level.",
-            "name": "GeodeticLLA"
-          }
-        },
-        {
-          "direction": "out",
-          "doc": "Mission-computer stores control broadcast to SMS.",
-          "name": "storesCommand",
-          "payload": "StoresCommandBus",
-          "payload_def": {
-            "attributes": {
-              "config_checksum": {
-                "doc": null,
-                "name": "config_checksum",
-                "type": "Integer",
-                "value": null
-              },
-              "jettison_all": {
-                "doc": null,
-                "name": "jettison_all",
-                "type": "Boolean",
-                "value": null
-              },
-              "pickle_command": {
-                "doc": null,
-                "name": "pickle_command",
-                "type": "Boolean",
-                "value": null
-              },
-              "power_mode_mask": {
-                "doc": null,
-                "name": "power_mode_mask",
-                "type": "Integer",
-                "value": null
-              },
-              "release_enable": {
-                "doc": null,
-                "name": "release_enable",
-                "type": "Boolean",
-                "value": null
-              },
-              "selected_station": {
-                "doc": null,
-                "name": "selected_station",
-                "type": "Integer",
-                "value": null
-              }
-            },
-            "doc": "Mission-computer command bundle for nine-store management, power, and jettison logic.",
-            "name": "StoresCommandBus"
-          }
-        },
-        {
-          "direction": "in",
-          "doc": "Stores health/status feedback for fire-control logic.",
-          "name": "storesStatus",
-          "payload": "StoresStatusBus",
-          "payload_def": {
-            "attributes": {
-              "cooling_demand_kw": {
-                "doc": null,
-                "name": "cooling_demand_kw",
-                "type": "Real",
-                "value": null
-              },
-              "fault_code": {
-                "doc": null,
-                "name": "fault_code",
-                "type": "Integer",
-                "value": null
-              },
-              "store_mass_total_kg": {
-                "doc": null,
-                "name": "store_mass_total_kg",
-                "type": "Real",
-                "value": null
-              },
-              "store_present_mask": {
-                "doc": null,
-                "name": "store_present_mask",
-                "type": "Integer",
-                "value": null
-              },
-              "weapon_ready_mask": {
-                "doc": null,
-                "name": "weapon_ready_mask",
-                "type": "Integer",
-                "value": null
-              }
-            },
-            "doc": "Health, weight, and readiness telemetry for all external stores.",
-            "name": "StoresStatusBus"
-          }
-        },
-        {
-          "direction": "in",
-          "doc": "Structural envelope monitoring input to gate commands.",
-          "name": "performanceStatus",
-          "payload": "StructuralPerformanceState",
-          "payload_def": {
-            "attributes": {
-              "autopilot_limit_code": {
-                "doc": null,
-                "name": "autopilot_limit_code",
-                "type": "Integer",
-                "value": null
-              },
-              "load_factor_g": {
-                "doc": null,
-                "name": "load_factor_g",
-                "type": "Real",
-                "value": null
-              },
-              "mach_estimate": {
-                "doc": null,
-                "name": "mach_estimate",
-                "type": "Real",
-                "value": null
-              },
-              "stores_release_inhibit": {
-                "doc": null,
-                "name": "stores_release_inhibit",
-                "type": "Boolean",
-                "value": null
-              },
-              "structural_margin_norm": {
-                "doc": null,
-                "name": "structural_margin_norm",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Structural and performance envelope monitoring for g-limit and Mach supervision.",
-            "name": "StructuralPerformanceState"
-          }
-        }
-      ]
-    },
-    "PowerSystem": {
-      "attributes": {
-        "ac_bus_voltage_kv": {
-          "doc": null,
-          "name": "ac_bus_voltage_kv",
-          "type": null,
-          "value": "0.115"
-        },
-        "battery_capacity_mj": {
-          "doc": null,
-          "name": "battery_capacity_mj",
-          "type": null,
-          "value": "650"
-        },
-        "bus_voltage_kv": {
-          "doc": null,
-          "name": "bus_voltage_kv",
-          "type": null,
-          "value": "0.27"
-        },
-        "converter_rating_kw": {
-          "doc": null,
-          "name": "converter_rating_kw",
-          "type": null,
-          "value": "40"
-        },
-        "epu_type": {
-          "doc": null,
-          "name": "epu_type",
-          "type": null,
-          "value": "\"hydrazine-turbine\""
-        },
-        "generator_efficiency": {
-          "doc": null,
-          "name": "generator_efficiency",
-          "type": null,
-          "value": "0.95"
-        }
-      },
-      "doc": "F-16 270 VDC / 115 VAC hybrid electrical system for avionics, flight control, and weapon systems.",
-      "name": "PowerSystem",
-      "parts": [],
-      "ports": [
-        {
-          "direction": "in",
-          "doc": "Generator output feed captured as structured electrical telemetry.",
-          "name": "generatorInput",
-          "payload": "GenericElectricalBus",
-          "payload_def": {
-            "attributes": {
-              "available_power_kw": {
-                "doc": null,
-                "name": "available_power_kw",
-                "type": "Real",
-                "value": null
-              },
-              "current_a": {
-                "doc": null,
-                "name": "current_a",
-                "type": "Real",
-                "value": null
-              },
-              "voltage_kv": {
-                "doc": null,
-                "name": "voltage_kv",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Power bus telemetry for avionics, control, and autonomy loads.",
-            "name": "GenericElectricalBus"
-          }
-        },
-        {
-          "direction": "out",
-          "doc": "Conditioned electrical feed powering avionics and mission computer.",
-          "name": "avionicsFeed",
-          "payload": "GenericElectricalBus",
-          "payload_def": {
-            "attributes": {
-              "available_power_kw": {
-                "doc": null,
-                "name": "available_power_kw",
-                "type": "Real",
-                "value": null
-              },
-              "current_a": {
-                "doc": null,
-                "name": "current_a",
-                "type": "Real",
-                "value": null
-              },
-              "voltage_kv": {
-                "doc": null,
-                "name": "voltage_kv",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Power bus telemetry for avionics, control, and autonomy loads.",
-            "name": "GenericElectricalBus"
-          }
-        },
-        {
-          "direction": "out",
-          "doc": "270 VDC main distribution bus for avionics and flight controls.",
-          "name": "dcBus270",
-          "payload": "GenericElectricalBus",
-          "payload_def": {
-            "attributes": {
-              "available_power_kw": {
-                "doc": null,
-                "name": "available_power_kw",
-                "type": "Real",
-                "value": null
-              },
-              "current_a": {
-                "doc": null,
-                "name": "current_a",
-                "type": "Real",
-                "value": null
-              },
-              "voltage_kv": {
-                "doc": null,
-                "name": "voltage_kv",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Power bus telemetry for avionics, control, and autonomy loads.",
-            "name": "GenericElectricalBus"
-          }
-        },
-        {
-          "direction": "out",
-          "doc": "115 VAC transformer bus for legacy/control loads.",
-          "name": "acBus115",
-          "payload": "GenericElectricalBus",
-          "payload_def": {
-            "attributes": {
-              "available_power_kw": {
-                "doc": null,
-                "name": "available_power_kw",
-                "type": "Real",
-                "value": null
-              },
-              "current_a": {
-                "doc": null,
-                "name": "current_a",
-                "type": "Real",
-                "value": null
-              },
-              "voltage_kv": {
-                "doc": null,
-                "name": "voltage_kv",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Power bus telemetry for avionics, control, and autonomy loads.",
-            "name": "GenericElectricalBus"
-          }
-        },
-        {
-          "direction": "out",
-          "doc": "Regulated bus powering control interface and actuator electronics.",
-          "name": "controlFeed",
-          "payload": "GenericElectricalBus",
-          "payload_def": {
-            "attributes": {
-              "available_power_kw": {
-                "doc": null,
-                "name": "available_power_kw",
-                "type": "Real",
-                "value": null
-              },
-              "current_a": {
-                "doc": null,
-                "name": "current_a",
-                "type": "Real",
-                "value": null
-              },
-              "voltage_kv": {
-                "doc": null,
-                "name": "voltage_kv",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Power bus telemetry for avionics, control, and autonomy loads.",
-            "name": "GenericElectricalBus"
-          }
-        },
-        {
-          "direction": "out",
-          "doc": "Dedicated supply for autonomy/autopilot compute payloads.",
-          "name": "autonomyFeed",
-          "payload": "GenericElectricalBus",
-          "payload_def": {
-            "attributes": {
-              "available_power_kw": {
-                "doc": null,
-                "name": "available_power_kw",
-                "type": "Real",
-                "value": null
-              },
-              "current_a": {
-                "doc": null,
-                "name": "current_a",
-                "type": "Real",
-                "value": null
-              },
-              "voltage_kv": {
-                "doc": null,
-                "name": "voltage_kv",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Power bus telemetry for avionics, control, and autonomy loads.",
-            "name": "GenericElectricalBus"
-          }
-        },
-        {
-          "direction": "out",
-          "doc": "Isolated distribution path for stores management electronics and pylons.",
-          "name": "storesFeed",
-          "payload": "GenericElectricalBus",
-          "payload_def": {
-            "attributes": {
-              "available_power_kw": {
-                "doc": null,
-                "name": "available_power_kw",
-                "type": "Real",
-                "value": null
-              },
-              "current_a": {
-                "doc": null,
-                "name": "current_a",
-                "type": "Real",
-                "value": null
-              },
-              "voltage_kv": {
-                "doc": null,
-                "name": "voltage_kv",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Power bus telemetry for avionics, control, and autonomy loads.",
-            "name": "GenericElectricalBus"
-          }
-        },
-        {
-          "direction": "in",
-          "doc": "Emergency-power-unit backfeed input.",
-          "name": "emergencyInput",
-          "payload": "GenericElectricalBus",
-          "payload_def": {
-            "attributes": {
-              "available_power_kw": {
-                "doc": null,
-                "name": "available_power_kw",
-                "type": "Real",
-                "value": null
-              },
-              "current_a": {
-                "doc": null,
-                "name": "current_a",
-                "type": "Real",
-                "value": null
-              },
-              "voltage_kv": {
-                "doc": null,
-                "name": "voltage_kv",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Power bus telemetry for avionics, control, and autonomy loads.",
-            "name": "GenericElectricalBus"
-          }
-        },
-        {
-          "direction": "out",
-          "doc": "Routed emergency bus for redundant avionics/autopilot feeds.",
-          "name": "emergencyBus",
-          "payload": "GenericElectricalBus",
-          "payload_def": {
-            "attributes": {
-              "available_power_kw": {
-                "doc": null,
-                "name": "available_power_kw",
-                "type": "Real",
-                "value": null
-              },
-              "current_a": {
-                "doc": null,
-                "name": "current_a",
-                "type": "Real",
-                "value": null
-              },
-              "voltage_kv": {
-                "doc": null,
-                "name": "voltage_kv",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Power bus telemetry for avionics, control, and autonomy loads.",
-            "name": "GenericElectricalBus"
-          }
-        }
-      ]
-    },
-    "StoresManagementSystem": {
-      "attributes": {
-        "cooling_capacity_kw": {
-          "doc": null,
-          "name": "cooling_capacity_kw",
-          "type": null,
-          "value": "12"
-        },
-        "data_bus_type": {
-          "doc": null,
-          "name": "data_bus_type",
-          "type": null,
-          "value": "\"MIL-STD-1553/1760 hybrid\""
-        },
-        "emergency_release_mode": {
-          "doc": null,
-          "name": "emergency_release_mode",
-          "type": null,
-          "value": "\"Selective+Jettison\""
-        },
-        "total_station_count": {
-          "doc": null,
-          "name": "total_station_count",
-          "type": null,
-          "value": "9"
-        }
-      },
-      "doc": "Nine-station stores management system coordinating pylons, weapon power, and release logic.",
-      "name": "StoresManagementSystem",
-      "parts": [],
-      "ports": [
-        {
-          "direction": "in",
-          "doc": "Mission-computer command ingress for weapon selection, master arm, and payload profiles.",
-          "name": "storesBusIn",
-          "payload": "StoresCommandBus",
-          "payload_def": {
-            "attributes": {
-              "config_checksum": {
-                "doc": null,
-                "name": "config_checksum",
-                "type": "Integer",
-                "value": null
-              },
-              "jettison_all": {
-                "doc": null,
-                "name": "jettison_all",
-                "type": "Boolean",
-                "value": null
-              },
-              "pickle_command": {
-                "doc": null,
-                "name": "pickle_command",
-                "type": "Boolean",
-                "value": null
-              },
-              "power_mode_mask": {
-                "doc": null,
-                "name": "power_mode_mask",
-                "type": "Integer",
-                "value": null
-              },
-              "release_enable": {
-                "doc": null,
-                "name": "release_enable",
-                "type": "Boolean",
-                "value": null
-              },
-              "selected_station": {
-                "doc": null,
-                "name": "selected_station",
-                "type": "Integer",
-                "value": null
-              }
-            },
-            "doc": "Mission-computer command bundle for nine-store management, power, and jettison logic.",
-            "name": "StoresCommandBus"
-          }
-        },
-        {
-          "direction": "out",
-          "doc": "Stores readiness, mass properties, and fault codes exported to mission computer.",
-          "name": "storesTelemetry",
-          "payload": "StoresStatusBus",
-          "payload_def": {
-            "attributes": {
-              "cooling_demand_kw": {
-                "doc": null,
-                "name": "cooling_demand_kw",
-                "type": "Real",
-                "value": null
-              },
-              "fault_code": {
-                "doc": null,
-                "name": "fault_code",
-                "type": "Integer",
-                "value": null
-              },
-              "store_mass_total_kg": {
-                "doc": null,
-                "name": "store_mass_total_kg",
-                "type": "Real",
-                "value": null
-              },
-              "store_present_mask": {
-                "doc": null,
-                "name": "store_present_mask",
-                "type": "Integer",
-                "value": null
-              },
-              "weapon_ready_mask": {
-                "doc": null,
-                "name": "weapon_ready_mask",
-                "type": "Integer",
-                "value": null
-              }
-            },
-            "doc": "Health, weight, and readiness telemetry for all external stores.",
-            "name": "StoresStatusBus"
-          }
-        },
-        {
-          "direction": "in",
-          "doc": "Primary power feed for ejector racks, weapon heaters, and bus controllers.",
-          "name": "powerIn",
-          "payload": "GenericElectricalBus",
-          "payload_def": {
-            "attributes": {
-              "available_power_kw": {
-                "doc": null,
-                "name": "available_power_kw",
-                "type": "Real",
-                "value": null
-              },
-              "current_a": {
-                "doc": null,
-                "name": "current_a",
-                "type": "Real",
-                "value": null
-              },
-              "voltage_kv": {
-                "doc": null,
-                "name": "voltage_kv",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Power bus telemetry for avionics, control, and autonomy loads.",
-            "name": "GenericElectricalBus"
-          }
-        },
-        {
-          "direction": "in",
-          "doc": "Structural interface tying the rack to the fuselage/wing airframe.",
-          "name": "airframeMount",
-          "payload": "StructuralInterface",
-          "payload_def": {
-            "attributes": {
-              "axial_load_kn": {
-                "doc": null,
-                "name": "axial_load_kn",
-                "type": "Real",
-                "value": null
-              },
-              "bending_moment_knm": {
-                "doc": null,
-                "name": "bending_moment_knm",
-                "type": "Real",
-                "value": null
-              },
-              "shear_load_kn": {
-                "doc": null,
-                "name": "shear_load_kn",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Structural mounting loads transferred between assemblies.",
-            "name": "StructuralInterface"
-          }
-        },
-        {
-          "direction": "in",
-          "doc": "Structural envelope status to inhibit unsafe releases.",
-          "name": "performanceStatus",
-          "payload": "StructuralPerformanceState",
-          "payload_def": {
-            "attributes": {
-              "autopilot_limit_code": {
-                "doc": null,
-                "name": "autopilot_limit_code",
-                "type": "Integer",
-                "value": null
-              },
-              "load_factor_g": {
-                "doc": null,
-                "name": "load_factor_g",
-                "type": "Real",
-                "value": null
-              },
-              "mach_estimate": {
-                "doc": null,
-                "name": "mach_estimate",
-                "type": "Real",
-                "value": null
-              },
-              "stores_release_inhibit": {
-                "doc": null,
-                "name": "stores_release_inhibit",
-                "type": "Boolean",
-                "value": null
-              },
-              "structural_margin_norm": {
-                "doc": null,
-                "name": "structural_margin_norm",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Structural and performance envelope monitoring for g-limit and Mach supervision.",
-            "name": "StructuralPerformanceState"
-          }
-        }
-      ]
-    },
-    "StructuralLoadsAndPerformanceMonitor": {
-      "attributes": {
-        "max_load_factor_g": {
-          "doc": null,
-          "name": "max_load_factor_g",
-          "type": null,
-          "value": "9"
-        },
-        "max_mach": {
-          "doc": null,
-          "name": "max_mach",
-          "type": null,
-          "value": "2.0"
-        },
-        "release_inhibit_g": {
-          "doc": null,
-          "name": "release_inhibit_g",
-          "type": null,
-          "value": "5.5"
-        }
-      },
-      "doc": "Calculates Mach/g loads to enforce structural and store-release envelopes.",
-      "name": "StructuralLoadsAndPerformanceMonitor",
-      "parts": [],
-      "ports": [
-        {
-          "direction": "in",
-          "doc": "Aerodynamic loads from wing solver.",
-          "name": "liftIn",
-          "payload": "LiftState",
-          "payload_def": {
-            "attributes": {
-              "drag_kn": {
-                "doc": null,
-                "name": "drag_kn",
-                "type": "Real",
-                "value": null
-              },
-              "lift_kn": {
-                "doc": null,
-                "name": "lift_kn",
-                "type": "Real",
-                "value": null
-              },
-              "pitching_moment_knm": {
-                "doc": null,
-                "name": "pitching_moment_knm",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Aerodynamic state summary exported from wing solver.",
-            "name": "LiftState"
-          }
-        },
-        {
-          "direction": "in",
-          "doc": "Propulsion thrust telemetry for acceleration estimation.",
-          "name": "thrustIn",
-          "payload": "ThrustState",
-          "payload_def": {
-            "attributes": {
-              "exhaust_velocity_mps": {
-                "doc": null,
-                "name": "exhaust_velocity_mps",
-                "type": "Real",
-                "value": null
-              },
-              "mass_flow_kgps": {
-                "doc": null,
-                "name": "mass_flow_kgps",
-                "type": "Real",
-                "value": null
-              },
-              "thrust_kn": {
-                "doc": null,
-                "name": "thrust_kn",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Propulsion output shared with performance models.",
-            "name": "ThrustState"
-          }
-        },
-        {
-          "direction": "in",
-          "doc": "Air-data/INS solution for Mach and attitude context.",
-          "name": "airDataIn",
-          "payload": "AirDataInertialState",
-          "payload_def": {
-            "attributes": {
-              "angle_of_attack_deg": {
-                "doc": null,
-                "name": "angle_of_attack_deg",
-                "type": "Real",
-                "value": null
-              },
-              "indicated_airspeed_mps": {
-                "doc": null,
-                "name": "indicated_airspeed_mps",
-                "type": "Real",
-                "value": null
-              },
-              "mach_number": {
-                "doc": null,
-                "name": "mach_number",
-                "type": "Real",
-                "value": null
-              },
-              "pitch_rate_degps": {
-                "doc": null,
-                "name": "pitch_rate_degps",
-                "type": "Real",
-                "value": null
-              },
-              "pressure_altitude_m": {
-                "doc": null,
-                "name": "pressure_altitude_m",
-                "type": "Real",
-                "value": null
-              },
-              "roll_rate_degps": {
-                "doc": null,
-                "name": "roll_rate_degps",
-                "type": "Real",
-                "value": null
-              },
-              "sideslip_deg": {
-                "doc": null,
-                "name": "sideslip_deg",
-                "type": "Real",
-                "value": null
-              },
-              "true_airspeed_mps": {
-                "doc": null,
-                "name": "true_airspeed_mps",
-                "type": "Real",
-                "value": null
-              },
-              "vertical_speed_mps": {
-                "doc": null,
-                "name": "vertical_speed_mps",
-                "type": "Real",
-                "value": null
-              },
-              "yaw_rate_degps": {
-                "doc": null,
-                "name": "yaw_rate_degps",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "High-rate pitot-static + INS fused navigation state for control-law inputs.",
-            "name": "AirDataInertialState"
-          }
-        },
-        {
-          "direction": "out",
-          "doc": "Structural/performance envelope telemetry exported to consumers.",
-          "name": "performanceStatus",
-          "payload": "StructuralPerformanceState",
-          "payload_def": {
-            "attributes": {
-              "autopilot_limit_code": {
-                "doc": null,
-                "name": "autopilot_limit_code",
-                "type": "Integer",
-                "value": null
-              },
-              "load_factor_g": {
-                "doc": null,
-                "name": "load_factor_g",
-                "type": "Real",
-                "value": null
-              },
-              "mach_estimate": {
-                "doc": null,
-                "name": "mach_estimate",
-                "type": "Real",
-                "value": null
-              },
-              "stores_release_inhibit": {
-                "doc": null,
-                "name": "stores_release_inhibit",
-                "type": "Boolean",
-                "value": null
-              },
-              "structural_margin_norm": {
-                "doc": null,
-                "name": "structural_margin_norm",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Structural and performance envelope monitoring for g-limit and Mach supervision.",
-            "name": "StructuralPerformanceState"
           }
         }
       ]
@@ -3289,36 +1453,6 @@
           }
         },
         {
-          "direction": "in",
-          "doc": "Fuel availability feedback for power scheduling and afterburner inhibit.",
-          "name": "fuelStatus",
-          "payload": "FuelLevelState",
-          "payload_def": {
-            "attributes": {
-              "fuel_level_norm": {
-                "doc": null,
-                "name": "fuel_level_norm",
-                "type": "Real",
-                "value": null
-              },
-              "fuel_remaining_kg": {
-                "doc": null,
-                "name": "fuel_remaining_kg",
-                "type": "Real",
-                "value": null
-              },
-              "fuel_starved": {
-                "doc": null,
-                "name": "fuel_starved",
-                "type": "Boolean",
-                "value": null
-              }
-            },
-            "doc": "Remaining fuel mass and normalized level for availability tracking.",
-            "name": "FuelLevelState"
-          }
-        },
-        {
           "direction": "out",
           "doc": "Propulsion thrust telemetry exported to airframe.",
           "name": "thrustOut",
@@ -3350,8 +1484,8 @@
         },
         {
           "direction": "out",
-          "doc": "Requested fuel mass-flow shared with storage system.",
-          "name": "fuelFlow",
+          "doc": "Mass flow telemetry",
+          "name": "fuel_consumption",
           "payload": "FuelConsumptionRate",
           "payload_def": {
             "attributes": {
@@ -3365,137 +1499,11 @@
             "doc": "Mass flow request or telemetry for turbofan fuel usage (kg/s).",
             "name": "FuelConsumptionRate"
           }
-        },
-        {
-          "direction": "out",
-          "doc": "Electrical bus output feeding vehicle power distribution.",
-          "name": "powerBus",
-          "payload": "GenericElectricalBus",
-          "payload_def": {
-            "attributes": {
-              "available_power_kw": {
-                "doc": null,
-                "name": "available_power_kw",
-                "type": "Real",
-                "value": null
-              },
-              "current_a": {
-                "doc": null,
-                "name": "current_a",
-                "type": "Real",
-                "value": null
-              },
-              "voltage_kv": {
-                "doc": null,
-                "name": "voltage_kv",
-                "type": "Real",
-                "value": null
-              }
-            },
-            "doc": "Power bus telemetry for avionics, control, and autonomy loads.",
-            "name": "GenericElectricalBus"
-          }
         }
       ]
     }
   },
   "port_definitions": {
-    "AirDataInertialState": {
-      "attributes": {
-        "angle_of_attack_deg": {
-          "doc": null,
-          "name": "angle_of_attack_deg",
-          "type": "Real",
-          "value": null
-        },
-        "indicated_airspeed_mps": {
-          "doc": null,
-          "name": "indicated_airspeed_mps",
-          "type": "Real",
-          "value": null
-        },
-        "mach_number": {
-          "doc": null,
-          "name": "mach_number",
-          "type": "Real",
-          "value": null
-        },
-        "pitch_rate_degps": {
-          "doc": null,
-          "name": "pitch_rate_degps",
-          "type": "Real",
-          "value": null
-        },
-        "pressure_altitude_m": {
-          "doc": null,
-          "name": "pressure_altitude_m",
-          "type": "Real",
-          "value": null
-        },
-        "roll_rate_degps": {
-          "doc": null,
-          "name": "roll_rate_degps",
-          "type": "Real",
-          "value": null
-        },
-        "sideslip_deg": {
-          "doc": null,
-          "name": "sideslip_deg",
-          "type": "Real",
-          "value": null
-        },
-        "true_airspeed_mps": {
-          "doc": null,
-          "name": "true_airspeed_mps",
-          "type": "Real",
-          "value": null
-        },
-        "vertical_speed_mps": {
-          "doc": null,
-          "name": "vertical_speed_mps",
-          "type": "Real",
-          "value": null
-        },
-        "yaw_rate_degps": {
-          "doc": null,
-          "name": "yaw_rate_degps",
-          "type": "Real",
-          "value": null
-        }
-      },
-      "doc": "High-rate pitot-static + INS fused navigation state for control-law inputs.",
-      "name": "AirDataInertialState"
-    },
-    "AutonomyGuidance": {
-      "attributes": {
-        "aggressiveness_norm": {
-          "doc": null,
-          "name": "aggressiveness_norm",
-          "type": "Real",
-          "value": null
-        },
-        "lateral_accel_mps2": {
-          "doc": null,
-          "name": "lateral_accel_mps2",
-          "type": "Real",
-          "value": null
-        },
-        "waypoint_altitude_m": {
-          "doc": null,
-          "name": "waypoint_altitude_m",
-          "type": "Real",
-          "value": null
-        },
-        "waypoint_heading_deg": {
-          "doc": null,
-          "name": "waypoint_heading_deg",
-          "type": "Real",
-          "value": null
-        }
-      },
-      "doc": "Autopilot-to-mission-computer guidance cues for co-simulation.",
-      "name": "AutonomyGuidance"
-    },
     "FlightStatusPacket": {
       "attributes": {
         "airspeed_mps": {
@@ -3561,30 +1569,6 @@
       },
       "doc": "Remaining fuel mass and normalized level for availability tracking.",
       "name": "FuelLevelState"
-    },
-    "GenericElectricalBus": {
-      "attributes": {
-        "available_power_kw": {
-          "doc": null,
-          "name": "available_power_kw",
-          "type": "Real",
-          "value": null
-        },
-        "current_a": {
-          "doc": null,
-          "name": "current_a",
-          "type": "Real",
-          "value": null
-        },
-        "voltage_kv": {
-          "doc": null,
-          "name": "voltage_kv",
-          "type": "Real",
-          "value": null
-        }
-      },
-      "doc": "Power bus telemetry for avionics, control, and autonomy loads.",
-      "name": "GenericElectricalBus"
     },
     "GeodeticLLA": {
       "attributes": {
@@ -3667,7 +1651,7 @@
           "value": null
         }
       },
-      "doc": "Waypoint-tracking telemetry from the autopilot navigation loop.",
+      "doc": "Waypoint-tracking status produced by the autopilot for logging and requirement evaluation.",
       "name": "MissionStatus"
     },
     "OrientationEuler": {
@@ -3691,7 +1675,7 @@
           "value": null
         }
       },
-      "doc": "Air vehicle orientation expressed as body-to-earth Euler angles in degrees.",
+      "doc": "Air vehicle orientation expressed as Euler angles in degrees.",
       "name": "OrientationEuler"
     },
     "PilotCommand": {
@@ -3759,144 +1743,6 @@
       },
       "doc": "HOTAS-style control payload shared across control surfaces and mission computer consumers.",
       "name": "PilotCommand"
-    },
-    "StoresCommandBus": {
-      "attributes": {
-        "config_checksum": {
-          "doc": null,
-          "name": "config_checksum",
-          "type": "Integer",
-          "value": null
-        },
-        "jettison_all": {
-          "doc": null,
-          "name": "jettison_all",
-          "type": "Boolean",
-          "value": null
-        },
-        "pickle_command": {
-          "doc": null,
-          "name": "pickle_command",
-          "type": "Boolean",
-          "value": null
-        },
-        "power_mode_mask": {
-          "doc": null,
-          "name": "power_mode_mask",
-          "type": "Integer",
-          "value": null
-        },
-        "release_enable": {
-          "doc": null,
-          "name": "release_enable",
-          "type": "Boolean",
-          "value": null
-        },
-        "selected_station": {
-          "doc": null,
-          "name": "selected_station",
-          "type": "Integer",
-          "value": null
-        }
-      },
-      "doc": "Mission-computer command bundle for nine-store management, power, and jettison logic.",
-      "name": "StoresCommandBus"
-    },
-    "StoresStatusBus": {
-      "attributes": {
-        "cooling_demand_kw": {
-          "doc": null,
-          "name": "cooling_demand_kw",
-          "type": "Real",
-          "value": null
-        },
-        "fault_code": {
-          "doc": null,
-          "name": "fault_code",
-          "type": "Integer",
-          "value": null
-        },
-        "store_mass_total_kg": {
-          "doc": null,
-          "name": "store_mass_total_kg",
-          "type": "Real",
-          "value": null
-        },
-        "store_present_mask": {
-          "doc": null,
-          "name": "store_present_mask",
-          "type": "Integer",
-          "value": null
-        },
-        "weapon_ready_mask": {
-          "doc": null,
-          "name": "weapon_ready_mask",
-          "type": "Integer",
-          "value": null
-        }
-      },
-      "doc": "Health, weight, and readiness telemetry for all external stores.",
-      "name": "StoresStatusBus"
-    },
-    "StructuralInterface": {
-      "attributes": {
-        "axial_load_kn": {
-          "doc": null,
-          "name": "axial_load_kn",
-          "type": "Real",
-          "value": null
-        },
-        "bending_moment_knm": {
-          "doc": null,
-          "name": "bending_moment_knm",
-          "type": "Real",
-          "value": null
-        },
-        "shear_load_kn": {
-          "doc": null,
-          "name": "shear_load_kn",
-          "type": "Real",
-          "value": null
-        }
-      },
-      "doc": "Structural mounting loads transferred between assemblies.",
-      "name": "StructuralInterface"
-    },
-    "StructuralPerformanceState": {
-      "attributes": {
-        "autopilot_limit_code": {
-          "doc": null,
-          "name": "autopilot_limit_code",
-          "type": "Integer",
-          "value": null
-        },
-        "load_factor_g": {
-          "doc": null,
-          "name": "load_factor_g",
-          "type": "Real",
-          "value": null
-        },
-        "mach_estimate": {
-          "doc": null,
-          "name": "mach_estimate",
-          "type": "Real",
-          "value": null
-        },
-        "stores_release_inhibit": {
-          "doc": null,
-          "name": "stores_release_inhibit",
-          "type": "Boolean",
-          "value": null
-        },
-        "structural_margin_norm": {
-          "doc": null,
-          "name": "structural_margin_norm",
-          "type": "Real",
-          "value": null
-        }
-      },
-      "doc": "Structural and performance envelope monitoring for g-limit and Mach supervision.",
-      "name": "StructuralPerformanceState"
     },
     "SurfaceActuationCommand": {
       "attributes": {
@@ -4011,6 +1857,22 @@
     {
       "identifier": "Requirement_REQ_FlyByWire",
       "text": "It should be an unstable aircraft, the control loop should compensate for this."
+    },
+    {
+      "identifier": "Requirement_REQ_Waypoints_1",
+      "text": "It should support loading a number of waypoints that it should fy to in order"
+    },
+    {
+      "identifier": "Requirement_REQ_Simulation_1",
+      "text": "The system should be packaged and simulated as a SSP (system structure and parameterization) artifact"
+    },
+    {
+      "identifier": "Requirement_REQ_Simulation_2",
+      "text": "All models should be packaged as FMUs"
+    },
+    {
+      "identifier": "Requirement_REQ_Simulation_3",
+      "text": "The waypoints should be injected into the simulation by utilizing SSP parameter set"
     }
   ]
 }
