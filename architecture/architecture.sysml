@@ -27,6 +27,9 @@ package Aircraft {
 
     doc /* HOTAS-equivalent command stream for mission computer blending. */
     out port autopilotCmd : PilotCommand;
+
+    doc /* Waypoint progression for logging and verification. */
+    out port missionStatus : MissionStatus;
   }
 
   part def CompositeAirframe {
@@ -107,8 +110,8 @@ package Aircraft {
     doc /* Actuation commands, sent to environment to track and calculate new position */
     out port actuation_command : SurfaceActuationCommand;
 
-    doc /* Tracking of lift, drag*/
-    out port lift_state : LiftState;
+    doc /* Tracking of lift, drag */
+    out port liftInterface : LiftState;
   }
 
   part def Environment {
@@ -117,14 +120,23 @@ package Aircraft {
     doc /* Reads the actuation and thrust commands to calculate the position, rotation and velocities */
 
     in port actuation_command : SurfaceActuationCommand;
-    in port lift_state : LiftState;
-    in port thrust : ThrustState;
+    in port lift : LiftState;
+    in port thrust_in : ThrustState;
 
     doc /* Feedback for simulated sensors */
     out port orientation : OrientationEuler;
     out port location : GeodeticLLA;
-    out port flight_status : FlightStatusPacket
+    out port flight_status : FlightStatusPacket;
 
+  }
+
+  part def InputOutput {
+    doc /* Simulation sink for debugging and recording mission/autopilot telemetry. */
+    in port locationLLA : GeodeticLLA;
+    in port orientation : OrientationEuler;
+    in port autopilotCmd : PilotCommand;
+    in port flightStatus : FlightStatusPacket;
+    in port missionStatus : MissionStatus;
   }
 
 }

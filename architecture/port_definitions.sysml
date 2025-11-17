@@ -72,6 +72,18 @@ package Aircraft {
   port def FlightStatusPacket {
     doc /* Mission computer status feedback consumed by autonomy and analysis models. */
     attribute airspeed_mps: Real;
+    attribute energy_state_norm: Real;
+    attribute angle_of_attack_deg: Real;
+    attribute health_code: Integer;
+  }
+
+  port def MissionStatus {
+    doc /* Waypoint-tracking status produced by the autopilot for logging and requirement evaluation. */
+    attribute waypoint_index: Integer;
+    attribute total_waypoints: Integer;
+    attribute distance_to_waypoint_km: Real;
+    attribute arrived: Boolean;
+    attribute complete: Boolean;
   }
 
 

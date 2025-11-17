@@ -18,14 +18,20 @@ package Aircraft {
 
   doc /* AdaptiveWingSystem */
   connect AdaptiveWingSystem.actuation_command to Environment.actuation_command;
-  connect AdaptiveWingSystem.lift_state to Environment.lift_state;
+  connect AdaptiveWingSystem.liftInterface to Environment.lift;
 
   doc /* Environment */
   connect Environment.orientation to AutopilotModule.currentOrientation;
   connect Environment.location to AutopilotModule.currentLocation;
   connect Environment.flight_status to AutopilotModule.feedbackBus;
   connect Environment.flight_status to AdaptiveWingSystem.flight_speed;
-}
 
+  doc /* InputOutput telemetry taps */
+  connect Environment.location to InputOutput.locationLLA;
+  connect Environment.orientation to InputOutput.orientation;
+  connect AutopilotModule.autopilotCmd to InputOutput.autopilotCmd;
+  connect Environment.flight_status to InputOutput.flightStatus;
+  connect AutopilotModule.missionStatus to InputOutput.missionStatus;
+}
 
 
