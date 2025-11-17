@@ -4,11 +4,10 @@ model AutopilotModule
   parameter Real updateRateHz = 40;
   parameter Real sensorFidelity = 0.98;
   parameter Real targetAltitude_m = 6000;
-  parameter String scenarioData = "0.0,0.0,1500.0, 0.2,0.1,2000.0, 0.4,0.2,1500.0";
-  parameter Real waypointLat[:] = {0.0, 0.2, 0.4};
-  parameter Real waypointLon[:] = {0.0, 0.1, 0.2};
-  parameter Real waypointAlt[:] = {1500.0, 2000.0, 1500.0};
-  parameter Integer waypointCount = size(waypointLat, 1);
+  parameter Real waypointLat[:] = {0.0, 0.2, 0.4, 0, 0, 0, 0, 0, 0, 0};
+  parameter Real waypointLon[:] = {0.0, 0.1, 0.2, 0, 0, 0, 0, 0, 0, 0};
+  parameter Real waypointAlt[:] = {1500.0, 2000.0, 1500.0, 0, 0, 0, 0, 0, 0, 0};
+  parameter Integer waypointCount = 3;
   parameter Real waypointProximity_km = 5 "Distance to trigger waypoint switch";
   input GI.FlightStatusPacket feedbackBus;
   input GI.GenericElectricalBus powerIn;
@@ -21,19 +20,23 @@ model AutopilotModule
   output GI.PilotCommand autopilotCmd;
   output GI.MissionStatus missionStatus;
 protected
-  discrete Integer waypointIndex(start=1, fixed=true);
+  Integer waypointIndex(start=1, fixed=true);
   Boolean missionDone(start=false, fixed=true);
-  Real targetLat;
-  Real targetLon;
-  Real targetAlt;
-  Real distanceKm;
-  Real bearingDeg;
-  Real headingError;
-  Real altitudeError;
+  Real targetLat(start=0);
+  Real targetLon(start=0);
+  Real targetAlt(start=0);
+  Real deltaLat(start=0);
+  Real deltaLon(start=0);
+  Real distanceKm(start=10);
+  Real bearingDeg(start=0);
+  Real headingError(start=0);
+  Real altitudeError(start=0);
   Real stability;
   Real holdStrength;
   Real performanceMargin;
 equation
+  waypointIndex = 1;
+  missionDone = false;
   holdStrength = min(1.0, max(0.3, (powerIn.available_power_kw + 0.3 * backupPower.available_power_kw) / 60.0));
   performanceMargin = max(0.4, performanceStatus.structural_margin_norm);
   stability = holdStrength * sensorFidelity * max(0.25, feedbackBus.energy_state_norm) * performanceMargin;
@@ -41,15 +44,14 @@ equation
   targetLon = if waypointCount > 0 then waypointLon[waypointIndex] else currentLocation.longitude_deg;
   targetAlt = if waypointCount > 0 then waypointAlt[waypointIndex] else targetAltitude_m;
 
-  distanceKm = 111.0 * sqrt(
-    (targetLat - currentLocation.latitude_deg) ^ 2 +
-    (cos(currentLocation.latitude_deg * 3.14159265358979 / 180) * (targetLon - currentLocation.longitude_deg)) ^ 2);
-  bearingDeg = atan2(targetLon - currentLocation.longitude_deg, targetLat - currentLocation.latitude_deg) * 180 / 3.14159265358979;
+  deltaLat = targetLat - currentLocation.latitude_deg;
+  deltaLon = targetLon - currentLocation.longitude_deg;
+  distanceKm = max(1e-3, 111.0 * sqrt(
+    (deltaLat) ^ 2 +
+    (cos(currentLocation.latitude_deg * 3.14159265358979 / 180) * (deltaLon)) ^ 2));
+  bearingDeg = if distanceKm < 1e-3 then currentOrientation.yaw_deg else atan2(deltaLon, deltaLat) * 180 / 3.14159265358979;
   headingError = bearingDeg - currentOrientation.yaw_deg;
   altitudeError = targetAlt - currentLocation.altitude_m;
-
-  waypointIndex = if distanceKm < waypointProximity_km and not pre(missionDone) then min(pre(waypointIndex) + 1, waypointCount) else pre(waypointIndex);
-  missionDone = pre(missionDone) or waypointIndex >= waypointCount;
 
   missionStatus.total_waypoints = waypointCount;
   missionStatus.waypoint_index = waypointIndex;

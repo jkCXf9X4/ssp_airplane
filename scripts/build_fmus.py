@@ -34,6 +34,7 @@ def build_mos_script(model_name: str, output_dir: Path) -> str:
     tmp_dir = REPO_ROOT / "build/tmp"
     tmp_dir.mkdir(parents=True, exist_ok=True)
     return f"""
+installPackage(Modelica, \"4.0.0\", exactMatch=false);
 loadFile("{package_path.as_posix()}");
 cd("./build/tmp/");
 setCommandLineOptions("--fmiFlags=s:cvode");

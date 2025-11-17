@@ -338,8 +338,10 @@ def evaluate_requirements(
     return evaluations
 
 
-def run_with_simulator(ssp_path: Path, result_file: Path, stop_time: float) -> None:
-    import pyssp4sim
+# toggle log_fmu for more extensive logs
+def run_with_simulator(ssp_path: Path, result_file: Path, stop_time: float, log_fmu = False) -> None:
+
+    log_fmu = "true" if log_fmu else "false"
 
     config = f"""
 {{
@@ -381,7 +383,8 @@ def run_with_simulator(ssp_path: Path, result_file: Path, stop_time: float) -> N
 
         "log":
         {{
-            "file": "./build/results/sim.log"
+            "file": "./build/results/sim.log",
+            "fmu": {log_fmu}
         }}
     }}
 }}
