@@ -1,12 +1,14 @@
 within Aircraft;
 model AutopilotModule
   import GI = Aircraft.GeneratedInterfaces;
-  import Modelica.Math;
-  import Aircraft.stringToRealVector;
   parameter Real updateRateHz = 40;
   parameter Real sensorFidelity = 0.98;
   parameter Real targetAltitude_m = 6000;
   parameter String scenarioData = "0.0,0.0,1500.0, 0.2,0.1,2000.0, 0.4,0.2,1500.0";
+  parameter Real waypointLat[:] = {0.0, 0.2, 0.4};
+  parameter Real waypointLon[:] = {0.0, 0.1, 0.2};
+  parameter Real waypointAlt[:] = {1500.0, 2000.0, 1500.0};
+  parameter Integer waypointCount = size(waypointLat, 1);
   parameter Real waypointProximity_km = 5 "Distance to trigger waypoint switch";
   input GI.FlightStatusPacket feedbackBus;
   input GI.GenericElectricalBus powerIn;
@@ -19,11 +21,6 @@ model AutopilotModule
   output GI.PilotCommand autopilotCmd;
   output GI.MissionStatus missionStatus;
 protected
-  parameter Real scenarioValues[:] = stringToRealVector(scenarioData);
-  parameter Integer waypointCount = integer(size(scenarioValues, 1) / 3);
-  parameter Real waypointLat[waypointCount] = {scenarioValues[3 * i - 2] for i in 1:waypointCount};
-  parameter Real waypointLon[waypointCount] = {scenarioValues[3 * i - 1] for i in 1:waypointCount};
-  parameter Real waypointAlt[waypointCount] = {scenarioValues[3 * i] for i in 1:waypointCount};
   discrete Integer waypointIndex(start=1, fixed=true);
   Boolean missionDone(start=false, fixed=true);
   Real targetLat;
@@ -47,20 +44,12 @@ equation
   distanceKm = 111.0 * sqrt(
     (targetLat - currentLocation.latitude_deg) ^ 2 +
     (cos(currentLocation.latitude_deg * 3.14159265358979 / 180) * (targetLon - currentLocation.longitude_deg)) ^ 2);
-  bearingDeg = Math.atan2(targetLon - currentLocation.longitude_deg, targetLat - currentLocation.latitude_deg) * 180 / 3.14159265358979;
+  bearingDeg = atan2(targetLon - currentLocation.longitude_deg, targetLat - currentLocation.latitude_deg) * 180 / 3.14159265358979;
   headingError = bearingDeg - currentOrientation.yaw_deg;
-  headingError = headingError - 360 * Math.floor((headingError + 180) / 360);
   altitudeError = targetAlt - currentLocation.altitude_m;
 
-  when {distanceKm < waypointProximity_km, missionDone} then
-    if not missionDone then
-      if waypointIndex < waypointCount then
-        waypointIndex := waypointIndex + 1;
-      else
-        missionDone := true;
-      end if;
-    end if;
-  end when;
+  waypointIndex = if distanceKm < waypointProximity_km and not pre(missionDone) then min(pre(waypointIndex) + 1, waypointCount) else pre(waypointIndex);
+  missionDone = pre(missionDone) or waypointIndex >= waypointCount;
 
   missionStatus.total_waypoints = waypointCount;
   missionStatus.waypoint_index = waypointIndex;

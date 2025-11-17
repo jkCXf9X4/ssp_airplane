@@ -43,6 +43,7 @@ When `scripts/simulate_scenario.py` runs, it always writes two artifacts into `b
 - `stores_available` is computed from the bitmask in `StoresManagementSystem.storesTelemetry.store_present_mask`, so deviations from 9 indicate missing/powered-down stations.
 - `autopilot_limit_max` and `control_surface_excursion_deg` ensure control authority and fly-by-wire activity for REQ_Control.
 - `thrust_kn_max` and `mass_flow_kgps_max` provide propulsion evidence.
+- `waypoint_miss_*`, `waypoint_hits`, `waypoint_total`, `waypoint_within_threshold_fraction`, and `waypoints_followed` quantify how closely the simulated path tracked the scenario waypoints (10 km threshold by default).
 
 ### Waypoint strings and plots
 

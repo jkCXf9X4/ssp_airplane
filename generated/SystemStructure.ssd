@@ -118,6 +118,51 @@
           <ssd:Connector name="manualInput.reserved" kind="input">
             <ssc:Integer />
           </ssd:Connector>
+          <ssd:Connector name="autopilotInput.stick_pitch_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotInput.stick_roll_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotInput.rudder_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotInput.throttle_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotInput.throttle_aux_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotInput.button_mask" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotInput.hat_x" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotInput.hat_y" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotInput.mode_switch" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotInput.reserved" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotStatus.waypoint_index" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotStatus.total_waypoints" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotStatus.distance_to_waypoint_km" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotStatus.arrived" kind="input">
+            <ssc:Boolean />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotStatus.complete" kind="input">
+            <ssc:Boolean />
+          </ssd:Connector>
           <ssd:Connector name="autonomyPort.waypoint_heading_deg" kind="input">
             <ssc:Real />
           </ssd:Connector>
@@ -305,6 +350,24 @@
           <ssd:Connector name="feedbackBus.health_code" kind="input">
             <ssc:Integer />
           </ssd:Connector>
+          <ssd:Connector name="currentLocation.latitude_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="currentLocation.longitude_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="currentLocation.altitude_m" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="currentOrientation.roll_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="currentOrientation.pitch_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="currentOrientation.yaw_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
           <ssd:Connector name="airDataIn.mach_number" kind="input">
             <ssc:Real />
           </ssd:Connector>
@@ -379,6 +442,51 @@
           </ssd:Connector>
           <ssd:Connector name="guidanceCmd.aggressiveness_norm" kind="output">
             <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotCmd.stick_pitch_norm" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotCmd.stick_roll_norm" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotCmd.rudder_norm" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotCmd.throttle_norm" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotCmd.throttle_aux_norm" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotCmd.button_mask" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotCmd.hat_x" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotCmd.hat_y" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotCmd.mode_switch" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotCmd.reserved" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="missionStatus.waypoint_index" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="missionStatus.total_waypoints" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="missionStatus.distance_to_waypoint_km" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="missionStatus.arrived" kind="output">
+            <ssc:Boolean />
+          </ssd:Connector>
+          <ssd:Connector name="missionStatus.complete" kind="output">
+            <ssc:Boolean />
           </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
@@ -792,6 +900,97 @@
           </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
+      <ssd:Component name="InputOutput" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_InputOutput.fmu">
+        <ssd:Connectors>
+          <ssd:Connector name="locationLLA.latitude_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="locationLLA.longitude_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="locationLLA.altitude_m" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="orientation.roll_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="orientation.pitch_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="orientation.yaw_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="missionStatus.waypoint_index" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="missionStatus.total_waypoints" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="missionStatus.distance_to_waypoint_km" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="missionStatus.arrived" kind="input">
+            <ssc:Boolean />
+          </ssd:Connector>
+          <ssd:Connector name="missionStatus.complete" kind="input">
+            <ssc:Boolean />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotCmd.stick_pitch_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotCmd.stick_roll_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotCmd.rudder_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotCmd.throttle_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotCmd.throttle_aux_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotCmd.button_mask" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotCmd.hat_x" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotCmd.hat_y" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotCmd.mode_switch" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotCmd.reserved" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="guidance.waypoint_heading_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="guidance.waypoint_altitude_m" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="guidance.lateral_accel_mps2" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="guidance.aggressiveness_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="flightStatus.airspeed_mps" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="flightStatus.energy_state_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="flightStatus.angle_of_attack_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="flightStatus.health_code" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+        </ssd:Connectors>
+      </ssd:Component>
     </ssd:Elements>
     <ssd:Connections>
       <ssd:Connection startElement="TurbofanPropulsion" startConnector="powerBus.voltage_kv" endElement="PowerSystem" endConnector="generatorInput.voltage_kv" />
@@ -840,14 +1039,64 @@
       <ssd:Connection startElement="AutopilotModule" startConnector="guidanceCmd.waypoint_altitude_m" endElement="MissionComputer" endConnector="autonomyPort.waypoint_altitude_m" />
       <ssd:Connection startElement="AutopilotModule" startConnector="guidanceCmd.lateral_accel_mps2" endElement="MissionComputer" endConnector="autonomyPort.lateral_accel_mps2" />
       <ssd:Connection startElement="AutopilotModule" startConnector="guidanceCmd.aggressiveness_norm" endElement="MissionComputer" endConnector="autonomyPort.aggressiveness_norm" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="autopilotCmd.stick_pitch_norm" endElement="MissionComputer" endConnector="autopilotInput.stick_pitch_norm" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="autopilotCmd.stick_roll_norm" endElement="MissionComputer" endConnector="autopilotInput.stick_roll_norm" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="autopilotCmd.rudder_norm" endElement="MissionComputer" endConnector="autopilotInput.rudder_norm" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="autopilotCmd.throttle_norm" endElement="MissionComputer" endConnector="autopilotInput.throttle_norm" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="autopilotCmd.throttle_aux_norm" endElement="MissionComputer" endConnector="autopilotInput.throttle_aux_norm" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="autopilotCmd.button_mask" endElement="MissionComputer" endConnector="autopilotInput.button_mask" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="autopilotCmd.hat_x" endElement="MissionComputer" endConnector="autopilotInput.hat_x" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="autopilotCmd.hat_y" endElement="MissionComputer" endConnector="autopilotInput.hat_y" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="autopilotCmd.mode_switch" endElement="MissionComputer" endConnector="autopilotInput.mode_switch" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="autopilotCmd.reserved" endElement="MissionComputer" endConnector="autopilotInput.reserved" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="missionStatus.waypoint_index" endElement="MissionComputer" endConnector="autopilotStatus.waypoint_index" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="missionStatus.total_waypoints" endElement="MissionComputer" endConnector="autopilotStatus.total_waypoints" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="missionStatus.distance_to_waypoint_km" endElement="MissionComputer" endConnector="autopilotStatus.distance_to_waypoint_km" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="missionStatus.arrived" endElement="MissionComputer" endConnector="autopilotStatus.arrived" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="missionStatus.complete" endElement="MissionComputer" endConnector="autopilotStatus.complete" />
       <ssd:Connection startElement="MissionComputer" startConnector="flightStatus.airspeed_mps" endElement="AutopilotModule" endConnector="feedbackBus.airspeed_mps" />
       <ssd:Connection startElement="MissionComputer" startConnector="flightStatus.energy_state_norm" endElement="AutopilotModule" endConnector="feedbackBus.energy_state_norm" />
       <ssd:Connection startElement="MissionComputer" startConnector="flightStatus.angle_of_attack_deg" endElement="AutopilotModule" endConnector="feedbackBus.angle_of_attack_deg" />
       <ssd:Connection startElement="MissionComputer" startConnector="flightStatus.health_code" endElement="AutopilotModule" endConnector="feedbackBus.health_code" />
+      <ssd:Connection startElement="MissionComputer" startConnector="locationLLA.latitude_deg" endElement="AutopilotModule" endConnector="currentLocation.latitude_deg" />
+      <ssd:Connection startElement="MissionComputer" startConnector="locationLLA.longitude_deg" endElement="AutopilotModule" endConnector="currentLocation.longitude_deg" />
+      <ssd:Connection startElement="MissionComputer" startConnector="locationLLA.altitude_m" endElement="AutopilotModule" endConnector="currentLocation.altitude_m" />
+      <ssd:Connection startElement="MissionComputer" startConnector="orientationEuler.roll_deg" endElement="AutopilotModule" endConnector="currentOrientation.roll_deg" />
+      <ssd:Connection startElement="MissionComputer" startConnector="orientationEuler.pitch_deg" endElement="AutopilotModule" endConnector="currentOrientation.pitch_deg" />
+      <ssd:Connection startElement="MissionComputer" startConnector="orientationEuler.yaw_deg" endElement="AutopilotModule" endConnector="currentOrientation.yaw_deg" />
       <ssd:Connection startElement="MissionComputer" startConnector="flightStatus.airspeed_mps" endElement="FlyByWireController" endConnector="flightFeedback.airspeed_mps" />
       <ssd:Connection startElement="MissionComputer" startConnector="flightStatus.energy_state_norm" endElement="FlyByWireController" endConnector="flightFeedback.energy_state_norm" />
       <ssd:Connection startElement="MissionComputer" startConnector="flightStatus.angle_of_attack_deg" endElement="FlyByWireController" endConnector="flightFeedback.angle_of_attack_deg" />
       <ssd:Connection startElement="MissionComputer" startConnector="flightStatus.health_code" endElement="FlyByWireController" endConnector="flightFeedback.health_code" />
+      <ssd:Connection startElement="MissionComputer" startConnector="locationLLA.latitude_deg" endElement="InputOutput" endConnector="locationLLA.latitude_deg" />
+      <ssd:Connection startElement="MissionComputer" startConnector="locationLLA.longitude_deg" endElement="InputOutput" endConnector="locationLLA.longitude_deg" />
+      <ssd:Connection startElement="MissionComputer" startConnector="locationLLA.altitude_m" endElement="InputOutput" endConnector="locationLLA.altitude_m" />
+      <ssd:Connection startElement="MissionComputer" startConnector="orientationEuler.roll_deg" endElement="InputOutput" endConnector="orientation.roll_deg" />
+      <ssd:Connection startElement="MissionComputer" startConnector="orientationEuler.pitch_deg" endElement="InputOutput" endConnector="orientation.pitch_deg" />
+      <ssd:Connection startElement="MissionComputer" startConnector="orientationEuler.yaw_deg" endElement="InputOutput" endConnector="orientation.yaw_deg" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="missionStatus.waypoint_index" endElement="InputOutput" endConnector="missionStatus.waypoint_index" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="missionStatus.total_waypoints" endElement="InputOutput" endConnector="missionStatus.total_waypoints" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="missionStatus.distance_to_waypoint_km" endElement="InputOutput" endConnector="missionStatus.distance_to_waypoint_km" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="missionStatus.arrived" endElement="InputOutput" endConnector="missionStatus.arrived" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="missionStatus.complete" endElement="InputOutput" endConnector="missionStatus.complete" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="autopilotCmd.stick_pitch_norm" endElement="InputOutput" endConnector="autopilotCmd.stick_pitch_norm" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="autopilotCmd.stick_roll_norm" endElement="InputOutput" endConnector="autopilotCmd.stick_roll_norm" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="autopilotCmd.rudder_norm" endElement="InputOutput" endConnector="autopilotCmd.rudder_norm" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="autopilotCmd.throttle_norm" endElement="InputOutput" endConnector="autopilotCmd.throttle_norm" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="autopilotCmd.throttle_aux_norm" endElement="InputOutput" endConnector="autopilotCmd.throttle_aux_norm" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="autopilotCmd.button_mask" endElement="InputOutput" endConnector="autopilotCmd.button_mask" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="autopilotCmd.hat_x" endElement="InputOutput" endConnector="autopilotCmd.hat_x" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="autopilotCmd.hat_y" endElement="InputOutput" endConnector="autopilotCmd.hat_y" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="autopilotCmd.mode_switch" endElement="InputOutput" endConnector="autopilotCmd.mode_switch" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="autopilotCmd.reserved" endElement="InputOutput" endConnector="autopilotCmd.reserved" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="guidanceCmd.waypoint_heading_deg" endElement="InputOutput" endConnector="guidance.waypoint_heading_deg" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="guidanceCmd.waypoint_altitude_m" endElement="InputOutput" endConnector="guidance.waypoint_altitude_m" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="guidanceCmd.lateral_accel_mps2" endElement="InputOutput" endConnector="guidance.lateral_accel_mps2" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="guidanceCmd.aggressiveness_norm" endElement="InputOutput" endConnector="guidance.aggressiveness_norm" />
+      <ssd:Connection startElement="MissionComputer" startConnector="flightStatus.airspeed_mps" endElement="InputOutput" endConnector="flightStatus.airspeed_mps" />
+      <ssd:Connection startElement="MissionComputer" startConnector="flightStatus.energy_state_norm" endElement="InputOutput" endConnector="flightStatus.energy_state_norm" />
+      <ssd:Connection startElement="MissionComputer" startConnector="flightStatus.angle_of_attack_deg" endElement="InputOutput" endConnector="flightStatus.angle_of_attack_deg" />
+      <ssd:Connection startElement="MissionComputer" startConnector="flightStatus.health_code" endElement="InputOutput" endConnector="flightStatus.health_code" />
       <ssd:Connection startElement="ControlInterface" startConnector="pilotCommand.stick_pitch_norm" endElement="MissionComputer" endConnector="manualInput.stick_pitch_norm" />
       <ssd:Connection startElement="ControlInterface" startConnector="pilotCommand.stick_roll_norm" endElement="MissionComputer" endConnector="manualInput.stick_roll_norm" />
       <ssd:Connection startElement="ControlInterface" startConnector="pilotCommand.rudder_norm" endElement="MissionComputer" endConnector="manualInput.rudder_norm" />

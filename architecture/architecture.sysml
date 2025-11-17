@@ -302,4 +302,14 @@ package Aircraft {
 
   }
 
+  part def InputOutput {
+    doc /* Simulation sink for debugging and recording mission/autopilot telemetry. */
+    in port locationLLA : GeodeticLLA;
+    in port orientation : OrientationEuler;
+    in port missionStatus : MissionStatus;
+    in port autopilotCmd : PilotCommand;
+    in port guidance : AutonomyGuidance;
+    in port flightStatus : FlightStatusPacket;
+  }
+
 }

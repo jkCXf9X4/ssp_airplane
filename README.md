@@ -72,6 +72,7 @@ Utilize OMSimulator as simulation engine, via python
 - `scripts/simulate_scenario.py` always produces a timeseries CSV at `build/results/<scenario>_results.csv` and a requirement-focused summary at `build/results/<scenario>_summary.json`.
 - Pass `--reuse-results` to skip OMSimulator when a CSV already exists (useful in CI and for quick requirement checks).
 - Summaries include pass/fail for REQ_Performance/REQ_Fuel/REQ_Control/REQ_Mission/REQ_Propulsion plus evidence strings and key metrics (max Mach, g-load, fuel used, stores available, thrust).
+- Waypoint-tracking metrics are computed from simulated geodetic traces (`waypoint_miss_*`, `waypoint_hits`, `waypoints_followed`), so you can verify path following directly from the summary.
 - See `docs/results_and_evaluation.md` for the metric/summary fields and how to interpret them.
 - Pre-generated data exists for `build/scenarios/test_scenario.json`, enabling tests to run without a fresh simulation.
 - Waypoints are exported as a comma-separated string to `build/results/<scenario>_waypoints.txt` (format: `lat,lon,alt,...`) that feeds the Autopilot `scenarioData` parameter via `stringToRealVector`.

@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import math
+import os
 import shutil
 from pathlib import Path
+import pytest
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS_DIR = REPO_ROOT / "scripts"
@@ -21,11 +24,17 @@ from simulate_scenario import (  # type: ignore  # noqa: E402
 
 def test_result_postprocessing_extracts_requirement_metrics():
     result_path = REPO_ROOT / "build" / "results" / "test_scenario_results.csv"
-    metrics = summarize_result_file(result_path)
+    scenario = (REPO_ROOT / "build" / "scenarios" / "test_scenario.json").read_text()
+    import json
+    scenario_points = json.loads(scenario)["points"]
+    metrics = summarize_result_file(result_path, scenario_points=scenario_points)
 
     assert metrics["duration_s"] > 0
     assert metrics["max_mach"] > 0
     assert metrics["fuel_initial_kg"] >= metrics["fuel_final_kg"]
+    assert "waypoint_miss_max_km" in metrics
+    assert not math.isnan(metrics["waypoint_miss_max_km"])
+    assert "waypoints_followed" in metrics
     requirements = evaluate_requirements(metrics, fuel_capacity_kg=metrics["fuel_initial_kg"])
     requirement_ids = {req.identifier for req in requirements}
     assert {"REQ_Performance", "REQ_Fuel", "REQ_Control", "REQ_Mission", "REQ_Propulsion"} <= requirement_ids
@@ -53,13 +62,14 @@ def test_simulation_reuse_produces_summary_and_requirements(tmp_path):
         scenario_path=scenario_path,
         ssp_path=REPO_ROOT / "build" / "ssp" / "aircraft.ssp",
         results_dir=results_dir,
-        reuse_results=True,
+        reuse_results=False,
         stop_time=120.0,
     )
 
     assert result.result_file == target_results
     assert result.used_oms
     assert result.requirement_evaluations
+    assert result.scenario_string
 
     mission_eval = next(req for req in result.requirement_evaluations if req.identifier == "REQ_Mission")
     assert mission_eval.passed
@@ -71,6 +81,7 @@ def test_simulation_reuse_produces_summary_and_requirements(tmp_path):
 def test_plot_generation(tmp_path):
     result_path = REPO_ROOT / "build" / "results" / "test_scenario_results.csv"
     output = tmp_path / "plot.png"
+    os.environ["SIM_SKIP_PLOTS"] = "1"
     plotted = plot_flight_path(result_path, [], output)
     if plotted:
         assert plotted.exists()

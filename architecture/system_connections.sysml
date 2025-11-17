@@ -20,6 +20,12 @@ package Aircraft {
   connect MissionComputer.locationLLA to AutopilotModule.currentLocation;
   connect MissionComputer.orientationEuler to AutopilotModule.currentOrientation;
   connect MissionComputer.flightStatus to FlyByWireController.flightFeedback;
+  connect MissionComputer.locationLLA to InputOutput.locationLLA;
+  connect MissionComputer.orientationEuler to InputOutput.orientation;
+  connect AutopilotModule.missionStatus to InputOutput.missionStatus;
+  connect AutopilotModule.autopilotCmd to InputOutput.autopilotCmd;
+  connect AutopilotModule.guidanceCmd to InputOutput.guidance;
+  connect MissionComputer.flightStatus to InputOutput.flightStatus;
   connect ControlInterface.pilotCommand to MissionComputer.manualInput;
   connect AdaptiveWingSystem.liftInterface to FlyByWireController.aeroFeedback;
   connect AdaptiveWingSystem.liftInterface to StructuralLoadsAndPerformanceMonitor.liftIn;

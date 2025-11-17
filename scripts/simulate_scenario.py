@@ -11,13 +11,16 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
+# activate venv prior
 import pyssp4sim
+import matplotlib
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SSP = REPO_ROOT / "build" / "ssp" / "aircraft.ssp"
 DEFAULT_RESULTS = REPO_ROOT / "build" / "results"
 DEFAULT_FUEL_CAPACITY = 3100.0
 RESERVE_FRACTION = 0.08
+WAYPOINT_HIT_THRESHOLD_KM = 10.0
 
 
 def load_json(path: Path) -> Dict[str, Any]:
@@ -100,12 +103,29 @@ def validate_scenario_points(points: List[Dict[str, float]]) -> None:
                 raise ValueError(f"Point {idx} has implausible altitude: {alt}")
 
 
+def extract_track_points(
+    rows: List[Dict[str, str]],
+) -> List[Tuple[float, float, float]]:
+    latitudes = _numeric_series(rows, "MissionComputer.locationLLA.latitude_deg")
+    longitudes = _numeric_series(rows, "MissionComputer.locationLLA.longitude_deg")
+    altitudes = _numeric_series(rows, "MissionComputer.locationLLA.altitude_m")
+    n = min(len(latitudes), len(longitudes), len(altitudes))
+    return [(latitudes[i], longitudes[i], altitudes[i]) for i in range(n)]
+
+
 def plot_flight_path(
     result_file: Path, scenario_points: List[Dict[str, float]], output_path: Path
 ) -> Optional[Path]:
+    import os
+
+    if os.getenv("SIM_SKIP_PLOTS") == "1":
+        return None
+
     try:
+        
+        matplotlib.use("Agg")
         import matplotlib.pyplot as plt
-    except ImportError:
+    except Exception:
         return None
 
     rows = _read_result_rows(result_file)
@@ -133,6 +153,47 @@ def plot_flight_path(
     return output_path
 
 
+def waypoint_tracking_metrics(
+    scenario_points: List[Dict[str, float]],
+    track_points: List[Tuple[float, float, float]],
+    threshold_km: float = WAYPOINT_HIT_THRESHOLD_KM,
+) -> Dict[str, float]:
+    if not scenario_points or not track_points:
+        return {
+            "waypoint_miss_max_km": float("nan"),
+            "waypoint_miss_avg_km": float("nan"),
+            "waypoint_hits": 0,
+            "waypoint_total": len(scenario_points),
+            "waypoint_within_threshold_fraction": 0.0,
+        }
+
+    def point_distance_km(lat1, lon1, lat2, lon2):
+        # local flat-earth approximation for small deltas
+        return 111.0 * math.sqrt(
+            (lat1 - lat2) ** 2 + (math.cos(lat1 * math.pi / 180) * (lon1 - lon2)) ** 2
+        )
+
+    misses: List[float] = []
+    hits = 0
+    for wp in scenario_points:
+        lat = float(wp["latitude_deg"])
+        lon = float(wp["longitude_deg"])
+        best = min(point_distance_km(lat, lon, t[0], t[1]) for t in track_points)
+        misses.append(best)
+        if best <= threshold_km:
+            hits += 1
+
+    total = len(scenario_points)
+    return {
+        "waypoint_miss_max_km": max(misses),
+        "waypoint_miss_avg_km": sum(misses) / total if total else float("nan"),
+        "waypoint_hits": hits,
+        "waypoint_total": total,
+        "waypoint_within_threshold_fraction": hits / total if total else 0.0,
+        "waypoints_followed": 1.0 if total and hits == total else 0.0,
+    }
+
+
 @dataclass
 class RequirementEvaluation:
     identifier: str
@@ -158,7 +219,9 @@ class ScenarioResult:
     plot_path: Optional[Path] = None
 
 
-def summarize_result_file(result_file: Path) -> Dict[str, float]:
+def summarize_result_file(
+    result_file: Path, scenario_points: Optional[List[Dict[str, float]]] = None
+) -> Dict[str, float]:
     rows = _read_result_rows(result_file)
     time_series = _numeric_series(rows, "time")
 
@@ -213,7 +276,7 @@ def summarize_result_file(result_file: Path) -> Dict[str, float]:
     fuel_final_candidates = [v for v in reversed(fuel_remaining) if v >= 0]
     fuel_final = fuel_final_candidates[0] if fuel_final_candidates else 0.0
 
-    return {
+    metrics = {
         "duration_s": time_series[-1] if time_series else 0.0,
         "max_mach": max(mach_series) if mach_series else 0.0,
         "max_load_factor_g": max(g_series) if g_series else 0.0,
@@ -230,6 +293,11 @@ def summarize_result_file(result_file: Path) -> Dict[str, float]:
         "mass_flow_kgps_max": max(mass_flow) if mass_flow else 0.0,
         "control_surface_excursion_deg": max(control_surface_excursions) if control_surface_excursions else 0.0,
     }
+    track_points = extract_track_points(rows)
+    metrics.update(
+        waypoint_tracking_metrics(scenario_points or [], track_points)
+    )
+    return metrics
 
 
 def evaluate_requirements(
@@ -271,6 +339,8 @@ def evaluate_requirements(
 
 
 def run_with_simulator(ssp_path: Path, result_file: Path, stop_time: float) -> None:
+    import pyssp4sim
+
     config = f"""
 {{
     "simulation" :
@@ -359,7 +429,7 @@ def simulate_scenario(
             raise FileNotFoundError(f"SSP file not found: {ssp_path}")
         run_with_simulator(ssp_path, result_file, stop_time)
 
-    metrics = summarize_result_file(result_file)
+    metrics = summarize_result_file(result_file, scenario_points=scenario["points"])
     metrics["total_distance_km"] = total_distance
     metrics["stop_time_s"] = stop_time
 
@@ -410,6 +480,12 @@ def simulate_scenario(
                 "thrust_kn_max",
                 "mass_flow_kgps_max",
                 "control_surface_excursion_deg",
+                "waypoint_miss_max_km",
+                "waypoint_miss_avg_km",
+                "waypoint_hits",
+                "waypoint_total",
+                "waypoint_within_threshold_fraction",
+                "waypoints_followed",
             ]
             if key in metrics
         },

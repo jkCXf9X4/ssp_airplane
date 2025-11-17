@@ -46,3 +46,5 @@ venv/
 build/
 third_party/
 .pip_cache/
+
+tmp_results/

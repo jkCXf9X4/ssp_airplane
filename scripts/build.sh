@@ -41,4 +41,3 @@ echo "Build pipeline completed successfully."
 
 echo "Simulate scenario!"
 python3 scripts/simulate_scenario.py --scenario build/scenarios/test_scenario.json
-

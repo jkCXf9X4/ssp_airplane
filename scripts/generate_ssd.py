@@ -53,6 +53,7 @@ MODEL_CLASS_MAP: Dict[str, str] = {
     "AdaptiveWingSystem": "Aircraft.AdaptiveWingSystem",
     "MissionComputer": "Aircraft.MissionComputer",
     "AutopilotModule": "Aircraft.AutopilotModule",
+    "InputOutput": "Aircraft.InputOutput",
     "PowerSystem": "Aircraft.PowerSystem",
     "FuelSystem": "Aircraft.FuelSystem",
     "ControlInterface": "Aircraft.ControlInterface",

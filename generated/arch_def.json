@@ -91,14 +91,74 @@
       "src_port": "guidanceCmd"
     },
     {
+      "dst_component": "MissionComputer",
+      "dst_port": "autopilotInput",
+      "src_component": "AutopilotModule",
+      "src_port": "autopilotCmd"
+    },
+    {
+      "dst_component": "MissionComputer",
+      "dst_port": "autopilotStatus",
+      "src_component": "AutopilotModule",
+      "src_port": "missionStatus"
+    },
+    {
       "dst_component": "AutopilotModule",
       "dst_port": "feedbackBus",
       "src_component": "MissionComputer",
       "src_port": "flightStatus"
     },
     {
+      "dst_component": "AutopilotModule",
+      "dst_port": "currentLocation",
+      "src_component": "MissionComputer",
+      "src_port": "locationLLA"
+    },
+    {
+      "dst_component": "AutopilotModule",
+      "dst_port": "currentOrientation",
+      "src_component": "MissionComputer",
+      "src_port": "orientationEuler"
+    },
+    {
       "dst_component": "FlyByWireController",
       "dst_port": "flightFeedback",
+      "src_component": "MissionComputer",
+      "src_port": "flightStatus"
+    },
+    {
+      "dst_component": "InputOutput",
+      "dst_port": "locationLLA",
+      "src_component": "MissionComputer",
+      "src_port": "locationLLA"
+    },
+    {
+      "dst_component": "InputOutput",
+      "dst_port": "orientation",
+      "src_component": "MissionComputer",
+      "src_port": "orientationEuler"
+    },
+    {
+      "dst_component": "InputOutput",
+      "dst_port": "missionStatus",
+      "src_component": "AutopilotModule",
+      "src_port": "missionStatus"
+    },
+    {
+      "dst_component": "InputOutput",
+      "dst_port": "autopilotCmd",
+      "src_component": "AutopilotModule",
+      "src_port": "autopilotCmd"
+    },
+    {
+      "dst_component": "InputOutput",
+      "dst_port": "guidance",
+      "src_component": "AutopilotModule",
+      "src_port": "guidanceCmd"
+    },
+    {
+      "dst_component": "InputOutput",
+      "dst_port": "flightStatus",
       "src_component": "MissionComputer",
       "src_port": "flightStatus"
     },
@@ -504,6 +564,66 @@
         },
         {
           "direction": "in",
+          "doc": "Current geodetic position from mission computer.",
+          "name": "currentLocation",
+          "payload": "GeodeticLLA",
+          "payload_def": {
+            "attributes": {
+              "altitude_m": {
+                "doc": null,
+                "name": "altitude_m",
+                "type": "Real",
+                "value": null
+              },
+              "latitude_deg": {
+                "doc": null,
+                "name": "latitude_deg",
+                "type": "Real",
+                "value": null
+              },
+              "longitude_deg": {
+                "doc": null,
+                "name": "longitude_deg",
+                "type": "Real",
+                "value": null
+              }
+            },
+            "doc": "Geodetic latitude/longitude (degrees) and altitude (meters) above mean sea level.",
+            "name": "GeodeticLLA"
+          }
+        },
+        {
+          "direction": "in",
+          "doc": "Current attitude from mission computer.",
+          "name": "currentOrientation",
+          "payload": "OrientationEuler",
+          "payload_def": {
+            "attributes": {
+              "pitch_deg": {
+                "doc": null,
+                "name": "pitch_deg",
+                "type": "Real",
+                "value": null
+              },
+              "roll_deg": {
+                "doc": null,
+                "name": "roll_deg",
+                "type": "Real",
+                "value": null
+              },
+              "yaw_deg": {
+                "doc": null,
+                "name": "yaw_deg",
+                "type": "Real",
+                "value": null
+              }
+            },
+            "doc": "Air vehicle orientation expressed as body-to-earth Euler angles in degrees.",
+            "name": "OrientationEuler"
+          }
+        },
+        {
+          "direction": "in",
           "doc": "Air-data/INS feed for hold modes and envelope limits.",
           "name": "airDataIn",
           "payload": "AirDataInertialState",
@@ -710,6 +830,120 @@
             },
             "doc": "Autopilot-to-mission-computer guidance cues for co-simulation.",
             "name": "AutonomyGuidance"
+          }
+        },
+        {
+          "direction": "out",
+          "doc": "HOTAS-equivalent command stream for mission computer blending.",
+          "name": "autopilotCmd",
+          "payload": "PilotCommand",
+          "payload_def": {
+            "attributes": {
+              "button_mask": {
+                "doc": null,
+                "name": "button_mask",
+                "type": "Integer",
+                "value": null
+              },
+              "hat_x": {
+                "doc": null,
+                "name": "hat_x",
+                "type": "Integer",
+                "value": null
+              },
+              "hat_y": {
+                "doc": null,
+                "name": "hat_y",
+                "type": "Integer",
+                "value": null
+              },
+              "mode_switch": {
+                "doc": null,
+                "name": "mode_switch",
+                "type": "Integer",
+                "value": null
+              },
+              "reserved": {
+                "doc": null,
+                "name": "reserved",
+                "type": "Integer",
+                "value": null
+              },
+              "rudder_norm": {
+                "doc": null,
+                "name": "rudder_norm",
+                "type": "Real",
+                "value": null
+              },
+              "stick_pitch_norm": {
+                "doc": null,
+                "name": "stick_pitch_norm",
+                "type": "Real",
+                "value": null
+              },
+              "stick_roll_norm": {
+                "doc": null,
+                "name": "stick_roll_norm",
+                "type": "Real",
+                "value": null
+              },
+              "throttle_aux_norm": {
+                "doc": null,
+                "name": "throttle_aux_norm",
+                "type": "Real",
+                "value": null
+              },
+              "throttle_norm": {
+                "doc": null,
+                "name": "throttle_norm",
+                "type": "Real",
+                "value": null
+              }
+            },
+            "doc": "HOTAS-style control payload shared across control surfaces and mission computer consumers.",
+            "name": "PilotCommand"
+          }
+        },
+        {
+          "direction": "out",
+          "doc": "Tracking of waypoint progress for mission supervision.",
+          "name": "missionStatus",
+          "payload": "MissionStatus",
+          "payload_def": {
+            "attributes": {
+              "arrived": {
+                "doc": null,
+                "name": "arrived",
+                "type": "Boolean",
+                "value": null
+              },
+              "complete": {
+                "doc": null,
+                "name": "complete",
+                "type": "Boolean",
+                "value": null
+              },
+              "distance_to_waypoint_km": {
+                "doc": null,
+                "name": "distance_to_waypoint_km",
+                "type": "Real",
+                "value": null
+              },
+              "total_waypoints": {
+                "doc": null,
+                "name": "total_waypoints",
+                "type": "Integer",
+                "value": null
+              },
+              "waypoint_index": {
+                "doc": null,
+                "name": "waypoint_index",
+                "type": "Integer",
+                "value": null
+              }
+            },
+            "doc": "Waypoint-tracking telemetry from the autopilot navigation loop.",
+            "name": "MissionStatus"
           }
         }
       ]
@@ -1281,6 +1515,260 @@
         }
       ]
     },
+    "InputOutput": {
+      "attributes": {},
+      "doc": "Simulation sink for debugging and recording mission/autopilot telemetry.",
+      "name": "InputOutput",
+      "parts": [],
+      "ports": [
+        {
+          "direction": "in",
+          "doc": null,
+          "name": "locationLLA",
+          "payload": "GeodeticLLA",
+          "payload_def": {
+            "attributes": {
+              "altitude_m": {
+                "doc": null,
+                "name": "altitude_m",
+                "type": "Real",
+                "value": null
+              },
+              "latitude_deg": {
+                "doc": null,
+                "name": "latitude_deg",
+                "type": "Real",
+                "value": null
+              },
+              "longitude_deg": {
+                "doc": null,
+                "name": "longitude_deg",
+                "type": "Real",
+                "value": null
+              }
+            },
+            "doc": "Geodetic latitude/longitude (degrees) and altitude (meters) above mean sea level.",
+            "name": "GeodeticLLA"
+          }
+        },
+        {
+          "direction": "in",
+          "doc": null,
+          "name": "orientation",
+          "payload": "OrientationEuler",
+          "payload_def": {
+            "attributes": {
+              "pitch_deg": {
+                "doc": null,
+                "name": "pitch_deg",
+                "type": "Real",
+                "value": null
+              },
+              "roll_deg": {
+                "doc": null,
+                "name": "roll_deg",
+                "type": "Real",
+                "value": null
+              },
+              "yaw_deg": {
+                "doc": null,
+                "name": "yaw_deg",
+                "type": "Real",
+                "value": null
+              }
+            },
+            "doc": "Air vehicle orientation expressed as body-to-earth Euler angles in degrees.",
+            "name": "OrientationEuler"
+          }
+        },
+        {
+          "direction": "in",
+          "doc": null,
+          "name": "missionStatus",
+          "payload": "MissionStatus",
+          "payload_def": {
+            "attributes": {
+              "arrived": {
+                "doc": null,
+                "name": "arrived",
+                "type": "Boolean",
+                "value": null
+              },
+              "complete": {
+                "doc": null,
+                "name": "complete",
+                "type": "Boolean",
+                "value": null
+              },
+              "distance_to_waypoint_km": {
+                "doc": null,
+                "name": "distance_to_waypoint_km",
+                "type": "Real",
+                "value": null
+              },
+              "total_waypoints": {
+                "doc": null,
+                "name": "total_waypoints",
+                "type": "Integer",
+                "value": null
+              },
+              "waypoint_index": {
+                "doc": null,
+                "name": "waypoint_index",
+                "type": "Integer",
+                "value": null
+              }
+            },
+            "doc": "Waypoint-tracking telemetry from the autopilot navigation loop.",
+            "name": "MissionStatus"
+          }
+        },
+        {
+          "direction": "in",
+          "doc": null,
+          "name": "autopilotCmd",
+          "payload": "PilotCommand",
+          "payload_def": {
+            "attributes": {
+              "button_mask": {
+                "doc": null,
+                "name": "button_mask",
+                "type": "Integer",
+                "value": null
+              },
+              "hat_x": {
+                "doc": null,
+                "name": "hat_x",
+                "type": "Integer",
+                "value": null
+              },
+              "hat_y": {
+                "doc": null,
+                "name": "hat_y",
+                "type": "Integer",
+                "value": null
+              },
+              "mode_switch": {
+                "doc": null,
+                "name": "mode_switch",
+                "type": "Integer",
+                "value": null
+              },
+              "reserved": {
+                "doc": null,
+                "name": "reserved",
+                "type": "Integer",
+                "value": null
+              },
+              "rudder_norm": {
+                "doc": null,
+                "name": "rudder_norm",
+                "type": "Real",
+                "value": null
+              },
+              "stick_pitch_norm": {
+                "doc": null,
+                "name": "stick_pitch_norm",
+                "type": "Real",
+                "value": null
+              },
+              "stick_roll_norm": {
+                "doc": null,
+                "name": "stick_roll_norm",
+                "type": "Real",
+                "value": null
+              },
+              "throttle_aux_norm": {
+                "doc": null,
+                "name": "throttle_aux_norm",
+                "type": "Real",
+                "value": null
+              },
+              "throttle_norm": {
+                "doc": null,
+                "name": "throttle_norm",
+                "type": "Real",
+                "value": null
+              }
+            },
+            "doc": "HOTAS-style control payload shared across control surfaces and mission computer consumers.",
+            "name": "PilotCommand"
+          }
+        },
+        {
+          "direction": "in",
+          "doc": null,
+          "name": "guidance",
+          "payload": "AutonomyGuidance",
+          "payload_def": {
+            "attributes": {
+              "aggressiveness_norm": {
+                "doc": null,
+                "name": "aggressiveness_norm",
+                "type": "Real",
+                "value": null
+              },
+              "lateral_accel_mps2": {
+                "doc": null,
+                "name": "lateral_accel_mps2",
+                "type": "Real",
+                "value": null
+              },
+              "waypoint_altitude_m": {
+                "doc": null,
+                "name": "waypoint_altitude_m",
+                "type": "Real",
+                "value": null
+              },
+              "waypoint_heading_deg": {
+                "doc": null,
+                "name": "waypoint_heading_deg",
+                "type": "Real",
+                "value": null
+              }
+            },
+            "doc": "Autopilot-to-mission-computer guidance cues for co-simulation.",
+            "name": "AutonomyGuidance"
+          }
+        },
+        {
+          "direction": "in",
+          "doc": null,
+          "name": "flightStatus",
+          "payload": "FlightStatusPacket",
+          "payload_def": {
+            "attributes": {
+              "airspeed_mps": {
+                "doc": null,
+                "name": "airspeed_mps",
+                "type": "Real",
+                "value": null
+              },
+              "angle_of_attack_deg": {
+                "doc": null,
+                "name": "angle_of_attack_deg",
+                "type": "Real",
+                "value": null
+              },
+              "energy_state_norm": {
+                "doc": null,
+                "name": "energy_state_norm",
+                "type": "Real",
+                "value": null
+              },
+              "health_code": {
+                "doc": null,
+                "name": "health_code",
+                "type": "Integer",
+                "value": null
+              }
+            },
+            "doc": "Mission computer status feedback consumed by autonomy and analysis models.",
+            "name": "FlightStatusPacket"
+          }
+        }
+      ]
+    },
     "MissionComputer": {
       "attributes": {
         "compute_budget_tops": {
@@ -1376,6 +1864,120 @@
             },
             "doc": "HOTAS-style control payload shared across control surfaces and mission computer consumers.",
             "name": "PilotCommand"
+          }
+        },
+        {
+          "direction": "in",
+          "doc": "Autopilot command bundle using same HOTAS signal structure.",
+          "name": "autopilotInput",
+          "payload": "PilotCommand",
+          "payload_def": {
+            "attributes": {
+              "button_mask": {
+                "doc": null,
+                "name": "button_mask",
+                "type": "Integer",
+                "value": null
+              },
+              "hat_x": {
+                "doc": null,
+                "name": "hat_x",
+                "type": "Integer",
+                "value": null
+              },
+              "hat_y": {
+                "doc": null,
+                "name": "hat_y",
+                "type": "Integer",
+                "value": null
+              },
+              "mode_switch": {
+                "doc": null,
+                "name": "mode_switch",
+                "type": "Integer",
+                "value": null
+              },
+              "reserved": {
+                "doc": null,
+                "name": "reserved",
+                "type": "Integer",
+                "value": null
+              },
+              "rudder_norm": {
+                "doc": null,
+                "name": "rudder_norm",
+                "type": "Real",
+                "value": null
+              },
+              "stick_pitch_norm": {
+                "doc": null,
+                "name": "stick_pitch_norm",
+                "type": "Real",
+                "value": null
+              },
+              "stick_roll_norm": {
+                "doc": null,
+                "name": "stick_roll_norm",
+                "type": "Real",
+                "value": null
+              },
+              "throttle_aux_norm": {
+                "doc": null,
+                "name": "throttle_aux_norm",
+                "type": "Real",
+                "value": null
+              },
+              "throttle_norm": {
+                "doc": null,
+                "name": "throttle_norm",
+                "type": "Real",
+                "value": null
+              }
+            },
+            "doc": "HOTAS-style control payload shared across control surfaces and mission computer consumers.",
+            "name": "PilotCommand"
+          }
+        },
+        {
+          "direction": "in",
+          "doc": "Mission status feedback from autopilot waypoint driver.",
+          "name": "autopilotStatus",
+          "payload": "MissionStatus",
+          "payload_def": {
+            "attributes": {
+              "arrived": {
+                "doc": null,
+                "name": "arrived",
+                "type": "Boolean",
+                "value": null
+              },
+              "complete": {
+                "doc": null,
+                "name": "complete",
+                "type": "Boolean",
+                "value": null
+              },
+              "distance_to_waypoint_km": {
+                "doc": null,
+                "name": "distance_to_waypoint_km",
+                "type": "Real",
+                "value": null
+              },
+              "total_waypoints": {
+                "doc": null,
+                "name": "total_waypoints",
+                "type": "Integer",
+                "value": null
+              },
+              "waypoint_index": {
+                "doc": null,
+                "name": "waypoint_index",
+                "type": "Integer",
+                "value": null
+              }
+            },
+            "doc": "Waypoint-tracking telemetry from the autopilot navigation loop.",
+            "name": "MissionStatus"
           }
         },
         {
@@ -3031,6 +3633,42 @@
       },
       "doc": "Aerodynamic state summary exported from wing solver.",
       "name": "LiftState"
+    },
+    "MissionStatus": {
+      "attributes": {
+        "arrived": {
+          "doc": null,
+          "name": "arrived",
+          "type": "Boolean",
+          "value": null
+        },
+        "complete": {
+          "doc": null,
+          "name": "complete",
+          "type": "Boolean",
+          "value": null
+        },
+        "distance_to_waypoint_km": {
+          "doc": null,
+          "name": "distance_to_waypoint_km",
+          "type": "Real",
+          "value": null
+        },
+        "total_waypoints": {
+          "doc": null,
+          "name": "total_waypoints",
+          "type": "Integer",
+          "value": null
+        },
+        "waypoint_index": {
+          "doc": null,
+          "name": "waypoint_index",
+          "type": "Integer",
+          "value": null
+        }
+      },
+      "doc": "Waypoint-tracking telemetry from the autopilot navigation loop.",
+      "name": "MissionStatus"
     },
     "OrientationEuler": {
       "attributes": {
