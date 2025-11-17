@@ -27,27 +27,6 @@ package Aircraft {
     attribute altitude_m: Real;
   }
 
-  port def AirDataInertialState {
-    doc /* High-rate pitot-static + INS fused navigation state for control-law inputs. */
-    attribute mach_number: Real;
-    attribute true_airspeed_mps: Real;
-    attribute indicated_airspeed_mps: Real;
-    attribute pressure_altitude_m: Real;
-    attribute vertical_speed_mps: Real;
-    attribute angle_of_attack_deg: Real;
-    attribute sideslip_deg: Real;
-    attribute roll_rate_degps: Real;
-    attribute pitch_rate_degps: Real;
-    attribute yaw_rate_degps: Real;
-  }
-
-  port def StructuralInterface {
-    doc /* Structural mounting loads transferred between assemblies. */
-    attribute axial_load_kn: Real;
-    attribute shear_load_kn: Real;
-    attribute bending_moment_knm: Real;
-  }
-
   port def SurfaceActuationCommand {
     doc /* Commanded surface deflections in degrees for co-simulation with aerodynamic models. */
     attribute left_aileron_deg: Real;
@@ -78,34 +57,6 @@ package Aircraft {
     attribute exhaust_velocity_mps: Real;
   }
 
-  port def GenericElectricalBus {
-    doc /* Power bus telemetry for avionics, control, and autonomy loads. */
-    attribute voltage_kv: Real;
-    attribute current_a: Real;
-    attribute available_power_kw: Real;
-  }
-
-  port def AutonomyGuidance {
-    doc /* Autopilot-to-mission-computer guidance cues for co-simulation. */
-    attribute waypoint_heading_deg: Real;
-    attribute waypoint_altitude_m: Real;
-    attribute lateral_accel_mps2: Real;
-    attribute aggressiveness_norm: Real;
-  }
-
-  port def FlightStatusPacket {
-    doc /* Mission computer status feedback consumed by autonomy and analysis models. */
-    attribute airspeed_mps: Real;
-    attribute energy_state_norm: Real;
-    attribute angle_of_attack_deg: Real;
-    attribute health_code: Integer;
-  }
-
-  port def FuelConsumptionRate {
-    doc /* Mass flow request or telemetry for turbofan fuel usage (kg/s). */
-    attribute mass_flow_kgps: Real;
-  }
-
   port def FuelLevelState {
     doc /* Remaining fuel mass and normalized level for availability tracking. */
     attribute fuel_remaining_kg: Real;
@@ -113,40 +64,11 @@ package Aircraft {
     attribute fuel_starved: Boolean;
   }
 
-  port def StoresCommandBus {
-    doc /* Mission-computer command bundle for nine-store management, power, and jettison logic. */
-    attribute selected_station: Integer;       /* 1..9 station index */
-    attribute release_enable: Boolean;         /* Master arm */
-    attribute pickle_command: Boolean;         /* True when release triggered */
-    attribute jettison_all: Boolean;           /* Emergency store dump */
-    attribute power_mode_mask: Integer;        /* bitmask enabling station power */
-    attribute config_checksum: Integer;        /* Validates loadout tables */
+  port def FlightStatusPacket {
+    doc /* Mission computer status feedback consumed by autonomy and analysis models. */
+    attribute airspeed_mps: Real;
   }
 
-  port def StoresStatusBus {
-    doc /* Health, weight, and readiness telemetry for all external stores. */
-    attribute store_present_mask: Integer;
-    attribute weapon_ready_mask: Integer;
-    attribute store_mass_total_kg: Real;
-    attribute cooling_demand_kw: Real;
-    attribute fault_code: Integer;
-  }
 
-  port def StructuralPerformanceState {
-    doc /* Structural and performance envelope monitoring for g-limit and Mach supervision. */
-    attribute load_factor_g: Real;
-    attribute mach_estimate: Real;
-    attribute structural_margin_norm: Real;
-    attribute stores_release_inhibit: Boolean;
-    attribute autopilot_limit_code: Integer;
-  }
 
-  port def MissionStatus {
-    doc /* Waypoint-tracking telemetry from the autopilot navigation loop. */
-    attribute waypoint_index : Integer;
-    attribute total_waypoints : Integer;
-    attribute distance_to_waypoint_km : Real;
-    attribute arrived : Boolean;
-    attribute complete : Boolean;
-  }
 }

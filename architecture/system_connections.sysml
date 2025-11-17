@@ -1,12 +1,5 @@
 package Aircraft {
-  connect TurbofanPropulsion.powerBus to PowerSystem.generatorInput;
-  connect PowerSystem.dcBus270 to MissionComputer.powerIn;
-  connect PowerSystem.acBus115 to ControlInterface.powerIn;
-  connect PowerSystem.autonomyFeed to AutopilotModule.powerIn;
-  connect PowerSystem.controlFeed to FlyByWireController.powerIn;
-  connect PowerSystem.avionicsFeed to AirDataAndInertialSuite.powerIn;
-  connect PowerSystem.emergencyBus to MissionComputer.backupPower;
-  connect PowerSystem.emergencyBus to AutopilotModule.backupPower;
+
   connect MissionComputer.surfaceBus to FlyByWireController.commandBus;
   connect MissionComputer.engineThrottle to TurbofanPropulsion.throttleCmd;
   connect TurbofanPropulsion.fuelFlow to FuelSystem.fuelFlowIn;

@@ -4,6 +4,9 @@ model MissionComputer
   parameter Integer flyByWireChannels = 3;
   parameter Real computeBudgetTOPS = 35;
   parameter Integer storesBuses = 2;
+  parameter Real initLatitude_deg = 0.0;
+  parameter Real initLongitude_deg = 0.0;
+  parameter Real speedScale = 150.0;
   input GI.PilotCommand manualInput;
   input GI.PilotCommand autopilotInput;
   input GI.MissionStatus autopilotStatus;
@@ -25,8 +28,11 @@ protected
   Real powerFactor;
   Real headingDeg(start=0);
   Real positionKm(start=0);
-  parameter Real headingGain = 75;
-  parameter Real velocityGain = 230;
+  Real headingRad;
+  Real latRad;
+  Real speed_mps;
+  Real latState(start=0);
+  Real lonState(start=0);
   Boolean autopilotEngaged;
   Real cmdStickRoll;
   Real cmdStickPitch;
@@ -70,6 +76,9 @@ equation
   measuredAirspeed = if airDataIn.true_airspeed_mps > 0 then airDataIn.true_airspeed_mps else 250 * manualScalar;
   releaseEnable = cmdButtonMask > 0 and not performanceStatus.stores_release_inhibit;
   presentMask = if storesStatus.store_present_mask > 0 then storesStatus.store_present_mask else 511;
+  speed_mps = measuredAirspeed;
+  headingRad = autonomyPort.waypoint_heading_deg * 3.14159265358979 / 180.0;
+  latRad = locationLLA.latitude_deg * 3.14159265358979 / 180.0;
 
   blendCmd = 0.5 * autonomyScalar + 0.5 * manualScalar;
   powerFactor = electricalScalar * fuelScalar * loadLimiter;
@@ -88,15 +97,17 @@ equation
   flightStatus.angle_of_attack_deg = airDataIn.angle_of_attack_deg;
   flightStatus.health_code = if fuelStatus.fuel_starved then 2 else if electricalScalar < 0.4 then 1 else storesBuses;
 
-  der(headingDeg) = headingGain * (cmdStickRoll / 2) + 20 * (autonomyScalar - 0.5);
-  der(positionKm) = velocityGain * engineThrottle.throttle_norm;
+  headingDeg = autonomyPort.waypoint_heading_deg;
+  der(positionKm) = engineThrottle.throttle_norm;
 
   orientationEuler.roll_deg = surfaceBus.left_aileron_deg - surfaceBus.right_aileron_deg;
   orientationEuler.pitch_deg = airDataIn.angle_of_attack_deg;
   orientationEuler.yaw_deg = headingDeg;
 
-  locationLLA.latitude_deg = positionKm / 111.0;
-  locationLLA.longitude_deg = 0.0;
+  der(latState) = (speed_mps * speedScale * cos(headingRad)) / 111000.0;
+  der(lonState) = if cos(latRad) > 1e-6 then (speed_mps * speedScale * sin(headingRad)) / (111000.0 * cos(latRad)) else 0;
+  locationLLA.latitude_deg = initLatitude_deg + latState;
+  locationLLA.longitude_deg = initLongitude_deg + lonState;
   locationLLA.altitude_m = 0.5 * autonomyPort.waypoint_altitude_m + 0.5 * airDataIn.pressure_altitude_m;
 
   storesCommand.selected_station = 1 + integer(mod(time, 9));
