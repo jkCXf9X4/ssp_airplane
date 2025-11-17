@@ -78,7 +78,6 @@ package Aircraft {
     doc /* Redundant emergency-bus feed for backup avionics power. */
     in port backupPower : GenericElectricalBus;
 
-
     doc /* Structured throttle/fuel enable command to propulsion. */
     out port engineThrottle : ThrottleCommand;
 

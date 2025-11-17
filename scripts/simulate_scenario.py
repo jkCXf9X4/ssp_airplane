@@ -1,22 +1,23 @@
 #!/usr/bin/env python3
-"""Simulate a waypoint scenario with OMSimulator or an analytic dry-run."""
+"""Simulate a waypoint scenario with OMSimulator and post-process the results."""
 
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import math
-import sys
-import tempfile
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Sequence
 
 import pyssp4sim
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SSP = REPO_ROOT / "build" / "ssp" / "aircraft.ssp"
 DEFAULT_RESULTS = REPO_ROOT / "build" / "results"
+DEFAULT_FUEL_CAPACITY = 3100.0
+RESERVE_FRACTION = 0.08
 
 
 def load_json(path: Path) -> Dict[str, Any]:
@@ -45,6 +46,44 @@ def estimate_duration(distance_km: float, cruise_speed_mps: float) -> float:
     return max(60.0, (distance_km * 1000.0) / max(1.0, cruise_speed_mps))
 
 
+def _numeric_series(
+    rows: Sequence[Dict[str, str]], key: str, cast=float
+) -> List[float]:
+    values: List[float] = []
+    for row in rows:
+        raw = row.get(key, "")
+        if raw is None:
+            continue
+        raw_str = str(raw).strip()
+        if not raw_str:
+            continue
+        try:
+            values.append(cast(raw_str))
+        except ValueError:
+            try:
+                values.append(cast(raw_str.replace(",", "")))
+            except ValueError:
+                continue
+    return values
+
+
+def _span(values: Sequence[float]) -> float:
+    return max(values) - min(values) if values else 0.0
+
+
+def _read_result_rows(result_file: Path) -> List[Dict[str, str]]:
+    with result_file.open() as fh:
+        reader = csv.DictReader(fh)
+        return list(reader)
+
+
+@dataclass
+class RequirementEvaluation:
+    identifier: str
+    passed: bool
+    evidence: str
+
+
 @dataclass
 class ScenarioResult:
     scenario_path: Path
@@ -57,10 +96,123 @@ class ScenarioResult:
     meets_range_requirement: bool
     used_oms: bool
     result_file: Optional[Path]
+    metrics: Dict[str, float] = field(default_factory=dict)
+    requirement_evaluations: List[RequirementEvaluation] = field(default_factory=list)
+
+
+def summarize_result_file(result_file: Path) -> Dict[str, float]:
+    rows = _read_result_rows(result_file)
+    time_series = _numeric_series(rows, "time")
+
+    mach_series = _numeric_series(
+        rows, "StructuralLoadsAndPerformanceMonitor.performanceStatus.mach_estimate"
+    ) or _numeric_series(rows, "AirDataAndInertialSuite.airDataOut.mach_number")
+    g_series = _numeric_series(
+        rows, "StructuralLoadsAndPerformanceMonitor.performanceStatus.load_factor_g"
+    )
+    structural_margin = _numeric_series(
+        rows,
+        "StructuralLoadsAndPerformanceMonitor.performanceStatus.structural_margin_norm",
+    )
+    fuel_remaining = _numeric_series(
+        rows, "TurbofanPropulsion.fuelStatus.fuel_remaining_kg"
+    )
+    fuel_level_norm = _numeric_series(
+        rows, "TurbofanPropulsion.fuelStatus.fuel_level_norm"
+    )
+    fuel_starved = _numeric_series(rows, "TurbofanPropulsion.fuelStatus.fuel_starved")
+    stores_masks = _numeric_series(
+        rows, "StoresManagementSystem.storesTelemetry.store_present_mask", cast=int
+    )
+    autopilot_limits = _numeric_series(
+        rows, "StructuralLoadsAndPerformanceMonitor.performanceStatus.autopilot_limit_code", cast=int
+    ) or _numeric_series(
+        rows, "AutopilotModule.performanceStatus.autopilot_limit_code", cast=int
+    )
+    energy_state = _numeric_series(
+        rows, "AutopilotModule.feedbackBus.energy_state_norm"
+    )
+    thrust_kn = _numeric_series(rows, "TurbofanPropulsion.thrustOut.thrust_kn")
+    mass_flow = _numeric_series(rows, "TurbofanPropulsion.thrustOut.mass_flow_kgps") or _numeric_series(
+        rows, "TurbofanPropulsion.fuelFlow.mass_flow_kgps"
+    )
+    control_surface_excursions = [
+        _span(_numeric_series(rows, "AdaptiveWingSystem.controlSurfaces.elevator_deg")),
+        _span(_numeric_series(rows, "AdaptiveWingSystem.controlSurfaces.flaperon_deg")),
+        _span(_numeric_series(rows, "FlyByWireController.commandBus.elevator_deg")),
+    ]
+
+    stores_available = 0
+    if stores_masks:
+        stores_available = max(int(mask).bit_count() for mask in stores_masks)
+
+    fuel_initial_candidates = [v for v in fuel_remaining if v > 0]
+    fuel_initial = (
+        fuel_initial_candidates[0]
+        if fuel_initial_candidates
+        else (fuel_remaining[0] if fuel_remaining else 0.0)
+    )
+    fuel_final_candidates = [v for v in reversed(fuel_remaining) if v >= 0]
+    fuel_final = fuel_final_candidates[0] if fuel_final_candidates else 0.0
+
+    return {
+        "duration_s": time_series[-1] if time_series else 0.0,
+        "max_mach": max(mach_series) if mach_series else 0.0,
+        "max_load_factor_g": max(g_series) if g_series else 0.0,
+        "min_structural_margin": min(structural_margin) if structural_margin else 1.0,
+        "fuel_initial_kg": fuel_initial,
+        "fuel_final_kg": fuel_final,
+        "fuel_used_kg": max(fuel_initial - fuel_final, 0.0),
+        "fuel_level_norm_min": min(fuel_level_norm) if fuel_level_norm else 0.0,
+        "fuel_starved_events": len([v for v in fuel_starved if v > 0.5]),
+        "stores_available": stores_available,
+        "autopilot_limit_max": max(autopilot_limits) if autopilot_limits else 0,
+        "energy_state_min": min(energy_state) if energy_state else 0.0,
+        "thrust_kn_max": max(thrust_kn) if thrust_kn else 0.0,
+        "mass_flow_kgps_max": max(mass_flow) if mass_flow else 0.0,
+        "control_surface_excursion_deg": max(control_surface_excursions) if control_surface_excursions else 0.0,
+    }
+
+
+def evaluate_requirements(
+    metrics: Dict[str, float], fuel_capacity_kg: float
+) -> List[RequirementEvaluation]:
+    reserve = fuel_capacity_kg * RESERVE_FRACTION
+    evaluations = [
+        RequirementEvaluation(
+            identifier="REQ_Performance",
+            passed=metrics.get("max_mach", 0.0) >= 2.0
+            and metrics.get("max_load_factor_g", 0.0) >= 9.0,
+            evidence=f"mach={metrics.get('max_mach', 0.0):.2f}, g-load={metrics.get('max_load_factor_g', 0.0):.2f}",
+        ),
+        RequirementEvaluation(
+            identifier="REQ_Fuel",
+            passed=metrics.get("fuel_final_kg", 0.0) >= reserve
+            and metrics.get("fuel_starved_events", 0.0) == 0,
+            evidence=f"final fuel={metrics.get('fuel_final_kg', 0.0):.1f} kg, reserve={reserve:.1f} kg",
+        ),
+        RequirementEvaluation(
+            identifier="REQ_Control",
+            passed=metrics.get("autopilot_limit_max", 1) == 0
+            and metrics.get("control_surface_excursion_deg", 0.0) > 0.0,
+            evidence=f"autopilot_limit={metrics.get('autopilot_limit_max', 1)}, control_excursion={metrics.get('control_surface_excursion_deg', 0.0):.2f} deg",
+        ),
+        RequirementEvaluation(
+            identifier="REQ_Mission",
+            passed=metrics.get("stores_available", 0) >= 9,
+            evidence=f"stores_available={metrics.get('stores_available', 0)}",
+        ),
+        RequirementEvaluation(
+            identifier="REQ_Propulsion",
+            passed=metrics.get("thrust_kn_max", 0.0) > 0.0
+            and metrics.get("mass_flow_kgps_max", 0.0) > 0.0,
+            evidence=f"thrust={metrics.get('thrust_kn_max', 0.0):.1f} kN, mass_flow={metrics.get('mass_flow_kgps_max', 0.0):.2f} kg/s",
+        ),
+    ]
+    return evaluations
 
 
 def run_with_simulator(ssp_path: Path, result_file: Path, stop_time: float) -> None:
-
     config = f"""
 {{
     "simulation" :
@@ -106,9 +258,9 @@ def run_with_simulator(ssp_path: Path, result_file: Path, stop_time: float) -> N
     }}
 }}
 """
-    temp_config = DEFAULT_RESULTS / "config.json"
+    temp_config = result_file.parent / "config.json"
     with open(temp_config, "w") as f:
-        f.write(config) 
+        f.write(config)
 
     sim = pyssp4sim.Simulator(temp_config.as_posix())
     sim.init()
@@ -117,29 +269,103 @@ def run_with_simulator(ssp_path: Path, result_file: Path, stop_time: float) -> N
 
 def simulate_scenario(
     scenario_path: Path,
-    ssp_path: Path = None,
+    ssp_path: Optional[Path] = None,
     results_dir: Path = DEFAULT_RESULTS,
+    reuse_results: bool = True,
+    stop_time: Optional[float] = None,
 ) -> ScenarioResult:
     scenario = load_json(scenario_path)
     if "points" not in scenario:
         raise ValueError("Scenario file must contain a 'points' list.")
 
+    overrides = scenario.get("simulation_overrides", {})
+    cruise_speed = float(overrides.get("cruise_speed_mps", 250.0))
     total_distance = scenario.get("total_distance_km") or haversine_distance_km(
         scenario["points"]
     )
-    if not ssp_path:
-        ssp_path = DEFAULT_SSP
-    if not ssp_path.exists():
-        raise FileNotFoundError(f"SSP file not found: {ssp_path}")
-    
+
     results_dir.mkdir(parents=True, exist_ok=True)
     result_file = results_dir / f"{scenario_path.stem}_results.csv"
-    run_with_simulator(ssp_path, result_file, 3600)
+
+    if stop_time is None:
+        stop_time = max(estimate_duration(total_distance, cruise_speed) * 1.1, 120.0)
+
+    if not reuse_results or not result_file.exists():
+        ssp_path = ssp_path or DEFAULT_SSP
+        if not ssp_path.exists():
+            raise FileNotFoundError(f"SSP file not found: {ssp_path}")
+        run_with_simulator(ssp_path, result_file, stop_time)
+
+    metrics = summarize_result_file(result_file)
+    metrics["total_distance_km"] = total_distance
+    metrics["stop_time_s"] = stop_time
+
+    fuel_capacity = float(
+        overrides.get("fuel_capacity_kg", metrics.get("fuel_initial_kg", DEFAULT_FUEL_CAPACITY))
+    )
+    fuel_burn_rate = float(
+        overrides.get(
+            "fuel_burn_rate_kgps",
+            metrics["fuel_used_kg"] / metrics["duration_s"] if metrics.get("duration_s") else 0.0,
+        )
+        or 0.0
+    )
+    estimated_duration = metrics.get("duration_s") or estimate_duration(
+        total_distance, cruise_speed
+    )
+    fuel_required = metrics.get("fuel_used_kg") or estimated_duration * fuel_burn_rate
+
+    reserve = fuel_capacity * RESERVE_FRACTION
+    fuel_final = metrics.get("fuel_final_kg", fuel_capacity - fuel_required)
+    fuel_exhausted = fuel_final <= 0 or fuel_final < reserve
+    meets_range_requirement = fuel_required <= max(fuel_capacity - reserve, 0.0) and not fuel_exhausted
+
+    requirement_evaluations = evaluate_requirements(metrics, fuel_capacity)
+
+    summary = {
+        "scenario": scenario.get("name", scenario_path.stem),
+        "distance_km": total_distance,
+        "duration_s": estimated_duration,
+        "fuel_capacity_kg": fuel_capacity,
+        "fuel_required_kg": fuel_required,
+        "requirements": [
+            {"id": eval_.identifier, "passed": eval_.passed, "evidence": eval_.evidence}
+            for eval_ in requirement_evaluations
+        ],
+        "metrics": {
+            key: metrics[key]
+            for key in [
+                "max_mach",
+                "max_load_factor_g",
+                "fuel_initial_kg",
+                "fuel_final_kg",
+                "fuel_used_kg",
+                "stores_available",
+                "autopilot_limit_max",
+                "thrust_kn_max",
+                "mass_flow_kgps_max",
+                "control_surface_excursion_deg",
+            ]
+            if key in metrics
+        },
+    }
+
+    summary_path = results_dir / f"{scenario_path.stem}_summary.json"
+    summary_path.write_text(json.dumps(summary, indent=2))
 
     return ScenarioResult(
         scenario_path=scenario_path,
         total_distance_km=total_distance,
+        estimated_duration_s=estimated_duration,
+        fuel_capacity_kg=fuel_capacity,
+        fuel_burn_rate_kgps=fuel_burn_rate,
+        fuel_required_kg=fuel_required,
+        fuel_exhausted=fuel_exhausted,
+        meets_range_requirement=meets_range_requirement,
+        used_oms=result_file.exists(),
         result_file=result_file,
+        metrics=metrics,
+        requirement_evaluations=requirement_evaluations,
     )
 
 
@@ -152,6 +378,17 @@ def parse_args() -> argparse.Namespace:
         "--ssp", type=Path, default=DEFAULT_SSP, help="Path to the SSP archive."
     )
     parser.add_argument("--results-dir", type=Path, default=DEFAULT_RESULTS)
+    parser.add_argument(
+        "--reuse-results",
+        action="store_true",
+        help="Skip OMSimulator run when a result CSV already exists for the scenario.",
+    )
+    parser.add_argument(
+        "--stop-time",
+        type=float,
+        default=None,
+        help="Override OMSimulator stop time in seconds.",
+    )
 
     return parser.parse_args()
 
@@ -162,6 +399,8 @@ def main() -> None:
         scenario_path=args.scenario,
         ssp_path=args.ssp,
         results_dir=args.results_dir,
+        reuse_results=args.reuse_results,
+        stop_time=args.stop_time,
     )
     print(
         json.dumps(
@@ -174,6 +413,10 @@ def main() -> None:
                 "meets_range_requirement": result.meets_range_requirement,
                 "used_oms": result.used_oms,
                 "result_file": str(result.result_file) if result.result_file else None,
+                "requirements": [
+                    {"id": eval_.identifier, "passed": eval_.passed}
+                    for eval_ in result.requirement_evaluations
+                ],
             },
             indent=2,
         )
