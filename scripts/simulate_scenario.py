@@ -7,9 +7,12 @@ import argparse
 import csv
 import json
 import math
+import shutil
+import zipfile
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence, Tuple
+import xml.etree.ElementTree as ET
 
 # activate venv prior
 import pyssp4sim
@@ -194,6 +197,85 @@ def waypoint_tracking_metrics(
     }
 
 
+def emit_waypoint_parameter_set(
+    scenario_points: List[Dict[str, float]],
+    output_path: Path,
+    component: str = "AutopilotModule",
+) -> Path:
+    ns = "http://ssp-standard.org/SSP1/ParameterValues"
+    ET.register_namespace("ssv", ns)
+    root = ET.Element(f"{{{ns}}}ParameterSet", attrib={"name": "Waypoints"})
+    params = ET.SubElement(root, f"{{{ns}}}Parameters")
+
+    def add_param(name: str, type_tag: str, value: str) -> None:
+        param_elem = ET.SubElement(params, f"{{{ns}}}Parameter", attrib={"name": name})
+        value_elem = ET.SubElement(param_elem, f"{{{ns}}}{type_tag}")
+        value_elem.set("value", value)
+
+    for idx, point in enumerate(scenario_points, start=1):
+        add_param(f"{component}.waypointLat[{idx}]", "Real", f"{float(point['latitude_deg']):.6f}")
+        add_param(f"{component}.waypointLon[{idx}]", "Real", f"{float(point['longitude_deg']):.6f}")
+        alt = float(point.get("altitude_m", 0.0))
+        add_param(f"{component}.waypointAlt[{idx}]", "Real", f"{alt:.2f}")
+
+    add_param(f"{component}.waypointCount", "Integer", f"{len(scenario_points)}")
+
+    tree = ET.ElementTree(root)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    ET.indent(tree, space="  ", level=0)
+    tree.write(output_path, encoding="UTF-8", xml_declaration=True)
+    return output_path
+
+
+def prepare_ssp_with_parameters(
+    ssp_path: Path, parameter_set: Path, scenario_stem: str, results_dir: Path
+) -> Path:
+    run_dir = results_dir / f"{scenario_stem}_run"
+    unpack_dir = run_dir / "unpacked"
+    if unpack_dir.exists():
+        shutil.rmtree(unpack_dir)
+    unpack_dir.mkdir(parents=True, exist_ok=True)
+
+    with zipfile.ZipFile(ssp_path, "r") as archive:
+        archive.extractall(unpack_dir)
+
+    resources_dir = unpack_dir / "resources"
+    resources_dir.mkdir(parents=True, exist_ok=True)
+    dest_ssv = resources_dir / parameter_set.name
+    shutil.copy(parameter_set, dest_ssv)
+
+    ssd_path = unpack_dir / "SystemStructure.ssd"
+    ssd_ns = "http://ssp-standard.org/SSP1/SystemStructureDescription"
+    ssc_ns = "http://ssp-standard.org/SSP1/SystemStructureCommon"
+    ET.register_namespace("ssd", ssd_ns)
+    ET.register_namespace("ssc", ssc_ns)
+    ns = {"ssd": ssd_ns}
+    tree = ET.parse(ssd_path)
+    root = tree.getroot()
+    system = root.find(".//ssd:System", ns)
+    if system is None:
+        system = root
+    bindings = system.find("ssd:ParameterBindings", ns)
+    if bindings is None:
+        bindings = ET.SubElement(system, f"{{{ssd_ns}}}ParameterBindings")
+    # remove duplicate bindings for same source
+    for existing in list(bindings):
+        if existing.get("source") == f"resources/{dest_ssv.name}":
+            bindings.remove(existing)
+    ET.SubElement(bindings, f"{{{ssd_ns}}}ParameterBinding", attrib={"source": f"resources/{dest_ssv.name}"})
+    ET.indent(tree, space="  ")
+    tree.write(ssd_path, encoding="UTF-8", xml_declaration=True)
+
+    prepared_ssp = run_dir / f"{scenario_stem}.ssp"
+    if prepared_ssp.exists():
+        prepared_ssp.unlink()
+    with zipfile.ZipFile(prepared_ssp, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        for path in unpack_dir.rglob("*"):
+            if path.is_file():
+                archive.write(path, arcname=path.relative_to(unpack_dir))
+    return prepared_ssp
+
+
 @dataclass
 class RequirementEvaluation:
     identifier: str
@@ -217,6 +299,8 @@ class ScenarioResult:
     requirement_evaluations: List[RequirementEvaluation] = field(default_factory=list)
     scenario_string: str = ""
     plot_path: Optional[Path] = None
+    parameter_set_path: Optional[Path] = None
+    prepared_ssp_path: Optional[Path] = None
 
 
 def summarize_result_file(
@@ -422,15 +506,17 @@ def simulate_scenario(
     result_file = results_dir / f"{scenario_path.stem}_results.csv"
     waypoints_file = results_dir / f"{scenario_path.stem}_waypoints.txt"
     waypoints_file.write_text(scenario_string)
+    parameter_set_path = results_dir / f"{scenario_path.stem}_waypoints.ssv"
+    emit_waypoint_parameter_set(scenario["points"], parameter_set_path)
+    prepared_ssp = prepare_ssp_with_parameters(ssp_path or DEFAULT_SSP, parameter_set_path, scenario_path.stem, results_dir)
 
     if stop_time is None:
         stop_time = max(estimate_duration(total_distance, cruise_speed) * 1.1, 120.0)
 
     if not reuse_results or not result_file.exists():
-        ssp_path = ssp_path or DEFAULT_SSP
-        if not ssp_path.exists():
-            raise FileNotFoundError(f"SSP file not found: {ssp_path}")
-        run_with_simulator(ssp_path, result_file, stop_time)
+        if not prepared_ssp.exists():
+            raise FileNotFoundError(f"Prepared SSP file not found: {prepared_ssp}")
+        run_with_simulator(prepared_ssp, result_file, stop_time)
 
     metrics = summarize_result_file(result_file, scenario_points=scenario["points"])
     metrics["total_distance_km"] = total_distance
@@ -518,6 +604,8 @@ def simulate_scenario(
         requirement_evaluations=requirement_evaluations,
         scenario_string=scenario_string,
         plot_path=plot_path,
+        parameter_set_path=parameter_set_path,
+        prepared_ssp_path=prepared_ssp,
     )
 
 
@@ -572,6 +660,7 @@ def main() -> None:
                 "used_oms": result.used_oms,
                 "result_file": str(result.result_file) if result.result_file else None,
                 "scenario_string": result.scenario_string,
+                "parameter_set": str(result.parameter_set_path) if result.parameter_set_path else None,
                 "plot_path": str(result.plot_path) if result.plot_path else None,
                 "requirements": [
                     {"id": eval_.identifier, "passed": eval_.passed}
