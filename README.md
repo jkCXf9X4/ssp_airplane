@@ -13,6 +13,10 @@ This repository tracks an SSP for an F-16 Fighting Falcon inspired single-seat m
 - Always use the virtual environment when running helper scripts to avoid missing `pyssp4sim` (`venv/bin/python scripts/...` or `source venv/bin/activate` first).
 - Prebuilt SSPs live in `build/ssp/`; the default is `build/ssp/aircraft.ssp`.
 - Curated mission scenarios live in `resources/scenarios/` (see `docs/use_cases.md` for requirement linkage).
+- Regenerate the SSD with parameter connectors plus a fresh default parameter set via:
+  - `python3 scripts/generate_ssd.py --output generated/SystemStructure.ssd`
+  - `python3 scripts/generate_parameter_set.py --output generated/parameters.ssv`
+  These outputs expose every component attribute as a parameter connector so you can bind SSVs in OMSimulator or CI runs without hand-editing XML.
 
 
 # Architecture

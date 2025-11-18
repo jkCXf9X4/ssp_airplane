@@ -3,18 +3,14 @@
 from __future__ import annotations
 
 import argparse
+import ast
 import sys
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 import xml.etree.ElementTree as ET
 
-from utils.sysmlv2_arch_parser import (
-    SysMLArchitecture,
-    SysMLPortDefinition,
-    SysMLPortEndpoint,
-    parse_sysml_folder,
-)
+from utils.sysmlv2_arch_parser import SysMLArchitecture, SysMLAttribute, SysMLPortDefinition, SysMLPortEndpoint, parse_sysml_folder
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 ARCH_PATH = REPO_ROOT / "architecture"
@@ -45,6 +41,7 @@ PRIMITIVE_TYPE_MAP = {
     "uint8": "Integer",
     "boolean": "Boolean",
     "bool": "Boolean",
+    "string": "String",
 }
 
 MODEL_CLASS_MAP: Dict[str, str] = {
@@ -134,6 +131,65 @@ def _expand_port_entries(
     return results
 
 
+def _parse_literal(value: Optional[str]):
+    if value is None:
+        return None
+    text = value.strip()
+    if not text:
+        return None
+    try:
+        return ast.literal_eval(text)
+    except (ValueError, SyntaxError):
+        pass
+    if text.startswith('"') and text.endswith('"'):
+        return text[1:-1]
+    lowered = text.lower()
+    if lowered in {"true", "false"}:
+        return lowered == "true"
+    try:
+        if any(ch in text for ch in (".", "e", "E")):
+            return float(text)
+        return int(text)
+    except ValueError:
+        return text
+
+
+def _infer_primitive(attr: SysMLAttribute, sample) -> str:
+    if attr.type:
+        return _primitive_type(attr.type)
+    if isinstance(sample, bool):
+        return "Boolean"
+    if isinstance(sample, int):
+        return "Integer"
+    if isinstance(sample, float):
+        return "Real"
+    if isinstance(sample, str):
+        return "String"
+    return "Real"
+
+
+def _parameter_connector_entries(attributes: Dict[str, SysMLAttribute]) -> List[Dict[str, str]]:
+    entries: List[Dict[str, str]] = []
+    for name in sorted(attributes):
+        attr = attributes[name]
+        literal = _parse_literal(attr.value)
+        if isinstance(literal, (list, tuple)):
+            sample = next((item for item in literal if item is not None), None)
+            primitive = _infer_primitive(attr, sample)
+            if literal:
+                for idx, _ in enumerate(literal, start=1):
+                    entries.append(
+                        {"connector_name": f"{attr.name}[{idx}]", "primitive": primitive}
+                    )
+            else:
+                entries.append({"connector_name": attr.name, "primitive": primitive})
+            continue
+
+        primitive = _infer_primitive(attr, literal)
+        entries.append({"connector_name": attr.name, "primitive": primitive})
+    return entries
+
+
 def build_ssd_tree(architecture: SysMLArchitecture) -> ET.ElementTree:
     system_name = architecture.package
     components = [(name, part) for name, part in architecture.parts.items() if name != "Aircraft"]
@@ -174,7 +230,9 @@ def build_ssd_tree(architecture: SysMLArchitecture) -> ET.ElementTree:
             }
             connector_entries.extend(entries)
 
-        if connector_entries:
+        parameter_entries = _parameter_connector_entries(part.attributes)
+
+        if connector_entries or parameter_entries:
             connectors_elem = ET.SubElement(component_elem, f"{{{SSD_NAMESPACE}}}Connectors")
             for entry in connector_entries:
                 connector_elem = ET.SubElement(
@@ -183,6 +241,13 @@ def build_ssd_tree(architecture: SysMLArchitecture) -> ET.ElementTree:
                     attrib={"name": entry["connector_name"], "kind": entry["kind"]},
                 )
                 ET.SubElement(connector_elem, f"{{{SSC_NAMESPACE}}}{entry['primitive']}")
+            for param in parameter_entries:
+                connector_elem = ET.SubElement(
+                    connectors_elem,
+                    f"{{{SSD_NAMESPACE}}}Connector",
+                    attrib={"name": param["connector_name"], "kind": "parameter"},
+                )
+                ET.SubElement(connector_elem, f"{{{SSC_NAMESPACE}}}{param['primitive']}")
 
         connector_lookup[part_name] = port_map
 

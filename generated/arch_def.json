@@ -301,6 +301,36 @@
           "name": "comment",
           "type": null,
           "value": "\"uses waypoint tracking\""
+        },
+        "waypointCount": {
+          "doc": null,
+          "name": "waypointCount",
+          "type": null,
+          "value": "10"
+        },
+        "waypointProximity_km": {
+          "doc": null,
+          "name": "waypointProximity_km",
+          "type": null,
+          "value": "10"
+        },
+        "waypointX_km": {
+          "doc": null,
+          "name": "waypointX_km",
+          "type": null,
+          "value": "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]"
+        },
+        "waypointY_km": {
+          "doc": null,
+          "name": "waypointY_km",
+          "type": null,
+          "value": "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]"
+        },
+        "waypointZ_km": {
+          "doc": null,
+          "name": "waypointZ_km",
+          "type": null,
+          "value": "[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]"
         }
       },
       "doc": "F-16 autopilot, takes in sensor data and translates it into a equivalent hotas command.",

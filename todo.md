@@ -1,3 +1,1 @@
-- [x] Look over the autopilot, it does not implement the full range of functionality needed for orienting the aircraft towards the next waypoint (fixed: waypoint heading/altitude tracking now implemented in `models/Aircraft/AutopilotModule.mo`)
-- [x] Utilize the parameters [waypointLat,...] for input of the waypoints (autopilot now consumes `waypointLat/Lon/Alt` and advances by `waypointProximity_km`)
-- 
+- [x] The generated ssd should also expose the parameter connectors

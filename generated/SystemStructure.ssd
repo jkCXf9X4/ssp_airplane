@@ -34,6 +34,12 @@
           <ssd:Connector name="pilotCommand.reserved" kind="output">
             <ssc:Integer />
           </ssd:Connector>
+          <ssd:Connector name="input_scheme" kind="parameter">
+            <ssc:String />
+          </ssd:Connector>
+          <ssd:Connector name="telemetry_rate_hz" kind="parameter">
+            <ssc:Integer />
+          </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
       <ssd:Component name="AutopilotModule" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_AutopilotModule.fmu">
@@ -113,9 +119,129 @@
           <ssd:Connector name="missionStatus.complete" kind="output">
             <ssc:Boolean />
           </ssd:Connector>
+          <ssd:Connector name="comment" kind="parameter">
+            <ssc:String />
+          </ssd:Connector>
+          <ssd:Connector name="waypointCount" kind="parameter">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="waypointProximity_km" kind="parameter">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="waypointX_km[1]" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="waypointX_km[2]" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="waypointX_km[3]" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="waypointX_km[4]" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="waypointX_km[5]" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="waypointX_km[6]" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="waypointX_km[7]" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="waypointX_km[8]" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="waypointX_km[9]" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="waypointX_km[10]" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="waypointY_km[1]" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="waypointY_km[2]" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="waypointY_km[3]" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="waypointY_km[4]" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="waypointY_km[5]" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="waypointY_km[6]" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="waypointY_km[7]" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="waypointY_km[8]" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="waypointY_km[9]" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="waypointY_km[10]" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="waypointZ_km[1]" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="waypointZ_km[2]" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="waypointZ_km[3]" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="waypointZ_km[4]" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="waypointZ_km[5]" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="waypointZ_km[6]" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="waypointZ_km[7]" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="waypointZ_km[8]" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="waypointZ_km[9]" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="waypointZ_km[10]" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
-      <ssd:Component name="CompositeAirframe" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_CompositeAirframe.fmu" />
+      <ssd:Component name="CompositeAirframe" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_CompositeAirframe.fmu">
+        <ssd:Connectors>
+          <ssd:Connector name="empty_weight_kg" kind="parameter">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="fuselage_width_m" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="hardpoint_count" kind="parameter">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="length_m" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="payload_capacity_kg" kind="parameter">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="wingspan_m" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+        </ssd:Connectors>
+      </ssd:Component>
       <ssd:Component name="TurbofanPropulsion" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_TurbofanPropulsion.fmu">
         <ssd:Connectors>
           <ssd:Connector name="throttleCmd.throttle_norm" kind="input">
@@ -137,6 +263,21 @@
             <ssc:Real />
           </ssd:Connector>
           <ssd:Connector name="fuel_consumption.mass_flow_kgps" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="dry_thrust_kn" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="fuel_capacity_kg" kind="parameter">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="generator_output_kw" kind="parameter">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="max_thrust_kn" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="specific_fuel_consumption" kind="parameter">
             <ssc:Real />
           </ssd:Connector>
         </ssd:Connectors>
@@ -246,6 +387,12 @@
           <ssd:Connector name="fuelState.fuel_starved" kind="output">
             <ssc:Boolean />
           </ssd:Connector>
+          <ssd:Connector name="fuel_capacity_kg" kind="parameter">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="reserve_fraction" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
       <ssd:Component name="AdaptiveWingSystem" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_AdaptiveWingSystem.fmu">
@@ -293,6 +440,21 @@
             <ssc:Real />
           </ssd:Connector>
           <ssd:Connector name="liftInterface.pitching_moment_knm" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="aspect_ratio" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="control_authority_deg" kind="parameter">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="load_factor_limit_g" kind="parameter">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="reference_area_m2" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="span_m" kind="parameter">
             <ssc:Real />
           </ssd:Connector>
         </ssd:Connectors>

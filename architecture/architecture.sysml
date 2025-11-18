@@ -15,6 +15,11 @@ package Aircraft {
   part def AutopilotModule {
     doc /* F-16 autopilot, takes in sensor data and translates it into a equivalent hotas command. */
     attribute comment = "uses waypoint tracking";
+    attribute waypointCount = 10;
+    attribute waypointProximity_km = 10;
+    attribute waypointX_km = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
+    attribute waypointY_km = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
+    attribute waypointZ_km = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
 
     doc /* Mission-computer flight status back into autopilot. */
     in port feedbackBus : FlightStatusPacket;
