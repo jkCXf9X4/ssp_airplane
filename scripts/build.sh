@@ -6,7 +6,7 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO_ROOT"
 source venv/bin/activate
 
-rm -r ./build
+rm -rf ./build
 
 echo "Exporting architecture"
 python3 scripts/save_architecture.py

@@ -9,7 +9,7 @@ model MissionComputer
   input GI.PilotCommand autopilotInput;
   input GI.FuelLevelState fuelStatus;
   output GI.ThrottleCommand engineThrottle;
-  output GI.OrientationEuler speed_vector_change;
+  output GI.OrientationEuler direction_command;
 protected
   Boolean autopilotEngaged;
   Real cmdStickRoll;
@@ -32,7 +32,7 @@ equation
   engineThrottle.fuel_enable = not fuelStatus.fuel_starved;
   engineThrottle.afterburner_enable = engineThrottle.throttle_norm > 0.85 and cmdThrottleAux > 0.5;
 
-  speed_vector_change.roll_deg = rollAuthority_deg * cmdStickRoll;
-  speed_vector_change.pitch_deg = pitchAuthority_deg * cmdStickPitch;
-  speed_vector_change.yaw_deg = yawAuthority_deg * cmdRudder;
+  direction_command.roll_deg = rollAuthority_deg * cmdStickRoll;
+  direction_command.pitch_deg = pitchAuthority_deg * cmdStickPitch;
+  direction_command.yaw_deg = yawAuthority_deg * cmdRudder;
 end MissionComputer;

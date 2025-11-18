@@ -11,7 +11,8 @@ package Aircraft {
 
   doc /* MissionComputer */
   connect MissionComputer.engineThrottle to TurbofanPropulsion.throttleCmd;
-  connect MissionComputer.speed_vector_change to AdaptiveWingSystem.velocity_vector_alteration;
+  connect MissionComputer.direction_command to AdaptiveWingSystem.direction_command;
+  connect MissionComputer.direction_command to Environment.direction_command;
 
   doc /* FuelSystem */
   connect FuelSystem.fuelState to MissionComputer.fuelStatus;

@@ -1,6 +1,6 @@
 package Aircraft {
   doc /* Reconfigured to model an F-16 Fighting Falcon multirole fighter with single-engine propulsion and manned cockpit. *
-  
+
 
   part def ControlInterface {
     doc /* F-16 HOTAS + side-stick interface for pilot inputs and trim switches. */
@@ -78,7 +78,7 @@ package Aircraft {
     out port engineThrottle : ThrottleCommand;
 
     doc /* Command how to alter the current velocity vector, pith, yaw, roll  */
-    out port speed_vector_change : OrientationEuler;
+    out port direction_command : OrientationEuler;
   }
 
 
@@ -103,7 +103,7 @@ package Aircraft {
     attribute load_factor_limit_g = 9;
 
     doc /* Mission-computer command bus input. Desired change in speed vector */
-    in port velocity_vector_alteration : OrientationEuler;
+    in port direction_command : OrientationEuler;
 
     in port flight_speed : FlightStatusPacket;
 
@@ -120,6 +120,7 @@ package Aircraft {
     doc /* Reads the actuation and thrust commands to calculate the position, rotation and velocities */
 
     in port actuation_command : SurfaceActuationCommand;
+    in port direction_command : OrientationEuler;
     in port lift : LiftState;
     in port thrust_in : ThrustState;
 

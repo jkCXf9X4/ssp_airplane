@@ -221,13 +221,13 @@
           <ssd:Connector name="engineThrottle.afterburner_enable" kind="output">
             <ssc:Boolean />
           </ssd:Connector>
-          <ssd:Connector name="speed_vector_change.roll_deg" kind="output">
+          <ssd:Connector name="direction_command.roll_deg" kind="output">
             <ssc:Real />
           </ssd:Connector>
-          <ssd:Connector name="speed_vector_change.pitch_deg" kind="output">
+          <ssd:Connector name="direction_command.pitch_deg" kind="output">
             <ssc:Real />
           </ssd:Connector>
-          <ssd:Connector name="speed_vector_change.yaw_deg" kind="output">
+          <ssd:Connector name="direction_command.yaw_deg" kind="output">
             <ssc:Real />
           </ssd:Connector>
         </ssd:Connectors>
@@ -250,13 +250,13 @@
       </ssd:Component>
       <ssd:Component name="AdaptiveWingSystem" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_AdaptiveWingSystem.fmu">
         <ssd:Connectors>
-          <ssd:Connector name="velocity_vector_alteration.roll_deg" kind="input">
+          <ssd:Connector name="direction_command.roll_deg" kind="input">
             <ssc:Real />
           </ssd:Connector>
-          <ssd:Connector name="velocity_vector_alteration.pitch_deg" kind="input">
+          <ssd:Connector name="direction_command.pitch_deg" kind="input">
             <ssc:Real />
           </ssd:Connector>
-          <ssd:Connector name="velocity_vector_alteration.yaw_deg" kind="input">
+          <ssd:Connector name="direction_command.yaw_deg" kind="input">
             <ssc:Real />
           </ssd:Connector>
           <ssd:Connector name="flight_speed.airspeed_mps" kind="input">
@@ -312,6 +312,15 @@
             <ssc:Real />
           </ssd:Connector>
           <ssd:Connector name="actuation_command.flaperon_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="direction_command.roll_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="direction_command.pitch_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="direction_command.yaw_deg" kind="input">
             <ssc:Real />
           </ssd:Connector>
           <ssd:Connector name="lift.lift_kn" kind="input">
@@ -472,9 +481,12 @@
       <ssd:Connection startElement="MissionComputer" startConnector="engineThrottle.throttle_norm" endElement="TurbofanPropulsion" endConnector="throttleCmd.throttle_norm" />
       <ssd:Connection startElement="MissionComputer" startConnector="engineThrottle.fuel_enable" endElement="TurbofanPropulsion" endConnector="throttleCmd.fuel_enable" />
       <ssd:Connection startElement="MissionComputer" startConnector="engineThrottle.afterburner_enable" endElement="TurbofanPropulsion" endConnector="throttleCmd.afterburner_enable" />
-      <ssd:Connection startElement="MissionComputer" startConnector="speed_vector_change.roll_deg" endElement="AdaptiveWingSystem" endConnector="velocity_vector_alteration.roll_deg" />
-      <ssd:Connection startElement="MissionComputer" startConnector="speed_vector_change.pitch_deg" endElement="AdaptiveWingSystem" endConnector="velocity_vector_alteration.pitch_deg" />
-      <ssd:Connection startElement="MissionComputer" startConnector="speed_vector_change.yaw_deg" endElement="AdaptiveWingSystem" endConnector="velocity_vector_alteration.yaw_deg" />
+      <ssd:Connection startElement="MissionComputer" startConnector="direction_command.roll_deg" endElement="AdaptiveWingSystem" endConnector="direction_command.roll_deg" />
+      <ssd:Connection startElement="MissionComputer" startConnector="direction_command.pitch_deg" endElement="AdaptiveWingSystem" endConnector="direction_command.pitch_deg" />
+      <ssd:Connection startElement="MissionComputer" startConnector="direction_command.yaw_deg" endElement="AdaptiveWingSystem" endConnector="direction_command.yaw_deg" />
+      <ssd:Connection startElement="MissionComputer" startConnector="direction_command.roll_deg" endElement="Environment" endConnector="direction_command.roll_deg" />
+      <ssd:Connection startElement="MissionComputer" startConnector="direction_command.pitch_deg" endElement="Environment" endConnector="direction_command.pitch_deg" />
+      <ssd:Connection startElement="MissionComputer" startConnector="direction_command.yaw_deg" endElement="Environment" endConnector="direction_command.yaw_deg" />
       <ssd:Connection startElement="FuelSystem" startConnector="fuelState.fuel_remaining_kg" endElement="MissionComputer" endConnector="fuelStatus.fuel_remaining_kg" />
       <ssd:Connection startElement="FuelSystem" startConnector="fuelState.fuel_level_norm" endElement="MissionComputer" endConnector="fuelStatus.fuel_level_norm" />
       <ssd:Connection startElement="FuelSystem" startConnector="fuelState.fuel_starved" endElement="MissionComputer" endConnector="fuelStatus.fuel_starved" />

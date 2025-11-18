@@ -16,6 +16,8 @@ model AutopilotModule
   parameter Real waypointY_km[waypointCount] = fill(0.0, waypointCount);
   parameter Real waypointZ_km[waypointCount] = fill(1, waypointCount);
   parameter Real waypointProximity_km = 10 "Distance to trigger waypoint switch";
+  // time constant for smoothing
+  parameter Real tauCmd = 0.5 "s, command filter time constant";
 
   input GI.FlightStatusPacket feedbackBus;
   input GI.PositionXYZ currentLocation;
@@ -41,6 +43,17 @@ protected
   Boolean arrived;
   Integer waypointIndex(start=1, fixed=true);
   Boolean missionDone(start=false, fixed=true);
+
+  // “raw” commands directly from control laws
+  Real rollCmd_raw;
+  Real pitchCmd_raw;
+  Real throttleCmd_raw;
+
+  // filtered commands that go to the outputs
+  Real rollCmd(start=0);
+  Real pitchCmd(start=0);
+  Real throttleCmd(start=defaultThrottle);
+
 equation
   // Pick the active waypoint (clamp to the configured list to avoid indexing beyond the end)
   activeWaypoint = if waypointCount < 1 then 1 else min(waypointIndex, waypointCount);
@@ -50,9 +63,9 @@ equation
   currentY_km = currentLocation.y_km;
   currentZ_km = currentLocation.z_km;
 
-  targetX_km = waypointX_km[activeWaypoint];
-  targetY_km = waypointY_km[activeWaypoint];
-  targetZ_km = waypointZ_km[activeWaypoint];
+  targetX_km = waypointX_km[pre(activeWaypoint)];
+  targetY_km = waypointY_km[pre(activeWaypoint)];
+  targetZ_km = waypointZ_km[pre(activeWaypoint)];
 
   dx_km = targetX_km - currentX_km;
   dy_km = targetY_km - currentY_km;
@@ -66,10 +79,19 @@ equation
     Math.sin((targetHeading - currentOrientation.yaw_deg) * degToRad),
     Math.cos((targetHeading - currentOrientation.yaw_deg) * degToRad)) * radToDeg;
 
-// 
   altitudeError = if waypointCount < 1 then 1 - currentZ_km else dz_km;
   holdStrength = max(0.2, min(1.0, defaultThrottle * max(0.2, feedbackBus.energy_state_norm)));
 
+  // raw commands with saturation (use noEvent to avoid extra events)
+  rollCmd_raw    = noEvent(max(-1.0, min(1.0, headingGain  * headingError)));
+  pitchCmd_raw   = noEvent(max(-1.0, min(1.0, altitudeGain * altitudeError)));
+  throttleCmd_raw = holdStrength; // already 0.2..1.0
+
+  // first-order low-pass filters: der(x) = (u - x)/tau
+  der(rollCmd)    = (rollCmd_raw    - rollCmd)    / tauCmd;
+  der(pitchCmd)   = (pitchCmd_raw   - pitchCmd)   / tauCmd;
+  der(throttleCmd)= (throttleCmd_raw- throttleCmd)/ tauCmd;
+  
   arrived = waypointCount > 0 and distanceToWaypoint_km <= waypointProximity_km;
 
   missionStatus.total_waypoints = waypointCount;
@@ -78,11 +100,11 @@ equation
   missionStatus.arrived = arrived;
   missionStatus.complete = missionDone;
 
-  autopilotCmd.stick_roll_norm = max(-1.0, min(1.0, headingGain * headingError));
+  autopilotCmd.stick_roll_norm   = rollCmd;
+  autopilotCmd.stick_pitch_norm  = pitchCmd;
+  autopilotCmd.throttle_norm     = throttleCmd;
+  autopilotCmd.throttle_aux_norm = throttleCmd;
   autopilotCmd.rudder_norm = autopilotCmd.stick_roll_norm / 2;
-  autopilotCmd.stick_pitch_norm = max(-1.0, min(1.0, altitudeGain * altitudeError));
-  autopilotCmd.throttle_norm = holdStrength;
-  autopilotCmd.throttle_aux_norm = autopilotCmd.throttle_norm;
   autopilotCmd.button_mask = 0;
   autopilotCmd.hat_x = 0;
   autopilotCmd.hat_y = 0;

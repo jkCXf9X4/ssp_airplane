@@ -8,7 +8,7 @@ model AdaptiveWingSystem
   parameter Real liftCoeffBase = 0.75;
   parameter Real rollAuthority_deg = 25;
   parameter Real pitchAuthority_deg = 20;
-  input GI.OrientationEuler velocity_vector_alteration "desired change from mission computer";
+  input GI.OrientationEuler direction_command "desired change from mission computer";
   input GI.FlightStatusPacket flight_speed;
   output GI.SurfaceActuationCommand actuation_command "Commanded surfaces to the environment";
   output GI.LiftState liftInterface;
@@ -16,10 +16,10 @@ protected
   Real liftCommand;
   Real speedFactor;
 equation
-  actuation_command.left_aileron_deg = max(-rollAuthority_deg, min(rollAuthority_deg, velocity_vector_alteration.roll_deg));
+  actuation_command.left_aileron_deg = max(-rollAuthority_deg, min(rollAuthority_deg, direction_command.roll_deg));
   actuation_command.right_aileron_deg = -actuation_command.left_aileron_deg;
-  actuation_command.elevator_deg = max(-pitchAuthority_deg, min(pitchAuthority_deg, velocity_vector_alteration.pitch_deg));
-  actuation_command.rudder_deg = velocity_vector_alteration.yaw_deg;
+  actuation_command.elevator_deg = max(-pitchAuthority_deg, min(pitchAuthority_deg, direction_command.pitch_deg));
+  actuation_command.rudder_deg = direction_command.yaw_deg;
   actuation_command.flaperon_deg = 0.5 * actuation_command.elevator_deg;
 
   speedFactor = max(0.5, min(1.5, flight_speed.airspeed_mps / 200));

@@ -32,9 +32,15 @@
     },
     {
       "dst_component": "AdaptiveWingSystem",
-      "dst_port": "velocity_vector_alteration",
+      "dst_port": "direction_command",
       "src_component": "MissionComputer",
-      "src_port": "speed_vector_change"
+      "src_port": "direction_command"
+    },
+    {
+      "dst_component": "Environment",
+      "dst_port": "direction_command",
+      "src_component": "MissionComputer",
+      "src_port": "direction_command"
     },
     {
       "dst_component": "MissionComputer",
@@ -151,7 +157,7 @@
         {
           "direction": "in",
           "doc": "Mission-computer command bus input. Desired change in speed vector",
-          "name": "velocity_vector_alteration",
+          "name": "direction_command",
           "payload": "OrientationEuler",
           "payload_def": {
             "attributes": {
@@ -696,6 +702,36 @@
             },
             "doc": "Commanded surface deflections in degrees for co-simulation with aerodynamic models.",
             "name": "SurfaceActuationCommand"
+          }
+        },
+        {
+          "direction": "in",
+          "doc": null,
+          "name": "direction_command",
+          "payload": "OrientationEuler",
+          "payload_def": {
+            "attributes": {
+              "pitch_deg": {
+                "doc": null,
+                "name": "pitch_deg",
+                "type": "Real",
+                "value": null
+              },
+              "roll_deg": {
+                "doc": null,
+                "name": "roll_deg",
+                "type": "Real",
+                "value": null
+              },
+              "yaw_deg": {
+                "doc": null,
+                "name": "yaw_deg",
+                "type": "Real",
+                "value": null
+              }
+            },
+            "doc": "Air vehicle orientation expressed as Euler angles in degrees.",
+            "name": "OrientationEuler"
           }
         },
         {
@@ -1356,7 +1392,7 @@
         {
           "direction": "out",
           "doc": "Command how to alter the current velocity vector, pith, yaw, roll",
-          "name": "speed_vector_change",
+          "name": "direction_command",
           "payload": "OrientationEuler",
           "payload_def": {
             "attributes": {

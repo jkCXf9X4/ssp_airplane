@@ -520,7 +520,7 @@ def run_with_simulator(ssp_path: Path, result_file: Path, stop_time: float, log_
         "recording":
         {{
             "enable": true,
-            "wait_for": false,
+            "wait_for": true,
             "interval": 0.25,
             "result_file": "{result_file.as_posix()}"
         }},
