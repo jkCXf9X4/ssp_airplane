@@ -27,11 +27,10 @@ package Aircraft {
   connect Environment.flight_status to AdaptiveWingSystem.flight_speed;
 
   doc /* InputOutput telemetry taps */
-  connect Environment.location to InputOutput.locationLLA;
+  connect Environment.location to InputOutput.locationXYZ;
   connect Environment.orientation to InputOutput.orientation;
   connect AutopilotModule.autopilotCmd to InputOutput.autopilotCmd;
   connect Environment.flight_status to InputOutput.flightStatus;
   connect AutopilotModule.missionStatus to InputOutput.missionStatus;
 }
-
 

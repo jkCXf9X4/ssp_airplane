@@ -8,7 +8,7 @@ package Aircraft {
   // --- Solution specific choices ---
 
   comment location_orientation /* 
-  Location is described in longitude and latitude 
+  Location is described in a local x/y/z grid in kilometers (x=North, y=East, z=Up)
   Absolute orientation is described in euler angles, North = 360° / 000°, East = 090°, South = 180°, West = 270 
   changes in orientation are described in +/- x for euler angles, pitch, yaw, roll, based upon absolute orientation 
   */

@@ -47,8 +47,8 @@ When `scripts/simulate_scenario.py` runs, it always writes two artifacts into `b
 
 ### Waypoint strings and plots
 
-- Each scenario’s waypoints are also exported to `build/results/<scenario>_waypoints.txt` as a comma-separated `lat,lon,alt,...` string, ready for Modelica `stringToRealVector` consumption (`AutopilotModule.scenarioData`).
-- Passing `--plot` to `simulate_scenario.py` generates `build/results/<scenario>_path.png`, overlaying the simulated latitude/longitude path against the supplied waypoints for a quick visual verification.
+- Each scenario’s waypoints are also exported to `build/results/<scenario>_waypoints.txt` as a comma-separated `x_km,y_km,z_km,...` string, ready for Modelica `stringToRealVector` consumption in the autopilot parameter set.
+- Passing `--plot` to `simulate_scenario.py` generates `build/results/<scenario>_path.png`, overlaying the simulated local X/Y path against the supplied waypoints for a quick visual verification.
 
 ## Reusing results vs. re-simulating
 

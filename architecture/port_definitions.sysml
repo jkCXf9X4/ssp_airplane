@@ -20,11 +20,11 @@ package Aircraft {
     attribute yaw_deg: Real;
   }
 
-  port def GeodeticLLA {
-    doc /* Geodetic latitude/longitude (degrees) and altitude (meters) above mean sea level. */
-    attribute latitude_deg: Real;
-    attribute longitude_deg: Real;
-    attribute altitude_m: Real;
+  port def PositionXYZ {
+    doc /* Local navigation frame expressed in kilometers (x=North, y=East, z=Up). */
+    attribute x_km: Real;
+    attribute y_km: Real;
+    attribute z_km: Real;
   }
 
   port def SurfaceActuationCommand {

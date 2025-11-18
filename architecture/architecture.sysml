@@ -1,11 +1,6 @@
 package Aircraft {
-  doc /* Reconfigured to model an F-16 Fighting Falcon multirole fighter with single-engine propulsion and manned cockpit. */
-
-  doc /* Simulation specifics */
-  doc /* Location is described in longitude and latitude */
-  doc /* Absolute orientation is described in euler angles, North = 360° / 000°, East = 090°, South = 180°, West = 270 */
-  doc /* changes in orientation are described in +/- x for euler angles, pitch, yaw, roll, based upon absolute orientation */
-
+  doc /* Reconfigured to model an F-16 Fighting Falcon multirole fighter with single-engine propulsion and manned cockpit. *
+  
 
   part def ControlInterface {
     doc /* F-16 HOTAS + side-stick interface for pilot inputs and trim switches. */
@@ -24,8 +19,8 @@ package Aircraft {
     doc /* Mission-computer flight status back into autopilot. */
     in port feedbackBus : FlightStatusPacket;
 
-    doc /* Current geodetic position from sensors */
-    in port currentLocation : GeodeticLLA;
+    doc /* Current local position from sensors */
+    in port currentLocation : PositionXYZ;
 
     doc /* Current attitude from sensors. */
     in port currentOrientation : OrientationEuler;
@@ -130,14 +125,14 @@ package Aircraft {
 
     doc /* Feedback for simulated sensors */
     out port orientation : OrientationEuler;
-    out port location : GeodeticLLA;
+    out port location : PositionXYZ;
     out port flight_status : FlightStatusPacket;
 
   }
 
   part def InputOutput {
     doc /* Simulation sink for debugging and recording mission/autopilot telemetry. */
-    in port locationLLA : GeodeticLLA;
+    in port locationXYZ : PositionXYZ;
     in port orientation : OrientationEuler;
     in port autopilotCmd : PilotCommand;
     in port flightStatus : FlightStatusPacket;

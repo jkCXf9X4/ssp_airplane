@@ -52,6 +52,16 @@ def estimate_duration(distance_km: float, cruise_speed_mps: float) -> float:
     return max(60.0, (distance_km * 1000.0) / max(1.0, cruise_speed_mps))
 
 
+def local_path_distance_km(points: List[Dict[str, float]]) -> float:
+    total = 0.0
+    for i in range(len(points) - 1):
+        dx = points[i + 1]["x_km"] - points[i]["x_km"]
+        dy = points[i + 1]["y_km"] - points[i]["y_km"]
+        dz = points[i + 1].get("z_km", 0.0) - points[i].get("z_km", 0.0)
+        total += math.sqrt(dx * dx + dy * dy + dz * dz)
+    return total
+
+
 def _numeric_series(
     rows: Sequence[Dict[str, str]], key: str, cast=float
 ) -> List[float]:
@@ -84,11 +94,12 @@ def _read_result_rows(result_file: Path) -> List[Dict[str, str]]:
 
 
 def scenario_to_string(points: List[Dict[str, float]]) -> str:
+    """Serialize local waypoint points [{x_km,y_km,z_km}] into csv string."""
     values: List[str] = []
     for point in points:
-        values.append(f"{point['latitude_deg']:.6f}")
-        values.append(f"{point['longitude_deg']:.6f}")
-        values.append(f"{point.get('altitude_m', 0.0):.2f}")
+        values.append(f"{point['x_km']:.3f}")
+        values.append(f"{point['y_km']:.3f}")
+        values.append(f"{point.get('z_km', 0.0):.3f}")
     return ",".join(values)
 
 
@@ -106,14 +117,53 @@ def validate_scenario_points(points: List[Dict[str, float]]) -> None:
                 raise ValueError(f"Point {idx} has implausible altitude: {alt}")
 
 
+def project_waypoints_to_local_km(points: List[Dict[str, float]]) -> List[Dict[str, float]]:
+    """Convert geodetic waypoints to a local x/y/z frame in kilometers relative to the first point."""
+    if not points:
+        return []
+    origin = points[0]
+    lat0 = float(origin["latitude_deg"])
+    lon0 = float(origin["longitude_deg"])
+    lat0_rad = math.radians(lat0)
+    projected: List[Dict[str, float]] = []
+    for point in points:
+        lat = float(point["latitude_deg"])
+        lon = float(point["longitude_deg"])
+        alt_m = float(point.get("altitude_m", 0.0))
+        x_km = 111.0 * (lat - lat0)
+        y_km = 111.0 * math.cos(lat0_rad) * (lon - lon0)
+        projected.append({"x_km": x_km, "y_km": y_km, "z_km": alt_m / 1000.0})
+    return projected
+
+
 def extract_track_points(
     rows: List[Dict[str, str]],
 ) -> List[Tuple[float, float, float]]:
-    latitudes = _numeric_series(rows, "MissionComputer.locationLLA.latitude_deg")
-    longitudes = _numeric_series(rows, "MissionComputer.locationLLA.longitude_deg")
-    altitudes = _numeric_series(rows, "MissionComputer.locationLLA.altitude_m")
-    n = min(len(latitudes), len(longitudes), len(altitudes))
-    return [(latitudes[i], longitudes[i], altitudes[i]) for i in range(n)]
+    xs = _numeric_series(rows, "Environment.location.x_km") or _numeric_series(
+        rows, "MissionComputer.locationXYZ.x_km"
+    )
+    ys = _numeric_series(rows, "Environment.location.y_km") or _numeric_series(
+        rows, "MissionComputer.locationXYZ.y_km"
+    )
+    zs = _numeric_series(rows, "Environment.location.z_km") or _numeric_series(
+        rows, "MissionComputer.locationXYZ.z_km"
+    )
+
+    # Backward-compatibility for legacy lat/lon recordings in existing CSVs
+    if (not xs or not ys) and _numeric_series(rows, "MissionComputer.locationLLA.latitude_deg"):
+        lats = _numeric_series(rows, "MissionComputer.locationLLA.latitude_deg")
+        lons = _numeric_series(rows, "MissionComputer.locationLLA.longitude_deg")
+        alts_m = _numeric_series(rows, "MissionComputer.locationLLA.altitude_m")
+        if lats and lons:
+            lat0 = lats[0]
+            lon0 = lons[0]
+            lat0_rad = math.radians(lat0)
+            xs = [111.0 * (lat - lat0) for lat in lats]
+            ys = [111.0 * math.cos(lat0_rad) * (lon - lon0) for lon in lons]
+            zs = [alt / 1000.0 for alt in alts_m] if alts_m else [0.0 for _ in lats]
+
+    n = min(len(xs), len(ys), len(zs))
+    return [(xs[i], ys[i], zs[i]) for i in range(n)]
 
 
 def plot_flight_path(
@@ -132,22 +182,33 @@ def plot_flight_path(
         return None
 
     rows = _read_result_rows(result_file)
-    latitudes = _numeric_series(rows, "MissionComputer.locationLLA.latitude_deg")
-    longitudes = _numeric_series(rows, "MissionComputer.locationLLA.longitude_deg")
-    if not latitudes or not longitudes:
+    xs = _numeric_series(rows, "Environment.location.x_km")
+    ys = _numeric_series(rows, "Environment.location.y_km")
+
+    if (not xs or not ys) and _numeric_series(rows, "MissionComputer.locationLLA.latitude_deg"):
+        lats = _numeric_series(rows, "MissionComputer.locationLLA.latitude_deg")
+        lons = _numeric_series(rows, "MissionComputer.locationLLA.longitude_deg")
+        if lats and lons:
+            lat0 = lats[0]
+            lon0 = lons[0]
+            lat0_rad = math.radians(lat0)
+            xs = [111.0 * (lat - lat0) for lat in lats]
+            ys = [111.0 * math.cos(lat0_rad) * (lon - lon0) for lon in lons]
+
+    if not xs or not ys:
         return None
 
     fig, ax = plt.subplots(figsize=(6, 5))
-    ax.plot(longitudes, latitudes, label="Flight path", color="#1f77b4")
+    ax.plot(xs, ys, label="Flight path", color="#1f77b4")
 
     if scenario_points:
-        wp_lats = [p["latitude_deg"] for p in scenario_points]
-        wp_lons = [p["longitude_deg"] for p in scenario_points]
-        ax.plot(wp_lons, wp_lats, "o--", label="Waypoints", color="#d62728")
+        wp_x = [p["x_km"] for p in scenario_points]
+        wp_y = [p["y_km"] for p in scenario_points]
+        ax.plot(wp_x, wp_y, "o--", label="Waypoints", color="#d62728")
 
-    ax.set_xlabel("Longitude [deg]")
-    ax.set_ylabel("Latitude [deg]")
-    ax.set_title("Flight path vs waypoints")
+    ax.set_xlabel("X [km]")
+    ax.set_ylabel("Y [km]")
+    ax.set_title("Flight path vs waypoints (local frame)")
     ax.legend()
     output_path.parent.mkdir(parents=True, exist_ok=True)
     fig.tight_layout()
@@ -170,18 +231,12 @@ def waypoint_tracking_metrics(
             "waypoint_within_threshold_fraction": 0.0,
         }
 
-    def point_distance_km(lat1, lon1, lat2, lon2):
-        # local flat-earth approximation for small deltas
-        return 111.0 * math.sqrt(
-            (lat1 - lat2) ** 2 + (math.cos(lat1 * math.pi / 180) * (lon1 - lon2)) ** 2
-        )
-
     misses: List[float] = []
     hits = 0
     for wp in scenario_points:
-        lat = float(wp["latitude_deg"])
-        lon = float(wp["longitude_deg"])
-        best = min(point_distance_km(lat, lon, t[0], t[1]) for t in track_points)
+        x = float(wp["x_km"])
+        y = float(wp["y_km"])
+        best = min(math.sqrt((x - t[0]) ** 2 + (y - t[1]) ** 2) for t in track_points)
         misses.append(best)
         if best <= threshold_km:
             hits += 1
@@ -198,7 +253,7 @@ def waypoint_tracking_metrics(
 
 
 def emit_waypoint_parameter_set(
-    scenario_points: List[Dict[str, float]],
+    local_points: List[Dict[str, float]],
     output_path: Path,
     component: str = "AutopilotModule",
 ) -> Path:
@@ -212,18 +267,18 @@ def emit_waypoint_parameter_set(
         value_elem = ET.SubElement(param_elem, f"{{{ns}}}{type_tag}")
         value_elem.set("value", value)
 
-    for idx, point in enumerate(scenario_points[1:], start=1):
-        add_param(f"{component}.waypointLat[{idx}]", "Real", f"{float(point['latitude_deg']):.6f}")
-        add_param(f"{component}.waypointLon[{idx}]", "Real", f"{float(point['longitude_deg']):.6f}")
-        alt = float(point.get("altitude_m", 0.0))
-        add_param(f"{component}.waypointAlt[{idx}]", "Real", f"{alt:.2f}")
+    if local_points:
+        first = local_points[0]
+        add_param("Environment.initX_km", "Real", f"{float(first['x_km']):.3f}")
+        add_param("Environment.initY_km", "Real", f"{float(first['y_km']):.3f}")
+        add_param("Environment.initZ_km", "Real", f"{float(first.get('z_km', 0.0)):.3f}")
 
-    add_param(f"{component}.waypointCount", "Integer", str(len(scenario_points)-1))
-    if scenario_points:
-        first = scenario_points[0]
-        add_param("MissionComputer.initLatitude_deg", "Real", f"{float(first['latitude_deg']):.6f}")
-        add_param("MissionComputer.initLongitude_deg", "Real", f"{float(first['longitude_deg']):.6f}")
-        # precompute switch times based on cumulative distance and nominal speed
+        for idx, point in enumerate(local_points[1:], start=1):
+            add_param(f"{component}.waypointX_km[{idx}]", "Real", f"{float(point['x_km']):.3f}")
+            add_param(f"{component}.waypointY_km[{idx}]", "Real", f"{float(point['y_km']):.3f}")
+            add_param(f"{component}.waypointZ_km[{idx}]", "Real", f"{float(point.get('z_km', 0.0)):.3f}")
+
+    add_param(f"{component}.waypointCount", "Integer", str(len(local_points)-1))
 
     tree = ET.ElementTree(root)
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -499,11 +554,12 @@ def simulate_scenario(
     if "points" not in scenario:
         raise ValueError("Scenario file must contain a 'points' list.")
     validate_scenario_points(scenario["points"])
+    local_points = project_waypoints_to_local_km(scenario["points"])
 
-    scenario_string = scenario_to_string(scenario["points"])
+    scenario_string = scenario_to_string(local_points)
     overrides = scenario.get("simulation_overrides", {})
     cruise_speed = float(overrides.get("cruise_speed_mps", 250.0))
-    total_distance = scenario.get("total_distance_km") or haversine_distance_km(
+    total_distance = scenario.get("total_distance_km") or local_path_distance_km(local_points) or haversine_distance_km(
         scenario["points"]
     )
 
@@ -512,7 +568,7 @@ def simulate_scenario(
     waypoints_file = results_dir / f"{scenario_path.stem}_waypoints.txt"
     waypoints_file.write_text(scenario_string)
     parameter_set_path = results_dir / f"{scenario_path.stem}_waypoints.ssv"
-    emit_waypoint_parameter_set(scenario["points"], parameter_set_path)
+    emit_waypoint_parameter_set(local_points, parameter_set_path)
     prepared_ssp = prepare_ssp_with_parameters(ssp_path or DEFAULT_SSP, parameter_set_path, scenario_path.stem, results_dir)
 
     if stop_time is None:
@@ -523,7 +579,7 @@ def simulate_scenario(
             raise FileNotFoundError(f"Prepared SSP file not found: {prepared_ssp}")
         run_with_simulator(prepared_ssp, result_file, stop_time)
 
-    metrics = summarize_result_file(result_file, scenario_points=scenario["points"])
+    metrics = summarize_result_file(result_file, scenario_points=local_points)
     metrics["total_distance_km"] = total_distance
     metrics["stop_time_s"] = stop_time
 
@@ -587,7 +643,7 @@ def simulate_scenario(
 
     if plot:
         requested_plot = results_dir / f"{scenario_path.stem}_path.png"
-        plot_path = plot_flight_path(result_file, scenario["points"], requested_plot)
+        plot_path = plot_flight_path(result_file, local_points, requested_plot)
         if plot_path:
             summary["plot_path"] = str(plot_path)
 

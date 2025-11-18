@@ -16,6 +16,7 @@ if str(SCRIPTS_DIR) not in sys.path:
 from simulate_scenario import (  # type: ignore  # noqa: E402
     evaluate_requirements,
     plot_flight_path,
+    project_waypoints_to_local_km,
     scenario_to_string,
     simulate_scenario,
     summarize_result_file,
@@ -27,7 +28,8 @@ def test_result_postprocessing_extracts_requirement_metrics():
     scenario = (REPO_ROOT / "build" / "scenarios" / "test_scenario.json").read_text()
     import json
     scenario_points = json.loads(scenario)["points"]
-    metrics = summarize_result_file(result_path, scenario_points=scenario_points)
+    local_points = project_waypoints_to_local_km(scenario_points)
+    metrics = summarize_result_file(result_path, scenario_points=local_points)
 
     assert metrics["duration_s"] > 0
     assert metrics["max_mach"] > 0
@@ -41,12 +43,12 @@ def test_result_postprocessing_extracts_requirement_metrics():
 
 
 def test_scenario_string_round_trip():
-    scenario = [
-        {"latitude_deg": 1.0, "longitude_deg": 2.0, "altitude_m": 100.0},
-        {"latitude_deg": 3.0, "longitude_deg": 4.0, "altitude_m": 200.0},
+    local_points = [
+        {"x_km": 0.0, "y_km": 0.0, "z_km": 0.1},
+        {"x_km": 5.0, "y_km": 10.0, "z_km": 0.2},
     ]
-    s = scenario_to_string(scenario)
-    assert "1.000000" in s
+    s = scenario_to_string(local_points)
+    assert "5.000" in s
     assert s.count(",") == len(s.split(",")) - 1
 
 

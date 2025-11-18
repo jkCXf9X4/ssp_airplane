@@ -4,22 +4,18 @@ import math
 
 # Mirrors the Modelica navigation arithmetic in AutopilotModule.mo so we can sanity-check
 # waypoint handling without rebuilding FMUs.
-EARTH_KM_PER_DEG = 111.0
 WAYPOINT_PROXIMITY_KM = 10.0
 
 
-def compute_heading_distance(
-    current_lat: float, current_lon: float, target_lat: float, target_lon: float
+def compute_heading_distance_xyz(
+    current_x_km: float, current_y_km: float, current_z_km: float,
+    target_x_km: float, target_y_km: float, target_z_km: float,
 ) -> tuple[float, float]:
-    lat_rad = math.radians(current_lat)
-    delta_lat = target_lat - current_lat
-    delta_lon = target_lon - current_lon
-    heading = math.degrees(
-        math.atan2(math.cos(lat_rad) * delta_lon, delta_lat)
-    )
-    distance_km = EARTH_KM_PER_DEG * math.sqrt(
-        delta_lat**2 + (math.cos(lat_rad) * delta_lon) ** 2
-    )
+    dx = target_x_km - current_x_km
+    dy = target_y_km - current_y_km
+    dz_km = target_z_km - current_z_km
+    heading = math.degrees(math.atan2(dy, dx))
+    distance_km = math.sqrt(dx**2 + dy**2 + dz_km**2)
     return heading, distance_km
 
 
@@ -29,11 +25,11 @@ def heading_error(target_heading: float, current_yaw: float) -> float:
 
 
 def test_heading_and_distance_follow_trajectory():
-    heading, distance = compute_heading_distance(45.0, 7.0, 45.1, 7.2)
+    heading, distance = compute_heading_distance_xyz(0.0, 0.0, 0.0, 10.0, 15.0, 1.0)
     assert 50.0 < heading < 60.0  # northeast turn
-    assert 19.0 < distance < 19.5
+    assert 18.0 < distance < 19.0
     err = heading_error(heading, current_yaw=10.0)
-    assert 44.0 < err < 45.0  # turn toward target instead of wrapping long-way around
+    assert 46.0 < err < 47.0  # turn toward target instead of wrapping long-way around
 
 
 def test_heading_error_wraps_shortest_turn():
@@ -42,5 +38,5 @@ def test_heading_error_wraps_shortest_turn():
 
 
 def test_proximity_detection_threshold():
-    _, distance = compute_heading_distance(10.0, 10.0, 10.05, 10.0)
+    _, distance = compute_heading_distance_xyz(1.0, 1.0, 0.5, 1.1, 1.0, 0.5)
     assert distance < WAYPOINT_PROXIMITY_KM

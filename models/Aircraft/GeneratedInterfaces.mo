@@ -17,11 +17,11 @@ package GeneratedInterfaces
     Boolean fuel_starved;
   end FuelLevelState;
 
-  connector GeodeticLLA
-    Real latitude_deg;
-    Real longitude_deg;
-    Real altitude_m;
-  end GeodeticLLA;
+  connector PositionXYZ
+    Real x_km;
+    Real y_km;
+    Real z_km;
+  end PositionXYZ;
 
   connector LiftState
     Real lift_kn;
