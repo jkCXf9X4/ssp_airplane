@@ -17,12 +17,6 @@ package GeneratedInterfaces
     Boolean fuel_starved;
   end FuelLevelState;
 
-  connector PositionXYZ
-    Real x_km;
-    Real y_km;
-    Real z_km;
-  end PositionXYZ;
-
   connector LiftState
     Real lift_kn;
     Real drag_kn;
@@ -55,6 +49,12 @@ package GeneratedInterfaces
     Integer mode_switch;
     Integer reserved;
   end PilotCommand;
+
+  connector PositionXYZ
+    Real x_km;
+    Real y_km;
+    Real z_km;
+  end PositionXYZ;
 
   connector SurfaceActuationCommand
     Real left_aileron_deg;

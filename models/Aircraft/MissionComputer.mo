@@ -34,5 +34,5 @@ equation
 
   speed_vector_change.roll_deg = rollAuthority_deg * cmdStickRoll;
   speed_vector_change.pitch_deg = pitchAuthority_deg * cmdStickPitch;
-  speed_vector_change.yaw_deg = yawAuthority_deg * cmdRudder + cmdModeSwitch * 5;
+  speed_vector_change.yaw_deg = yawAuthority_deg * cmdRudder;
 end MissionComputer;

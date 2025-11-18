@@ -80,7 +80,7 @@
     },
     {
       "dst_component": "InputOutput",
-      "dst_port": "locationLLA",
+      "dst_port": "locationXYZ",
       "src_component": "Environment",
       "src_port": "location"
     },
@@ -339,32 +339,32 @@
         },
         {
           "direction": "in",
-          "doc": "Current geodetic position from sensors",
+          "doc": "Current local position from sensors",
           "name": "currentLocation",
-          "payload": "GeodeticLLA",
+          "payload": "PositionXYZ",
           "payload_def": {
             "attributes": {
-              "altitude_m": {
+              "x_km": {
                 "doc": null,
-                "name": "altitude_m",
+                "name": "x_km",
                 "type": "Real",
                 "value": null
               },
-              "latitude_deg": {
+              "y_km": {
                 "doc": null,
-                "name": "latitude_deg",
+                "name": "y_km",
                 "type": "Real",
                 "value": null
               },
-              "longitude_deg": {
+              "z_km": {
                 "doc": null,
-                "name": "longitude_deg",
+                "name": "z_km",
                 "type": "Real",
                 "value": null
               }
             },
-            "doc": "Geodetic latitude/longitude (degrees) and altitude (meters) above mean sea level.",
-            "name": "GeodeticLLA"
+            "doc": "Local navigation frame expressed in kilometers (x=North, y=East, z=Up).",
+            "name": "PositionXYZ"
           }
         },
         {
@@ -792,30 +792,30 @@
           "direction": "out",
           "doc": null,
           "name": "location",
-          "payload": "GeodeticLLA",
+          "payload": "PositionXYZ",
           "payload_def": {
             "attributes": {
-              "altitude_m": {
+              "x_km": {
                 "doc": null,
-                "name": "altitude_m",
+                "name": "x_km",
                 "type": "Real",
                 "value": null
               },
-              "latitude_deg": {
+              "y_km": {
                 "doc": null,
-                "name": "latitude_deg",
+                "name": "y_km",
                 "type": "Real",
                 "value": null
               },
-              "longitude_deg": {
+              "z_km": {
                 "doc": null,
-                "name": "longitude_deg",
+                "name": "z_km",
                 "type": "Real",
                 "value": null
               }
             },
-            "doc": "Geodetic latitude/longitude (degrees) and altitude (meters) above mean sea level.",
-            "name": "GeodeticLLA"
+            "doc": "Local navigation frame expressed in kilometers (x=North, y=East, z=Up).",
+            "name": "PositionXYZ"
           }
         },
         {
@@ -934,31 +934,31 @@
         {
           "direction": "in",
           "doc": null,
-          "name": "locationLLA",
-          "payload": "GeodeticLLA",
+          "name": "locationXYZ",
+          "payload": "PositionXYZ",
           "payload_def": {
             "attributes": {
-              "altitude_m": {
+              "x_km": {
                 "doc": null,
-                "name": "altitude_m",
+                "name": "x_km",
                 "type": "Real",
                 "value": null
               },
-              "latitude_deg": {
+              "y_km": {
                 "doc": null,
-                "name": "latitude_deg",
+                "name": "y_km",
                 "type": "Real",
                 "value": null
               },
-              "longitude_deg": {
+              "z_km": {
                 "doc": null,
-                "name": "longitude_deg",
+                "name": "z_km",
                 "type": "Real",
                 "value": null
               }
             },
-            "doc": "Geodetic latitude/longitude (degrees) and altitude (meters) above mean sea level.",
-            "name": "GeodeticLLA"
+            "doc": "Local navigation frame expressed in kilometers (x=North, y=East, z=Up).",
+            "name": "PositionXYZ"
           }
         },
         {
@@ -1570,30 +1570,6 @@
       "doc": "Remaining fuel mass and normalized level for availability tracking.",
       "name": "FuelLevelState"
     },
-    "GeodeticLLA": {
-      "attributes": {
-        "altitude_m": {
-          "doc": null,
-          "name": "altitude_m",
-          "type": "Real",
-          "value": null
-        },
-        "latitude_deg": {
-          "doc": null,
-          "name": "latitude_deg",
-          "type": "Real",
-          "value": null
-        },
-        "longitude_deg": {
-          "doc": null,
-          "name": "longitude_deg",
-          "type": "Real",
-          "value": null
-        }
-      },
-      "doc": "Geodetic latitude/longitude (degrees) and altitude (meters) above mean sea level.",
-      "name": "GeodeticLLA"
-    },
     "LiftState": {
       "attributes": {
         "drag_kn": {
@@ -1744,6 +1720,30 @@
       "doc": "HOTAS-style control payload shared across control surfaces and mission computer consumers.",
       "name": "PilotCommand"
     },
+    "PositionXYZ": {
+      "attributes": {
+        "x_km": {
+          "doc": null,
+          "name": "x_km",
+          "type": "Real",
+          "value": null
+        },
+        "y_km": {
+          "doc": null,
+          "name": "y_km",
+          "type": "Real",
+          "value": null
+        },
+        "z_km": {
+          "doc": null,
+          "name": "z_km",
+          "type": "Real",
+          "value": null
+        }
+      },
+      "doc": "Local navigation frame expressed in kilometers (x=North, y=East, z=Up).",
+      "name": "PositionXYZ"
+    },
     "SurfaceActuationCommand": {
       "attributes": {
         "elevator_deg": {
@@ -1871,7 +1871,11 @@
       "text": "All models should be packaged as FMUs"
     },
     {
-      "identifier": "Requirement_REQ_Simulation_3",
+      "identifier": "location_orientation",
+      "text": "Location is described in a local x/y/z grid in kilometers (x=North, y=East, z=Up) Absolute orientation is described in euler angles, North = 360\u00b0 / 000\u00b0, East = 090\u00b0, South = 180\u00b0, West = 270 changes in orientation are described in +/- x for euler angles, pitch, yaw, roll, based upon absolute orientation"
+    },
+    {
+      "identifier": "waypoint_solutions",
       "text": "The waypoints should be injected into the simulation by utilizing SSP parameter set"
     }
   ]

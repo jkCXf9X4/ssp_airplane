@@ -50,13 +50,13 @@
           <ssd:Connector name="feedbackBus.health_code" kind="input">
             <ssc:Integer />
           </ssd:Connector>
-          <ssd:Connector name="currentLocation.latitude_deg" kind="input">
+          <ssd:Connector name="currentLocation.x_km" kind="input">
             <ssc:Real />
           </ssd:Connector>
-          <ssd:Connector name="currentLocation.longitude_deg" kind="input">
+          <ssd:Connector name="currentLocation.y_km" kind="input">
             <ssc:Real />
           </ssd:Connector>
-          <ssd:Connector name="currentLocation.altitude_m" kind="input">
+          <ssd:Connector name="currentLocation.z_km" kind="input">
             <ssc:Real />
           </ssd:Connector>
           <ssd:Connector name="currentOrientation.roll_deg" kind="input">
@@ -341,13 +341,13 @@
           <ssd:Connector name="orientation.yaw_deg" kind="output">
             <ssc:Real />
           </ssd:Connector>
-          <ssd:Connector name="location.latitude_deg" kind="output">
+          <ssd:Connector name="location.x_km" kind="output">
             <ssc:Real />
           </ssd:Connector>
-          <ssd:Connector name="location.longitude_deg" kind="output">
+          <ssd:Connector name="location.y_km" kind="output">
             <ssc:Real />
           </ssd:Connector>
-          <ssd:Connector name="location.altitude_m" kind="output">
+          <ssd:Connector name="location.z_km" kind="output">
             <ssc:Real />
           </ssd:Connector>
           <ssd:Connector name="flight_status.airspeed_mps" kind="output">
@@ -366,13 +366,13 @@
       </ssd:Component>
       <ssd:Component name="InputOutput" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_InputOutput.fmu">
         <ssd:Connectors>
-          <ssd:Connector name="locationLLA.latitude_deg" kind="input">
+          <ssd:Connector name="locationXYZ.x_km" kind="input">
             <ssc:Real />
           </ssd:Connector>
-          <ssd:Connector name="locationLLA.longitude_deg" kind="input">
+          <ssd:Connector name="locationXYZ.y_km" kind="input">
             <ssc:Real />
           </ssd:Connector>
-          <ssd:Connector name="locationLLA.altitude_m" kind="input">
+          <ssd:Connector name="locationXYZ.z_km" kind="input">
             <ssc:Real />
           </ssd:Connector>
           <ssd:Connector name="orientation.roll_deg" kind="input">
@@ -489,9 +489,9 @@
       <ssd:Connection startElement="Environment" startConnector="orientation.roll_deg" endElement="AutopilotModule" endConnector="currentOrientation.roll_deg" />
       <ssd:Connection startElement="Environment" startConnector="orientation.pitch_deg" endElement="AutopilotModule" endConnector="currentOrientation.pitch_deg" />
       <ssd:Connection startElement="Environment" startConnector="orientation.yaw_deg" endElement="AutopilotModule" endConnector="currentOrientation.yaw_deg" />
-      <ssd:Connection startElement="Environment" startConnector="location.latitude_deg" endElement="AutopilotModule" endConnector="currentLocation.latitude_deg" />
-      <ssd:Connection startElement="Environment" startConnector="location.longitude_deg" endElement="AutopilotModule" endConnector="currentLocation.longitude_deg" />
-      <ssd:Connection startElement="Environment" startConnector="location.altitude_m" endElement="AutopilotModule" endConnector="currentLocation.altitude_m" />
+      <ssd:Connection startElement="Environment" startConnector="location.x_km" endElement="AutopilotModule" endConnector="currentLocation.x_km" />
+      <ssd:Connection startElement="Environment" startConnector="location.y_km" endElement="AutopilotModule" endConnector="currentLocation.y_km" />
+      <ssd:Connection startElement="Environment" startConnector="location.z_km" endElement="AutopilotModule" endConnector="currentLocation.z_km" />
       <ssd:Connection startElement="Environment" startConnector="flight_status.airspeed_mps" endElement="AutopilotModule" endConnector="feedbackBus.airspeed_mps" />
       <ssd:Connection startElement="Environment" startConnector="flight_status.energy_state_norm" endElement="AutopilotModule" endConnector="feedbackBus.energy_state_norm" />
       <ssd:Connection startElement="Environment" startConnector="flight_status.angle_of_attack_deg" endElement="AutopilotModule" endConnector="feedbackBus.angle_of_attack_deg" />
@@ -500,9 +500,9 @@
       <ssd:Connection startElement="Environment" startConnector="flight_status.energy_state_norm" endElement="AdaptiveWingSystem" endConnector="flight_speed.energy_state_norm" />
       <ssd:Connection startElement="Environment" startConnector="flight_status.angle_of_attack_deg" endElement="AdaptiveWingSystem" endConnector="flight_speed.angle_of_attack_deg" />
       <ssd:Connection startElement="Environment" startConnector="flight_status.health_code" endElement="AdaptiveWingSystem" endConnector="flight_speed.health_code" />
-      <ssd:Connection startElement="Environment" startConnector="location.latitude_deg" endElement="InputOutput" endConnector="locationLLA.latitude_deg" />
-      <ssd:Connection startElement="Environment" startConnector="location.longitude_deg" endElement="InputOutput" endConnector="locationLLA.longitude_deg" />
-      <ssd:Connection startElement="Environment" startConnector="location.altitude_m" endElement="InputOutput" endConnector="locationLLA.altitude_m" />
+      <ssd:Connection startElement="Environment" startConnector="location.x_km" endElement="InputOutput" endConnector="locationXYZ.x_km" />
+      <ssd:Connection startElement="Environment" startConnector="location.y_km" endElement="InputOutput" endConnector="locationXYZ.y_km" />
+      <ssd:Connection startElement="Environment" startConnector="location.z_km" endElement="InputOutput" endConnector="locationXYZ.z_km" />
       <ssd:Connection startElement="Environment" startConnector="orientation.roll_deg" endElement="InputOutput" endConnector="orientation.roll_deg" />
       <ssd:Connection startElement="Environment" startConnector="orientation.pitch_deg" endElement="InputOutput" endConnector="orientation.pitch_deg" />
       <ssd:Connection startElement="Environment" startConnector="orientation.yaw_deg" endElement="InputOutput" endConnector="orientation.yaw_deg" />

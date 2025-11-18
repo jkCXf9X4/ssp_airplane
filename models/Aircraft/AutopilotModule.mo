@@ -7,16 +7,14 @@ model AutopilotModule
   constant Real degToRad = Constants.pi / 180;
   constant Real radToDeg = 180 / Constants.pi;
   parameter Real updateRateHz = 40;
-  parameter Real sensorFidelity = 0.98;
   parameter Real defaultThrottle = 0.7;
   parameter Real headingGain = 1 / 60.0 "deg^-1 to normalize yaw error into stick roll";
-  parameter Real altitudeGain = 1 / 3000.0 "m^-1 to normalize altitude error into stick pitch";
-  parameter Real targetAltitude_m = 6000;
+  parameter Real altitudeGain = 1 / 3.0 "m^-1 to normalize altitude error into stick pitch";
 
   parameter Integer waypointCount = 10;
   parameter Real waypointX_km[waypointCount] = fill(0.0, waypointCount);
   parameter Real waypointY_km[waypointCount] = fill(0.0, waypointCount);
-  parameter Real waypointZ_km[waypointCount] = fill(targetAltitude_m / 1000.0, waypointCount);
+  parameter Real waypointZ_km[waypointCount] = fill(1, waypointCount);
   parameter Real waypointProximity_km = 10 "Distance to trigger waypoint switch";
 
   input GI.FlightStatusPacket feedbackBus;
@@ -60,7 +58,7 @@ equation
   dy_km = targetY_km - currentY_km;
   dz_km = targetZ_km - currentZ_km;
 
-  distanceToWaypoint_km = if waypointCount < 1 then 0 else Math.sqrt(dx_km ^ 2 + dy_km ^ 2 + dz_km ^ 2);
+  distanceToWaypoint_km = if waypointCount < 1 then 0 else sqrt(dx_km ^ 2 + dy_km ^ 2 + dz_km ^ 2);
   targetHeading = if waypointCount < 1 then currentOrientation.yaw_deg else Math.atan2(dy_km, dx_km) * radToDeg;
 
   // Normalize heading error into [-180, 180] to avoid commanding a long turn the wrong direction
@@ -68,8 +66,9 @@ equation
     Math.sin((targetHeading - currentOrientation.yaw_deg) * degToRad),
     Math.cos((targetHeading - currentOrientation.yaw_deg) * degToRad)) * radToDeg;
 
-  altitudeError = if waypointCount < 1 then targetAltitude_m - currentZ_km * 1000.0 else dz_km * 1000.0;
-  holdStrength = max(0.2, min(1.0, defaultThrottle * sensorFidelity * max(0.2, feedbackBus.energy_state_norm)));
+// 
+  altitudeError = if waypointCount < 1 then 1 - currentZ_km else dz_km;
+  holdStrength = max(0.2, min(1.0, defaultThrottle * max(0.2, feedbackBus.energy_state_norm)));
 
   arrived = waypointCount > 0 and distanceToWaypoint_km <= waypointProximity_km;
 
