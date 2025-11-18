@@ -7,7 +7,4 @@ package Aircraft {
   comment Requirement_REQ_Mission /* Support multirole loadouts across nine hardpoints with mission computer stores management. */
   comment Requirement_REQ_FlyByWire /* It should be an unstable aircraft, the control loop should compensate for this. */
   comment Requirement_REQ_Waypoints_1 /* It should support loading a number of waypoints that it should fy to in order */
-  comment Requirement_REQ_Simulation_1 /* The system should be packaged and simulated as a SSP (system structure and parameterization) artifact */
-  comment Requirement_REQ_Simulation_2 /* All models should be packaged as FMUs */
-  comment Requirement_REQ_Simulation_3 /* The waypoints should be injected into the simulation by utilizing SSP parameter set */
 }

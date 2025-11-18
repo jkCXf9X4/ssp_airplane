@@ -1,6 +1,11 @@
 package Aircraft {
   doc /* Reconfigured to model an F-16 Fighting Falcon multirole fighter with single-engine propulsion and manned cockpit. */
 
+  doc /* Simulation specifics */
+  doc /* Location is described in longitude and latitude */
+  doc /* Absolute orientation is described in euler angles, North = 360° / 000°, East = 090°, South = 180°, West = 270 */
+  doc /* changes in orientation are described in +/- x for euler angles, pitch, yaw, roll, based upon absolute orientation */
+
 
   part def ControlInterface {
     doc /* F-16 HOTAS + side-stick interface for pilot inputs and trim switches. */

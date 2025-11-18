@@ -18,7 +18,6 @@ protected
   Real cmdThrottle;
   Real cmdThrottleAux;
   Integer cmdModeSwitch;
-  Real authorityScale;
 equation
   autopilotEngaged = autopilotInput.mode_switch > 0;
 
@@ -29,9 +28,7 @@ equation
   cmdThrottleAux = if autopilotEngaged then autopilotInput.throttle_aux_norm else manualInput.throttle_aux_norm;
   cmdModeSwitch = if autopilotEngaged then autopilotInput.mode_switch else manualInput.mode_switch;
 
-  authorityScale = min(1.0, flyByWireChannels / 3.0);
-
-  engineThrottle.throttle_norm = min(1.0, max(0.12, cmdThrottle * authorityScale));
+  engineThrottle.throttle_norm = min(1.0, max(0.12, cmdThrottle));
   engineThrottle.fuel_enable = not fuelStatus.fuel_starved;
   engineThrottle.afterburner_enable = engineThrottle.throttle_norm > 0.85 and cmdThrottleAux > 0.5;
 

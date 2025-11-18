@@ -14,11 +14,6 @@ This repository tracks an SSP for an F-16 Fighting Falcon inspired single-seat m
 - Prebuilt SSPs live in `build/ssp/`; the default is `build/ssp/aircraft.ssp`.
 - Curated mission scenarios live in `resources/scenarios/` (see `docs/use_cases.md` for requirement linkage).
 
-# System requirements:
-- Maintain F-16 class geometry (≈15 m length, 10 m span) with nine external hardpoints
-- Integrate an F100/F110-class augmented turbofan supplying both thrust and electrical power
-- Provide full HOTAS pilot inputs, fly-by-wire flight-control channels, and autopilot hold modes
-- Support Mach 2 dash performance, 9 g maneuver envelope, and mission computer driven stores management
 
 # Architecture
 The architecture is captured as SysML v2 textual notation split across:
@@ -27,6 +22,7 @@ The architecture is captured as SysML v2 textual notation split across:
 - `architecture/data_definitions.sysml` – all structured payload definitions
 - `architecture/system_connections.sysml` – all `connect` statements
 - `architecture/requirements.sysml` – top-level capability requirements
+- `architecture/simulation.sysml` – top-level simulation arch requirements and design choices
 
 ## Components
 
@@ -36,12 +32,11 @@ It contains models for:
  - cropped-delta wing and control surfaces
  - F100/F110 turbofan propulsion module
  - mission computer with HOTAS, stores management, and flight control exports
- - optional autopilot module (attitude/altitude/heading hold)
+ - autopilot module, to navigate around points in space
  - power distribution system sized for 270 VDC generation
  - cockpit HOTAS interface
  - telemetry sink (`InputOutput`) that taps the environment state, autopilot outputs (pilot command + mission status), and flight status for logging and validation
 
-Key architectural signals include a LiftState feed from the AdaptiveWingSystem into the Environment and a detailed FlightStatusPacket (airspeed, energy state, angle of attack, health code) used by both the autopilot and mission computer.
 # Build
 
 all sub-systems are to be exported into into Functional mockup units, FMUs. Packaged into a SSP for executing the simulation in the optimization loop.
@@ -69,6 +64,12 @@ Utilize OMSimulator as simulation engine, via python
 2. Rebuild the FMUs/SSD/SSP with the helper scripts whenever the models change.
 3. Run `python3 scripts/simulate_scenario.py --scenario build/scenarios/demo.json` to execute OMSimulator or post-process existing results (`--reuse-results`) and optional custom `--ssp` or `--stop-time`.
 4. Execute `pytest` to run the scenario-based unit tests and validate requirement coverage (range, fuel exhaustion).
+
+## Autopilot waypoint tracking
+
+- Waypoints are injected into `AutopilotModule` via the `waypointLat[]/waypointLon[]/waypointAlt[]` parameters; `simulate_scenario.py` emits an SSV parameter set for each scenario so the FMU receives the route automatically.
+- The autopilot computes a heading and altitude error toward the active waypoint using a flat-earth projection and advances once the aircraft is within `waypointProximity_km` (10 km default), updating `MissionStatus` for logging and requirement evaluation.
+- You can sanity-check the navigation math without rebuilding FMUs by running `pytest tests/test_autopilot_logic.py`, which mirrors the Modelica heading/error calculations.
 
 ### Simulation and results
 
