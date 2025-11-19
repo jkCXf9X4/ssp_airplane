@@ -6,11 +6,15 @@ import argparse
 import os
 import shutil
 import subprocess
+import sys
 import tempfile
 from pathlib import Path
 import re
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
+from scripts.common.paths import BUILD_DIR, MODELS_DIR, REPO_ROOT, ensure_directory
 DEFAULT_MODELS = [
     "Aircraft.CompositeAirframe",
     "Aircraft.TurbofanPropulsion",
@@ -25,9 +29,9 @@ DEFAULT_MODELS = [
 
 
 def build_mos_script(model_name: str, output_dir: Path) -> str:
-    package_path = REPO_ROOT / "models" / "Aircraft" / "package.mo"
-    tmp_dir = REPO_ROOT / "build/tmp"
-    tmp_dir.mkdir(parents=True, exist_ok=True)
+    package_path = MODELS_DIR / "Aircraft" / "package.mo"
+    tmp_dir = BUILD_DIR / "tmp"
+    ensure_directory(tmp_dir)
     return f"""
 installPackage(Modelica, \"4.0.0\", exactMatch=false);
 loadFile("{package_path.as_posix()}");
@@ -78,10 +82,6 @@ def extract_fmu_path(output: str) -> Path | None:
     return Path(matches[-1])
 
 
-def ensure_dir(path: Path) -> None:
-    path.mkdir(parents=True, exist_ok=True)
-
-
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -97,7 +97,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--output",
-        default=REPO_ROOT / "build" / "fmus",
+        default=BUILD_DIR / "fmus",
         type=Path,
         help="Destination directory for FMUs",
     )
@@ -115,7 +115,7 @@ def main() -> None:
 
     if output_dir.exists():
         shutil.rmtree(output_dir)
-    ensure_dir(output_dir)
+    ensure_directory(output_dir)
 
     for model in args.models:
         mos_script = build_mos_script(model, output_dir)

@@ -3,14 +3,18 @@
 from __future__ import annotations
 
 import argparse
+import sys
 from pathlib import Path
 from typing import Optional
 
-from utils.sysmlv2_arch_parser import parse_sysml_folder
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_ARCH_DIR = REPO_ROOT / "architecture"
-DEFAULT_OUTPUT = REPO_ROOT / "generated" / "arch_def.json"
+from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR, ensure_parent_dir
+from scripts.utils.sysmlv2_arch_parser import parse_sysml_folder
+
+DEFAULT_ARCH_DIR = ARCHITECTURE_DIR
+DEFAULT_OUTPUT = GENERATED_DIR / "arch_def.json"
 
 
 def main(argv: Optional[list[str]] = None) -> int:
@@ -34,7 +38,7 @@ def main(argv: Optional[list[str]] = None) -> int:
         source = source.parent
     architecture = parse_sysml_folder(source)
 
-    args.output.parent.mkdir(parents=True, exist_ok=True)
+    ensure_parent_dir(args.output)
     args.output.write_text(str(architecture))
     print(f"Architecture saved to {args.output}")
 

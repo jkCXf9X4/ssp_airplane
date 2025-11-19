@@ -8,13 +8,14 @@ import sys
 from pathlib import Path
 from typing import Dict, List, Set, Tuple
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-SCRIPTS_DIR = Path(__file__).parent
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-if str(SCRIPTS_DIR) not in sys.path:
-    sys.path.insert(0, str(SCRIPTS_DIR))
+from scripts.common.paths import ARCHITECTURE_DIR, MODELS_DIR
+from scripts.utils.sysmlv2_arch_parser import parse_sysml_folder
 
-from utils.sysmlv2_arch_parser import parse_sysml_folder  # type: ignore  # noqa: E402
+DEFAULT_ARCH_DIR = ARCHITECTURE_DIR
+DEFAULT_MODELS_DIR = MODELS_DIR / "Aircraft"
 
 INTERFACE_DECL_RE = re.compile(
     r"\b(?P<direction>input|output)\s+GI\.(?P<record>\w+)\s+(?P<var>\w+)",
@@ -98,13 +99,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--architecture",
         type=Path,
-        default=REPO_ROOT / "architecture",
+        default=DEFAULT_ARCH_DIR,
         help="Path to the SysML architecture directory or file.",
     )
     parser.add_argument(
         "--models-dir",
         type=Path,
-        default=REPO_ROOT / "models" / "Aircraft",
+        default=DEFAULT_MODELS_DIR,
         help="Directory containing Modelica models to check.",
     )
     return parser.parse_args()

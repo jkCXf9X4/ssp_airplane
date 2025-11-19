@@ -4,12 +4,17 @@ from __future__ import annotations
 
 import argparse
 import subprocess
+import sys
 import tempfile
 from pathlib import Path
 from typing import Iterable
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-PACKAGE_FILE = REPO_ROOT / "models" / "Aircraft" / "package.mo"
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
+from scripts.common.paths import MODELS_DIR, REPO_ROOT
+
+PACKAGE_FILE = MODELS_DIR / "Aircraft" / "package.mo"
 DEFAULT_MODELS = [
     "Aircraft.CompositeAirframe",
     "Aircraft.TurbofanPropulsion",

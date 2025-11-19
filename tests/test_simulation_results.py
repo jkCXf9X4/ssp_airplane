@@ -5,15 +5,13 @@ import os
 import shutil
 from pathlib import Path
 import pytest
-
-REPO_ROOT = Path(__file__).resolve().parents[1]
-SCRIPTS_DIR = REPO_ROOT / "scripts"
 import sys
 
-if str(SCRIPTS_DIR) not in sys.path:
-    sys.path.insert(0, str(SCRIPTS_DIR))
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 
-from simulate_scenario import (  # type: ignore  # noqa: E402
+from scripts.workflows.simulate_scenario import (  # type: ignore  # noqa: E402
     evaluate_requirements,
     plot_flight_path,
     project_waypoints_to_local_km,

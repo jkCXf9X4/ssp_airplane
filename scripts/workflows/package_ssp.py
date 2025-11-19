@@ -3,13 +3,18 @@
 from __future__ import annotations
 
 import argparse
+import sys
 import zipfile
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_SSD = REPO_ROOT / "generated" / "SystemStructure.ssd"
-DEFAULT_FMU_DIR = REPO_ROOT / "build" / "fmus"
-DEFAULT_OUTPUT = REPO_ROOT / "build" / "ssp" / "aircraft.ssp"
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
+from scripts.common.paths import BUILD_DIR, GENERATED_DIR, ensure_parent_dir
+
+DEFAULT_SSD = GENERATED_DIR / "SystemStructure.ssd"
+DEFAULT_FMU_DIR = BUILD_DIR / "fmus"
+DEFAULT_OUTPUT = BUILD_DIR / "ssp" / "aircraft.ssp"
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -26,7 +31,7 @@ def main() -> None:
     if not args.fmu_dir.exists():
         raise SystemExit(f"FMU directory not found: {args.fmu_dir}")
 
-    args.output.parent.mkdir(parents=True, exist_ok=True)
+    ensure_parent_dir(args.output)
     fmu_files = sorted(args.fmu_dir.glob("*.fmu"))
     if not fmu_files:
         raise SystemExit(f"No FMUs found under {args.fmu_dir}")

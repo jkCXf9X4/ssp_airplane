@@ -8,11 +8,18 @@ from pathlib import Path
 from typing import Iterable, Optional
 import xml.etree.ElementTree as ET
 
-from utils.sysmlv2_arch_parser import SysMLArchitecture, SysMLAttribute, parse_sysml_folder
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_ARCH_PATH = REPO_ROOT / "architecture"
-DEFAULT_OUTPUT = REPO_ROOT / "generated" / "parameters.ssv"
+from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR, ensure_parent_dir
+from scripts.utils.sysmlv2_arch_parser import (
+    SysMLArchitecture,
+    SysMLAttribute,
+    parse_sysml_folder,
+)
+
+DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
+DEFAULT_OUTPUT = GENERATED_DIR / "parameters.ssv"
 
 SSV_NAMESPACE = "http://ssp-standard.org/SSP1/ParameterValues"
 
@@ -122,7 +129,7 @@ def generate_parameter_set(
     architecture = parse_sysml_folder(architecture_path)
     pairs = _parameter_entries(architecture, components)
     tree = build_parameter_tree(pairs)
-    output_path.parent.mkdir(parents=True, exist_ok=True)
+    ensure_parent_dir(output_path)
     tree.write(output_path, encoding="utf-8", xml_declaration=True)
     return output_path
 

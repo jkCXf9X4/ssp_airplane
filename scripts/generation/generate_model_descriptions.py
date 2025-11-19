@@ -12,12 +12,19 @@ from uuid import NAMESPACE_URL, uuid5
 import xml.etree.ElementTree as ET
 import zipfile
 
-from utils.sysmlv2_arch_parser import SysMLArchitecture, SysMLAttribute, SysMLPartDefinition, parse_sysml_folder
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_ARCH_PATH = REPO_ROOT / "architecture"
-DEFAULT_OUTPUT_DIR = REPO_ROOT / "generated" / "model_descriptions"
-BUILD_DIR = REPO_ROOT / "build"
+from scripts.common.paths import ARCHITECTURE_DIR, BUILD_DIR, GENERATED_DIR
+from scripts.utils.sysmlv2_arch_parser import (
+    SysMLArchitecture,
+    SysMLAttribute,
+    SysMLPartDefinition,
+    parse_sysml_folder,
+)
+
+DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
+DEFAULT_OUTPUT_DIR = GENERATED_DIR / "model_descriptions"
 
 CO_SIMULATION_ATTRS = {
     "modelIdentifier": "",

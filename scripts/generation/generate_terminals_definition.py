@@ -8,16 +8,19 @@ from pathlib import Path
 from typing import Dict, Iterable, Optional
 import xml.etree.ElementTree as ET
 
-from utils.sysmlv2_arch_parser import (
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
+from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR, ensure_parent_dir
+from scripts.utils.sysmlv2_arch_parser import (
     SysMLArchitecture,
     SysMLPartDefinition,
     SysMLPortDefinition,
     parse_sysml_folder,
 )
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_ARCH_PATH = REPO_ROOT / "architecture"
-DEFAULT_OUTPUT = REPO_ROOT / "generated" / "terminalsAndIcons.xml"
+DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
+DEFAULT_OUTPUT = GENERATED_DIR / "terminalsAndIcons.xml"
 
 
 def _indent(tree: ET.ElementTree) -> None:
@@ -95,7 +98,7 @@ def generate_terminals_file(
     architecture = parse_sysml_folder(architecture_path)
     targets = _select_components(architecture, components)
     tree = build_terminals_tree(targets)
-    output_path.parent.mkdir(parents=True, exist_ok=True)
+    ensure_parent_dir(output_path)
     tree.write(output_path, encoding="utf-8", xml_declaration=True)
     return output_path
 

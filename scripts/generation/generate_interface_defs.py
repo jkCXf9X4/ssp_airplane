@@ -3,14 +3,22 @@
 from __future__ import annotations
 
 import argparse
+import sys
 from pathlib import Path
 from typing import Dict, List, Tuple
 
-from utils.sysmlv2_arch_parser import SysMLArchitecture, SysMLPortDefinition, parse_sysml_folder
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-ARCH_PATH = REPO_ROOT / "architecture"
-OUTPUT_DIR = REPO_ROOT / "models" /"Aircraft"
+from scripts.common.paths import ARCHITECTURE_DIR, MODELS_DIR, ensure_parent_dir
+from scripts.utils.sysmlv2_arch_parser import (
+    SysMLArchitecture,
+    SysMLPortDefinition,
+    parse_sysml_folder,
+)
+
+DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
+DEFAULT_OUTPUT_PATH = MODELS_DIR / "Aircraft" / "GeneratedInterfaces.mo"
 
 PRIMITIVE_MAP = {
     "real": "Real",
@@ -63,8 +71,8 @@ def generate_modelica_package(defs: Dict[str, List[Tuple[str, str]]]) -> str:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--architecture", type=Path, default=ARCH_PATH)
-    parser.add_argument("--output", type=Path, default=OUTPUT_DIR / "GeneratedInterfaces.mo")
+    parser.add_argument("--architecture", type=Path, default=DEFAULT_ARCH_PATH)
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT_PATH)
     args = parser.parse_args()
 
     architecture = parse_sysml_folder(args.architecture)
@@ -72,7 +80,7 @@ def main() -> None:
     if not data_defs:
         raise SystemExit("No data definitions found; nothing to generate.")
 
-    args.output.parent.mkdir(parents=True, exist_ok=True)
+    ensure_parent_dir(args.output)
     content = generate_modelica_package(data_defs)
     args.output.write_text(content)
     print(f"Wrote Modelica interfaces to {args.output}")

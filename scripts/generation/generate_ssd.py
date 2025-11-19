@@ -10,11 +10,20 @@ from typing import Dict, List, Optional, Tuple
 
 import xml.etree.ElementTree as ET
 
-from utils.sysmlv2_arch_parser import SysMLArchitecture, SysMLAttribute, SysMLPortDefinition, SysMLPortEndpoint, parse_sysml_folder
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-ARCH_PATH = REPO_ROOT / "architecture"
-BUILD_DIR = REPO_ROOT / "generated"
+from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR
+from scripts.utils.sysmlv2_arch_parser import (
+    SysMLArchitecture,
+    SysMLAttribute,
+    SysMLPortDefinition,
+    SysMLPortEndpoint,
+    parse_sysml_folder,
+)
+
+DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
+BUILD_DIR = GENERATED_DIR
 
 SSD_NAMESPACE = "http://ssp-standard.org/SSP1/SystemStructureDescription"
 SSC_NAMESPACE = "http://ssp-standard.org/SSP1/SystemStructureCommon"
@@ -290,7 +299,7 @@ def main() -> None:
     parser.add_argument(
         "--architecture",
         type=Path,
-        default=ARCH_PATH,
+        default=DEFAULT_ARCH_PATH,
         help="Directory containing the SysML architecture (.sysml) files or a file within it.",
     )
     parser.add_argument("--output", type=Path, default=BUILD_DIR / "SystemStructure.ssd")
@@ -300,7 +309,7 @@ def main() -> None:
     source = args.architecture
     if source.is_file():
         source = source.parent
-    args.output.parent.mkdir(parents=True, exist_ok=True) 
+    args.output.parent.mkdir(parents=True, exist_ok=True)
 
     architecture = parse_sysml_folder(source)
     tree = build_ssd_tree(architecture)

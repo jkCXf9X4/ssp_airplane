@@ -8,6 +8,7 @@ import csv
 import json
 import math
 import shutil
+import sys
 import zipfile
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -15,12 +16,20 @@ from typing import Any, Dict, List, Optional, Sequence, Tuple
 import xml.etree.ElementTree as ET
 
 # activate venv prior
-import pyssp4sim
 import matplotlib
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_SSP = REPO_ROOT / "build" / "ssp" / "aircraft.ssp"
-DEFAULT_RESULTS = REPO_ROOT / "build" / "results"
+try:
+    import pyssp4sim
+except ImportError:
+    pyssp4sim = None
+
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
+from scripts.common.paths import BUILD_DIR
+
+DEFAULT_SSP = BUILD_DIR / "ssp" / "aircraft.ssp"
+DEFAULT_RESULTS = BUILD_DIR / "results"
 DEFAULT_FUEL_CAPACITY = 3100.0
 RESERVE_FRACTION = 0.08
 WAYPOINT_HIT_THRESHOLD_KM = 10.0
@@ -483,8 +492,7 @@ def evaluate_requirements(
 
 
 # toggle log_fmu for more extensive logs
-def run_with_simulator(ssp_path: Path, result_file: Path, stop_time: float, log_fmu = False) -> None:
-
+def run_with_simulator(ssp_path: Path, result_file: Path, stop_time: float, log_fmu=False) -> None:
     log_fmu = "true" if log_fmu else "false"
 
     config = f"""
@@ -537,6 +545,10 @@ def run_with_simulator(ssp_path: Path, result_file: Path, stop_time: float, log_
     with open(temp_config, "w") as f:
         f.write(config)
 
+    if pyssp4sim is None:
+        raise RuntimeError(
+            "pyssp4sim is not available; install the ssp4sim Python API or reuse existing results."
+        )
     sim = pyssp4sim.Simulator(temp_config.as_posix())
     sim.init()
     sim.simulate()
@@ -574,7 +586,16 @@ def simulate_scenario(
     if stop_time is None:
         stop_time = max(estimate_duration(total_distance, cruise_speed) * 1.1, 120.0)
 
-    if not reuse_results or not result_file.exists():
+    needs_simulation = (not reuse_results) or (not result_file.exists())
+    if needs_simulation and pyssp4sim is None:
+        if result_file.exists():
+            needs_simulation = False
+        else:
+            raise RuntimeError(
+                "pyssp4sim is not available; install the dependency or rerun with --reuse-results."
+            )
+
+    if needs_simulation:
         if not prepared_ssp.exists():
             raise FileNotFoundError(f"Prepared SSP file not found: {prepared_ssp}")
         run_with_simulator(prepared_ssp, result_file, stop_time)

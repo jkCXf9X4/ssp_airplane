@@ -1,6 +1,6 @@
 # Results and requirement evaluation
 
-When `scripts/simulate_scenario.py` runs, it always writes two artifacts into `build/results/`:
+When `scripts.workflows.simulate_scenario` runs, it always writes two artifacts into `build/results/`:
 
 1) `<scenario>_results.csv` — full OMSimulator timeseries for every exported variable.  
 2) `<scenario>_summary.json` — compact requirement view with evidence and key metrics for humans and LLM agents.
@@ -48,7 +48,7 @@ When `scripts/simulate_scenario.py` runs, it always writes two artifacts into `b
 ### Waypoint strings and plots
 
 - Each scenario’s waypoints are also exported to `build/results/<scenario>_waypoints.txt` as a comma-separated `x_km,y_km,z_km,...` string, ready for Modelica `stringToRealVector` consumption in the autopilot parameter set.
-- Passing `--plot` to `simulate_scenario.py` generates `build/results/<scenario>_path.png`, overlaying the simulated local X/Y path against the supplied waypoints for a quick visual verification.
+- Passing `--plot` to `python3 -m scripts.workflows.simulate_scenario` generates `build/results/<scenario>_path.png`, overlaying the simulated local X/Y path against the supplied waypoints for a quick visual verification.
 
 ## Reusing results vs. re-simulating
 
@@ -58,4 +58,4 @@ When `scripts/simulate_scenario.py` runs, it always writes two artifacts into `b
 ## Scenario provenance
 
 - Curated scenarios and their linked requirements are documented in `docs/use_cases.md`.
-- A pre-generated dataset for `build/scenarios/test_scenario.json` is kept in `build/results/` so `pytest` can run without invoking OMSimulator.
+- A pre-generated dataset (see `resources/scenarios/test_scenario.json` and `resources/references/test_scenario_results.csv`) is copied into `build/` on demand so `pytest` can run without invoking OMSimulator.

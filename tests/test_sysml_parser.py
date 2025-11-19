@@ -4,11 +4,10 @@ import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-SCRIPTS_DIR = REPO_ROOT / "scripts"
-if str(SCRIPTS_DIR) not in sys.path:
-    sys.path.insert(0, str(SCRIPTS_DIR))
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 
-from utils.sysmlv2_arch_parser import parse_sysml_folder  # type: ignore  # noqa: E402
+from scripts.utils.sysmlv2_arch_parser import parse_sysml_folder  # type: ignore  # noqa: E402
 
 
 def test_parser_collects_parts_and_ports():
@@ -32,8 +31,8 @@ def test_parser_collects_parts_and_ports():
 def test_connections_are_parsed():
     architecture = parse_sysml_folder(REPO_ROOT / "architecture")
     assert any(
-        conn.src_component == "MissionComputer"
-        and conn.src_port == "flightStatus"
+        conn.src_component == "Environment"
+        and conn.src_port == "flight_status"
         and conn.dst_component == "AutopilotModule"
         and conn.dst_port == "feedbackBus"
         for conn in architecture.connections

@@ -3,16 +3,24 @@
 from __future__ import annotations
 
 import argparse
+import sys
 from pathlib import Path
 from typing import Dict, List, Optional, Sequence, Tuple
 import xml.etree.ElementTree as ET
 import zipfile
 
-from utils.sysmlv2_arch_parser import SysMLArchitecture, SysMLPartDefinition, parse_sysml_folder
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_ARCH_PATH = REPO_ROOT / "architecture"
-DEFAULT_FMU_DIR = REPO_ROOT / "build" / "fmus"
+from scripts.common.paths import ARCHITECTURE_DIR, BUILD_DIR
+from scripts.utils.sysmlv2_arch_parser import (
+    SysMLArchitecture,
+    SysMLPartDefinition,
+    parse_sysml_folder,
+)
+
+DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
+DEFAULT_FMU_DIR = BUILD_DIR / "fmus"
 VALID_DIRECTIONS = {"in", "out"}
 
 

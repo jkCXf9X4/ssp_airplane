@@ -3,10 +3,21 @@
 from __future__ import annotations
 
 import argparse
+import sys
 from pathlib import Path
 from typing import Dict, List, Tuple
 
-from utils.sysmlv2_arch_parser import SysMLArchitecture, SysMLPortEndpoint, parse_sysml_folder
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
+from scripts.common.paths import ARCHITECTURE_DIR
+from scripts.utils.sysmlv2_arch_parser import (
+    SysMLArchitecture,
+    SysMLPortEndpoint,
+    parse_sysml_folder,
+)
+
+DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 
 
 def _build_port_index(architecture: SysMLArchitecture) -> Dict[Tuple[str, str], SysMLPortEndpoint]:
@@ -68,7 +79,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--architecture",
         type=Path,
-        default=Path("architecture"),
+        default=DEFAULT_ARCH_PATH,
         help="Directory containing the SysML .sysml sections.",
     )
     return parser.parse_args()
