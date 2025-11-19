@@ -16,6 +16,7 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, BUILD_DIR, GENERATED_DIR
+from scripts.common.sysml_values import parse_literal
 from scripts.utils.sysmlv2_arch_parser import (
     SysMLArchitecture,
     SysMLAttribute,
@@ -66,25 +67,6 @@ def _normalize_type(type_name: Optional[str]) -> Optional[str]:
     if not type_name:
         return None
     return PRIMITIVE_TYPE_MAP.get(type_name.strip().lower())
-
-
-def _parse_literal(value: Optional[str]) -> Optional[object]:
-    if value is None:
-        return None
-    raw = value.strip()
-    if not raw:
-        return None
-    if raw.startswith('"') and raw.endswith('"'):
-        return raw[1:-1]
-    lowered = raw.lower()
-    if lowered in {"true", "false"}:
-        return lowered == "true"
-    try:
-        if any(ch in raw for ch in (".", "e", "E")):
-            return float(raw)
-        return int(raw)
-    except ValueError:
-        return raw
 
 
 def _format_start_value(fmi_type: str, literal: Optional[object]) -> Optional[str]:
@@ -143,7 +125,7 @@ def _port_attribute_variables(part: SysMLPartDefinition, starting_ref: int) -> t
 
         for attr in attributes:
             var_name = f"{port.name}.{attr.name}"
-            literal = _parse_literal(attr.value)
+            literal = parse_literal(attr.value)
             fmi_type = _normalize_type(attr.type) or "Real"
             description = attr.doc or port.doc or (payload_def.doc if payload_def else None)
             spec = VariableSpec(
@@ -165,7 +147,7 @@ def _parameter_variables(part: SysMLPartDefinition, starting_ref: int) -> tuple[
     value_ref = starting_ref
     for attr_name in sorted(part.attributes):
         attr = part.attributes[attr_name]
-        literal = _parse_literal(attr.value)
+        literal = parse_literal(attr.value)
         fmi_type = _resolve_fmi_type(attr, literal)
         spec = VariableSpec(
             name=attr.name,

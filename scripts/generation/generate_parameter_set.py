@@ -12,6 +12,7 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR, ensure_parent_dir
+from scripts.common.sysml_values import parse_literal
 from scripts.utils.sysmlv2_arch_parser import (
     SysMLArchitecture,
     SysMLAttribute,
@@ -42,7 +43,7 @@ def _normalize_type(attr: SysMLAttribute) -> str:
         key = attr.type.strip().lower()
         if key in PRIMITIVE_TYPE_MAP:
             return PRIMITIVE_TYPE_MAP[key]
-    literal = _parse_literal(attr.value)
+    literal = parse_literal(attr.value)
     if isinstance(literal, bool):
         return "Boolean"
     if isinstance(literal, int):
@@ -52,25 +53,6 @@ def _normalize_type(attr: SysMLAttribute) -> str:
     if isinstance(literal, str):
         return "String"
     return "Real"
-
-
-def _parse_literal(raw: Optional[str]):
-    if raw is None:
-        return None
-    text = raw.strip()
-    if not text:
-        return None
-    if text.startswith('"') and text.endswith('"'):
-        return text[1:-1]
-    lowered = text.lower()
-    if lowered in {"true", "false"}:
-        return lowered == "true"
-    try:
-        if any(ch in text for ch in (".", "e", "E")):
-            return float(text)
-        return int(text)
-    except ValueError:
-        return text
 
 
 def _format_value(tag: str, literal) -> str:
@@ -106,7 +88,7 @@ def build_parameter_tree(parameter_pairs: Iterable[tuple[str, SysMLAttribute]]) 
     params_elem = ET.SubElement(root, f"{{{SSV_NAMESPACE}}}Parameters")
 
     for name, attr in parameter_pairs:
-        literal = _parse_literal(attr.value)
+        literal = parse_literal(attr.value)
         data_type = _normalize_type(attr)
         param_elem = ET.SubElement(params_elem, f"{{{SSV_NAMESPACE}}}Parameter", attrib={"name": name})
         value_elem = ET.SubElement(param_elem, f"{{{SSV_NAMESPACE}}}{data_type}")

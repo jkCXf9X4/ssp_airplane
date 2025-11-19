@@ -22,7 +22,7 @@ python3 -m scripts.verification.verify_model_equations
 python3 -m scripts.verification.verify_modelica_variables
 
 echo "Building FMUs..."
-python3 -m scripts.workflows.build_fmus
+python3 -m scripts.generation.build_fmus
 
 echo "Verifying FMUs..."
 python3 -m scripts.verification.verify_fmu_ios
@@ -34,7 +34,7 @@ echo "Validating SSD schema..."
 python3 -m scripts.verification.verify_ssd_xml_compliance
 
 echo "Packaging SSP..."
-python3 -m scripts.workflows.package_ssp
+python3 -m scripts.generation.package_ssp
 
 echo "Running pytest scenarios..."
 pytest -q

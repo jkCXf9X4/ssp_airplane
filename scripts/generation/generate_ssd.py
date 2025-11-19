@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import argparse
-import ast
 import sys
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
@@ -14,6 +13,7 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR
+from scripts.common.sysml_values import parse_literal
 from scripts.utils.sysmlv2_arch_parser import (
     SysMLArchitecture,
     SysMLAttribute,
@@ -140,29 +140,6 @@ def _expand_port_entries(
     return results
 
 
-def _parse_literal(value: Optional[str]):
-    if value is None:
-        return None
-    text = value.strip()
-    if not text:
-        return None
-    try:
-        return ast.literal_eval(text)
-    except (ValueError, SyntaxError):
-        pass
-    if text.startswith('"') and text.endswith('"'):
-        return text[1:-1]
-    lowered = text.lower()
-    if lowered in {"true", "false"}:
-        return lowered == "true"
-    try:
-        if any(ch in text for ch in (".", "e", "E")):
-            return float(text)
-        return int(text)
-    except ValueError:
-        return text
-
-
 def _infer_primitive(attr: SysMLAttribute, sample) -> str:
     if attr.type:
         return _primitive_type(attr.type)
@@ -181,7 +158,7 @@ def _parameter_connector_entries(attributes: Dict[str, SysMLAttribute]) -> List[
     entries: List[Dict[str, str]] = []
     for name in sorted(attributes):
         attr = attributes[name]
-        literal = _parse_literal(attr.value)
+        literal = parse_literal(attr.value)
         if isinstance(literal, (list, tuple)):
             sample = next((item for item in literal if item is not None), None)
             primitive = _infer_primitive(attr, sample)

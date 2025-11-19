@@ -33,8 +33,8 @@ Common entry points:
 | --- | --- | --- |
 | Merge SysML sections into JSON | `python3 -m scripts.generation.save_architecture --output generated/arch_def.json` | Creates a single architecture snapshot for downstream tooling. |
 | Generate SSD and parameter set | `python3 -m scripts.generation.generate_ssd` / `python3 -m scripts.generation.generate_parameter_set` | Produces SSP-compliant descriptions with parameter connectors. |
-| Build FMUs via OpenModelica | `python3 -m scripts.workflows.build_fmus --omc omc` | Exports each Modelica component into `build/fmus`. |
-| Package SSP archive | `python3 -m scripts.workflows.package_ssp --fmu-dir build/fmus --ssd generated/SystemStructure.ssd` | Bundles FMUs and SSD into `build/ssp/aircraft.ssp`. |
+| Build FMUs via OpenModelica | `python3 -m scripts.generation.build_fmus --omc omc` | Exports each Modelica component into `build/fmus`. |
+| Package SSP archive | `python3 -m scripts.generation.package_ssp --fmu-dir build/fmus --ssd generated/SystemStructure.ssd` | Bundles FMUs and SSD into `build/ssp/aircraft.ssp`. |
 | Simulate a scenario | `python3 -m scripts.workflows.simulate_scenario --scenario build/scenarios/test_scenario.json` | Runs OMSimulator (or reuses results) and emits summaries/plots. |
 | Verify architecture and FMUs | `python3 -m scripts.verification.verify_connections`, `python3 -m scripts.verification.verify_fmu_ios`, etc. | Guards against connector, FMU, and SSD regressions. |
 
