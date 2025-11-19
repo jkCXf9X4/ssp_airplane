@@ -14,30 +14,27 @@ if __package__ in {None, ""}:
 
 from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR
 from scripts.common.sysml_values import parse_literal
+from scripts.utils.fmi_helpers import architecture_model_map, component_fmu_source
+from scripts.utils.sysml_helpers import load_architecture
 from scripts.utils.sysmlv2_arch_parser import (
     SysMLArchitecture,
     SysMLAttribute,
     SysMLPortDefinition,
     SysMLPortEndpoint,
-    parse_sysml_folder,
 )
+from scripts.utils.ssp_helpers import (
+    SSD_NAMESPACE,
+    SSC_NAMESPACE,
+    SSV_NAMESPACE,
+    SSM_NAMESPACE,
+    SSB_NAMESPACE,
+    register_ssp_namespaces,
+)
+
+register_ssp_namespaces()
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 BUILD_DIR = GENERATED_DIR
-
-SSD_NAMESPACE = "http://ssp-standard.org/SSP1/SystemStructureDescription"
-SSC_NAMESPACE = "http://ssp-standard.org/SSP1/SystemStructureCommon"
-SSV_NAMESPACE = "http://ssp-standard.org/SSP1/SystemStructureParameterValues"
-SSM_NAMESPACE = "http://ssp-standard.org/SSP1/SystemStructureParameterMapping"
-SSB_NAMESPACE = "http://ssp-standard.org/SSP1/SystemStructureSignalDictionary"
-
-
-
-ET.register_namespace("ssd", SSD_NAMESPACE)
-ET.register_namespace("ssc", SSC_NAMESPACE)
-ET.register_namespace("ssv", SSV_NAMESPACE)
-ET.register_namespace("ssm", SSM_NAMESPACE)
-ET.register_namespace("ssb", SSB_NAMESPACE)
 
 PRIMITIVE_TYPE_MAP = {
     "real": "Real",
@@ -52,27 +49,6 @@ PRIMITIVE_TYPE_MAP = {
     "bool": "Boolean",
     "string": "String",
 }
-
-MODEL_CLASS_MAP: Dict[str, str] = {
-    "CompositeAirframe": "Aircraft.CompositeAirframe",
-    "TurbofanPropulsion": "Aircraft.TurbofanPropulsion",
-    "AdaptiveWingSystem": "Aircraft.AdaptiveWingSystem",
-    "MissionComputer": "Aircraft.MissionComputer",
-    "AutopilotModule": "Aircraft.AutopilotModule",
-    "InputOutput": "Aircraft.InputOutput",
-    "FuelSystem": "Aircraft.FuelSystem",
-    "ControlInterface": "Aircraft.ControlInterface",
-    "Environment": "Aircraft.Environment",
-}
-
-
-def fmu_source(component_name: str) -> str:
-    modelica_class = MODEL_CLASS_MAP.get(component_name)
-    if not modelica_class:
-        raise KeyError(f"No Modelica class map defined for component '{component_name}'")
-    fmu_filename = modelica_class.replace(".", "_") + ".fmu"
-    return f"resources/{fmu_filename}"
-
 
 def _primitive_type(type_name: Optional[str]) -> str:
     if not type_name:
@@ -176,7 +152,10 @@ def _parameter_connector_entries(attributes: Dict[str, SysMLAttribute]) -> List[
     return entries
 
 
-def build_ssd_tree(architecture: SysMLArchitecture) -> ET.ElementTree:
+def build_ssd_tree(
+    architecture: SysMLArchitecture, class_map: Optional[Dict[str, str]] = None
+) -> ET.ElementTree:
+    class_map = class_map or architecture_model_map(architecture)
     system_name = architecture.package
     components = [(name, part) for name, part in architecture.parts.items() if name != "Aircraft"]
     component_names: Dict[str, str] = {}
@@ -202,7 +181,7 @@ def build_ssd_tree(architecture: SysMLArchitecture) -> ET.ElementTree:
             attrib={
                 "name": display_name,
                 "type": "application/x-fmu-sharedlibrary",
-                "source": fmu_source(part_name),
+                "source": component_fmu_source(part_name, class_map),
             },
         )
         connector_entries: List[Dict[str, str]] = []
@@ -283,12 +262,8 @@ def main() -> None:
 
     args = parser.parse_args()
 
-    source = args.architecture
-    if source.is_file():
-        source = source.parent
+    architecture = load_architecture(args.architecture)
     args.output.parent.mkdir(parents=True, exist_ok=True)
-
-    architecture = parse_sysml_folder(source)
     tree = build_ssd_tree(architecture)
     ET.indent(tree, space="  ", level=0)
     tree.write(args.output, encoding="utf-8", xml_declaration=True)

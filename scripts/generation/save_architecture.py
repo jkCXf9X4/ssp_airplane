@@ -11,7 +11,7 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR, ensure_parent_dir
-from scripts.utils.sysmlv2_arch_parser import parse_sysml_folder
+from scripts.utils.sysml_helpers import load_architecture
 
 DEFAULT_ARCH_DIR = ARCHITECTURE_DIR
 DEFAULT_OUTPUT = GENERATED_DIR / "arch_def.json"
@@ -33,10 +33,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     )
     args = parser.parse_args(argv)
 
-    source = args.source
-    if source.is_file():
-        source = source.parent
-    architecture = parse_sysml_folder(source)
+    architecture = load_architecture(args.source)
 
     ensure_parent_dir(args.output)
     args.output.write_text(str(architecture))

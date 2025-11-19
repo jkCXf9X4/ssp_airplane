@@ -12,46 +12,22 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR, ensure_parent_dir
-from scripts.utils.sysmlv2_arch_parser import (
-    SysMLArchitecture,
-    SysMLPartDefinition,
-    parse_sysml_folder,
+from scripts.utils.fmi_helpers import architecture_model_map, component_fmu_source
+from scripts.utils.sysml_helpers import load_architecture
+from scripts.utils.sysmlv2_arch_parser import SysMLArchitecture, SysMLPartDefinition
+from scripts.utils.ssp_helpers import (
+    SSD_NAMESPACE,
+    SSC_NAMESPACE,
+    SSV_NAMESPACE,
+    SSM_NAMESPACE,
+    SSB_NAMESPACE,
+    register_ssp_namespaces,
 )
+
+register_ssp_namespaces()
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_OUTPUT = GENERATED_DIR / "SystemStructure_terminals.ssd"
-
-SSD_NAMESPACE = "http://ssp-standard.org/SSP1/SystemStructureDescription"
-SSC_NAMESPACE = "http://ssp-standard.org/SSP1/SystemStructureCommon"
-SSV_NAMESPACE = "http://ssp-standard.org/SSP1/SystemStructureParameterValues"
-SSM_NAMESPACE = "http://ssp-standard.org/SSP1/SystemStructureParameterMapping"
-SSB_NAMESPACE = "http://ssp-standard.org/SSP1/SystemStructureSignalDictionary"
-OMS_NAMESPACE = "https://raw.githubusercontent.com/OpenModelica/OMSimulator/master/schema/oms.xsd"
-
-ET.register_namespace("ssd", SSD_NAMESPACE)
-ET.register_namespace("ssc", SSC_NAMESPACE)
-ET.register_namespace("ssv", SSV_NAMESPACE)
-ET.register_namespace("ssm", SSM_NAMESPACE)
-ET.register_namespace("ssb", SSB_NAMESPACE)
-ET.register_namespace("oms", OMS_NAMESPACE)
-
-MODEL_CLASS_MAP: Dict[str, str] = {
-    "CompositeAirframe": "Aircraft.CompositeAirframe",
-    "TurbofanPropulsion": "Aircraft.TurbofanPropulsion",
-    "AdaptiveWingSystem": "Aircraft.AdaptiveWingSystem",
-    "MissionComputer": "Aircraft.MissionComputer",
-    "AutopilotModule": "Aircraft.AutopilotModule",
-    "FuelSystem": "Aircraft.FuelSystem",
-    "ControlInterface": "Aircraft.ControlInterface",
-}
-
-
-def fmu_source(component_name: str) -> str:
-    modelica_class = MODEL_CLASS_MAP.get(component_name)
-    if not modelica_class:
-        raise KeyError(f"No Modelica class map defined for component '{component_name}'")
-    fmu_filename = modelica_class.replace(".", "_") + ".fmu"
-    return f"resources/{fmu_filename}"
 
 
 def _unique_component_name(name: str, used: Dict[str, str]) -> str:
@@ -89,10 +65,13 @@ def _add_terminal_connector(component_elem: ET.Element, port_name: str, kind: st
     ET.SubElement(connector_elem, f"{{{SSC_NAMESPACE}}}Terminal")
 
 
-def build_terminal_ssd_tree(architecture: SysMLArchitecture) -> ET.ElementTree:
+def build_terminal_ssd_tree(
+    architecture: SysMLArchitecture, class_map: Optional[Dict[str, str]] = None
+) -> ET.ElementTree:
     system_name = architecture.package or "System"
     components = [(name, part) for name, part in architecture.parts.items() if name != system_name]
     component_names: Dict[str, str] = {}
+    class_map = class_map or architecture_model_map(architecture)
 
     root = ET.Element(
         f"{{{SSD_NAMESPACE}}}SystemStructureDescription",
@@ -113,7 +92,7 @@ def build_terminal_ssd_tree(architecture: SysMLArchitecture) -> ET.ElementTree:
             attrib={
                 "name": display_name,
                 "type": "application/x-fmu-sharedlibrary",
-                "source": fmu_source(part_name),
+                "source": component_fmu_source(part_name, class_map),
             },
         )
         for port in part.ports:
@@ -166,14 +145,10 @@ def main(argv: Optional[list[str]] = None) -> int:
     )
     args = parser.parse_args(argv)
 
-    source = args.architecture
-    if source.is_file():
-        source = source.parent
-
     try:
-        architecture = parse_sysml_folder(source)
+        architecture = load_architecture(args.architecture)
         tree = build_terminal_ssd_tree(architecture)
-    ensure_parent_dir(args.output)
+        ensure_parent_dir(args.output)
         tree.write(args.output, encoding="utf-8", xml_declaration=True)
     except Exception as exc:  # noqa: BLE001
         print(f"[error] {exc}", file=sys.stderr)

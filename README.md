@@ -25,7 +25,7 @@ Scripts are grouped by intent under `scripts/`:
 - `scripts/generation/` – emit SysML-derived artifacts (architecture JSON, SSD, parameter sets, terminals, Modelica interfaces, scenarios).
 - `scripts/verification/` – statically inspect SysML connectors, FMU I/O, Modelica definitions, and SSD XML compliance.
 - `scripts/workflows/` – orchestration utilities for building FMUs, packaging SSPs, and simulating mission scenarios.
-- `scripts/utils/` – shared helpers such as the SysML v2 parser.
+- `scripts/utils/` – shared helpers such as `sysml_helpers` (architecture loading), `fmi_helpers` (FMU naming), `ssp_helpers` (namespace registration), and `map_geometry` (waypoint calculations) alongside the SysML v2 parser.
 
 Common entry points:
 
@@ -71,7 +71,7 @@ All subsystem FMUs are generated from the `models/Aircraft` Modelica package usi
 
 ## The SSD
 
-The ssd is build by a script that parses the architecture and creates a system structure definition (SSD)
+The ssd is build by a script that parses the architecture and creates a system structure definition (SSD). FMU source names are now derived directly from the SysML package/component names via `scripts.utils.fmi_helpers`, so adding a new part to the architecture automatically wires up its FMU in the SSD.
 
 ## SSP 
 

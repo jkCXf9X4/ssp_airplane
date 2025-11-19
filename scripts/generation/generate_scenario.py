@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import List
 
-EARTH_RADIUS_KM = 6371.0
+from scripts.utils.map_geometry import destination_point, haversine_distance_km
 
 
 @dataclass
@@ -18,33 +18,6 @@ class GeodeticLLA:
     latitude_deg: float
     longitude_deg: float
     altitude_m: float
-
-
-def haversine_km(a: GeodeticLLA, b: GeodeticLLA) -> float:
-    """Return surface distance between two LLA points in kilometers."""
-    lat1, lon1 = math.radians(a.latitude_deg), math.radians(a.longitude_deg)
-    lat2, lon2 = math.radians(b.latitude_deg), math.radians(b.longitude_deg)
-    dlat = lat2 - lat1
-    dlon = lon2 - lon1
-    h = (
-        math.sin(dlat / 2) ** 2
-        + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2) ** 2
-    )
-    return 2 * EARTH_RADIUS_KM * math.asin(min(1.0, math.sqrt(h)))
-
-
-def destination_point(start: GeodeticLLA, distance_km: float, bearing_rad: float) -> GeodeticLLA:
-    """Compute destination LLA from start, distance, and bearing."""
-    lat1 = math.radians(start.latitude_deg)
-    lon1 = math.radians(start.longitude_deg)
-    ang_dist = distance_km / EARTH_RADIUS_KM
-    sin_lat2 = math.sin(lat1) * math.cos(ang_dist) + math.cos(lat1) * math.sin(ang_dist) * math.cos(bearing_rad)
-    lat2 = math.asin(max(-1.0, min(1.0, sin_lat2)))
-    y = math.sin(bearing_rad) * math.sin(ang_dist) * math.cos(lat1)
-    x = math.cos(ang_dist) - math.sin(lat1) * math.sin(lat2)
-    lon2 = lon1 + math.atan2(y, x)
-    lon2 = (lon2 + math.pi) % (2 * math.pi) - math.pi
-    return GeodeticLLA(math.degrees(lat2), math.degrees(lon2), 0.0)
 
 
 def random_segments(count: int, total: float) -> List[float]:
@@ -74,7 +47,10 @@ def generate_scenario(
     current = start
     for idx, distance_km in enumerate(segment_distances, start=1):
         bearing = random.uniform(0.0, 2 * math.pi)
-        next_point = destination_point(current, distance_km, bearing)
+        dest = destination_point(
+            current.latitude_deg, current.longitude_deg, distance_km, bearing
+        )
+        next_point = GeodeticLLA(dest["latitude_deg"], dest["longitude_deg"], 0.0)
         if idx == len(segment_distances):
             next_point.altitude_m = 0.0
         else:
@@ -82,7 +58,15 @@ def generate_scenario(
         points.append(next_point)
         current = next_point
 
-    total_distance_calc = sum(haversine_km(points[i], points[i + 1]) for i in range(len(points) - 1))
+    total_distance_calc = haversine_distance_km(
+        [
+            {
+                "latitude_deg": p.latitude_deg,
+                "longitude_deg": p.longitude_deg,
+            }
+            for p in points
+        ]
+    )
     return {
         "points": [
             {

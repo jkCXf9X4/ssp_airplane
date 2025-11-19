@@ -13,11 +13,8 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, BUILD_DIR
-from scripts.utils.sysmlv2_arch_parser import (
-    SysMLArchitecture,
-    SysMLPartDefinition,
-    parse_sysml_folder,
-)
+from scripts.utils.sysml_helpers import load_architecture
+from scripts.utils.sysmlv2_arch_parser import SysMLArchitecture, SysMLPartDefinition
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_FMU_DIR = BUILD_DIR / "fmus"
@@ -61,7 +58,7 @@ def _resolve_parts(architecture: SysMLArchitecture, parts: Sequence[str] | None)
 
 
 def verify_fmu_ios(arch_path: Path, fmu_dir: Path, parts: Sequence[str] | None = None) -> int:
-    architecture = parse_sysml_folder(arch_path)
+    architecture = load_architecture(arch_path)
     target_parts = _resolve_parts(architecture, parts)
     issues: List[str] = []
     checked_parts = 0

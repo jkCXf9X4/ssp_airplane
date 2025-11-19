@@ -12,11 +12,11 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR, ensure_parent_dir
+from scripts.utils.sysml_helpers import load_architecture
 from scripts.utils.sysmlv2_arch_parser import (
     SysMLArchitecture,
     SysMLPartDefinition,
     SysMLPortDefinition,
-    parse_sysml_folder,
 )
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
@@ -93,9 +93,7 @@ def generate_terminals_file(
     output_path: Path,
     components: Optional[Iterable[str]] = None,
 ) -> Path:
-    if architecture_path.is_file():
-        architecture_path = architecture_path.parent
-    architecture = parse_sysml_folder(architecture_path)
+    architecture = load_architecture(architecture_path)
     targets = _select_components(architecture, components)
     tree = build_terminals_tree(targets)
     ensure_parent_dir(output_path)

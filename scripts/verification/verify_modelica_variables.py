@@ -12,7 +12,7 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, MODELS_DIR
-from scripts.utils.sysmlv2_arch_parser import parse_sysml_folder
+from scripts.utils.sysml_helpers import load_architecture
 
 DEFAULT_ARCH_DIR = ARCHITECTURE_DIR
 DEFAULT_MODELS_DIR = MODELS_DIR / "Aircraft"
@@ -24,9 +24,8 @@ INTERFACE_DECL_RE = re.compile(
 
 
 def _collect_architecture_data(
-    arch_dir: Path,
+    architecture: SysMLArchitecture,
 ) -> Tuple[Dict[str, Set[str]], Dict[str, Dict[str, Tuple[str, str]]]]:
-    architecture = parse_sysml_folder(arch_dir)
     members: Dict[str, Set[str]] = {}
     part_ports: Dict[str, Dict[str, Tuple[str, str]]] = {}
 
@@ -39,12 +38,6 @@ def _collect_architecture_data(
         }
 
     return members, part_ports
-
-
-def _resolve_arch_dir(path: Path) -> Path:
-    if path.is_file():
-        return path.parent
-    return path
 
 
 def _scan_file(
@@ -113,8 +106,8 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
-    arch_dir = _resolve_arch_dir(args.architecture)
-    members, part_ports = _collect_architecture_data(arch_dir)
+    architecture = load_architecture(args.architecture)
+    members, part_ports = _collect_architecture_data(architecture)
 
     if not args.models_dir.exists():
         print(f"Model directory not found: {args.models_dir}", file=sys.stderr)

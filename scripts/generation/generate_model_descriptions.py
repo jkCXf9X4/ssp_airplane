@@ -17,11 +17,11 @@ if __package__ in {None, ""}:
 
 from scripts.common.paths import ARCHITECTURE_DIR, BUILD_DIR, GENERATED_DIR
 from scripts.common.sysml_values import parse_literal
+from scripts.utils.sysml_helpers import load_architecture
 from scripts.utils.sysmlv2_arch_parser import (
     SysMLArchitecture,
     SysMLAttribute,
     SysMLPartDefinition,
-    parse_sysml_folder,
 )
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
@@ -243,9 +243,7 @@ def generate_model_descriptions(
     output_dir: Path,
     components: Optional[Iterable[str]] = None,
 ) -> list[Path]:
-    if architecture_path.is_file():
-        architecture_path = architecture_path.parent
-    architecture = parse_sysml_folder(architecture_path)
+    architecture = load_architecture(architecture_path)
     targets = _component_targets(architecture, components)
     output_dir.mkdir(parents=True, exist_ok=True)
 

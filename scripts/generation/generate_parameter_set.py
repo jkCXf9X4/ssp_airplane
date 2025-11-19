@@ -13,11 +13,8 @@ if __package__ in {None, ""}:
 
 from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR, ensure_parent_dir
 from scripts.common.sysml_values import parse_literal
-from scripts.utils.sysmlv2_arch_parser import (
-    SysMLArchitecture,
-    SysMLAttribute,
-    parse_sysml_folder,
-)
+from scripts.utils.sysml_helpers import load_architecture
+from scripts.utils.sysmlv2_arch_parser import SysMLArchitecture, SysMLAttribute
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_OUTPUT = GENERATED_DIR / "parameters.ssv"
@@ -106,9 +103,7 @@ def generate_parameter_set(
     output_path: Path,
     components: Optional[Iterable[str]] = None,
 ) -> Path:
-    if architecture_path.is_file():
-        architecture_path = architecture_path.parent
-    architecture = parse_sysml_folder(architecture_path)
+    architecture = load_architecture(architecture_path)
     pairs = _parameter_entries(architecture, components)
     tree = build_parameter_tree(pairs)
     ensure_parent_dir(output_path)

@@ -11,11 +11,8 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR
-from scripts.utils.sysmlv2_arch_parser import (
-    SysMLArchitecture,
-    SysMLPortEndpoint,
-    parse_sysml_folder,
-)
+from scripts.utils.sysml_helpers import load_architecture
+from scripts.utils.sysmlv2_arch_parser import SysMLArchitecture, SysMLPortEndpoint
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 
@@ -29,10 +26,7 @@ def _build_port_index(architecture: SysMLArchitecture) -> Dict[Tuple[str, str], 
 
 
 def verify_connections(architecture_path: Path) -> int:
-    source = architecture_path
-    if source.is_file():
-        source = source.parent
-    architecture = parse_sysml_folder(source)
+    architecture = load_architecture(architecture_path)
     components = set(architecture.parts.keys())
     port_index = _build_port_index(architecture)
     issues: List[str] = []
