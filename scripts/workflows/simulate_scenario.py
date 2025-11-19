@@ -15,13 +15,13 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 import xml.etree.ElementTree as ET
 
-# activate venv prior
-import matplotlib
 
 try:
     import pyssp4sim
 except ImportError:
-    pyssp4sim = None
+    raise RuntimeError(
+            "pyssp4sim is not available; activate venv, install the ssp4sim Python API or reuse existing results."
+        )
 
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
@@ -127,13 +127,10 @@ def extract_track_points(
 def plot_flight_path(
     result_file: Path, scenario_points: List[Dict[str, float]], output_path: Path
 ) -> Optional[Path]:
-    import os
-
-    if os.getenv("SIM_SKIP_PLOTS") == "1":
-        return None
 
     try:
-        
+        import matplotlib
+        # For god sake do not import this before executing the simulation, simulation does not load for some probably great reason 
         matplotlib.use("Agg")
         import matplotlib.pyplot as plt
     except Exception:
@@ -497,10 +494,6 @@ def run_with_simulator(ssp_path: Path, result_file: Path, stop_time: float, log_
     with open(temp_config, "w") as f:
         f.write(config)
 
-    if pyssp4sim is None:
-        raise RuntimeError(
-            "pyssp4sim is not available; install the ssp4sim Python API or reuse existing results."
-        )
     sim = pyssp4sim.Simulator(temp_config.as_posix())
     sim.init()
     sim.simulate()

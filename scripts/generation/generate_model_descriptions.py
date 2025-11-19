@@ -43,15 +43,6 @@ class VariableSpec:
     start_value: Optional[str] = None
 
 
-def _indent(tree: ET.ElementTree) -> None:
-    """Indent the XML tree for readability."""
-    ET.indent(tree, space="  ", level=0)
-
-
-def _normalize_type(type_name: Optional[str]) -> Optional[str]:
-    return optional_primitive(type_name)
-
-
 def _format_start_value(fmi_type: str, literal: Optional[object]) -> Optional[str]:
     if literal is None:
         return None
@@ -64,10 +55,6 @@ def _format_start_value(fmi_type: str, literal: Optional[object]) -> Optional[st
     if fmi_type == "String":
         return str(literal)
     return None
-
-
-def _resolve_fmi_type(attribute: SysMLAttribute, literal: Optional[object]) -> str:
-    return infer_primitive(attribute.type, literal)
 
 
 def _port_attribute_variables(part: SysMLPartDefinition, starting_ref: int) -> tuple[list[VariableSpec], int, list[int]]:
@@ -98,7 +85,7 @@ def _port_attribute_variables(part: SysMLPartDefinition, starting_ref: int) -> t
         for attr in attributes:
             var_name = f"{port.name}.{attr.name}"
             literal = parse_literal(attr.value)
-            fmi_type = _normalize_type(attr.type) or "Real"
+            fmi_type = optional_primitive(attr.type) or "Real"
             description = attr.doc or port.doc or (payload_def.doc if payload_def else None)
             spec = VariableSpec(
                 name=var_name,
@@ -120,7 +107,7 @@ def _parameter_variables(part: SysMLPartDefinition, starting_ref: int) -> tuple[
     for attr_name in sorted(part.attributes):
         attr = part.attributes[attr_name]
         literal = parse_literal(attr.value)
-        fmi_type = _resolve_fmi_type(attr, literal)
+        fmi_type = infer_primitive(attr.type, literal)
         spec = VariableSpec(
             name=attr.name,
             causality="parameter",
@@ -192,7 +179,7 @@ def _build_model_description_tree(part: SysMLPartDefinition, architecture: SysML
             ET.SubElement(initial_elem, "Unknown", attrib={"index": str(idx)})
 
     tree = ET.ElementTree(root)
-    _indent(tree)
+    ET.indent(tree, space="  ", level=0)
     return tree
 
 

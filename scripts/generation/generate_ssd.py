@@ -37,9 +37,6 @@ register_ssp_namespaces()
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 BUILD_DIR = GENERATED_DIR
 
-def _primitive_type(type_name: Optional[str]) -> str:
-    return normalize_primitive(type_name)
-
 
 def _unique_component_name(name: str, used: Dict[str, str]) -> str:
     base = "".join(ch if ch.isalnum() else "_" for ch in name).strip("_") or "Component"
@@ -73,7 +70,7 @@ def _expand_payload_definition(
                 field_name = attr.name if not suffix else f"{attr.name}.{suffix}"
                 entries.append((field_name, primitive))
         else:
-            entries.append((attr.name, _primitive_type(attr.type)))
+            entries.append((attr.name, normalize_primitive(attr.type)))
     if not entries:
         entries.append(("", "Real"))
     return entries

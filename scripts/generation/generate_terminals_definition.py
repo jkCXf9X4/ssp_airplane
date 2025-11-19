@@ -23,10 +23,6 @@ DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_OUTPUT = GENERATED_DIR / "terminalsAndIcons.xml"
 
 
-def _indent(tree: ET.ElementTree) -> None:
-    ET.indent(tree, space="  ", level=0)
-
-
 def _select_components(architecture: SysMLArchitecture, names: Optional[Iterable[str]]) -> list[SysMLPartDefinition]:
     if names:
         ordered: list[SysMLPartDefinition] = []
@@ -84,7 +80,7 @@ def build_terminals_tree(components: Iterable[SysMLPartDefinition]) -> ET.Elemen
                 ET.SubElement(terminal_elem, "TerminalMemberVariable", attrib=member_attrs)
 
     tree = ET.ElementTree(root)
-    _indent(tree)
+    ET.indent(tree, space="  ", level=0)
     return tree
 
 
