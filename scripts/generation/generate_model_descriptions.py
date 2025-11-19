@@ -23,6 +23,7 @@ from scripts.utils.sysmlv2_arch_parser import (
     SysMLAttribute,
     SysMLPartDefinition,
 )
+from scripts.utils.type_utils import infer_primitive, normalize_primitive, optional_primitive
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_OUTPUT_DIR = GENERATED_DIR / "model_descriptions"
@@ -30,22 +31,6 @@ DEFAULT_OUTPUT_DIR = GENERATED_DIR / "model_descriptions"
 CO_SIMULATION_ATTRS = {
     "modelIdentifier": "",
 }
-
-PRIMITIVE_TYPE_MAP = {
-    "real": "Real",
-    "float": "Real",
-    "float32": "Real",
-    "float64": "Real",
-    "double": "Real",
-    "integer": "Integer",
-    "int": "Integer",
-    "int32": "Integer",
-    "uint32": "Integer",
-    "boolean": "Boolean",
-    "bool": "Boolean",
-    "string": "String",
-}
-
 
 @dataclass
 class VariableSpec:
@@ -64,9 +49,7 @@ def _indent(tree: ET.ElementTree) -> None:
 
 
 def _normalize_type(type_name: Optional[str]) -> Optional[str]:
-    if not type_name:
-        return None
-    return PRIMITIVE_TYPE_MAP.get(type_name.strip().lower())
+    return optional_primitive(type_name)
 
 
 def _format_start_value(fmi_type: str, literal: Optional[object]) -> Optional[str]:
@@ -84,18 +67,7 @@ def _format_start_value(fmi_type: str, literal: Optional[object]) -> Optional[st
 
 
 def _resolve_fmi_type(attribute: SysMLAttribute, literal: Optional[object]) -> str:
-    explicit_type = _normalize_type(attribute.type)
-    if explicit_type:
-        return explicit_type
-    if isinstance(literal, bool):
-        return "Boolean"
-    if isinstance(literal, int):
-        return "Integer"
-    if isinstance(literal, float):
-        return "Real"
-    if isinstance(literal, str):
-        return "String"
-    return "Real"
+    return infer_primitive(attribute.type, literal)
 
 
 def _port_attribute_variables(part: SysMLPartDefinition, starting_ref: int) -> tuple[list[VariableSpec], int, list[int]]:

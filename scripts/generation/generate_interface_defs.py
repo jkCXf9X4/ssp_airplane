@@ -13,22 +13,10 @@ if __package__ in {None, ""}:
 from scripts.common.paths import ARCHITECTURE_DIR, MODELS_DIR, ensure_parent_dir
 from scripts.utils.sysml_helpers import load_architecture
 from scripts.utils.sysmlv2_arch_parser import SysMLArchitecture, SysMLPortDefinition
+from scripts.utils.type_utils import modelica_connector_type
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_OUTPUT_PATH = MODELS_DIR / "Aircraft" / "GeneratedInterfaces.mo"
-
-PRIMITIVE_MAP = {
-    "real": "Real",
-    "float": "Real",
-    "float32": "Real",
-    "double": "Real",
-    "integer": "Integer",
-    "int": "Integer",
-    "int8": "Integer",
-    "uint8": "Integer",
-    "boolean": "Boolean",
-    "bool": "Boolean",
-}
 
 
 def _collect_data_defs(architecture: SysMLArchitecture) -> Dict[str, List[Tuple[str, str]]]:
@@ -46,10 +34,6 @@ def _port_attributes(port_def: SysMLPortDefinition) -> List[Tuple[str, str]]:
     return attrs
 
 
-def to_modelica_type(sysml_type: str) -> str:
-    return PRIMITIVE_MAP.get(sysml_type.lower(), sysml_type)
-
-
 def generate_modelica_package(defs: Dict[str, List[Tuple[str, str]]]) -> str:
     lines = ["within Aircraft;", "package GeneratedInterfaces"]
     for type_name, fields in sorted(defs.items()):
@@ -58,7 +42,7 @@ def generate_modelica_package(defs: Dict[str, List[Tuple[str, str]]]) -> str:
             lines.append(f"  end {type_name};")
             continue
         for field, field_type in fields:
-            mo_type = to_modelica_type(field_type)
+            mo_type = modelica_connector_type(field_type)
             lines.append(f"    {mo_type} {field};")
         lines.append(f"  end {type_name};")
         lines.append("")

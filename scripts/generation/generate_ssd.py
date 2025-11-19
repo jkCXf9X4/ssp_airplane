@@ -30,31 +30,15 @@ from scripts.utils.ssp_helpers import (
     SSB_NAMESPACE,
     register_ssp_namespaces,
 )
+from scripts.utils.type_utils import infer_primitive, normalize_primitive
 
 register_ssp_namespaces()
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 BUILD_DIR = GENERATED_DIR
 
-PRIMITIVE_TYPE_MAP = {
-    "real": "Real",
-    "float": "Real",
-    "float32": "Real",
-    "double": "Real",
-    "integer": "Integer",
-    "int": "Integer",
-    "int8": "Integer",
-    "uint8": "Integer",
-    "boolean": "Boolean",
-    "bool": "Boolean",
-    "string": "String",
-}
-
 def _primitive_type(type_name: Optional[str]) -> str:
-    if not type_name:
-        return "Real"
-    key = type_name.strip().lower()
-    return PRIMITIVE_TYPE_MAP.get(key, "Real")
+    return normalize_primitive(type_name)
 
 
 def _unique_component_name(name: str, used: Dict[str, str]) -> str:
@@ -116,20 +100,6 @@ def _expand_port_entries(
     return results
 
 
-def _infer_primitive(attr: SysMLAttribute, sample) -> str:
-    if attr.type:
-        return _primitive_type(attr.type)
-    if isinstance(sample, bool):
-        return "Boolean"
-    if isinstance(sample, int):
-        return "Integer"
-    if isinstance(sample, float):
-        return "Real"
-    if isinstance(sample, str):
-        return "String"
-    return "Real"
-
-
 def _parameter_connector_entries(attributes: Dict[str, SysMLAttribute]) -> List[Dict[str, str]]:
     entries: List[Dict[str, str]] = []
     for name in sorted(attributes):
@@ -137,7 +107,7 @@ def _parameter_connector_entries(attributes: Dict[str, SysMLAttribute]) -> List[
         literal = parse_literal(attr.value)
         if isinstance(literal, (list, tuple)):
             sample = next((item for item in literal if item is not None), None)
-            primitive = _infer_primitive(attr, sample)
+            primitive = infer_primitive(attr.type, sample)
             if literal:
                 for idx, _ in enumerate(literal, start=1):
                     entries.append(
@@ -147,7 +117,7 @@ def _parameter_connector_entries(attributes: Dict[str, SysMLAttribute]) -> List[
                 entries.append({"connector_name": attr.name, "primitive": primitive})
             continue
 
-        primitive = _infer_primitive(attr, literal)
+        primitive = infer_primitive(attr.type, literal)
         entries.append({"connector_name": attr.name, "primitive": primitive})
     return entries
 

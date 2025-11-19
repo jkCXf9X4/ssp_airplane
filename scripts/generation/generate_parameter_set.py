@@ -15,6 +15,7 @@ from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR, ensure_parent_
 from scripts.common.sysml_values import parse_literal
 from scripts.utils.sysml_helpers import load_architecture
 from scripts.utils.sysmlv2_arch_parser import SysMLArchitecture, SysMLAttribute
+from scripts.utils.type_utils import infer_primitive
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_OUTPUT = GENERATED_DIR / "parameters.ssv"
@@ -23,33 +24,10 @@ SSV_NAMESPACE = "http://ssp-standard.org/SSP1/ParameterValues"
 
 ET.register_namespace("ssv", SSV_NAMESPACE)
 
-PRIMITIVE_TYPE_MAP = {
-    "boolean": "Boolean",
-    "bool": "Boolean",
-    "integer": "Integer",
-    "int": "Integer",
-    "real": "Real",
-    "float": "Real",
-    "double": "Real",
-    "string": "String",
-}
-
 
 def _normalize_type(attr: SysMLAttribute) -> str:
-    if attr.type:
-        key = attr.type.strip().lower()
-        if key in PRIMITIVE_TYPE_MAP:
-            return PRIMITIVE_TYPE_MAP[key]
     literal = parse_literal(attr.value)
-    if isinstance(literal, bool):
-        return "Boolean"
-    if isinstance(literal, int):
-        return "Integer"
-    if isinstance(literal, float):
-        return "Real"
-    if isinstance(literal, str):
-        return "String"
-    return "Real"
+    return infer_primitive(attr.type, literal)
 
 
 def _format_value(tag: str, literal) -> str:

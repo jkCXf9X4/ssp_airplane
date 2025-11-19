@@ -40,10 +40,6 @@ RESERVE_FRACTION = 0.08
 WAYPOINT_HIT_THRESHOLD_KM = 10.0
 
 
-def load_json(path: Path) -> Dict[str, Any]:
-    return json.loads(path.read_text())
-
-
 def estimate_duration(distance_km: float, cruise_speed_mps: float) -> float:
     return max(60.0, (distance_km * 1000.0) / max(1.0, cruise_speed_mps))
 
@@ -67,10 +63,6 @@ def _numeric_series(
             except ValueError:
                 continue
     return values
-
-
-def _span(values: Sequence[float]) -> float:
-    return max(values) - min(values) if values else 0.0
 
 
 def _read_result_rows(result_file: Path) -> List[Dict[str, str]]:
@@ -367,11 +359,14 @@ def summarize_result_file(
     mass_flow = _numeric_series(rows, "TurbofanPropulsion.thrustOut.mass_flow_kgps") or _numeric_series(
         rows, "TurbofanPropulsion.fuelFlow.mass_flow_kgps"
     )
-    control_surface_excursions = [
-        _span(_numeric_series(rows, "AdaptiveWingSystem.controlSurfaces.elevator_deg")),
-        _span(_numeric_series(rows, "AdaptiveWingSystem.controlSurfaces.flaperon_deg")),
-        _span(_numeric_series(rows, "FlyByWireController.commandBus.elevator_deg")),
-    ]
+    control_surface_excursions: List[float] = []
+    for key in (
+        "AdaptiveWingSystem.controlSurfaces.elevator_deg",
+        "AdaptiveWingSystem.controlSurfaces.flaperon_deg",
+        "FlyByWireController.commandBus.elevator_deg",
+    ):
+        series = _numeric_series(rows, key)
+        control_surface_excursions.append(max(series) - min(series) if series else 0.0)
 
     stores_available = 0
     if stores_masks:
@@ -519,7 +514,7 @@ def simulate_scenario(
     stop_time: Optional[float] = None,
     plot: bool = False,
 ) -> ScenarioResult:
-    scenario = load_json(scenario_path)
+    scenario = json.loads(scenario_path.read_text())
     if "points" not in scenario:
         raise ValueError("Scenario file must contain a 'points' list.")
     validate_scenario_points(scenario["points"])

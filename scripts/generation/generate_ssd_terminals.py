@@ -40,23 +40,10 @@ def _unique_component_name(name: str, used: Dict[str, str]) -> str:
     return candidate
 
 
-def _connector_kind(direction: str) -> Optional[str]:
-    if direction == "in":
-        return "input"
-    if direction == "out":
-        return "output"
-    return None
-
-
-def _ensure_connectors_element(component_elem: ET.Element) -> ET.Element:
+def _add_terminal_connector(component_elem: ET.Element, port_name: str, kind: str) -> None:
     connectors_elem = component_elem.find(f"{{{SSD_NAMESPACE}}}Connectors")
     if connectors_elem is None:
         connectors_elem = ET.SubElement(component_elem, f"{{{SSD_NAMESPACE}}}Connectors")
-    return connectors_elem
-
-
-def _add_terminal_connector(component_elem: ET.Element, port_name: str, kind: str) -> None:
-    connectors_elem = _ensure_connectors_element(component_elem)
     connector_elem = ET.SubElement(
         connectors_elem,
         f"{{{SSD_NAMESPACE}}}Connector",
@@ -96,8 +83,11 @@ def build_terminal_ssd_tree(
             },
         )
         for port in part.ports:
-            kind = _connector_kind(port.direction)
-            if not kind:
+            if port.direction == "in":
+                kind = "input"
+            elif port.direction == "out":
+                kind = "output"
+            else:
                 continue
             _add_terminal_connector(component_elem, port.name, kind)
 
