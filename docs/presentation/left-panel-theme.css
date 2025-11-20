@@ -12,7 +12,7 @@ section {
   box-sizing: border-box;
 }
 
-/* Container for text box */
+/* Container for text box (centered single box) */
 section .first {
   background: rgba(0, 0, 0, 0.65); /* semi-transparent black */
   padding: 2rem;
@@ -22,7 +22,7 @@ section .first {
   margin: auto;
 }
 
-/* Headings inside the panel */
+/* Headings inside the .first panel */
 section .first h1,
 section .first h2,
 section .first h3 {
@@ -30,7 +30,7 @@ section .first h3 {
   margin-top: 0;
 }
 
-/* Left text panel */
+/* Left text panel (generic) */
 section .content-panel {
   background: rgba(0, 0, 0, 0.65);  /* semi-transparent dark panel */
   color: rgb(255,255,255);
@@ -40,7 +40,7 @@ section .content-panel {
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
 }
 
-/* Headings inside the panel */
+/* Headings inside the content panel */
 section .content-panel h1,
 section .content-panel h2,
 section .content-panel h3 {
@@ -62,6 +62,29 @@ section .content-panel ol {
   margin: 0.5rem 0 0;
 }
 
+/* ========================= */
+/* Table styling ONLY inside content-panel */
+/* ========================= */
+
+section .content-panel table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(0, 0, 0, 0.35);
+  color: rgb(0,0,0);;
+}
+
+section .content-panel th {
+  background: rgba(255, 255, 255, 0.15);
+  color: rgb(0,0,0);
+  padding: 0.6rem;
+  font-weight: 600;
+}
+
+section .content-panel td {
+  padding: 0.6rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+}
+
 /* Smaller / narrower screens fallback */
 @media screen and (max-aspect-ratio: 4/3) {
   section {
@@ -72,3 +95,38 @@ section .content-panel ol {
     max-width: 100%;
   }
 }
+
+/* ========================= */
+/* Split layout: text + image */
+/* ========================= */
+
+section .cols {
+  display: flex;
+  flex-direction: row;  /* ensure horizontal layout */
+  gap: 2rem;
+  align-items: center;
+  width: 100%;
+}
+
+/* Left side: reuse .content-panel for the box */
+section .cols .col-left {
+  flex: 1.2;
+  min-width: 0; /* prevents overflow when text is long */
+}
+
+/* Right side: image container */
+section .cols .col-right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Image styling on the right */
+section .cols .col-right img {
+  max-width: 100%;
+  max-height: 80vh;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
