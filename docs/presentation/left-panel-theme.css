@@ -1,0 +1,74 @@
+/* @theme left-panel */
+@import "default";
+
+/* Base slide layout */
+section {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 3rem 4rem;
+  box-sizing: border-box;
+}
+
+/* Container for text box */
+section .first {
+  background: rgba(0, 0, 0, 0.65); /* semi-transparent black */
+  padding: 2rem;
+  border-radius: 18px;
+  color: rgb(255,255,255);
+  width: 80%;
+  margin: auto;
+}
+
+/* Headings inside the panel */
+section .first h1,
+section .first h2,
+section .first h3 {
+  color: rgb(255,255,255);
+  margin-top: 0;
+}
+
+/* Left text panel */
+section .content-panel {
+  background: rgba(0, 0, 0, 0.65);  /* semi-transparent dark panel */
+  color: rgb(255,255,255);
+  padding: 2rem 2.5rem;
+  border-radius: 18px;
+  max-width: 50%;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Headings inside the panel */
+section .content-panel h1,
+section .content-panel h2,
+section .content-panel h3 {
+  color: rgb(255,255,255);
+  margin-top: 0;
+}
+
+/* Body text & lists */
+section .content-panel p,
+section .content-panel li {
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+/* Bullet spacing */
+section .content-panel ul,
+section .content-panel ol {
+  padding-left: 1.3rem;
+  margin: 0.5rem 0 0;
+}
+
+/* Smaller / narrower screens fallback */
+@media screen and (max-aspect-ratio: 4/3) {
+  section {
+    padding: 1.5rem;
+  }
+
+  section .content-panel {
+    max-width: 100%;
+  }
+}

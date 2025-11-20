@@ -1,0 +1,5 @@
+{
+  "markdown.marp.themes": [
+    "./docs/presentation/left-panel-theme.css"
+  ]
+}
