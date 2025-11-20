@@ -14,7 +14,7 @@ section {
 
 /* Container for text box (centered single box) */
 section .first {
-  background: rgba(0, 0, 0, 0.65); /* semi-transparent black */
+  background: rgba(0, 0, 0, 0.7); /* semi-transparent black */
   padding: 2rem;
   border-radius: 18px;
   color: rgb(255,255,255);
@@ -32,7 +32,7 @@ section .first h3 {
 
 /* Left text panel (generic) */
 section .content-panel {
-  background: rgba(0, 0, 0, 0.65);  /* semi-transparent dark panel */
+  background: rgba(0, 0, 0, 0.7);  /* semi-transparent dark panel */
   color: rgb(255,255,255);
   padding: 2rem 2.5rem;
   border-radius: 18px;

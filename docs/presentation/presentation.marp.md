@@ -15,16 +15,30 @@ Linköping University, Saab Aeronautics
 </div>
 
 ---
+<!-- comments:  -->
+![bg](./gripen-e-up-1160x773.jpg)
+<div class="content-panel">
 
+## Goal
+
+- Develop and evaluate experimental simulation engine supporting complex CPS development
+  - Experimental orchestration
+  - Efficient and deterministic
+
+</div>
+
+---
+
+<!-- comments:  -->
 ![bg](./gripen-e-up-1160x773.jpg)
 <div class="content-panel">
 
 ## Overview
-- Evaluating workflows compatible with complex CPS development
-- Digital thread from Architecture, Models, Simulation and Requirement fulfillment
-- Develop and evaluate SSP4SIM for simulation validation
-  - Utilizing open model standards such as FMUs, and SSP
-- Automated toolchain wraps artifact generation, verification, and simulation steps
+- Integration into simulation workflows compatible with continuous complex CPS development
+- Utilizing digital threads between: 
+  Architecture, Models, Simulation and Requirements
+
+- Utilizing open model standards such as FMUs and SSP
 
 </div>
 
@@ -33,31 +47,18 @@ Linköping University, Saab Aeronautics
 ![bg](./gripen-e-up-1160x773.jpg)
 <div class="content-panel">
 
-## Goals
+## Method
 
-- Create a simple mockup system for complex CPS development, 
-  - Single-seat multirole fighter reference project
-- SysMLv2 packages as definition for architecture
+- Create and evaluate a simple mockup system for complex CPS development (multirole fighter)
+
+- Machine readable definition for architecture (SysMLv2)
+
   - Sub-systems, interfaces, connections, requirements
-- Create a workflow that would enable CI/CD
 
 </div>
 
 ---
 
-![bg](./gripen-e-up-1160x773.jpg)
-<div class="content-panel">
-
-## Model Development Workflow
-
-- Model interfaces generated and verified from architecture
-- Package every subsystem as a ready-to-deploy FMU 
-- Utilize parameter sets for simulation customization.
-- Package sub-systems and parameter sets as a traceable SSP bundle for simulation.
-
-</div>
-
----
 
 ![bg](./gripen-e-up-1160x773.jpg)
 
@@ -69,7 +70,7 @@ Linköping University, Saab Aeronautics
 
   - F16 inspired airframe and propulsion, HOTAS cockpit
   - Requirements cover performance, fuel, control, mission, and propulsion
-  - Mission computer, flight controls, autopilot exposes evaluation data and telemetry
+  - Mission computer, flight controls, autopilot exposes evaluation data and telemetry from simulation
 
   </div>
 
@@ -85,11 +86,12 @@ Linköping University, Saab Aeronautics
 <div class="content-panel">
 
 ## Mission Use Case Evaluations
-Each scenario enforces requirement coverage and enables reproducible CI validation.
 
-1. High-altitude intercept
-2. Deep strike penetration
-3. Close air support patrol
+- Scenarios enables integration testing and top level requirement coverage
+
+- Utilize parameter sets for simulation customization.
+
+- Example scenarios: High-altitude intercept, Deep strike penetration,  Close air support patrol
 
 </div>
 
@@ -98,7 +100,39 @@ Each scenario enforces requirement coverage and enables reproducible CI validati
 ![bg](./gripen-e-up-1160x773.jpg)
 <div class="content-panel">
 
-## Simulation Engine - SSP4SIM
+## Sub-system Development Workflow
+
+Iterate:
+- Update architecture
+- Sub-system interfaces generated from architecture
+- Develop sub-system
+- Package sub-system as a ready-to-deploy FMU
+- Package sub-systems and parameter sets as a traceable SSP for simulation
+- Simulate and evaluate
+
+</div>
+
+
+---
+
+![bg](./gripen-e-up-1160x773.jpg)
+<div class="content-panel">
+
+# - SSP4SIM -
+
+
+- Enabling complex cyber-physical systems development 
+- Sole focus on Co-Simulation 
+- SSP/FMI Compatible
+
+</div>
+
+---
+
+![bg](./gripen-e-up-1160x773.jpg)
+<div class="content-panel">
+
+## Key aspects
 
 - Determinism
 - Customizability
@@ -107,12 +141,13 @@ Each scenario enforces requirement coverage and enables reproducible CI validati
 
 </div>
 
+
 ---
 
 ![bg](./gripen-e-up-1160x773.jpg)
 <div class="content-panel">
 
-## Results & Next Steps
+## Determinism
 
 
 </div>
@@ -123,18 +158,22 @@ Each scenario enforces requirement coverage and enables reproducible CI validati
 ![bg](./gripen-e-up-1160x773.jpg)
 <div class="content-panel">
 
-## Results & Next Steps
+## Customizability
 
+- 
 
 </div>
-
 
 ---
 
 ![bg](./gripen-e-up-1160x773.jpg)
 <div class="content-panel">
 
-## Results & Next Steps
+## Logging
+
+- JSON, local or remote
+- OTel extendable
 
 
 </div>
+
