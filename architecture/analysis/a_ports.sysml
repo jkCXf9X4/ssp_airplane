@@ -14,12 +14,5 @@ package Aircraft::Analysis {
     attribute exhaust_velocity_mps: Real;
   }
 
-  port def FlightStatusPacket {
-    doc /* Mission computer status feedback consumed by autonomy and analysis models. */
-    attribute airspeed_mps: Real;
-    attribute energy_state_norm: Real;
-    attribute angle_of_attack_deg: Real;
-    attribute health_code: Integer;
-  }
 
 }

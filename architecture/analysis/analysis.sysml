@@ -1,4 +1,4 @@
-package Aircraft {
+package Aircraft::Analysis {
   doc /* ControlInterface */
   connect ControlInterface.pilotCommand to MissionComputer.manualInput;
 

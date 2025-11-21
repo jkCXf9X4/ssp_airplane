@@ -1,7 +1,7 @@
 
 // Document simulation specific requirements and choices
 
-package Aircraft {
+package Aircraft::Analysis {
   comment Requirement_REQ_Simulation_1 /* The system should be packaged and simulated as a SSP (system structure and parameterization) artifact */
   comment Requirement_REQ_Simulation_2 /* All models should be packaged as FMUs */
 

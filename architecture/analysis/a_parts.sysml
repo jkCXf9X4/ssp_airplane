@@ -1,15 +1,6 @@
-package Aircraft {
+package Aircraft::Analysis {
   doc /* Reconfigured to model an F-16 Fighting Falcon multirole fighter with single-engine propulsion and manned cockpit. *
 
-
-  part def ControlInterface {
-    doc /* F-16 HOTAS + side-stick interface for pilot inputs and trim switches. */
-    attribute input_scheme = "HOTAS";
-    attribute telemetry_rate_hz = 120;
-  
-    doc /* HOTAS-control bundle forwarded for mission computer sensor fusion. */
-    out port pilotCommand : PilotCommand;
-  }
 
   part def AutopilotModule {
     doc /* F-16 autopilot, takes in sensor data and translates it into a equivalent hotas command. */
