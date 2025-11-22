@@ -17,7 +17,7 @@ model AutopilotModule
   parameter Real waypointZ_km[waypointCount] = fill(1, waypointCount);
   parameter Real waypointProximity_km = 10 "Distance to trigger waypoint switch";
   // time constant for smoothing
-  parameter Real tauCmd = 0.5 "s, command filter time constant";
+  parameter Real tauCmd = 1.0 "s, command filter time constant";
 
   input GI.FlightStatusPacket feedbackBus;
   input GI.PositionXYZ currentLocation;

@@ -5,7 +5,7 @@ model Environment
   parameter Real initX_km = 0;
   parameter Real initY_km = 0;
   parameter Real initZ_km = 1.0 "Initial altitude in km";
-  parameter Real tauDirection_s = 2.0 "s, first-order response to direction commands";
+  parameter Real tauDirection_s = 10.0 "s, first-order response to direction commands";
 
   input GI.SurfaceActuationCommand actuation_command "Unused at the moment, verify function before implementing";
   input GI.OrientationEuler direction_command "Direct steering command from mission computer";
