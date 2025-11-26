@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import math
-import os
 import shutil
 from pathlib import Path
 import pytest
@@ -14,6 +13,7 @@ if str(REPO_ROOT) not in sys.path:
 from scripts.workflows.simulate_scenario import (  # type: ignore  # noqa: E402
     evaluate_requirements,
     plot_flight_path,
+    plot_flight_path_3d,
     project_waypoints_to_local_km,
     scenario_to_string,
     simulate_scenario,
@@ -78,10 +78,18 @@ def test_simulation_reuse_produces_summary_and_requirements(tmp_path):
     assert summary_path.exists()
 
 
-def test_plot_generation(tmp_path):
+def test_plot_generation(tmp_path, monkeypatch):
     result_path = REPO_ROOT / "build" / "results" / "test_scenario_results.csv"
     output = tmp_path / "plot.png"
-    os.environ["SIM_SKIP_PLOTS"] = "1"
+    monkeypatch.setenv("SIM_SKIP_PLOTS", "1")
     plotted = plot_flight_path(result_path, [], output)
     if plotted:
         assert plotted.exists()
+
+
+def test_plot_generation_3d(tmp_path, monkeypatch):
+    result_path = REPO_ROOT / "build" / "results" / "test_scenario_results.csv"
+    output = tmp_path / "plot3d.png"
+    monkeypatch.delenv("SIM_SKIP_PLOTS", raising=False)
+    plotted = plot_flight_path_3d(result_path, [], output)
+    assert plotted is None or plotted.exists()

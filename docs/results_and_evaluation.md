@@ -49,6 +49,7 @@ When `scripts.workflows.simulate_scenario` runs, it always writes two artifacts 
 
 - Each scenario’s waypoints are also exported to `build/results/<scenario>_waypoints.txt` as a comma-separated `x_km,y_km,z_km,...` string, ready for Modelica `stringToRealVector` consumption in the autopilot parameter set.
 - Passing `--plot` to `python3 -m scripts.workflows.simulate_scenario` generates `build/results/<scenario>_path.png`, overlaying the simulated local X/Y path against the supplied waypoints for a quick visual verification.
+- Passing `--plot-3d` emits `build/results/<scenario>_path3d.png`, plotting the track and waypoints with altitude for spatial inspection.
 
 ## Reusing results vs. re-simulating
 

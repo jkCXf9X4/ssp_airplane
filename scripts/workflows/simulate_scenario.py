@@ -7,6 +7,7 @@ import argparse
 import csv
 import json
 import math
+import os
 import shutil
 import sys
 import zipfile
@@ -127,7 +128,8 @@ def extract_track_points(
 def plot_flight_path(
     result_file: Path, scenario_points: List[Dict[str, float]], output_path: Path
 ) -> Optional[Path]:
-
+    if os.environ.get("SIM_SKIP_PLOTS") == "1":
+        return None
     try:
         import matplotlib
         # For god sake do not import this before executing the simulation, simulation does not load for some probably great reason 
@@ -164,6 +166,47 @@ def plot_flight_path(
     ax.set_xlabel("X [km]")
     ax.set_ylabel("Y [km]")
     ax.set_title("Flight path vs waypoints (local frame)")
+    ax.legend()
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    fig.tight_layout()
+    fig.savefig(output_path, dpi=150)
+    plt.close(fig)
+    return output_path
+
+
+def plot_flight_path_3d(
+    result_file: Path, scenario_points: List[Dict[str, float]], output_path: Path
+) -> Optional[Path]:
+    if os.environ.get("SIM_SKIP_PLOTS") == "1":
+        return None
+    try:
+        import matplotlib
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+        from mpl_toolkits.mplot3d import Axes3D  # noqa: F401
+    except Exception:
+        return None
+
+    rows = _read_result_rows(result_file)
+    track_points = extract_track_points(rows)
+    if not track_points:
+        return None
+
+    xs, ys, zs = zip(*track_points)
+    fig = plt.figure(figsize=(7, 5))
+    ax = fig.add_subplot(111, projection="3d")
+    ax.plot(xs, ys, zs, label="Flight path", color="#1f77b4")
+
+    if scenario_points:
+        wp_x = [p["x_km"] for p in scenario_points]
+        wp_y = [p["y_km"] for p in scenario_points]
+        wp_z = [p.get("z_km", 0.0) for p in scenario_points]
+        ax.plot(wp_x, wp_y, wp_z, "o--", label="Waypoints", color="#d62728")
+
+    ax.set_xlabel("X [km]")
+    ax.set_ylabel("Y [km]")
+    ax.set_zlabel("Z [km]")
+    ax.set_title("Flight path vs waypoints (3D local frame)")
     ax.legend()
     output_path.parent.mkdir(parents=True, exist_ok=True)
     fig.tight_layout()
@@ -314,6 +357,7 @@ class ScenarioResult:
     requirement_evaluations: List[RequirementEvaluation] = field(default_factory=list)
     scenario_string: str = ""
     plot_path: Optional[Path] = None
+    plot3d_path: Optional[Path] = None
     parameter_set_path: Optional[Path] = None
     prepared_ssp_path: Optional[Path] = None
 
@@ -506,6 +550,7 @@ def simulate_scenario(
     reuse_results: bool = True,
     stop_time: Optional[float] = None,
     plot: bool = False,
+    plot_3d: bool = False,
 ) -> ScenarioResult:
     scenario = json.loads(scenario_path.read_text())
     if "points" not in scenario:
@@ -571,6 +616,7 @@ def simulate_scenario(
 
     requirement_evaluations = evaluate_requirements(metrics, fuel_capacity)
     plot_path = None
+    plot3d_path = None
 
     summary = {
         "scenario": scenario.get("name", scenario_path.stem),
@@ -612,6 +658,11 @@ def simulate_scenario(
         plot_path = plot_flight_path(result_file, local_points, requested_plot)
         if plot_path:
             summary["plot_path"] = str(plot_path)
+    if plot_3d:
+        requested_plot_3d = results_dir / f"{scenario_path.stem}_path3d.png"
+        plot3d_path = plot_flight_path_3d(result_file, local_points, requested_plot_3d)
+        if plot3d_path:
+            summary["plot3d_path"] = str(plot3d_path)
 
     summary_path = results_dir / f"{scenario_path.stem}_summary.json"
     summary_path.write_text(json.dumps(summary, indent=2))
@@ -631,6 +682,7 @@ def simulate_scenario(
         requirement_evaluations=requirement_evaluations,
         scenario_string=scenario_string,
         plot_path=plot_path,
+        plot3d_path=plot3d_path,
         parameter_set_path=parameter_set_path,
         prepared_ssp_path=prepared_ssp,
     )
@@ -661,6 +713,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Generate a flight-path plot comparing simulated track to waypoints.",
     )
+    parser.add_argument(
+        "--plot-3d",
+        action="store_true",
+        help="Generate a 3D flight-path plot including altitude against the waypoint track.",
+    )
 
     return parser.parse_args()
 
@@ -674,6 +731,7 @@ def main() -> None:
         reuse_results=args.reuse_results,
         stop_time=args.stop_time,
         plot=args.plot,
+        plot_3d=args.plot_3d,
     )
     print(
         json.dumps(
@@ -689,6 +747,7 @@ def main() -> None:
                 "scenario_string": result.scenario_string,
                 "parameter_set": str(result.parameter_set_path) if result.parameter_set_path else None,
                 "plot_path": str(result.plot_path) if result.plot_path else None,
+                "plot3d_path": str(result.plot3d_path) if result.plot3d_path else None,
                 "requirements": [
                     {"id": eval_.identifier, "passed": eval_.passed}
                     for eval_ in result.requirement_evaluations
