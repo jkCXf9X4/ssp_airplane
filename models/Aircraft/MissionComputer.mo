@@ -12,6 +12,7 @@ model MissionComputer
   output GI.OrientationEuler direction_command;
 protected
   Boolean autopilotEngaged;
+  Real stateKeeper(start=0) "Dummy continuous state to satisfy co-sim master";
   Real cmdStickRoll;
   Real cmdStickPitch;
   Real cmdRudder;
@@ -35,4 +36,7 @@ equation
   direction_command.roll_deg = rollAuthority_deg * cmdStickRoll;
   direction_command.pitch_deg = pitchAuthority_deg * cmdStickPitch;
   direction_command.yaw_deg = yawAuthority_deg * cmdRudder;
+
+  // Keep at least one continuous state so the FMU tolerates master calls to getContinuousStates
+  der(stateKeeper) = 0;
 end MissionComputer;

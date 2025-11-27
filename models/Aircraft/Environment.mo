@@ -6,6 +6,10 @@ model Environment
   parameter Real initY_km = 0;
   parameter Real initZ_km = 1.0 "Initial altitude in km";
   parameter Real tauDirection_s = 2.0 "s, first-order response to direction commands";
+  parameter Real thrustToSpeedGain = 4.0 "m/s per kN of thrust converted to forward speed";
+  parameter Real climbBleedFraction = 0.35 "Fractional speed loss at straight-up climb";
+  parameter Real minAirspeed_mps = 50 "Lower bound on indicated airspeed";
+  parameter Real referenceEnergySpeed_mps = 300 "Speed used to normalize energy_state_norm";
 
   input GI.SurfaceActuationCommand actuation_command "Unused at the moment, verify function before implementing";
   input GI.OrientationEuler direction_command "Direct steering command from mission computer";
@@ -32,6 +36,8 @@ protected
   Real pitch_heading_rad;
   Real climb_rate;
   Real ground_speed_ms;
+  Real base_speed_ms;
+  Real ground_speed_unclamped_ms;
 
 equation
 
@@ -54,7 +60,13 @@ equation
   heading_rad  = yaw_deg * Modelica.Constants.pi / 180;
   pitch_heading_rad = pitch_deg * Modelica.Constants.pi / 180;
 
-  ground_speed_ms = max(50, thrust_in.thrust_kn *4);
+  base_speed_ms = max(minAirspeed_mps,
+                      thrust_in.thrust_kn * thrustToSpeedGain);
+  ground_speed_unclamped_ms = base_speed_ms *
+                              max(0.5,
+                                  1 - climbBleedFraction * max(0, sin(pitch_heading_rad)));
+  ground_speed_ms = max(minAirspeed_mps, ground_speed_unclamped_ms);
+
   climb_rate = ground_speed_ms * sin(pitch_heading_rad);
 
   der(location.x_km) = (ground_speed_ms * cos(heading_rad)) / 1000.0;
@@ -63,7 +75,10 @@ equation
 
   // Flight status
   flight_status.airspeed_mps        = ground_speed_ms;
-  flight_status.energy_state_norm   = max(0, min(1, thrust_in.thrust_kn / 130));
+  flight_status.energy_state_norm   = max(0,
+                                          min(1,
+                                              0.5 * (thrust_in.thrust_kn / 130)
+                                              + 0.5 * (ground_speed_ms / referenceEnergySpeed_mps)));
   flight_status.angle_of_attack_deg = orientation.pitch_deg;
   flight_status.health_code         = 0;
   flight_status.climb_rate         = climb_rate;

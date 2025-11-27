@@ -9,6 +9,10 @@ model AutopilotModule
 
   parameter Real updateRateHz = 40;
   parameter Real defaultThrottle = 0.7;
+  parameter Real targetAirspeed_mps = 75 "Nominal airspeed to hold during cruise/climb";
+  parameter Real airspeedToThrottleGain = 0.003 "Throttle gain per m/s airspeed error";
+  parameter Real climbRateToThrottleGain = 0.01 "Throttle gain per m/s climb to counter speed bleed";
+  parameter Real minThrottleCommand = 0.2 "Lower bound for throttle command";
 
   // Heading and altitude control gains
   parameter Real headingGain          = 1 / 60.0 "deg^-1 to normalize yaw error into stick roll";
@@ -25,7 +29,7 @@ model AutopilotModule
   parameter Real waypointAltitudeProximity_km   = 1.0  "Altitude distance to trigger waypoint switch";
 
   // time constant for smoothing
-  parameter Real tauCmd = 0.5 "s, command filter time constant";
+  parameter Real tauCmd = 1.0 "s, command filter time constant";
 
   input GI.FlightStatusPacket feedbackBus;
   input GI.PositionXYZ currentLocation;
@@ -51,7 +55,6 @@ protected
   Real targetZ_km;
 
   Real altitudeError;
-  Real holdStrength;
   Real targetHeading;
 
   Real distanceToWaypoint_km;
@@ -66,6 +69,8 @@ protected
   Real rollCmd_raw;
   Real pitchCmd_raw;
   Real throttleCmd_raw;
+  Real throttleFromAirspeed;
+  Real throttleFromClimb;
 
   // filtered commands that go to the outputs
   Real rollCmd(start=0);
@@ -112,9 +117,6 @@ equation
   // Altitude control uses dz_km to target altitude, or 1 km by default if no waypoints
   altitudeError = if waypointCount < 1 then 1 - currentZ_km else dz_km;
 
-  // Throttle “hold strength” based on available energy
-  holdStrength = max(0.2, min(1.0, defaultThrottle * max(0.2, feedbackBus.energy_state_norm)));
-
   // raw commands with saturation (use noEvent to avoid extra events)
 
   // Roll: simple proportional on heading error
@@ -136,8 +138,11 @@ equation
                    max(-1.0,
                        min(1.0, pitchAngleGain * pitchError_deg)));
 
-  // Throttle from holdStrength (already limited)
-  throttleCmd_raw = holdStrength;
+  // Throttle: bias toward cruise throttle, add airspeed deficit + climb feed-forward
+  throttleFromAirspeed = airspeedToThrottleGain * (targetAirspeed_mps - feedbackBus.airspeed_mps);
+  throttleFromClimb = climbRateToThrottleGain * max(0, feedbackBus.climb_rate);
+  throttleCmd_raw = noEvent(
+                         max(minThrottleCommand, min(1.0, defaultThrottle + throttleFromAirspeed + throttleFromClimb)));
 
   // first-order low-pass filters: der(x) = (u - x)/tau
   der(rollCmd)     = (rollCmd_raw     - rollCmd)     / tauCmd;

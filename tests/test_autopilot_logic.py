@@ -6,6 +6,14 @@ import math
 # waypoint handling without rebuilding FMUs.
 WAYPOINT_PROXIMITY_KM = 10.0
 ALTITUDE_PROXIMITY_KM = 0.5
+THRUST_TO_SPEED_GAIN = 4.0
+CLIMB_BLEED_FRACTION = 0.35
+MIN_AIRSPEED = 50.0
+DEFAULT_THROTTLE = 0.7
+TARGET_AIRSPEED = 220.0
+AIRSPEED_THROTTLE_GAIN = 0.003
+CLIMB_THROTTLE_GAIN = 0.01
+MIN_THROTTLE = 0.2
 
 
 def compute_heading_distance_xyz(
@@ -55,3 +63,33 @@ def has_arrived(current: tuple[float, float, float], target: tuple[float, float,
 def test_arrival_requires_altitude_match():
     assert not has_arrived((0.0, 0.0, 0.0), (5.0, 5.0, 2.0))
     assert has_arrived((0.0, 0.0, 0.0), (5.0, 5.0, 0.25))
+
+
+def environment_speed(thrust_kn: float, pitch_deg: float) -> tuple[float, float]:
+    base_speed = max(MIN_AIRSPEED, thrust_kn * THRUST_TO_SPEED_GAIN)
+    bleed = max(0.5, 1 - CLIMB_BLEED_FRACTION * max(0.0, math.sin(math.radians(pitch_deg))))
+    speed = max(MIN_AIRSPEED, base_speed * bleed)
+    climb_rate = speed * math.sin(math.radians(pitch_deg))
+    return speed, climb_rate
+
+
+def autopilot_throttle_cmd(airspeed: float, climb_rate: float) -> float:
+    throttle = DEFAULT_THROTTLE
+    throttle += AIRSPEED_THROTTLE_GAIN * (TARGET_AIRSPEED - airspeed)
+    throttle += CLIMB_THROTTLE_GAIN * max(0.0, climb_rate)
+    return max(MIN_THROTTLE, min(1.0, throttle))
+
+
+def test_climb_bleeds_speed_in_environment():
+    level_speed, level_climb = environment_speed(thrust_kn=100.0, pitch_deg=0.0)
+    climb_speed, climb_rate = environment_speed(thrust_kn=100.0, pitch_deg=20.0)
+    assert level_speed > climb_speed
+    assert level_climb == 0.0
+    assert climb_rate > 0.0
+
+
+def test_autopilot_adds_throttle_when_slow_and_climbing():
+    throttle_level = autopilot_throttle_cmd(airspeed=TARGET_AIRSPEED, climb_rate=0.0)
+    throttle_climb = autopilot_throttle_cmd(airspeed=TARGET_AIRSPEED - 30.0, climb_rate=25.0)
+    assert throttle_climb > throttle_level
+    assert throttle_climb > DEFAULT_THROTTLE
