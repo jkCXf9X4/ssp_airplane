@@ -4,6 +4,7 @@ package GeneratedInterfaces
     Real airspeed_mps;
     Real energy_state_norm;
     Real angle_of_attack_deg;
+    Real climb_rate;
     Integer health_code;
   end FlightStatusPacket;
 

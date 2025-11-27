@@ -203,6 +203,12 @@
                 "type": "Real",
                 "value": null
               },
+              "climb_rate": {
+                "doc": null,
+                "name": "climb_rate",
+                "type": "Real",
+                "value": null
+              },
               "energy_state_norm": {
                 "doc": null,
                 "name": "energy_state_norm",
@@ -353,6 +359,12 @@
               "angle_of_attack_deg": {
                 "doc": null,
                 "name": "angle_of_attack_deg",
+                "type": "Real",
+                "value": null
+              },
+              "climb_rate": {
+                "doc": null,
+                "name": "climb_rate",
                 "type": "Real",
                 "value": null
               },
@@ -903,6 +915,12 @@
                 "type": "Real",
                 "value": null
               },
+              "climb_rate": {
+                "doc": null,
+                "name": "climb_rate",
+                "type": "Real",
+                "value": null
+              },
               "energy_state_norm": {
                 "doc": null,
                 "name": "energy_state_norm",
@@ -1145,6 +1163,12 @@
               "angle_of_attack_deg": {
                 "doc": null,
                 "name": "angle_of_attack_deg",
+                "type": "Real",
+                "value": null
+              },
+              "climb_rate": {
+                "doc": null,
+                "name": "climb_rate",
                 "type": "Real",
                 "value": null
               },
@@ -1581,6 +1605,12 @@
         "angle_of_attack_deg": {
           "doc": null,
           "name": "angle_of_attack_deg",
+          "type": "Real",
+          "value": null
+        },
+        "climb_rate": {
+          "doc": null,
+          "name": "climb_rate",
           "type": "Real",
           "value": null
         },

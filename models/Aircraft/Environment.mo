@@ -5,7 +5,7 @@ model Environment
   parameter Real initX_km = 0;
   parameter Real initY_km = 0;
   parameter Real initZ_km = 1.0 "Initial altitude in km";
-  parameter Real tauDirection_s = 10.0 "s, first-order response to direction commands";
+  parameter Real tauDirection_s = 2.0 "s, first-order response to direction commands";
 
   input GI.SurfaceActuationCommand actuation_command "Unused at the moment, verify function before implementing";
   input GI.OrientationEuler direction_command "Direct steering command from mission computer";
@@ -29,8 +29,9 @@ protected
   Real yaw_deg(start=0);
 
   Real heading_rad;
-  Real ground_speed_ms;
+  Real pitch_heading_rad;
   Real climb_rate;
+  Real ground_speed_ms;
 
 equation
 
@@ -51,8 +52,10 @@ equation
 
   // Simple kinematics
   heading_rad  = yaw_deg * Modelica.Constants.pi / 180;
+  pitch_heading_rad = pitch_deg * Modelica.Constants.pi / 180;
+
   ground_speed_ms = max(50, thrust_in.thrust_kn *4);
-  climb_rate = ground_speed_ms * sin(pitch_deg);
+  climb_rate = ground_speed_ms * sin(pitch_heading_rad);
 
   der(location.x_km) = (ground_speed_ms * cos(heading_rad)) / 1000.0;
   der(location.y_km) = (ground_speed_ms * sin(heading_rad)) / 1000.0;
@@ -63,6 +66,8 @@ equation
   flight_status.energy_state_norm   = max(0, min(1, thrust_in.thrust_kn / 130));
   flight_status.angle_of_attack_deg = orientation.pitch_deg;
   flight_status.health_code         = 0;
+  flight_status.climb_rate         = climb_rate;
+
 
 initial equation
   location.x_km = initX_km;

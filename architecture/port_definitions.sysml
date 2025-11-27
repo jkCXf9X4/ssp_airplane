@@ -74,6 +74,7 @@ package Aircraft {
     attribute airspeed_mps: Real;
     attribute energy_state_norm: Real;
     attribute angle_of_attack_deg: Real;
+    attribute climb_rate: Real;
     attribute health_code: Integer;
   }
 

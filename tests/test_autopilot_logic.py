@@ -5,6 +5,7 @@ import math
 # Mirrors the Modelica navigation arithmetic in AutopilotModule.mo so we can sanity-check
 # waypoint handling without rebuilding FMUs.
 WAYPOINT_PROXIMITY_KM = 10.0
+ALTITUDE_PROXIMITY_KM = 0.5
 
 
 def compute_heading_distance_xyz(
@@ -40,3 +41,17 @@ def test_heading_error_wraps_shortest_turn():
 def test_proximity_detection_threshold():
     _, distance = compute_heading_distance_xyz(1.0, 1.0, 0.5, 1.1, 1.0, 0.5)
     assert distance < WAYPOINT_PROXIMITY_KM
+
+
+def has_arrived(current: tuple[float, float, float], target: tuple[float, float, float]) -> bool:
+    dx = target[0] - current[0]
+    dy = target[1] - current[1]
+    dz = target[2] - current[2]
+    horizontal = math.hypot(dx, dy)
+    vertical = abs(dz)
+    return horizontal <= WAYPOINT_PROXIMITY_KM and vertical <= ALTITUDE_PROXIMITY_KM
+
+
+def test_arrival_requires_altitude_match():
+    assert not has_arrived((0.0, 0.0, 0.0), (5.0, 5.0, 2.0))
+    assert has_arrived((0.0, 0.0, 0.0), (5.0, 5.0, 0.25))

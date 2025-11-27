@@ -34,6 +34,8 @@ def test_result_postprocessing_extracts_requirement_metrics():
     assert metrics["fuel_initial_kg"] >= metrics["fuel_final_kg"]
     assert "waypoint_miss_max_km" in metrics
     assert not math.isnan(metrics["waypoint_miss_max_km"])
+    assert "waypoint_miss_vertical_max_km" in metrics
+    assert not math.isnan(metrics["waypoint_miss_vertical_max_km"])
     assert "waypoints_followed" in metrics
     requirements = evaluate_requirements(metrics, fuel_capacity_kg=metrics["fuel_initial_kg"])
     requirement_ids = {req.identifier for req in requirements}

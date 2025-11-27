@@ -39,6 +39,7 @@ DEFAULT_RESULTS = BUILD_DIR / "results"
 DEFAULT_FUEL_CAPACITY = 3100.0
 RESERVE_FRACTION = 0.08
 WAYPOINT_HIT_THRESHOLD_KM = 10.0
+WAYPOINT_ALTITUDE_HIT_THRESHOLD_KM = 0.5
 
 
 def estimate_duration(distance_km: float, cruise_speed_mps: float) -> float:
@@ -219,30 +220,50 @@ def waypoint_tracking_metrics(
     scenario_points: List[Dict[str, float]],
     track_points: List[Tuple[float, float, float]],
     threshold_km: float = WAYPOINT_HIT_THRESHOLD_KM,
+    vertical_threshold_km: float = WAYPOINT_ALTITUDE_HIT_THRESHOLD_KM,
 ) -> Dict[str, float]:
     if not scenario_points or not track_points:
         return {
             "waypoint_miss_max_km": float("nan"),
             "waypoint_miss_avg_km": float("nan"),
+            "waypoint_miss_vertical_max_km": float("nan"),
+            "waypoint_miss_vertical_avg_km": float("nan"),
             "waypoint_hits": 0,
             "waypoint_total": len(scenario_points),
             "waypoint_within_threshold_fraction": 0.0,
         }
 
     misses: List[float] = []
+    vertical_misses: List[float] = []
     hits = 0
     for wp in scenario_points:
         x = float(wp["x_km"])
         y = float(wp["y_km"])
-        best = min(math.sqrt((x - t[0]) ** 2 + (y - t[1]) ** 2) for t in track_points)
-        misses.append(best)
-        if best <= threshold_km:
+        z = float(wp.get("z_km", 0.0))
+        best_distance = float("inf")
+        best_planar = float("inf")
+        best_vertical = float("inf")
+        for t in track_points:
+            dx = x - t[0]
+            dy = y - t[1]
+            dz = z - t[2]
+            planar = math.sqrt(dx * dx + dy * dy)
+            vertical_sep = abs(dz)
+            distance = math.sqrt(planar * planar + dz * dz)
+            best_planar = min(best_planar, planar)
+            best_vertical = min(best_vertical, vertical_sep)
+            best_distance = min(best_distance, distance)
+        misses.append(best_planar)
+        vertical_misses.append(best_vertical)
+        if best_distance <= threshold_km and best_vertical <= vertical_threshold_km:
             hits += 1
 
     total = len(scenario_points)
     return {
         "waypoint_miss_max_km": max(misses),
         "waypoint_miss_avg_km": sum(misses) / total if total else float("nan"),
+        "waypoint_miss_vertical_max_km": max(vertical_misses),
+        "waypoint_miss_vertical_avg_km": sum(vertical_misses) / total if total else float("nan"),
         "waypoint_hits": hits,
         "waypoint_total": total,
         "waypoint_within_threshold_fraction": hits / total if total else 0.0,
@@ -644,6 +665,8 @@ def simulate_scenario(
                 "control_surface_excursion_deg",
                 "waypoint_miss_max_km",
                 "waypoint_miss_avg_km",
+                "waypoint_miss_vertical_max_km",
+                "waypoint_miss_vertical_avg_km",
                 "waypoint_hits",
                 "waypoint_total",
                 "waypoint_within_threshold_fraction",

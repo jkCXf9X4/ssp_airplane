@@ -53,6 +53,9 @@
           <ssd:Connector name="feedbackBus.angle_of_attack_deg" kind="input">
             <ssc:Real />
           </ssd:Connector>
+          <ssd:Connector name="feedbackBus.climb_rate" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
           <ssd:Connector name="feedbackBus.health_code" kind="input">
             <ssc:Integer />
           </ssd:Connector>
@@ -415,6 +418,9 @@
           <ssd:Connector name="flight_speed.angle_of_attack_deg" kind="input">
             <ssc:Real />
           </ssd:Connector>
+          <ssd:Connector name="flight_speed.climb_rate" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
           <ssd:Connector name="flight_speed.health_code" kind="input">
             <ssc:Integer />
           </ssd:Connector>
@@ -530,6 +536,9 @@
           <ssd:Connector name="flight_status.angle_of_attack_deg" kind="output">
             <ssc:Real />
           </ssd:Connector>
+          <ssd:Connector name="flight_status.climb_rate" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
           <ssd:Connector name="flight_status.health_code" kind="output">
             <ssc:Integer />
           </ssd:Connector>
@@ -592,6 +601,9 @@
             <ssc:Real />
           </ssd:Connector>
           <ssd:Connector name="flightStatus.angle_of_attack_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="flightStatus.climb_rate" kind="input">
             <ssc:Real />
           </ssd:Connector>
           <ssd:Connector name="flightStatus.health_code" kind="input">
@@ -669,10 +681,12 @@
       <ssd:Connection startElement="Environment" startConnector="flight_status.airspeed_mps" endElement="AutopilotModule" endConnector="feedbackBus.airspeed_mps" />
       <ssd:Connection startElement="Environment" startConnector="flight_status.energy_state_norm" endElement="AutopilotModule" endConnector="feedbackBus.energy_state_norm" />
       <ssd:Connection startElement="Environment" startConnector="flight_status.angle_of_attack_deg" endElement="AutopilotModule" endConnector="feedbackBus.angle_of_attack_deg" />
+      <ssd:Connection startElement="Environment" startConnector="flight_status.climb_rate" endElement="AutopilotModule" endConnector="feedbackBus.climb_rate" />
       <ssd:Connection startElement="Environment" startConnector="flight_status.health_code" endElement="AutopilotModule" endConnector="feedbackBus.health_code" />
       <ssd:Connection startElement="Environment" startConnector="flight_status.airspeed_mps" endElement="AdaptiveWingSystem" endConnector="flight_speed.airspeed_mps" />
       <ssd:Connection startElement="Environment" startConnector="flight_status.energy_state_norm" endElement="AdaptiveWingSystem" endConnector="flight_speed.energy_state_norm" />
       <ssd:Connection startElement="Environment" startConnector="flight_status.angle_of_attack_deg" endElement="AdaptiveWingSystem" endConnector="flight_speed.angle_of_attack_deg" />
+      <ssd:Connection startElement="Environment" startConnector="flight_status.climb_rate" endElement="AdaptiveWingSystem" endConnector="flight_speed.climb_rate" />
       <ssd:Connection startElement="Environment" startConnector="flight_status.health_code" endElement="AdaptiveWingSystem" endConnector="flight_speed.health_code" />
       <ssd:Connection startElement="Environment" startConnector="location.x_km" endElement="InputOutput" endConnector="locationXYZ.x_km" />
       <ssd:Connection startElement="Environment" startConnector="location.y_km" endElement="InputOutput" endConnector="locationXYZ.y_km" />
@@ -693,6 +707,7 @@
       <ssd:Connection startElement="Environment" startConnector="flight_status.airspeed_mps" endElement="InputOutput" endConnector="flightStatus.airspeed_mps" />
       <ssd:Connection startElement="Environment" startConnector="flight_status.energy_state_norm" endElement="InputOutput" endConnector="flightStatus.energy_state_norm" />
       <ssd:Connection startElement="Environment" startConnector="flight_status.angle_of_attack_deg" endElement="InputOutput" endConnector="flightStatus.angle_of_attack_deg" />
+      <ssd:Connection startElement="Environment" startConnector="flight_status.climb_rate" endElement="InputOutput" endConnector="flightStatus.climb_rate" />
       <ssd:Connection startElement="Environment" startConnector="flight_status.health_code" endElement="InputOutput" endConnector="flightStatus.health_code" />
       <ssd:Connection startElement="AutopilotModule" startConnector="missionStatus.waypoint_index" endElement="InputOutput" endConnector="missionStatus.waypoint_index" />
       <ssd:Connection startElement="AutopilotModule" startConnector="missionStatus.total_waypoints" endElement="InputOutput" endConnector="missionStatus.total_waypoints" />
