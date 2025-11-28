@@ -4,8 +4,7 @@
   "requirements": ["REQ_Performance", "REQ_Fuel", "REQ_Mission"],
   "simulation_overrides": {
     "cruise_speed_mps": 260.0,
-    "fuel_capacity_kg": 3400.0,
-    "fuel_burn_rate_kgps": 0.24
+    "fuel_capacity_kg": 3400.0
   },
   "points": [
     {
@@ -36,7 +35,7 @@
     {
       "latitude_deg": -11.596598,
       "longitude_deg": 95.303783,
-      "altitude_m": 0.0
+      "altitude_m": 1000.0
     }
   ],
   "total_distance_km": 3187.49

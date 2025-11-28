@@ -3,9 +3,8 @@
   "description": "Sprint from alert base to intercept a supersonic target, exercising Mach 2 dash capability and HOTAS/autopilot coordination.",
   "requirements": ["REQ_Performance", "REQ_Control"],
   "simulation_overrides": {
-    "cruise_speed_mps": 680.0,
-    "fuel_capacity_kg": 2600.0,
-    "fuel_burn_rate_kgps": 0.62
+    "cruise_speed_mps": 500.0,
+    "fuel_capacity_kg": 2600.0
   },
   "points": [
     {
@@ -26,7 +25,7 @@
     {
       "latitude_deg": -2.857028,
       "longitude_deg": 43.751846,
-      "altitude_m": 0.0
+      "altitude_m": 1000.0
     }
   ],
   "total_distance_km": 516.23

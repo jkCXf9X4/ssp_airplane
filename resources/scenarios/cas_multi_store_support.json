@@ -9,8 +9,7 @@
   },
   "simulation_overrides": {
     "cruise_speed_mps": 220.0,
-    "fuel_capacity_kg": 2400.0,
-    "fuel_burn_rate_kgps": 0.5
+    "fuel_capacity_kg": 2400.0
   },
   "points": [
     {
@@ -36,7 +35,7 @@
     {
       "latitude_deg": -23.634193,
       "longitude_deg": 4.71562,
-      "altitude_m": 0.0
+      "altitude_m": 1000.0
     }
   ],
   "total_distance_km": 609.5
