@@ -10,10 +10,9 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from scripts.plot_results import plot_flight_path, plot_flight_path_3d, plot_fuel_altitude_time  # type: ignore  # noqa: E402
 from scripts.workflows.simulate_scenario import (  # type: ignore  # noqa: E402
     evaluate_requirements,
-    plot_flight_path,
-    plot_flight_path_3d,
     project_waypoints_to_local_km,
     scenario_to_string,
     simulate_scenario,
@@ -94,4 +93,12 @@ def test_plot_generation_3d(tmp_path, monkeypatch):
     output = tmp_path / "plot3d.png"
     monkeypatch.delenv("SIM_SKIP_PLOTS", raising=False)
     plotted = plot_flight_path_3d(result_path, [], output)
+    assert plotted is None or plotted.exists()
+
+
+def test_plot_generation_fuel_altitude(tmp_path, monkeypatch):
+    result_path = REPO_ROOT / "build" / "results" / "test_scenario_results.csv"
+    output = tmp_path / "fuel_altitude.png"
+    monkeypatch.delenv("SIM_SKIP_PLOTS", raising=False)
+    plotted = plot_fuel_altitude_time(result_path, output)
     assert plotted is None or plotted.exists()

@@ -104,8 +104,7 @@ Utilize OMSimulator as simulation engine, via python
 - See `docs/results_and_evaluation.md` for the metric/summary fields and how to interpret them.
 - Pre-generated data stored under `resources/scenarios/test_scenario.json` and `resources/references/test_scenario_results.csv` is copied into `build/` on demand so tests can run without a fresh simulation.
 - Waypoints are exported as a comma-separated string to `build/results/<scenario>_waypoints.txt` (format: `x_km,y_km,z_km,...`) that feeds the Autopilot parameter set via `stringToRealVector`.
-- Add `--plot` to emit `build/results/<scenario>_path.png`, overlaying simulated local X/Y traces against mission waypoints.
-- Add `--plot-3d` to emit `build/results/<scenario>_path3d.png` with altitude included for a 3D flight-path view.
+- Use `python3 -m scripts.plot_results --results-csv build/results/<scenario>_results.csv --scenario build/scenarios/<scenario>.json --plot-path --plot-3d --plot-fuel-altitude` to generate visualizations after a run.
 
 ## Verification helpers
 
