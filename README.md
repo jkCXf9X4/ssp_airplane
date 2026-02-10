@@ -8,8 +8,17 @@ This repository tracks an SSP for an F-16 Fighting Falcon inspired single-seat m
 - Create a virtual environment and install deps:
   ```
   python3 -m venv venv
-  venv/bin/pip install -r requirements.txt
+  . venv/bin/activate 
+  pip install -r requirements.txt
+
   ```
+
+- Build the SSP
+  ```
+  ./scripts/workflows/build.sh
+
+  ```
+
 - Always use the virtual environment when running helper modules to avoid missing `pyssp4sim` (`python3 -m scripts.<module>` or `source venv/bin/activate` first).
 - Prebuilt SSPs live in `build/ssp/`; the default is `build/ssp/aircraft.ssp`.
 - Curated mission scenarios live in `resources/scenarios/` (see `docs/use_cases.md` for requirement linkage).

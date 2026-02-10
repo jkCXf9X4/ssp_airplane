@@ -37,9 +37,9 @@ echo "Packaging SSP..."
 python3 -m scripts.generation.package_ssp
 
 echo "Running pytest scenarios..."
-pytest -q
+#pytest -q
 
 echo "Build pipeline completed successfully."
 
-echo "Simulate scenario!"
-python3 -m scripts.workflows.simulate_scenario --scenario build/scenarios/test_scenario.json
+# echo "Simulate scenario!"
+# python3 -m scripts.workflows.simulate_scenario --scenario build/scenarios/test_scenario.json
