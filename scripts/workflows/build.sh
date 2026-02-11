@@ -42,4 +42,4 @@ echo "Running pytest scenarios..."
 echo "Build pipeline completed successfully."
 
 echo "Simulate scenario!"
-python3 -m scripts.workflows.simulate_scenario --scenario build/scenarios/test_scenario.json
+python3 -m scripts.workflows.simulate_scenario --scenario resources/scenarios/test_scenario.json
