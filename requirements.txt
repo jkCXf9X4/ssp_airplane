@@ -1,4 +1,5 @@
 pytest>=8.0.0
+https://github.com/jkCXf9X4/ssp4sim/releases/download/v0.1.1/pyssp4sim-0.1.0-cp311-cp311-linux_x86_64.whl
 #-e /home/eriro/pwa/2_work/ssp4sim/build/public/python_api
 pyssp-standard
 matplotlib>=3.7

@@ -7,14 +7,13 @@ This repository tracks an SSP for an F-16 Fighting Falcon inspired single-seat m
 - Ensure Python 3.11+ and ssp4sim runtime are available. The Python API for ssp4sim is installed via the editable dependency in `requirements.txt` (points to `../ssp4sim/build/public/python_api` by default).
 - Create a virtual environment and install deps:
   ```
-  python3 -m venv venv
-  . venv/bin/activate 
-  pip install -r requirements.txt
+  python3.11 -m venv venv &&. venv/bin/activate &&  pip install -r requirements.txt
 
   ```
 
 - Build the SSP
   ```
+  . venv/bin/activate
   ./scripts/workflows/build.sh
 
   ```
