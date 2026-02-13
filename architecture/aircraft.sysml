@@ -1,4 +1,17 @@
 package Aircraft {
+
+  part def Aircraft {
+    doc /* Top-level composition containing all subsystem instances and signal routing. */
+    part ControlInterface : ControlInterface;
+    part AutopilotModule : AutopilotModule;
+    part CompositeAirframe : CompositeAirframe;
+    part TurbofanPropulsion : TurbofanPropulsion;
+    part MissionComputer : MissionComputer;
+    part FuelSystem : FuelSystem;
+    part AdaptiveWingSystem : AdaptiveWingSystem;
+    part Environment : Environment;
+    part InputOutput : InputOutput;
+
   doc /* ControlInterface */
   connect ControlInterface.pilotCommand to MissionComputer.manualInput;
 
@@ -33,5 +46,6 @@ package Aircraft {
   connect AutopilotModule.autopilotCmd to InputOutput.autopilotCmd;
   connect Environment.flight_status to InputOutput.flightStatus;
   connect AutopilotModule.missionStatus to InputOutput.missionStatus;
-}
+  }
 
+}
