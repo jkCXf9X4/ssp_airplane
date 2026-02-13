@@ -13,14 +13,19 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR
-from sysml.values import parse_literal
-from scripts.utils.fmi_helpers import architecture_model_map, component_fmu_source
-from sysml.helpers import load_architecture
-from sysml.parser import (
+from sysml import (
     SysMLArchitecture,
     SysMLAttribute,
     SysMLPortDefinition,
-    SysMLPortEndpoint,
+    SysMLPortReference,
+    load_architecture,
+)
+from sysml.type_utils import infer_primitive, normalize_primitive
+from scripts.utils.fmi_helpers import architecture_model_map, component_fmu_source
+from scripts.utils.sysml_compat import (
+    architecture_connections,
+    architecture_port_definitions,
+    literal_value,
 )
 from scripts.utils.ssp_helpers import (
     SSD_NAMESPACE,
@@ -30,8 +35,6 @@ from scripts.utils.ssp_helpers import (
     SSB_NAMESPACE,
     register_ssp_namespaces,
 )
-from sysml.type_utils import infer_primitive, normalize_primitive
-
 register_ssp_namespaces()
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
@@ -77,12 +80,15 @@ def _expand_payload_definition(
 
 
 def _expand_port_entries(
-    port: SysMLPortEndpoint, architecture: SysMLArchitecture
+    port: SysMLPortReference, architecture: SysMLArchitecture
 ) -> List[Dict[str, str]]:
     if port.direction not in {"in", "out"}:
         return []
     kind = "input" if port.direction == "in" else "output"
-    payload_entries = _expand_payload_definition(port.payload_def, architecture.port_definitions)
+    payload_entries = _expand_payload_definition(
+        port.payload_def,
+        architecture_port_definitions(architecture),
+    )
     results: List[Dict[str, str]] = []
     for suffix, primitive in payload_entries:
         connector_name = port.name if not suffix else f"{port.name}.{suffix}"
@@ -101,7 +107,7 @@ def _parameter_connector_entries(attributes: Dict[str, SysMLAttribute]) -> List[
     entries: List[Dict[str, str]] = []
     for name in sorted(attributes):
         attr = attributes[name]
-        literal = parse_literal(attr.value)
+        literal = literal_value(attr.value)
         if isinstance(literal, (list, tuple)):
             sample = next((item for item in literal if item is not None), None)
             primitive = infer_primitive(attr.type, sample)
@@ -184,7 +190,7 @@ def build_ssd_tree(
         connector_lookup[part_name] = port_map
 
     connections_elem = ET.SubElement(system_elem, f"{{{SSD_NAMESPACE}}}Connections")
-    for conn in architecture.connections:
+    for conn in architecture_connections(architecture):
         start_component = component_names.get(conn.src_component)
         end_component = component_names.get(conn.dst_component)
         if not start_component or not end_component:

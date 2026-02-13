@@ -13,8 +13,8 @@ if __package__ in {None, ""}:
 
 from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR, ensure_parent_dir
 from scripts.utils.fmi_helpers import architecture_model_map, component_fmu_source
-from sysml.helpers import load_architecture
-from sysml.parser import SysMLArchitecture, SysMLPartDefinition
+from sysml import SysMLArchitecture, SysMLPartDefinition, load_architecture
+from scripts.utils.sysml_compat import architecture_connections
 from scripts.utils.ssp_helpers import (
     SSD_NAMESPACE,
     SSC_NAMESPACE,
@@ -92,7 +92,7 @@ def build_terminal_ssd_tree(
             _add_terminal_connector(component_elem, port.name, kind)
 
     connections_elem = ET.SubElement(system_elem, f"{{{SSD_NAMESPACE}}}Connections")
-    for conn in architecture.connections:
+    for conn in architecture_connections(architecture):
         start_element = component_names.get(conn.src_component)
         end_element = component_names.get(conn.dst_component)
         if not start_element or not end_element:

@@ -12,10 +12,9 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR, ensure_parent_dir
-from sysml.values import parse_literal
-from sysml.helpers import load_architecture
-from sysml.parser import SysMLArchitecture, SysMLAttribute
+from sysml import SysMLArchitecture, SysMLAttribute, load_architecture
 from sysml.type_utils import infer_primitive
+from scripts.utils.sysml_compat import literal_value
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_OUTPUT = GENERATED_DIR / "parameters.ssv"
@@ -26,7 +25,7 @@ ET.register_namespace("ssv", SSV_NAMESPACE)
 
 
 def _normalize_type(attr: SysMLAttribute) -> str:
-    literal = parse_literal(attr.value)
+    literal = literal_value(attr.value)
     return infer_primitive(attr.type, literal)
 
 
@@ -63,7 +62,7 @@ def build_parameter_tree(parameter_pairs: Iterable[tuple[str, SysMLAttribute]]) 
     params_elem = ET.SubElement(root, f"{{{SSV_NAMESPACE}}}Parameters")
 
     for name, attr in parameter_pairs:
-        literal = parse_literal(attr.value)
+        literal = literal_value(attr.value)
         data_type = _normalize_type(attr)
         param_elem = ET.SubElement(params_elem, f"{{{SSV_NAMESPACE}}}Parameter", attrib={"name": name})
         value_elem = ET.SubElement(param_elem, f"{{{SSV_NAMESPACE}}}{data_type}")

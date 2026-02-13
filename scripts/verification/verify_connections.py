@@ -11,14 +11,14 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR
-from sysml.helpers import load_architecture
-from sysml.parser import SysMLArchitecture, SysMLPortEndpoint
+from sysml import SysMLArchitecture, SysMLPortReference, load_architecture
+from scripts.utils.sysml_compat import architecture_connections
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 
 
-def _build_port_index(architecture: SysMLArchitecture) -> Dict[Tuple[str, str], SysMLPortEndpoint]:
-    index: Dict[Tuple[str, str], SysMLPortEndpoint] = {}
+def _build_port_index(architecture: SysMLArchitecture) -> Dict[Tuple[str, str], SysMLPortReference]:
+    index: Dict[Tuple[str, str], SysMLPortReference] = {}
     for comp_name, part in architecture.parts.items():
         for port in part.ports:
             index[(comp_name, port.name)] = port
@@ -31,7 +31,7 @@ def verify_connections(architecture_path: Path) -> int:
     port_index = _build_port_index(architecture)
     issues: List[str] = []
 
-    for connector in architecture.connections:
+    for connector in architecture_connections(architecture):
         start_comp = connector.src_component
         end_comp = connector.dst_component
         start_port = connector.src_port

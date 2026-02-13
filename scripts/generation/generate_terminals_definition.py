@@ -12,11 +12,11 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR, ensure_parent_dir
-from sysml.helpers import load_architecture
-from sysml.parser import (
+from sysml import (
     SysMLArchitecture,
     SysMLPartDefinition,
     SysMLPortDefinition,
+    load_architecture,
 )
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR

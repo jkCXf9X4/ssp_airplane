@@ -3,8 +3,9 @@ from __future__ import annotations
 
 from typing import Dict
 
-from sysml.parser import SysMLArchitecture
-from sysml.helpers import component_modelica_map
+from sysml import SysMLArchitecture
+
+from scripts.utils.modelica import component_modelica_map
 
 
 def fmu_filename(modelica_class: str) -> str:

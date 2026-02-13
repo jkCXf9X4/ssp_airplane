@@ -12,7 +12,8 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, MODELS_DIR
-from sysml.helpers import load_architecture
+from sysml import SysMLArchitecture, load_architecture
+from scripts.utils.sysml_compat import architecture_port_definitions
 
 DEFAULT_ARCH_DIR = ARCHITECTURE_DIR
 DEFAULT_MODELS_DIR = MODELS_DIR / "Aircraft"
@@ -29,7 +30,7 @@ def _collect_architecture_data(
     members: Dict[str, Set[str]] = {}
     part_ports: Dict[str, Dict[str, Tuple[str, str]]] = {}
 
-    for name, definition in architecture.port_definitions.items():
+    for name, definition in architecture_port_definitions(architecture).items():
         members[name] = set(definition.attributes.keys())
 
     for part_name, part in architecture.parts.items():

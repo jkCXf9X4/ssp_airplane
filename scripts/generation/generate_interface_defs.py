@@ -11,9 +11,9 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, MODELS_DIR, ensure_parent_dir
-from sysml.helpers import load_architecture
-from sysml.parser import SysMLArchitecture, SysMLPortDefinition
+from sysml import SysMLArchitecture, SysMLPortDefinition, load_architecture
 from sysml.type_utils import modelica_connector_type
+from scripts.utils.sysml_compat import architecture_port_definitions
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_OUTPUT_PATH = MODELS_DIR / "Aircraft" / "GeneratedInterfaces.mo"
@@ -21,7 +21,7 @@ DEFAULT_OUTPUT_PATH = MODELS_DIR / "Aircraft" / "GeneratedInterfaces.mo"
 
 def _collect_data_defs(architecture: SysMLArchitecture) -> Dict[str, List[Tuple[str, str]]]:
     defs: Dict[str, List[Tuple[str, str]]] = {}
-    for name, port_def in architecture.port_definitions.items():
+    for name, port_def in architecture_port_definitions(architecture).items():
         defs[name] = _port_attributes(port_def)
     return defs
 

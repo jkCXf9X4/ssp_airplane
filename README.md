@@ -33,10 +33,8 @@ Scripts are grouped by intent under `scripts/`:
 - `scripts/generation/` – emit SysML-derived artifacts (architecture JSON, SSD, parameter sets, terminals, Modelica interfaces, scenarios).
 - `scripts/verification/` – statically inspect SysML connectors, FMU I/O, Modelica definitions, and SSD XML compliance.
 - `scripts/workflows/` – orchestration utilities for building FMUs, packaging SSPs, and simulating mission scenarios.
-- `sysml/` – standalone SysML package (parser, architecture helpers, literal/type normalization) that can be split into its own module/repo later.
+- SysML parser package is now external: `py_sysml_v2_cps` (`https://github.com/jkCXf9X4/py_sysml_v2_cps`).
 - `scripts/utils/` – non-SysML shared helpers such as `fmi_helpers` (FMU naming), `ssp_helpers` (namespace registration), and `map_geometry` (waypoint calculations).
-
-You can install the extracted SysML package independently with `pip install -e ./sysml`.
 
 Common entry points:
 
@@ -130,7 +128,7 @@ Utilize OMSimulator as simulation engine, via python
 architecture/ - the system architecture 
 models/ - all models are located here
 scripts/ - Python package containing `generation/`, `verification/`, `workflows/`, and shared non-SysML utilities
-sysml/ - extracted SysML parsing/helpers package intended for eventual standalone reuse
+SysML parsing/helpers are provided by the external `py_sysml_v2_cps` package
 
 
 ## Results and requirement evaluation

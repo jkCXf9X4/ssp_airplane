@@ -4,7 +4,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Dict, Optional
 
-from sysml.parser import SysMLArchitecture
+from sysml import SysMLArchitecture
 
 
 def component_modelica_map(

@@ -16,14 +16,14 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, BUILD_DIR, GENERATED_DIR
-from sysml.values import parse_literal
-from sysml.helpers import load_architecture
-from sysml.parser import (
+from sysml import (
     SysMLArchitecture,
     SysMLAttribute,
     SysMLPartDefinition,
+    load_architecture,
 )
-from sysml.type_utils import infer_primitive, normalize_primitive, optional_primitive
+from sysml.type_utils import infer_primitive, optional_primitive
+from scripts.utils.sysml_compat import literal_value
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_OUTPUT_DIR = GENERATED_DIR / "model_descriptions"
@@ -84,7 +84,7 @@ def _port_attribute_variables(part: SysMLPartDefinition, starting_ref: int) -> t
 
         for attr in attributes:
             var_name = f"{port.name}.{attr.name}"
-            literal = parse_literal(attr.value)
+            literal = literal_value(attr.value)
             fmi_type = optional_primitive(attr.type) or "Real"
             description = attr.doc or port.doc or (payload_def.doc if payload_def else None)
             spec = VariableSpec(
@@ -106,7 +106,7 @@ def _parameter_variables(part: SysMLPartDefinition, starting_ref: int) -> tuple[
     value_ref = starting_ref
     for attr_name in sorted(part.attributes):
         attr = part.attributes[attr_name]
-        literal = parse_literal(attr.value)
+        literal = literal_value(attr.value)
         fmi_type = infer_primitive(attr.type, literal)
         spec = VariableSpec(
             name=attr.name,
