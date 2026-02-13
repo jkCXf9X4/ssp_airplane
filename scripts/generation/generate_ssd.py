@@ -13,10 +13,10 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR
-from scripts.common.sysml_values import parse_literal
+from sysml.values import parse_literal
 from scripts.utils.fmi_helpers import architecture_model_map, component_fmu_source
-from scripts.utils.sysml_helpers import load_architecture
-from scripts.utils.sysmlv2_arch_parser import (
+from sysml.helpers import load_architecture
+from sysml.parser import (
     SysMLArchitecture,
     SysMLAttribute,
     SysMLPortDefinition,
@@ -30,7 +30,7 @@ from scripts.utils.ssp_helpers import (
     SSB_NAMESPACE,
     register_ssp_namespaces,
 )
-from scripts.utils.type_utils import infer_primitive, normalize_primitive
+from sysml.type_utils import infer_primitive, normalize_primitive
 
 register_ssp_namespaces()
 

@@ -7,7 +7,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from scripts.utils.sysmlv2_arch_parser import parse_sysml_folder  # type: ignore  # noqa: E402
+from sysml.parser import parse_sysml_folder  # type: ignore  # noqa: E402
 
 
 def test_parser_collects_parts_and_ports():

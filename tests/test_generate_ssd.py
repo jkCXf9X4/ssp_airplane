@@ -8,7 +8,7 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from scripts.generation.generate_ssd import SSD_NAMESPACE, build_ssd_tree  # type: ignore  # noqa: E402
-from scripts.utils.sysmlv2_arch_parser import parse_sysml_folder  # type: ignore  # noqa: E402
+from sysml.parser import parse_sysml_folder  # type: ignore  # noqa: E402
 
 
 def test_parameter_connectors_emitted_for_attributes():

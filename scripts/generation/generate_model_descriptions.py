@@ -16,14 +16,14 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, BUILD_DIR, GENERATED_DIR
-from scripts.common.sysml_values import parse_literal
-from scripts.utils.sysml_helpers import load_architecture
-from scripts.utils.sysmlv2_arch_parser import (
+from sysml.values import parse_literal
+from sysml.helpers import load_architecture
+from sysml.parser import (
     SysMLArchitecture,
     SysMLAttribute,
     SysMLPartDefinition,
 )
-from scripts.utils.type_utils import infer_primitive, normalize_primitive, optional_primitive
+from sysml.type_utils import infer_primitive, normalize_primitive, optional_primitive
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_OUTPUT_DIR = GENERATED_DIR / "model_descriptions"

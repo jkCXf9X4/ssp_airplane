@@ -13,8 +13,8 @@ if __package__ in {None, ""}:
 
 from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR, ensure_parent_dir
 from scripts.utils.fmi_helpers import architecture_model_map, component_fmu_source
-from scripts.utils.sysml_helpers import load_architecture
-from scripts.utils.sysmlv2_arch_parser import SysMLArchitecture, SysMLPartDefinition
+from sysml.helpers import load_architecture
+from sysml.parser import SysMLArchitecture, SysMLPartDefinition
 from scripts.utils.ssp_helpers import (
     SSD_NAMESPACE,
     SSC_NAMESPACE,

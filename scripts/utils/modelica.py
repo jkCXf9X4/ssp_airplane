@@ -4,15 +4,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Dict, Optional
 
-from scripts.utils.sysmlv2_arch_parser import SysMLArchitecture, parse_sysml_folder
-
-
-def load_architecture(source: Path) -> SysMLArchitecture:
-    """Load a SysML architecture from either a directory or a file within it."""
-    path = source
-    if path.is_file():
-        path = path.parent
-    return parse_sysml_folder(path)
+from sysml.parser import SysMLArchitecture
 
 
 def component_modelica_map(

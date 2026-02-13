@@ -11,9 +11,9 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, MODELS_DIR, ensure_parent_dir
-from scripts.utils.sysml_helpers import load_architecture
-from scripts.utils.sysmlv2_arch_parser import SysMLArchitecture, SysMLPortDefinition
-from scripts.utils.type_utils import modelica_connector_type
+from sysml.helpers import load_architecture
+from sysml.parser import SysMLArchitecture, SysMLPortDefinition
+from sysml.type_utils import modelica_connector_type
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_OUTPUT_PATH = MODELS_DIR / "Aircraft" / "GeneratedInterfaces.mo"

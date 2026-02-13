@@ -13,8 +13,8 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, BUILD_DIR
-from scripts.utils.sysml_helpers import load_architecture
-from scripts.utils.sysmlv2_arch_parser import SysMLArchitecture, SysMLPartDefinition
+from sysml.helpers import load_architecture
+from sysml.parser import SysMLArchitecture, SysMLPartDefinition
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_FMU_DIR = BUILD_DIR / "fmus"

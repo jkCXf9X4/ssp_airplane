@@ -16,6 +16,8 @@
 *.exp
 *.o
 *.pyc
+*.egg-info/
+dist/
 
 ## Simulation files
 *.mat

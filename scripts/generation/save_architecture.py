@@ -11,7 +11,7 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR, ensure_parent_dir
-from scripts.utils.sysml_helpers import load_architecture
+from sysml.helpers import load_architecture
 
 DEFAULT_ARCH_DIR = ARCHITECTURE_DIR
 DEFAULT_OUTPUT = GENERATED_DIR / "arch_def.json"
