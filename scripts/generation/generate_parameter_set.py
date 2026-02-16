@@ -6,11 +6,11 @@ import argparse
 import sys
 from pathlib import Path
 from typing import Iterable, Optional
-import xml.etree.ElementTree as ET
 
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
+from pyssp_standard.ssv import SSV
 from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR, ensure_parent_dir
 from pycps_sysmlv2 import SysMLArchitecture, SysMLAttribute, SysMLPartDefinition, load_architecture
 from pycps_sysmlv2.type_utils import infer_primitive
@@ -19,23 +19,19 @@ from scripts.utils.sysml_compat import composition_components, literal_value
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_OUTPUT = GENERATED_DIR / "parameters.ssv"
 
-SSV_NAMESPACE = "http://ssp-standard.org/SSP1/ParameterValues"
-
-ET.register_namespace("ssv", SSV_NAMESPACE)
-
 
 def _normalize_type(attr: SysMLAttribute) -> str:
     literal = literal_value(attr.value)
     return infer_primitive(attr.type, literal)
 
 
-def _format_value(tag: str, literal) -> str:
+def _format_value(tag: str, literal):
     if literal is None:
         return ""
     if tag == "Boolean":
         return "true" if bool(literal) else "false"
     if tag == "Integer":
-        return str(int(literal))
+        return int(literal)
     if tag == "Real":
         return f"{float(literal):g}"
     return str(literal)
@@ -61,10 +57,7 @@ def _parameter_entries(architecture: SysMLArchitecture, components: Optional[Ite
     return entries
 
 
-def build_parameter_tree(parameter_pairs: Iterable[tuple[str, SysMLAttribute]]) -> ET.ElementTree:
-    root = ET.Element(f"{{{SSV_NAMESPACE}}}ParameterSet", attrib={"name": "ArchitecturalDefaults", "version": "1.0"})
-    params_elem = ET.SubElement(root, f"{{{SSV_NAMESPACE}}}Parameters")
-
+def _populate_parameter_set(ssv: SSV, parameter_pairs: Iterable[tuple[str, SysMLAttribute]]) -> None:
     for name, attr in parameter_pairs:
         literal = literal_value(attr.value)
         if isinstance(literal, (list, tuple)):
@@ -72,23 +65,23 @@ def build_parameter_tree(parameter_pairs: Iterable[tuple[str, SysMLAttribute]]) 
             data_type = infer_primitive(attr.type, sample)
             for idx, item in enumerate(literal, start=1):
                 indexed_name = f"{name}[{idx}]"
-                param_elem = ET.SubElement(params_elem, f"{{{SSV_NAMESPACE}}}Parameter", attrib={"name": indexed_name})
-                value_elem = ET.SubElement(param_elem, f"{{{SSV_NAMESPACE}}}{data_type}")
                 formatted = _format_value(data_type, item)
-                if formatted:
-                    value_elem.set("value", formatted)
+                ssv.add_parameter(indexed_name, ptype=data_type, value=formatted)
             continue
 
         data_type = _normalize_type(attr)
-        param_elem = ET.SubElement(params_elem, f"{{{SSV_NAMESPACE}}}Parameter", attrib={"name": name})
-        value_elem = ET.SubElement(param_elem, f"{{{SSV_NAMESPACE}}}{data_type}")
         formatted = _format_value(data_type, literal)
-        if formatted:
-            value_elem.set("value", formatted)
+        ssv.add_parameter(name, ptype=data_type, value=formatted)
 
-    tree = ET.ElementTree(root)
-    ET.indent(tree, space="  ", level=0)
-    return tree
+
+def _strip_none_parameter_attrs(ssv: SSV) -> None:
+    for parameter in ssv.parameters:
+        type_value = parameter["type_value"]
+        type_value.parameter = {
+            key: value
+            for key, value in type_value.parameter.items()
+            if value is not None
+        }
 
 
 def generate_parameter_set(
@@ -98,9 +91,10 @@ def generate_parameter_set(
 ) -> Path:
     architecture = load_architecture(architecture_path)
     pairs = _parameter_entries(architecture, components)
-    tree = build_parameter_tree(pairs)
     ensure_parent_dir(output_path)
-    tree.write(output_path, encoding="utf-8", xml_declaration=True)
+    with SSV(output_path, mode="w", name="ArchitecturalDefaults") as ssv:
+        _populate_parameter_set(ssv, pairs)
+        _strip_none_parameter_attrs(ssv)
     return output_path
 
 

@@ -7,12 +7,12 @@ import sys
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
-import xml.etree.ElementTree as ET
-
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR, ensure_parent_dir
+from pyssp_standard.common_content_ssc import TypeBoolean, TypeInteger, TypeReal, TypeString
+from pyssp_standard.ssd import Component, Connection, Connector, DefaultExperiment, SSD, System
 from pycps_sysmlv2 import (
     SysMLArchitecture,
     SysMLAttribute,
@@ -30,12 +30,6 @@ from scripts.utils.sysml_compat import (
     literal_value,
     part_ports,
 )
-from scripts.utils.ssp_helpers import (
-    SSD_NAMESPACE,
-    SSC_NAMESPACE,
-    register_ssp_namespaces,
-)
-register_ssp_namespaces()
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_OUTPUT = GENERATED_DIR / "SystemStructure.ssd"
@@ -125,38 +119,42 @@ def _parameter_connector_entries(attributes: Dict[str, SysMLAttribute]) -> List[
     return entries
 
 
-def build_ssd_tree(
-    architecture: SysMLArchitecture, class_map: Optional[Dict[str, str]] = None
-) -> ET.ElementTree:
+def _type_from_primitive(primitive: str):
+    normalized = normalize_primitive(primitive)
+    if normalized == "Real":
+        return TypeReal(unit=None)
+    if normalized == "Integer":
+        return TypeInteger()
+    if normalized == "Boolean":
+        return TypeBoolean()
+    if normalized == "String":
+        return TypeString()
+    return TypeReal(unit=None)
+
+
+def build_ssd(
+    ssd: SSD,
+    architecture: SysMLArchitecture,
+    class_map: Optional[Dict[str, str]] = None,
+) -> None:
     class_map = class_map or architecture_model_map(architecture)
     system_name = architecture_package(architecture)
     components = composition_components(architecture)
     component_names: Dict[str, str] = {}
     connector_lookup: Dict[str, Dict[str, Dict[str, str]]] = {}
 
-    root = ET.Element(
-        f"{{{SSD_NAMESPACE}}}SystemStructureDescription",
-        attrib={
-            "name": system_name,
-            "version": "1.0",
-        },
-    )
-
-    system_elem = ET.SubElement(root, f"{{{SSD_NAMESPACE}}}System", attrib={"name": system_name})
-    elements_elem = ET.SubElement(system_elem, f"{{{SSD_NAMESPACE}}}Elements")
+    ssd.name = system_name
+    ssd.version = "1.0"
+    ssd.system = System(name=system_name)
 
     for part_name, part in components:
         component_names[part_name] = _unique_component_name(part_name, component_names)
         display_name = component_names[part_name]
-        component_elem = ET.SubElement(
-            elements_elem,
-            f"{{{SSD_NAMESPACE}}}Component",
-            attrib={
-                "name": display_name,
-                "type": "application/x-fmu-sharedlibrary",
-                "source": component_fmu_source(part.name, class_map),
-            },
-        )
+        component = Component()
+        component.name = display_name
+        component.component_type = "application/x-fmu-sharedlibrary"
+        component.source = component_fmu_source(part.name, class_map)
+
         connector_entries: List[Dict[str, str]] = []
         port_map: Dict[str, Dict[str, str]] = {}
         for port in part_ports(part):
@@ -170,26 +168,27 @@ def build_ssd_tree(
 
         parameter_entries = _parameter_connector_entries(part.attributes)
 
-        if connector_entries or parameter_entries:
-            connectors_elem = ET.SubElement(component_elem, f"{{{SSD_NAMESPACE}}}Connectors")
-            for entry in connector_entries:
-                connector_elem = ET.SubElement(
-                    connectors_elem,
-                    f"{{{SSD_NAMESPACE}}}Connector",
-                    attrib={"name": entry["connector_name"], "kind": entry["kind"]},
+        for entry in connector_entries:
+            component.connectors.append(
+                Connector(
+                    name=entry["connector_name"],
+                    kind=entry["kind"],
+                    type_=_type_from_primitive(entry["primitive"]),
                 )
-                ET.SubElement(connector_elem, f"{{{SSC_NAMESPACE}}}{entry['primitive']}")
-            for param in parameter_entries:
-                connector_elem = ET.SubElement(
-                    connectors_elem,
-                    f"{{{SSD_NAMESPACE}}}Connector",
-                    attrib={"name": param["connector_name"], "kind": "parameter"},
+            )
+        for param in parameter_entries:
+            component.connectors.append(
+                Connector(
+                    name=param["connector_name"],
+                    kind="parameter",
+                    type_=_type_from_primitive(param["primitive"]),
                 )
-                ET.SubElement(connector_elem, f"{{{SSC_NAMESPACE}}}{param['primitive']}")
+            )
+
+        ssd.system.elements.append(component)
 
         connector_lookup[part_name] = port_map
 
-    connections_elem = ET.SubElement(system_elem, f"{{{SSD_NAMESPACE}}}Connections")
     for conn in architecture_connections(architecture):
         start_component = component_names.get(conn.src_component)
         end_component = component_names.get(conn.dst_component)
@@ -203,24 +202,19 @@ def build_ssd_tree(
             end_connector = end_variants.get(suffix)
             if not end_connector:
                 continue
-            ET.SubElement(
-                connections_elem,
-                f"{{{SSD_NAMESPACE}}}Connection",
-                attrib={
-                    "startElement": start_component,
-                    "startConnector": start_connector,
-                    "endElement": end_component,
-                    "endConnector": end_connector,
-                },
+            ssd.add_connection(
+                Connection(
+                    start_element=start_component,
+                    start_connector=start_connector,
+                    end_element=end_component,
+                    end_connector=end_connector,
+                )
             )
 
-    ET.SubElement(
-        root,
-        f"{{{SSD_NAMESPACE}}}DefaultExperiment",
-        attrib={"startTime": "0", "stopTime": "3600"},
-    )
-
-    return ET.ElementTree(root)
+    default_experiment = DefaultExperiment()
+    default_experiment.start_time = 0
+    default_experiment.stop_time = 3600
+    ssd.default_experiment = default_experiment
 
 
 def main(argv: Optional[list[str]] = None) -> int:
@@ -236,10 +230,10 @@ def main(argv: Optional[list[str]] = None) -> int:
 
     try:
         architecture = load_architecture(args.architecture)
-        tree = build_ssd_tree(architecture)
-        ET.indent(tree, space="  ", level=0)
         ensure_parent_dir(args.output)
-        tree.write(args.output, encoding="utf-8", xml_declaration=True)
+        with SSD(args.output, mode="w") as ssd:
+            build_ssd(ssd, architecture)
+
     except Exception as exc:  # noqa: BLE001
         print(f"[error] {exc}", file=sys.stderr)
         return 1

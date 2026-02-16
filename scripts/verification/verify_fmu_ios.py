@@ -6,12 +6,12 @@ import argparse
 import sys
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
-import xml.etree.ElementTree as ET
 import zipfile
 
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
+from pyssp_standard.fmu import FMU
 from scripts.common.paths import ARCHITECTURE_DIR, BUILD_DIR, COMPOSITION_NAME
 from pycps_sysmlv2 import load_architecture
 
@@ -22,22 +22,17 @@ VALID_DIRECTIONS = {"in", "out"}
 
 def _load_scalar_variables(fmu_path: Path) -> Dict[str, Optional[str]]:
     try:
-        with zipfile.ZipFile(fmu_path) as archive:
-            with archive.open("modelDescription.xml") as handle:
-                tree = ET.parse(handle)
+        with FMU(fmu_path, mode="r") as fmu:
+            variables = {
+                variable.name: variable.causality
+                for variable in fmu.model_description.variables()
+            }
     except FileNotFoundError as exc:
         raise SystemExit(f"FMU file not found: {fmu_path}") from exc
-    except KeyError as exc:
-        raise SystemExit(f"{fmu_path} does not contain modelDescription.xml") from exc
     except zipfile.BadZipFile as exc:
         raise SystemExit(f"FMU file is not a valid zip archive: {fmu_path}") from exc
-
-    variables: Dict[str, Optional[str]] = {}
-    for scalar in tree.iterfind(".//ScalarVariable"):
-        name = scalar.attrib.get("name")
-        causality = scalar.attrib.get("causality")
-        if name:
-            variables[name] = causality
+    except IndexError as exc:
+        raise SystemExit(f"{fmu_path} does not contain modelDescription.xml") from exc
     return variables
 
 
@@ -53,6 +48,8 @@ def verify_fmu_ios(arch_path: Path, fmu_dir: Path, part: str) -> int:
     checked_ports = 0
 
     for part_name, part in sorted(target_parts.items()):
+
+        # Loading ports from arch
         expected: List[Tuple[str, str, str]] = []
         for port in part.ports.values():
             payload = port.payload_def
@@ -68,6 +65,8 @@ def verify_fmu_ios(arch_path: Path, fmu_dir: Path, part: str) -> int:
                 expected.append((f"{port.name}.{attr_name}", port.direction, port.name))
         if not expected:
             continue
+
+        # Loading ports from fmu
         fmu_path = fmu_dir / f"Aircraft_{part_name}.fmu"
         if not fmu_path.exists():
             issues.append(f"Missing FMU for part {part_name}: {fmu_path}")

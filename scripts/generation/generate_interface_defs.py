@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Emit interface definitions for SysML data-def types as Modelica records."""
+
 from __future__ import annotations
 
 import argparse
@@ -10,7 +11,12 @@ from typing import Dict, Optional
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from scripts.common.paths import ARCHITECTURE_DIR, MODELS_DIR, PACKAGE_NAME, ensure_parent_dir
+from scripts.common.paths import (
+    ARCHITECTURE_DIR,
+    MODELS_DIR,
+    PACKAGE_NAME,
+    ensure_parent_dir,
+)
 
 from pycps_sysmlv2 import SysMLPortDefinition, load_architecture
 
@@ -21,15 +27,13 @@ DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_OUTPUT_PATH = MODELS_DIR / PACKAGE_NAME / "GeneratedInterfaces.mo"
 
 
-
 def generate_modelica_package(ports: Dict[str, SysMLPortDefinition]) -> str:
     lines = [f"within {PACKAGE_NAME};", "package GeneratedInterfaces"]
 
     for port_name, port in sorted(ports.items()):
-
         if not port.attributes:
             continue
-        
+
         lines.append(f"  connector {port_name}")
         for variable in port.attributes.values():
             mo_type = map_modelica_type(variable.type)

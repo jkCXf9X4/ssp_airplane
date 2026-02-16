@@ -6,12 +6,14 @@ import argparse
 import sys
 from pathlib import Path
 from typing import Dict, Optional
-import xml.etree.ElementTree as ET
+from lxml import etree as ET
+from lxml.etree import QName
 
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR, ensure_parent_dir
+from pyssp_standard.ssd import Component, Connection, Connector, DefaultExperiment, SSD, System
 from scripts.utils.fmi_helpers import architecture_model_map, component_fmu_source
 from pycps_sysmlv2 import SysMLArchitecture, load_architecture
 from scripts.utils.sysml_compat import (
@@ -20,16 +22,11 @@ from scripts.utils.sysml_compat import (
     composition_components,
     part_ports,
 )
-from scripts.utils.ssp_helpers import (
-    SSD_NAMESPACE,
-    SSC_NAMESPACE,
-    register_ssp_namespaces,
-)
-
-register_ssp_namespaces()
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_OUTPUT = GENERATED_DIR / "SystemStructure_terminals.ssd"
+
+SSC_NAMESPACE = "http://ssp-standard.org/SSP1/SystemStructureCommon"
 
 
 def _unique_component_name(name: str, used: Dict[str, str]) -> str:
@@ -42,48 +39,34 @@ def _unique_component_name(name: str, used: Dict[str, str]) -> str:
     return candidate
 
 
-def _add_terminal_connector(component_elem: ET.Element, port_name: str, kind: str) -> None:
-    connectors_elem = component_elem.find(f"{{{SSD_NAMESPACE}}}Connectors")
-    if connectors_elem is None:
-        connectors_elem = ET.SubElement(component_elem, f"{{{SSD_NAMESPACE}}}Connectors")
-    connector_elem = ET.SubElement(
-        connectors_elem,
-        f"{{{SSD_NAMESPACE}}}Connector",
-        attrib={"name": port_name, "kind": kind},
-    )
-    ET.SubElement(connector_elem, f"{{{SSC_NAMESPACE}}}Terminal")
+class _TerminalType:
+    def to_xml(self, namespace: str = "ssc"):
+        if namespace != "ssc":
+            raise ValueError("Terminal connectors are only supported in SSP common namespace.")
+        return ET.Element(QName(SSC_NAMESPACE, "Terminal"))
 
 
-def build_terminal_ssd_tree(
-    architecture: SysMLArchitecture, class_map: Optional[Dict[str, str]] = None
-) -> ET.ElementTree:
+def build_terminal_ssd(
+    ssd: SSD,
+    architecture: SysMLArchitecture,
+    class_map: Optional[Dict[str, str]] = None,
+) -> None:
     system_name = architecture_package(architecture) or "System"
     components = composition_components(architecture)
     component_names: Dict[str, str] = {}
     class_map = class_map or architecture_model_map(architecture)
 
-    root = ET.Element(
-        f"{{{SSD_NAMESPACE}}}SystemStructureDescription",
-        attrib={
-            "name": system_name,
-            "version": "1.0",
-        },
-    )
-    system_elem = ET.SubElement(root, f"{{{SSD_NAMESPACE}}}System", attrib={"name": "root"})
-    elements_elem = ET.SubElement(system_elem, f"{{{SSD_NAMESPACE}}}Elements")
+    ssd.name = system_name
+    ssd.version = "1.0"
+    ssd.system = System(name="root")
 
     for part_name, part in components:
         display_name = _unique_component_name(part_name, component_names)
         component_names[part_name] = display_name
-        component_elem = ET.SubElement(
-            elements_elem,
-            f"{{{SSD_NAMESPACE}}}Component",
-            attrib={
-                "name": display_name,
-                "type": "application/x-fmu-sharedlibrary",
-                "source": component_fmu_source(part.name, class_map),
-            },
-        )
+        component = Component()
+        component.name = display_name
+        component.component_type = "application/x-fmu-sharedlibrary"
+        component.source = component_fmu_source(part.name, class_map)
         for port in part_ports(part):
             if port.direction == "in":
                 kind = "input"
@@ -91,34 +74,33 @@ def build_terminal_ssd_tree(
                 kind = "output"
             else:
                 continue
-            _add_terminal_connector(component_elem, port.name, kind)
+            component.connectors.append(
+                Connector(
+                    name=port.name,
+                    kind=kind,
+                    type_=_TerminalType(),
+                )
+            )
+        ssd.system.elements.append(component)
 
-    connections_elem = ET.SubElement(system_elem, f"{{{SSD_NAMESPACE}}}Connections")
     for conn in architecture_connections(architecture):
         start_element = component_names.get(conn.src_component)
         end_element = component_names.get(conn.dst_component)
         if not start_element or not end_element:
             continue
-        ET.SubElement(
-            connections_elem,
-            f"{{{SSD_NAMESPACE}}}Connection",
-            attrib={
-                "startElement": start_element,
-                "startConnector": conn.src_port,
-                "endElement": end_element,
-                "endConnector": conn.dst_port,
-            },
+        ssd.add_connection(
+            Connection(
+                start_element=start_element,
+                start_connector=conn.src_port,
+                end_element=end_element,
+                end_connector=conn.dst_port,
+            )
         )
 
-    ET.SubElement(
-        root,
-        f"{{{SSD_NAMESPACE}}}DefaultExperiment",
-        attrib={"startTime": "0.0", "stopTime": "3600.0"},
-    )
-
-    tree = ET.ElementTree(root)
-    ET.indent(tree, space="  ", level=0)
-    return tree
+    default_experiment = DefaultExperiment()
+    default_experiment.start_time = 0.0
+    default_experiment.stop_time = 3600.0
+    ssd.default_experiment = default_experiment
 
 
 def main(argv: Optional[list[str]] = None) -> int:
@@ -139,9 +121,9 @@ def main(argv: Optional[list[str]] = None) -> int:
 
     try:
         architecture = load_architecture(args.architecture)
-        tree = build_terminal_ssd_tree(architecture)
         ensure_parent_dir(args.output)
-        tree.write(args.output, encoding="utf-8", xml_declaration=True)
+        with SSD(args.output, mode="w") as ssd:
+            build_terminal_ssd(ssd, architecture)
     except Exception as exc:  # noqa: BLE001
         print(f"[error] {exc}", file=sys.stderr)
         return 1
