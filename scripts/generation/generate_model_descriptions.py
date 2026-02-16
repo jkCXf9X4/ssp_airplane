@@ -16,14 +16,18 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, BUILD_DIR, GENERATED_DIR
-from sysml import (
+from pycps_sysmlv2 import (
     SysMLArchitecture,
-    SysMLAttribute,
     SysMLPartDefinition,
     load_architecture,
 )
-from sysml.type_utils import infer_primitive, optional_primitive
-from scripts.utils.sysml_compat import literal_value
+from pycps_sysmlv2.type_utils import infer_primitive, optional_primitive
+from scripts.utils.sysml_compat import (
+    architecture_package,
+    composition_components,
+    literal_value,
+    part_ports,
+)
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_OUTPUT_DIR = GENERATED_DIR / "model_descriptions"
@@ -61,7 +65,7 @@ def _port_attribute_variables(part: SysMLPartDefinition, starting_ref: int) -> t
     variables: list[VariableSpec] = []
     output_indexes: list[int] = []
     value_ref = starting_ref
-    for port in sorted(part.ports, key=lambda item: item.name):
+    for port in sorted(part_ports(part), key=lambda item: item.name):
         payload_def = port.payload_def
         attributes = (
             [payload_def.attributes[name] for name in sorted(payload_def.attributes)]
@@ -107,6 +111,23 @@ def _parameter_variables(part: SysMLPartDefinition, starting_ref: int) -> tuple[
     for attr_name in sorted(part.attributes):
         attr = part.attributes[attr_name]
         literal = literal_value(attr.value)
+        if isinstance(literal, (list, tuple)):
+            sample = next((item for item in literal if item is not None), None)
+            fmi_type = infer_primitive(attr.type, sample)
+            for idx, item in enumerate(literal, start=1):
+                spec = VariableSpec(
+                    name=f"{attr.name}[{idx}]",
+                    causality="parameter",
+                    value_reference=value_ref,
+                    fmi_type=fmi_type,
+                    variability="fixed",
+                    description=attr.doc,
+                    start_value=_format_start_value(fmi_type, item),
+                )
+                variables.append(spec)
+                value_ref += 1
+            continue
+
         fmi_type = infer_primitive(attr.type, literal)
         spec = VariableSpec(
             name=attr.name,
@@ -141,13 +162,14 @@ def _write_scalar_variable(parent: ET.Element, spec: VariableSpec) -> None:
 
 def _build_model_description_tree(part: SysMLPartDefinition, architecture: SysMLArchitecture) -> ET.ElementTree:
     timestamp = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
-    guid = str(uuid5(NAMESPACE_URL, f"ssp_airplane/{architecture.package}/{part.name}"))
+    package_name = architecture_package(architecture)
+    guid = str(uuid5(NAMESPACE_URL, f"ssp_airplane/{package_name}/{part.name}"))
 
     root = ET.Element(
         "fmiModelDescription",
         attrib={
             "fmiVersion": "2.0",
-            "modelName": f"{architecture.package}.{part.name}",
+            "modelName": f"{package_name}.{part.name}",
             "guid": f"{{{guid}}}",
             "description": part.doc or "",
             "version": "1.0",
@@ -184,17 +206,32 @@ def _build_model_description_tree(part: SysMLPartDefinition, architecture: SysML
 
 
 def _component_targets(architecture: SysMLArchitecture, include: Optional[Iterable[str]]) -> list[SysMLPartDefinition]:
+    component_pairs = composition_components(architecture)
+    available_instances = {name for name, _ in component_pairs}
+    available_defs = {part.name for _, part in component_pairs}
+
     if include:
         ordered: list[SysMLPartDefinition] = []
         seen: set[str] = set()
         for name in include:
             name = name.strip()
-            if not name or name in seen or name not in architecture.parts:
+            if not name:
                 continue
-            ordered.append(architecture.parts[name])
-            seen.add(name)
+            if name not in available_instances and name not in available_defs:
+                continue
+            for instance_name, part in component_pairs:
+                if name != instance_name and name != part.name:
+                    continue
+                if part.name in seen:
+                    continue
+                ordered.append(part)
+                seen.add(part.name)
         return ordered
-    return [architecture.parts[name] for name in sorted(architecture.parts)]
+
+    by_name: dict[str, SysMLPartDefinition] = {}
+    for _, part in component_pairs:
+        by_name.setdefault(part.name, part)
+    return [by_name[name] for name in sorted(by_name)]
 
 
 def generate_model_descriptions(
@@ -203,6 +240,7 @@ def generate_model_descriptions(
     components: Optional[Iterable[str]] = None,
 ) -> list[Path]:
     architecture = load_architecture(architecture_path)
+
     targets = _component_targets(architecture, components)
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -237,7 +275,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     parser.add_argument(
         "--components",
         nargs="*",
-        help="Optional subset of component names to generate (defaults to all parts).",
+        help="Optional subset of component instance/definition names to generate.",
     )
     args = parser.parse_args(argv)
 

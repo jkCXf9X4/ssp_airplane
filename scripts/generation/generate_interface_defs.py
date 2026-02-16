@@ -11,17 +11,29 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, MODELS_DIR, ensure_parent_dir
-from sysml import SysMLArchitecture, SysMLPortDefinition, load_architecture
-from sysml.type_utils import modelica_connector_type
-from scripts.utils.sysml_compat import architecture_port_definitions
+from pycps_sysmlv2 import SysMLArchitecture, SysMLPortDefinition, load_architecture
+from pycps_sysmlv2.type_utils import modelica_connector_type
+from scripts.utils.sysml_compat import (
+    architecture_port_definitions,
+    composition_components,
+    part_ports,
+)
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_OUTPUT_PATH = MODELS_DIR / "Aircraft" / "GeneratedInterfaces.mo"
 
 
 def _collect_data_defs(architecture: SysMLArchitecture) -> Dict[str, List[Tuple[str, str]]]:
+    used_payloads = {
+        port.payload
+        for _, component in composition_components(architecture)
+        for port in part_ports(component)
+        if port.payload
+    }
     defs: Dict[str, List[Tuple[str, str]]] = {}
     for name, port_def in architecture_port_definitions(architecture).items():
+        if name not in used_payloads:
+            continue
         defs[name] = _port_attributes(port_def)
     return defs
 

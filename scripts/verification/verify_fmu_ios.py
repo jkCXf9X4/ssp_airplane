@@ -13,7 +13,8 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, BUILD_DIR
-from sysml import SysMLArchitecture, SysMLPartDefinition, load_architecture
+from pycps_sysmlv2 import SysMLArchitecture, SysMLPartDefinition, load_architecture
+from scripts.utils.sysml_compat import composition_components, part_ports
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_FMU_DIR = BUILD_DIR / "fmus"
@@ -42,15 +43,23 @@ def _load_scalar_variables(fmu_path: Path) -> Dict[str, Optional[str]]:
 
 
 def _resolve_parts(architecture: SysMLArchitecture, parts: Sequence[str] | None) -> Dict[str, SysMLPartDefinition]:
+    component_pairs = composition_components(architecture)
+    by_instance: Dict[str, SysMLPartDefinition] = {name: part for name, part in component_pairs}
+    by_definition: Dict[str, SysMLPartDefinition] = {}
+    for _, part in component_pairs:
+        by_definition.setdefault(part.name, part)
+
     if not parts:
-        return architecture.parts
+        return by_instance
+
     subset: Dict[str, SysMLPartDefinition] = {}
     missing: List[str] = []
     for part_name in parts:
-        if part_name not in architecture.parts:
+        selected = by_instance.get(part_name) or by_definition.get(part_name)
+        if selected is None:
             missing.append(part_name)
             continue
-        subset[part_name] = architecture.parts[part_name]
+        subset[part_name] = selected
     if missing:
         raise SystemExit(f"Unknown part(s) requested: {', '.join(sorted(missing))}")
     return subset
@@ -66,7 +75,7 @@ def verify_fmu_ios(arch_path: Path, fmu_dir: Path, parts: Sequence[str] | None =
     for part_name in sorted(target_parts):
         part = target_parts[part_name]
         expected: List[Tuple[str, str, str]] = []
-        for port in part.ports:
+        for port in part_ports(part):
             payload = port.payload_def
             if payload is None:
                 issues.append(

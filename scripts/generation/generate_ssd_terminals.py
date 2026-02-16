@@ -13,14 +13,16 @@ if __package__ in {None, ""}:
 
 from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR, ensure_parent_dir
 from scripts.utils.fmi_helpers import architecture_model_map, component_fmu_source
-from sysml import SysMLArchitecture, SysMLPartDefinition, load_architecture
-from scripts.utils.sysml_compat import architecture_connections
+from pycps_sysmlv2 import SysMLArchitecture, load_architecture
+from scripts.utils.sysml_compat import (
+    architecture_connections,
+    architecture_package,
+    composition_components,
+    part_ports,
+)
 from scripts.utils.ssp_helpers import (
     SSD_NAMESPACE,
     SSC_NAMESPACE,
-    SSV_NAMESPACE,
-    SSM_NAMESPACE,
-    SSB_NAMESPACE,
     register_ssp_namespaces,
 )
 
@@ -55,8 +57,8 @@ def _add_terminal_connector(component_elem: ET.Element, port_name: str, kind: st
 def build_terminal_ssd_tree(
     architecture: SysMLArchitecture, class_map: Optional[Dict[str, str]] = None
 ) -> ET.ElementTree:
-    system_name = architecture.package or "System"
-    components = [(name, part) for name, part in architecture.parts.items() if name != system_name]
+    system_name = architecture_package(architecture) or "System"
+    components = composition_components(architecture)
     component_names: Dict[str, str] = {}
     class_map = class_map or architecture_model_map(architecture)
 
@@ -79,10 +81,10 @@ def build_terminal_ssd_tree(
             attrib={
                 "name": display_name,
                 "type": "application/x-fmu-sharedlibrary",
-                "source": component_fmu_source(part_name, class_map),
+                "source": component_fmu_source(part.name, class_map),
             },
         )
-        for port in part.ports:
+        for port in part_ports(part):
             if port.direction == "in":
                 kind = "input"
             elif port.direction == "out":

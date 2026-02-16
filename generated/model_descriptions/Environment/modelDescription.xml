@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='utf-8'?>
+<fmiModelDescription fmiVersion="2.0" modelName="Aircraft.Environment" guid="{ff7145e1-9fad-57f0-abc9-ff6d2ada8965}" description="Tracking position and velocities of the aircraft and feeds the sensors" version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2026-02-16T10:27:08Z" variableNamingConvention="structured" numberOfEventIndicators="0">
+  <CoSimulation modelIdentifier="Environment" />
+  <ModelVariables>
+    <ScalarVariable name="actuation_command.elevator_deg" valueReference="1" causality="input" description="Reads the actuation and thrust commands to calculate the position, rotation and velocities">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="actuation_command.flaperon_deg" valueReference="2" causality="input" description="Reads the actuation and thrust commands to calculate the position, rotation and velocities">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="actuation_command.left_aileron_deg" valueReference="3" causality="input" description="Reads the actuation and thrust commands to calculate the position, rotation and velocities">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="actuation_command.right_aileron_deg" valueReference="4" causality="input" description="Reads the actuation and thrust commands to calculate the position, rotation and velocities">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="actuation_command.rudder_deg" valueReference="5" causality="input" description="Reads the actuation and thrust commands to calculate the position, rotation and velocities">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="direction_command.pitch_deg" valueReference="6" causality="input" description="Air vehicle orientation expressed as Euler angles in degrees.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="direction_command.roll_deg" valueReference="7" causality="input" description="Air vehicle orientation expressed as Euler angles in degrees.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="direction_command.yaw_deg" valueReference="8" causality="input" description="Air vehicle orientation expressed as Euler angles in degrees.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="flight_status.airspeed_mps" valueReference="9" causality="output" description="Mission computer status feedback consumed by autonomy and analysis models.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="flight_status.angle_of_attack_deg" valueReference="10" causality="output" description="Mission computer status feedback consumed by autonomy and analysis models.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="flight_status.climb_rate" valueReference="11" causality="output" description="Mission computer status feedback consumed by autonomy and analysis models.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="flight_status.energy_state_norm" valueReference="12" causality="output" description="Mission computer status feedback consumed by autonomy and analysis models.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="flight_status.health_code" valueReference="13" causality="output" description="Mission computer status feedback consumed by autonomy and analysis models.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="lift.drag_kn" valueReference="14" causality="input" description="Aerodynamic state summary exported from wing solver.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="lift.lift_kn" valueReference="15" causality="input" description="Aerodynamic state summary exported from wing solver.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="lift.pitching_moment_knm" valueReference="16" causality="input" description="Aerodynamic state summary exported from wing solver.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="location.x_km" valueReference="17" causality="output" description="Local navigation frame expressed in kilometers (x=North, y=East, z=Up).">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="location.y_km" valueReference="18" causality="output" description="Local navigation frame expressed in kilometers (x=North, y=East, z=Up).">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="location.z_km" valueReference="19" causality="output" description="Local navigation frame expressed in kilometers (x=North, y=East, z=Up).">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="orientation.pitch_deg" valueReference="20" causality="output" description="Feedback for simulated sensors">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="orientation.roll_deg" valueReference="21" causality="output" description="Feedback for simulated sensors">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="orientation.yaw_deg" valueReference="22" causality="output" description="Feedback for simulated sensors">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="thrust_in.exhaust_velocity_mps" valueReference="23" causality="input" description="Propulsion output shared with performance models.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="thrust_in.mass_flow_kgps" valueReference="24" causality="input" description="Propulsion output shared with performance models.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="thrust_in.thrust_kn" valueReference="25" causality="input" description="Propulsion output shared with performance models.">
+      <Real />
+    </ScalarVariable>
+  </ModelVariables>
+  <ModelStructure>
+    <Outputs>
+      <Unknown index="9" />
+      <Unknown index="10" />
+      <Unknown index="11" />
+      <Unknown index="12" />
+      <Unknown index="13" />
+      <Unknown index="17" />
+      <Unknown index="18" />
+      <Unknown index="19" />
+      <Unknown index="20" />
+      <Unknown index="21" />
+      <Unknown index="22" />
+    </Outputs>
+    <InitialUnknowns>
+      <Unknown index="9" />
+      <Unknown index="10" />
+      <Unknown index="11" />
+      <Unknown index="12" />
+      <Unknown index="13" />
+      <Unknown index="17" />
+      <Unknown index="18" />
+      <Unknown index="19" />
+      <Unknown index="20" />
+      <Unknown index="21" />
+      <Unknown index="22" />
+    </InitialUnknowns>
+  </ModelStructure>
+</fmiModelDescription>

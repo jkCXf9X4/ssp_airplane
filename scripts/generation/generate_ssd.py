@@ -13,26 +13,26 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR
-from sysml import (
+from pycps_sysmlv2 import (
     SysMLArchitecture,
     SysMLAttribute,
     SysMLPortDefinition,
     SysMLPortReference,
     load_architecture,
 )
-from sysml.type_utils import infer_primitive, normalize_primitive
+from pycps_sysmlv2.type_utils import infer_primitive, normalize_primitive
 from scripts.utils.fmi_helpers import architecture_model_map, component_fmu_source
 from scripts.utils.sysml_compat import (
+    architecture_package,
     architecture_connections,
+    composition_components,
     architecture_port_definitions,
     literal_value,
+    part_ports,
 )
 from scripts.utils.ssp_helpers import (
     SSD_NAMESPACE,
     SSC_NAMESPACE,
-    SSV_NAMESPACE,
-    SSM_NAMESPACE,
-    SSB_NAMESPACE,
     register_ssp_namespaces,
 )
 register_ssp_namespaces()
@@ -129,8 +129,8 @@ def build_ssd_tree(
     architecture: SysMLArchitecture, class_map: Optional[Dict[str, str]] = None
 ) -> ET.ElementTree:
     class_map = class_map or architecture_model_map(architecture)
-    system_name = architecture.package
-    components = [(name, part) for name, part in architecture.parts.items() if name != "Aircraft"]
+    system_name = architecture_package(architecture)
+    components = composition_components(architecture)
     component_names: Dict[str, str] = {}
     connector_lookup: Dict[str, Dict[str, Dict[str, str]]] = {}
 
@@ -154,12 +154,12 @@ def build_ssd_tree(
             attrib={
                 "name": display_name,
                 "type": "application/x-fmu-sharedlibrary",
-                "source": component_fmu_source(part_name, class_map),
+                "source": component_fmu_source(part.name, class_map),
             },
         )
         connector_entries: List[Dict[str, str]] = []
         port_map: Dict[str, Dict[str, str]] = {}
-        for port in part.ports:
+        for port in part_ports(part):
             entries = _expand_port_entries(port, architecture)
             if not entries:
                 continue

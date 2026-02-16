@@ -1,6 +1,6 @@
 package Aircraft {
 
-  part def Aircraft {
+  part def AircraftComposition {
     doc /* Top-level composition containing all subsystem instances and signal routing. */
     part ControlInterface : ControlInterface;
     part AutopilotModule : AutopilotModule;

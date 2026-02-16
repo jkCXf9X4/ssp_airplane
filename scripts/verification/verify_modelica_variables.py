@@ -12,8 +12,12 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, MODELS_DIR
-from sysml import SysMLArchitecture, load_architecture
-from scripts.utils.sysml_compat import architecture_port_definitions
+from pycps_sysmlv2 import SysMLArchitecture, load_architecture
+from scripts.utils.sysml_compat import (
+    architecture_port_definitions,
+    composition_components,
+    part_ports,
+)
 
 DEFAULT_ARCH_DIR = ARCHITECTURE_DIR
 DEFAULT_MODELS_DIR = MODELS_DIR / "Aircraft"
@@ -28,17 +32,19 @@ def _collect_architecture_data(
     architecture: SysMLArchitecture,
 ) -> Tuple[Dict[str, Set[str]], Dict[str, Dict[str, Tuple[str, str]]]]:
     members: Dict[str, Set[str]] = {}
-    part_ports: Dict[str, Dict[str, Tuple[str, str]]] = {}
+    part_port_map: Dict[str, Dict[str, Tuple[str, str]]] = {}
 
     for name, definition in architecture_port_definitions(architecture).items():
         members[name] = set(definition.attributes.keys())
 
-    for part_name, part in architecture.parts.items():
-        part_ports[part_name] = {
-            port.name: (port.direction, port.payload) for port in part.ports
+    for instance_name, part in composition_components(architecture):
+        ports = {
+            port.name: (port.direction, port.payload) for port in part_ports(part)
         }
+        part_port_map[instance_name] = ports
+        part_port_map.setdefault(part.name, ports)
 
-    return members, part_ports
+    return members, part_port_map
 
 
 def _scan_file(

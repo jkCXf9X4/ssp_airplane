@@ -1,0 +1,212 @@
+<?xml version='1.0' encoding='utf-8'?>
+<fmiTerminalsAndIcons fmiVersion="3.0">
+  <Terminals>
+    <Terminal name="ControlInterface_pilotCommand_1" matchingRule="plug" terminalKind="PilotCommand" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
+      <TerminalMemberVariable variableKind="signal" variableName="pilotCommand.button_mask" memberName="button_mask" />
+      <TerminalMemberVariable variableKind="signal" variableName="pilotCommand.hat_x" memberName="hat_x" />
+      <TerminalMemberVariable variableKind="signal" variableName="pilotCommand.hat_y" memberName="hat_y" />
+      <TerminalMemberVariable variableKind="signal" variableName="pilotCommand.mode_switch" memberName="mode_switch" />
+      <TerminalMemberVariable variableKind="signal" variableName="pilotCommand.reserved" memberName="reserved" />
+      <TerminalMemberVariable variableKind="signal" variableName="pilotCommand.rudder_norm" memberName="rudder_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="pilotCommand.stick_pitch_norm" memberName="stick_pitch_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="pilotCommand.stick_roll_norm" memberName="stick_roll_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="pilotCommand.throttle_aux_norm" memberName="throttle_aux_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="pilotCommand.throttle_norm" memberName="throttle_norm" />
+    </Terminal>
+    <Terminal name="AutopilotModule_feedbackBus_1" matchingRule="plug" terminalKind="FlightStatusPacket" description="Mission-computer flight status back into autopilot.">
+      <TerminalMemberVariable variableKind="signal" variableName="feedbackBus.airspeed_mps" memberName="airspeed_mps" />
+      <TerminalMemberVariable variableKind="signal" variableName="feedbackBus.angle_of_attack_deg" memberName="angle_of_attack_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="feedbackBus.climb_rate" memberName="climb_rate" />
+      <TerminalMemberVariable variableKind="signal" variableName="feedbackBus.energy_state_norm" memberName="energy_state_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="feedbackBus.health_code" memberName="health_code" />
+    </Terminal>
+    <Terminal name="AutopilotModule_currentLocation_1" matchingRule="plug" terminalKind="PositionXYZ" description="Current local position from sensors">
+      <TerminalMemberVariable variableKind="signal" variableName="currentLocation.x_km" memberName="x_km" />
+      <TerminalMemberVariable variableKind="signal" variableName="currentLocation.y_km" memberName="y_km" />
+      <TerminalMemberVariable variableKind="signal" variableName="currentLocation.z_km" memberName="z_km" />
+    </Terminal>
+    <Terminal name="AutopilotModule_currentOrientation_1" matchingRule="plug" terminalKind="OrientationEuler" description="Current attitude from sensors.">
+      <TerminalMemberVariable variableKind="signal" variableName="currentOrientation.pitch_deg" memberName="pitch_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="currentOrientation.roll_deg" memberName="roll_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="currentOrientation.yaw_deg" memberName="yaw_deg" />
+    </Terminal>
+    <Terminal name="AutopilotModule_autopilotCmd_1" matchingRule="plug" terminalKind="PilotCommand" description="HOTAS-equivalent command stream for mission computer blending.">
+      <TerminalMemberVariable variableKind="signal" variableName="autopilotCmd.button_mask" memberName="button_mask" />
+      <TerminalMemberVariable variableKind="signal" variableName="autopilotCmd.hat_x" memberName="hat_x" />
+      <TerminalMemberVariable variableKind="signal" variableName="autopilotCmd.hat_y" memberName="hat_y" />
+      <TerminalMemberVariable variableKind="signal" variableName="autopilotCmd.mode_switch" memberName="mode_switch" />
+      <TerminalMemberVariable variableKind="signal" variableName="autopilotCmd.reserved" memberName="reserved" />
+      <TerminalMemberVariable variableKind="signal" variableName="autopilotCmd.rudder_norm" memberName="rudder_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="autopilotCmd.stick_pitch_norm" memberName="stick_pitch_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="autopilotCmd.stick_roll_norm" memberName="stick_roll_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="autopilotCmd.throttle_aux_norm" memberName="throttle_aux_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="autopilotCmd.throttle_norm" memberName="throttle_norm" />
+    </Terminal>
+    <Terminal name="AutopilotModule_missionStatus_1" matchingRule="plug" terminalKind="MissionStatus" description="Waypoint progression for logging and verification.">
+      <TerminalMemberVariable variableKind="signal" variableName="missionStatus.arrived" memberName="arrived" />
+      <TerminalMemberVariable variableKind="signal" variableName="missionStatus.complete" memberName="complete" />
+      <TerminalMemberVariable variableKind="signal" variableName="missionStatus.distance_to_waypoint_km" memberName="distance_to_waypoint_km" />
+      <TerminalMemberVariable variableKind="signal" variableName="missionStatus.total_waypoints" memberName="total_waypoints" />
+      <TerminalMemberVariable variableKind="signal" variableName="missionStatus.waypoint_index" memberName="waypoint_index" />
+    </Terminal>
+    <Terminal name="TurbofanPropulsion_throttleCmd_1" matchingRule="plug" terminalKind="ThrottleCommand" description="Mission computer throttle + afterburner command input.">
+      <TerminalMemberVariable variableKind="signal" variableName="throttleCmd.afterburner_enable" memberName="afterburner_enable" />
+      <TerminalMemberVariable variableKind="signal" variableName="throttleCmd.fuel_enable" memberName="fuel_enable" />
+      <TerminalMemberVariable variableKind="signal" variableName="throttleCmd.throttle_norm" memberName="throttle_norm" />
+    </Terminal>
+    <Terminal name="TurbofanPropulsion_thrustOut_1" matchingRule="plug" terminalKind="ThrustState" description="Propulsion thrust telemetry exported to airframe.">
+      <TerminalMemberVariable variableKind="signal" variableName="thrustOut.exhaust_velocity_mps" memberName="exhaust_velocity_mps" />
+      <TerminalMemberVariable variableKind="signal" variableName="thrustOut.mass_flow_kgps" memberName="mass_flow_kgps" />
+      <TerminalMemberVariable variableKind="signal" variableName="thrustOut.thrust_kn" memberName="thrust_kn" />
+    </Terminal>
+    <Terminal name="TurbofanPropulsion_fuel_consumption_1" matchingRule="plug" terminalKind="FuelConsumptionRate" description="Mass flow telemetry">
+      <TerminalMemberVariable variableKind="signal" variableName="fuel_consumption.mass_flow_kgps" memberName="mass_flow_kgps" />
+    </Terminal>
+    <Terminal name="MissionComputer_manualInput_1" matchingRule="plug" terminalKind="PilotCommand" description="Manual HOTAS command bundle from cockpit controls.">
+      <TerminalMemberVariable variableKind="signal" variableName="manualInput.button_mask" memberName="button_mask" />
+      <TerminalMemberVariable variableKind="signal" variableName="manualInput.hat_x" memberName="hat_x" />
+      <TerminalMemberVariable variableKind="signal" variableName="manualInput.hat_y" memberName="hat_y" />
+      <TerminalMemberVariable variableKind="signal" variableName="manualInput.mode_switch" memberName="mode_switch" />
+      <TerminalMemberVariable variableKind="signal" variableName="manualInput.reserved" memberName="reserved" />
+      <TerminalMemberVariable variableKind="signal" variableName="manualInput.rudder_norm" memberName="rudder_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="manualInput.stick_pitch_norm" memberName="stick_pitch_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="manualInput.stick_roll_norm" memberName="stick_roll_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="manualInput.throttle_aux_norm" memberName="throttle_aux_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="manualInput.throttle_norm" memberName="throttle_norm" />
+    </Terminal>
+    <Terminal name="MissionComputer_autopilotInput_1" matchingRule="plug" terminalKind="PilotCommand" description="Autopilot command bundle using same HOTAS signal structure.">
+      <TerminalMemberVariable variableKind="signal" variableName="autopilotInput.button_mask" memberName="button_mask" />
+      <TerminalMemberVariable variableKind="signal" variableName="autopilotInput.hat_x" memberName="hat_x" />
+      <TerminalMemberVariable variableKind="signal" variableName="autopilotInput.hat_y" memberName="hat_y" />
+      <TerminalMemberVariable variableKind="signal" variableName="autopilotInput.mode_switch" memberName="mode_switch" />
+      <TerminalMemberVariable variableKind="signal" variableName="autopilotInput.reserved" memberName="reserved" />
+      <TerminalMemberVariable variableKind="signal" variableName="autopilotInput.rudder_norm" memberName="rudder_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="autopilotInput.stick_pitch_norm" memberName="stick_pitch_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="autopilotInput.stick_roll_norm" memberName="stick_roll_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="autopilotInput.throttle_aux_norm" memberName="throttle_aux_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="autopilotInput.throttle_norm" memberName="throttle_norm" />
+    </Terminal>
+    <Terminal name="MissionComputer_fuelStatus_1" matchingRule="plug" terminalKind="FuelLevelState" description="Fuel telemetry used for command blending and power limiting.">
+      <TerminalMemberVariable variableKind="signal" variableName="fuelStatus.fuel_level_norm" memberName="fuel_level_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="fuelStatus.fuel_remaining_kg" memberName="fuel_remaining_kg" />
+      <TerminalMemberVariable variableKind="signal" variableName="fuelStatus.fuel_starved" memberName="fuel_starved" />
+    </Terminal>
+    <Terminal name="MissionComputer_engineThrottle_1" matchingRule="plug" terminalKind="ThrottleCommand" description="Structured throttle/fuel enable command to propulsion.">
+      <TerminalMemberVariable variableKind="signal" variableName="engineThrottle.afterburner_enable" memberName="afterburner_enable" />
+      <TerminalMemberVariable variableKind="signal" variableName="engineThrottle.fuel_enable" memberName="fuel_enable" />
+      <TerminalMemberVariable variableKind="signal" variableName="engineThrottle.throttle_norm" memberName="throttle_norm" />
+    </Terminal>
+    <Terminal name="MissionComputer_direction_command_1" matchingRule="plug" terminalKind="OrientationEuler" description="Command how to alter the current velocity vector, pith, yaw, roll">
+      <TerminalMemberVariable variableKind="signal" variableName="direction_command.pitch_deg" memberName="pitch_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="direction_command.roll_deg" memberName="roll_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="direction_command.yaw_deg" memberName="yaw_deg" />
+    </Terminal>
+    <Terminal name="FuelSystem_fuel_consumption_rate_1" matchingRule="plug" terminalKind="FuelConsumptionRate" description="Propulsion-requested fuel mass flow entering storage manager.">
+      <TerminalMemberVariable variableKind="signal" variableName="fuel_consumption_rate.mass_flow_kgps" memberName="mass_flow_kgps" />
+    </Terminal>
+    <Terminal name="FuelSystem_fuelState_1" matchingRule="plug" terminalKind="FuelLevelState" description="Telemetry describing remaining fuel mass/normalized level.">
+      <TerminalMemberVariable variableKind="signal" variableName="fuelState.fuel_level_norm" memberName="fuel_level_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="fuelState.fuel_remaining_kg" memberName="fuel_remaining_kg" />
+      <TerminalMemberVariable variableKind="signal" variableName="fuelState.fuel_starved" memberName="fuel_starved" />
+    </Terminal>
+    <Terminal name="AdaptiveWingSystem_direction_command_1" matchingRule="plug" terminalKind="OrientationEuler" description="Mission-computer command bus input. Desired change in speed vector">
+      <TerminalMemberVariable variableKind="signal" variableName="direction_command.pitch_deg" memberName="pitch_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="direction_command.roll_deg" memberName="roll_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="direction_command.yaw_deg" memberName="yaw_deg" />
+    </Terminal>
+    <Terminal name="AdaptiveWingSystem_flight_speed_1" matchingRule="plug" terminalKind="FlightStatusPacket">
+      <TerminalMemberVariable variableKind="signal" variableName="flight_speed.airspeed_mps" memberName="airspeed_mps" />
+      <TerminalMemberVariable variableKind="signal" variableName="flight_speed.angle_of_attack_deg" memberName="angle_of_attack_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="flight_speed.climb_rate" memberName="climb_rate" />
+      <TerminalMemberVariable variableKind="signal" variableName="flight_speed.energy_state_norm" memberName="energy_state_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="flight_speed.health_code" memberName="health_code" />
+    </Terminal>
+    <Terminal name="AdaptiveWingSystem_actuation_command_1" matchingRule="plug" terminalKind="SurfaceActuationCommand" description="Actuation commands, sent to environment to track and calculate new position">
+      <TerminalMemberVariable variableKind="signal" variableName="actuation_command.elevator_deg" memberName="elevator_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="actuation_command.flaperon_deg" memberName="flaperon_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="actuation_command.left_aileron_deg" memberName="left_aileron_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="actuation_command.right_aileron_deg" memberName="right_aileron_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="actuation_command.rudder_deg" memberName="rudder_deg" />
+    </Terminal>
+    <Terminal name="AdaptiveWingSystem_liftInterface_1" matchingRule="plug" terminalKind="LiftState" description="Tracking of lift, drag">
+      <TerminalMemberVariable variableKind="signal" variableName="liftInterface.drag_kn" memberName="drag_kn" />
+      <TerminalMemberVariable variableKind="signal" variableName="liftInterface.lift_kn" memberName="lift_kn" />
+      <TerminalMemberVariable variableKind="signal" variableName="liftInterface.pitching_moment_knm" memberName="pitching_moment_knm" />
+    </Terminal>
+    <Terminal name="Environment_actuation_command_1" matchingRule="plug" terminalKind="SurfaceActuationCommand" description="Reads the actuation and thrust commands to calculate the position, rotation and velocities">
+      <TerminalMemberVariable variableKind="signal" variableName="actuation_command.elevator_deg" memberName="elevator_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="actuation_command.flaperon_deg" memberName="flaperon_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="actuation_command.left_aileron_deg" memberName="left_aileron_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="actuation_command.right_aileron_deg" memberName="right_aileron_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="actuation_command.rudder_deg" memberName="rudder_deg" />
+    </Terminal>
+    <Terminal name="Environment_direction_command_1" matchingRule="plug" terminalKind="OrientationEuler">
+      <TerminalMemberVariable variableKind="signal" variableName="direction_command.pitch_deg" memberName="pitch_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="direction_command.roll_deg" memberName="roll_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="direction_command.yaw_deg" memberName="yaw_deg" />
+    </Terminal>
+    <Terminal name="Environment_lift_1" matchingRule="plug" terminalKind="LiftState">
+      <TerminalMemberVariable variableKind="signal" variableName="lift.drag_kn" memberName="drag_kn" />
+      <TerminalMemberVariable variableKind="signal" variableName="lift.lift_kn" memberName="lift_kn" />
+      <TerminalMemberVariable variableKind="signal" variableName="lift.pitching_moment_knm" memberName="pitching_moment_knm" />
+    </Terminal>
+    <Terminal name="Environment_thrust_in_1" matchingRule="plug" terminalKind="ThrustState">
+      <TerminalMemberVariable variableKind="signal" variableName="thrust_in.exhaust_velocity_mps" memberName="exhaust_velocity_mps" />
+      <TerminalMemberVariable variableKind="signal" variableName="thrust_in.mass_flow_kgps" memberName="mass_flow_kgps" />
+      <TerminalMemberVariable variableKind="signal" variableName="thrust_in.thrust_kn" memberName="thrust_kn" />
+    </Terminal>
+    <Terminal name="Environment_orientation_1" matchingRule="plug" terminalKind="OrientationEuler" description="Feedback for simulated sensors">
+      <TerminalMemberVariable variableKind="signal" variableName="orientation.pitch_deg" memberName="pitch_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="orientation.roll_deg" memberName="roll_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="orientation.yaw_deg" memberName="yaw_deg" />
+    </Terminal>
+    <Terminal name="Environment_location_1" matchingRule="plug" terminalKind="PositionXYZ">
+      <TerminalMemberVariable variableKind="signal" variableName="location.x_km" memberName="x_km" />
+      <TerminalMemberVariable variableKind="signal" variableName="location.y_km" memberName="y_km" />
+      <TerminalMemberVariable variableKind="signal" variableName="location.z_km" memberName="z_km" />
+    </Terminal>
+    <Terminal name="Environment_flight_status_1" matchingRule="plug" terminalKind="FlightStatusPacket">
+      <TerminalMemberVariable variableKind="signal" variableName="flight_status.airspeed_mps" memberName="airspeed_mps" />
+      <TerminalMemberVariable variableKind="signal" variableName="flight_status.angle_of_attack_deg" memberName="angle_of_attack_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="flight_status.climb_rate" memberName="climb_rate" />
+      <TerminalMemberVariable variableKind="signal" variableName="flight_status.energy_state_norm" memberName="energy_state_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="flight_status.health_code" memberName="health_code" />
+    </Terminal>
+    <Terminal name="InputOutput_locationXYZ_1" matchingRule="plug" terminalKind="PositionXYZ">
+      <TerminalMemberVariable variableKind="signal" variableName="locationXYZ.x_km" memberName="x_km" />
+      <TerminalMemberVariable variableKind="signal" variableName="locationXYZ.y_km" memberName="y_km" />
+      <TerminalMemberVariable variableKind="signal" variableName="locationXYZ.z_km" memberName="z_km" />
+    </Terminal>
+    <Terminal name="InputOutput_orientation_1" matchingRule="plug" terminalKind="OrientationEuler">
+      <TerminalMemberVariable variableKind="signal" variableName="orientation.pitch_deg" memberName="pitch_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="orientation.roll_deg" memberName="roll_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="orientation.yaw_deg" memberName="yaw_deg" />
+    </Terminal>
+    <Terminal name="InputOutput_autopilotCmd_1" matchingRule="plug" terminalKind="PilotCommand">
+      <TerminalMemberVariable variableKind="signal" variableName="autopilotCmd.button_mask" memberName="button_mask" />
+      <TerminalMemberVariable variableKind="signal" variableName="autopilotCmd.hat_x" memberName="hat_x" />
+      <TerminalMemberVariable variableKind="signal" variableName="autopilotCmd.hat_y" memberName="hat_y" />
+      <TerminalMemberVariable variableKind="signal" variableName="autopilotCmd.mode_switch" memberName="mode_switch" />
+      <TerminalMemberVariable variableKind="signal" variableName="autopilotCmd.reserved" memberName="reserved" />
+      <TerminalMemberVariable variableKind="signal" variableName="autopilotCmd.rudder_norm" memberName="rudder_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="autopilotCmd.stick_pitch_norm" memberName="stick_pitch_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="autopilotCmd.stick_roll_norm" memberName="stick_roll_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="autopilotCmd.throttle_aux_norm" memberName="throttle_aux_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="autopilotCmd.throttle_norm" memberName="throttle_norm" />
+    </Terminal>
+    <Terminal name="InputOutput_flightStatus_1" matchingRule="plug" terminalKind="FlightStatusPacket">
+      <TerminalMemberVariable variableKind="signal" variableName="flightStatus.airspeed_mps" memberName="airspeed_mps" />
+      <TerminalMemberVariable variableKind="signal" variableName="flightStatus.angle_of_attack_deg" memberName="angle_of_attack_deg" />
+      <TerminalMemberVariable variableKind="signal" variableName="flightStatus.climb_rate" memberName="climb_rate" />
+      <TerminalMemberVariable variableKind="signal" variableName="flightStatus.energy_state_norm" memberName="energy_state_norm" />
+      <TerminalMemberVariable variableKind="signal" variableName="flightStatus.health_code" memberName="health_code" />
+    </Terminal>
+    <Terminal name="InputOutput_missionStatus_1" matchingRule="plug" terminalKind="MissionStatus">
+      <TerminalMemberVariable variableKind="signal" variableName="missionStatus.arrived" memberName="arrived" />
+      <TerminalMemberVariable variableKind="signal" variableName="missionStatus.complete" memberName="complete" />
+      <TerminalMemberVariable variableKind="signal" variableName="missionStatus.distance_to_waypoint_km" memberName="distance_to_waypoint_km" />
+      <TerminalMemberVariable variableKind="signal" variableName="missionStatus.total_waypoints" memberName="total_waypoints" />
+      <TerminalMemberVariable variableKind="signal" variableName="missionStatus.waypoint_index" memberName="waypoint_index" />
+    </Terminal>
+  </Terminals>
+</fmiTerminalsAndIcons>

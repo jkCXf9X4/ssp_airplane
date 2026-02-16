@@ -1,0 +1,158 @@
+<?xml version='1.0' encoding='utf-8'?>
+<ssd:SystemStructureDescription xmlns:ssc="http://ssp-standard.org/SSP1/SystemStructureCommon" xmlns:ssd="http://ssp-standard.org/SSP1/SystemStructureDescription" name="Aircraft" version="1.0">
+  <ssd:System name="root">
+    <ssd:Elements>
+      <ssd:Component name="ControlInterface" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_ControlInterface.fmu">
+        <ssd:Connectors>
+          <ssd:Connector name="pilotCommand" kind="output">
+            <ssc:Terminal />
+          </ssd:Connector>
+        </ssd:Connectors>
+      </ssd:Component>
+      <ssd:Component name="AutopilotModule" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_AutopilotModule.fmu">
+        <ssd:Connectors>
+          <ssd:Connector name="feedbackBus" kind="input">
+            <ssc:Terminal />
+          </ssd:Connector>
+          <ssd:Connector name="currentLocation" kind="input">
+            <ssc:Terminal />
+          </ssd:Connector>
+          <ssd:Connector name="currentOrientation" kind="input">
+            <ssc:Terminal />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotCmd" kind="output">
+            <ssc:Terminal />
+          </ssd:Connector>
+          <ssd:Connector name="missionStatus" kind="output">
+            <ssc:Terminal />
+          </ssd:Connector>
+        </ssd:Connectors>
+      </ssd:Component>
+      <ssd:Component name="CompositeAirframe" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_CompositeAirframe.fmu" />
+      <ssd:Component name="TurbofanPropulsion" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_TurbofanPropulsion.fmu">
+        <ssd:Connectors>
+          <ssd:Connector name="throttleCmd" kind="input">
+            <ssc:Terminal />
+          </ssd:Connector>
+          <ssd:Connector name="thrustOut" kind="output">
+            <ssc:Terminal />
+          </ssd:Connector>
+          <ssd:Connector name="fuel_consumption" kind="output">
+            <ssc:Terminal />
+          </ssd:Connector>
+        </ssd:Connectors>
+      </ssd:Component>
+      <ssd:Component name="MissionComputer" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_MissionComputer.fmu">
+        <ssd:Connectors>
+          <ssd:Connector name="manualInput" kind="input">
+            <ssc:Terminal />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotInput" kind="input">
+            <ssc:Terminal />
+          </ssd:Connector>
+          <ssd:Connector name="fuelStatus" kind="input">
+            <ssc:Terminal />
+          </ssd:Connector>
+          <ssd:Connector name="engineThrottle" kind="output">
+            <ssc:Terminal />
+          </ssd:Connector>
+          <ssd:Connector name="direction_command" kind="output">
+            <ssc:Terminal />
+          </ssd:Connector>
+        </ssd:Connectors>
+      </ssd:Component>
+      <ssd:Component name="FuelSystem" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_FuelSystem.fmu">
+        <ssd:Connectors>
+          <ssd:Connector name="fuel_consumption_rate" kind="input">
+            <ssc:Terminal />
+          </ssd:Connector>
+          <ssd:Connector name="fuelState" kind="output">
+            <ssc:Terminal />
+          </ssd:Connector>
+        </ssd:Connectors>
+      </ssd:Component>
+      <ssd:Component name="AdaptiveWingSystem" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_AdaptiveWingSystem.fmu">
+        <ssd:Connectors>
+          <ssd:Connector name="direction_command" kind="input">
+            <ssc:Terminal />
+          </ssd:Connector>
+          <ssd:Connector name="flight_speed" kind="input">
+            <ssc:Terminal />
+          </ssd:Connector>
+          <ssd:Connector name="actuation_command" kind="output">
+            <ssc:Terminal />
+          </ssd:Connector>
+          <ssd:Connector name="liftInterface" kind="output">
+            <ssc:Terminal />
+          </ssd:Connector>
+        </ssd:Connectors>
+      </ssd:Component>
+      <ssd:Component name="Environment" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_Environment.fmu">
+        <ssd:Connectors>
+          <ssd:Connector name="actuation_command" kind="input">
+            <ssc:Terminal />
+          </ssd:Connector>
+          <ssd:Connector name="direction_command" kind="input">
+            <ssc:Terminal />
+          </ssd:Connector>
+          <ssd:Connector name="lift" kind="input">
+            <ssc:Terminal />
+          </ssd:Connector>
+          <ssd:Connector name="thrust_in" kind="input">
+            <ssc:Terminal />
+          </ssd:Connector>
+          <ssd:Connector name="orientation" kind="output">
+            <ssc:Terminal />
+          </ssd:Connector>
+          <ssd:Connector name="location" kind="output">
+            <ssc:Terminal />
+          </ssd:Connector>
+          <ssd:Connector name="flight_status" kind="output">
+            <ssc:Terminal />
+          </ssd:Connector>
+        </ssd:Connectors>
+      </ssd:Component>
+      <ssd:Component name="InputOutput" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_InputOutput.fmu">
+        <ssd:Connectors>
+          <ssd:Connector name="locationXYZ" kind="input">
+            <ssc:Terminal />
+          </ssd:Connector>
+          <ssd:Connector name="orientation" kind="input">
+            <ssc:Terminal />
+          </ssd:Connector>
+          <ssd:Connector name="autopilotCmd" kind="input">
+            <ssc:Terminal />
+          </ssd:Connector>
+          <ssd:Connector name="flightStatus" kind="input">
+            <ssc:Terminal />
+          </ssd:Connector>
+          <ssd:Connector name="missionStatus" kind="input">
+            <ssc:Terminal />
+          </ssd:Connector>
+        </ssd:Connectors>
+      </ssd:Component>
+    </ssd:Elements>
+    <ssd:Connections>
+      <ssd:Connection startElement="ControlInterface" startConnector="pilotCommand" endElement="MissionComputer" endConnector="manualInput" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="autopilotCmd" endElement="MissionComputer" endConnector="autopilotInput" />
+      <ssd:Connection startElement="TurbofanPropulsion" startConnector="thrustOut" endElement="Environment" endConnector="thrust_in" />
+      <ssd:Connection startElement="TurbofanPropulsion" startConnector="fuel_consumption" endElement="FuelSystem" endConnector="fuel_consumption_rate" />
+      <ssd:Connection startElement="MissionComputer" startConnector="engineThrottle" endElement="TurbofanPropulsion" endConnector="throttleCmd" />
+      <ssd:Connection startElement="MissionComputer" startConnector="direction_command" endElement="AdaptiveWingSystem" endConnector="direction_command" />
+      <ssd:Connection startElement="MissionComputer" startConnector="direction_command" endElement="Environment" endConnector="direction_command" />
+      <ssd:Connection startElement="FuelSystem" startConnector="fuelState" endElement="MissionComputer" endConnector="fuelStatus" />
+      <ssd:Connection startElement="AdaptiveWingSystem" startConnector="actuation_command" endElement="Environment" endConnector="actuation_command" />
+      <ssd:Connection startElement="AdaptiveWingSystem" startConnector="liftInterface" endElement="Environment" endConnector="lift" />
+      <ssd:Connection startElement="Environment" startConnector="orientation" endElement="AutopilotModule" endConnector="currentOrientation" />
+      <ssd:Connection startElement="Environment" startConnector="location" endElement="AutopilotModule" endConnector="currentLocation" />
+      <ssd:Connection startElement="Environment" startConnector="flight_status" endElement="AutopilotModule" endConnector="feedbackBus" />
+      <ssd:Connection startElement="Environment" startConnector="flight_status" endElement="AdaptiveWingSystem" endConnector="flight_speed" />
+      <ssd:Connection startElement="Environment" startConnector="location" endElement="InputOutput" endConnector="locationXYZ" />
+      <ssd:Connection startElement="Environment" startConnector="orientation" endElement="InputOutput" endConnector="orientation" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="autopilotCmd" endElement="InputOutput" endConnector="autopilotCmd" />
+      <ssd:Connection startElement="Environment" startConnector="flight_status" endElement="InputOutput" endConnector="flightStatus" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="missionStatus" endElement="InputOutput" endConnector="missionStatus" />
+    </ssd:Connections>
+  </ssd:System>
+  <ssd:DefaultExperiment startTime="0.0" stopTime="3600.0" />
+</ssd:SystemStructureDescription>

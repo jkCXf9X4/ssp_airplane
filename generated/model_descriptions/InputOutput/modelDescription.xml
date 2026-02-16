@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='utf-8'?>
+<fmiModelDescription fmiVersion="2.0" modelName="Aircraft.InputOutput" guid="{d97ec030-ec6c-52ca-ae54-c0aa4a8ec870}" description="Simulation sink for debugging and recording mission/autopilot telemetry." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2026-02-16T10:27:08Z" variableNamingConvention="structured" numberOfEventIndicators="0">
+  <CoSimulation modelIdentifier="InputOutput" />
+  <ModelVariables>
+    <ScalarVariable name="autopilotCmd.button_mask" valueReference="1" causality="input" description="HOTAS-style control payload shared across control surfaces and mission computer consumers.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="autopilotCmd.hat_x" valueReference="2" causality="input" description="HOTAS-style control payload shared across control surfaces and mission computer consumers.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="autopilotCmd.hat_y" valueReference="3" causality="input" description="HOTAS-style control payload shared across control surfaces and mission computer consumers.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="autopilotCmd.mode_switch" valueReference="4" causality="input" description="HOTAS-style control payload shared across control surfaces and mission computer consumers.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="autopilotCmd.reserved" valueReference="5" causality="input" description="HOTAS-style control payload shared across control surfaces and mission computer consumers.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="autopilotCmd.rudder_norm" valueReference="6" causality="input" description="HOTAS-style control payload shared across control surfaces and mission computer consumers.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="autopilotCmd.stick_pitch_norm" valueReference="7" causality="input" description="HOTAS-style control payload shared across control surfaces and mission computer consumers.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="autopilotCmd.stick_roll_norm" valueReference="8" causality="input" description="HOTAS-style control payload shared across control surfaces and mission computer consumers.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="autopilotCmd.throttle_aux_norm" valueReference="9" causality="input" description="HOTAS-style control payload shared across control surfaces and mission computer consumers.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="autopilotCmd.throttle_norm" valueReference="10" causality="input" description="HOTAS-style control payload shared across control surfaces and mission computer consumers.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="flightStatus.airspeed_mps" valueReference="11" causality="input" description="Mission computer status feedback consumed by autonomy and analysis models.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="flightStatus.angle_of_attack_deg" valueReference="12" causality="input" description="Mission computer status feedback consumed by autonomy and analysis models.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="flightStatus.climb_rate" valueReference="13" causality="input" description="Mission computer status feedback consumed by autonomy and analysis models.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="flightStatus.energy_state_norm" valueReference="14" causality="input" description="Mission computer status feedback consumed by autonomy and analysis models.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="flightStatus.health_code" valueReference="15" causality="input" description="Mission computer status feedback consumed by autonomy and analysis models.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="locationXYZ.x_km" valueReference="16" causality="input" description="Local navigation frame expressed in kilometers (x=North, y=East, z=Up).">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="locationXYZ.y_km" valueReference="17" causality="input" description="Local navigation frame expressed in kilometers (x=North, y=East, z=Up).">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="locationXYZ.z_km" valueReference="18" causality="input" description="Local navigation frame expressed in kilometers (x=North, y=East, z=Up).">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="missionStatus.arrived" valueReference="19" causality="input" description="Waypoint-tracking status produced by the autopilot for logging and requirement evaluation.">
+      <Boolean />
+    </ScalarVariable>
+    <ScalarVariable name="missionStatus.complete" valueReference="20" causality="input" description="Waypoint-tracking status produced by the autopilot for logging and requirement evaluation.">
+      <Boolean />
+    </ScalarVariable>
+    <ScalarVariable name="missionStatus.distance_to_waypoint_km" valueReference="21" causality="input" description="Waypoint-tracking status produced by the autopilot for logging and requirement evaluation.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="missionStatus.total_waypoints" valueReference="22" causality="input" description="Waypoint-tracking status produced by the autopilot for logging and requirement evaluation.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="missionStatus.waypoint_index" valueReference="23" causality="input" description="Waypoint-tracking status produced by the autopilot for logging and requirement evaluation.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="orientation.pitch_deg" valueReference="24" causality="input" description="Air vehicle orientation expressed as Euler angles in degrees.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="orientation.roll_deg" valueReference="25" causality="input" description="Air vehicle orientation expressed as Euler angles in degrees.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="orientation.yaw_deg" valueReference="26" causality="input" description="Air vehicle orientation expressed as Euler angles in degrees.">
+      <Real />
+    </ScalarVariable>
+  </ModelVariables>
+  <ModelStructure />
+</fmiModelDescription>

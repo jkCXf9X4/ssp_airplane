@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from typing import Dict
 
-from sysml import SysMLArchitecture
+from pycps_sysmlv2 import SysMLArchitecture
 
 from scripts.utils.modelica import component_modelica_map
 

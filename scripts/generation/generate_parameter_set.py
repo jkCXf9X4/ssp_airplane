@@ -12,9 +12,9 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR, ensure_parent_dir
-from sysml import SysMLArchitecture, SysMLAttribute, load_architecture
-from sysml.type_utils import infer_primitive
-from scripts.utils.sysml_compat import literal_value
+from pycps_sysmlv2 import SysMLArchitecture, SysMLAttribute, SysMLPartDefinition, load_architecture
+from pycps_sysmlv2.type_utils import infer_primitive
+from scripts.utils.sysml_compat import composition_components, literal_value
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_OUTPUT = GENERATED_DIR / "parameters.ssv"
@@ -42,17 +42,21 @@ def _format_value(tag: str, literal) -> str:
 
 
 def _parameter_entries(architecture: SysMLArchitecture, components: Optional[Iterable[str]]) -> list[tuple[str, SysMLAttribute]]:
-    parts = architecture.parts
-    selected = (
-        [parts[name] for name in components if name in parts]
-        if components
-        else [parts[name] for name in sorted(parts)]
-    )
+    component_pairs = composition_components(architecture)
+    selected: list[tuple[str, SysMLPartDefinition]] = []
+    if components:
+        requested = {name.strip() for name in components if name.strip()}
+        for instance_name, part in component_pairs:
+            if instance_name in requested or part.name in requested:
+                selected.append((instance_name, part))
+    else:
+        selected = component_pairs
+
     entries: list[tuple[str, SysMLAttribute]] = []
-    for part in selected:
+    for instance_name, part in selected:
         for attr_name in sorted(part.attributes):
             attr = part.attributes[attr_name]
-            full_name = f"{part.name}.{attr.name}"
+            full_name = f"{instance_name}.{attr.name}"
             entries.append((full_name, attr))
     return entries
 
@@ -63,6 +67,18 @@ def build_parameter_tree(parameter_pairs: Iterable[tuple[str, SysMLAttribute]]) 
 
     for name, attr in parameter_pairs:
         literal = literal_value(attr.value)
+        if isinstance(literal, (list, tuple)):
+            sample = next((item for item in literal if item is not None), None)
+            data_type = infer_primitive(attr.type, sample)
+            for idx, item in enumerate(literal, start=1):
+                indexed_name = f"{name}[{idx}]"
+                param_elem = ET.SubElement(params_elem, f"{{{SSV_NAMESPACE}}}Parameter", attrib={"name": indexed_name})
+                value_elem = ET.SubElement(param_elem, f"{{{SSV_NAMESPACE}}}{data_type}")
+                formatted = _format_value(data_type, item)
+                if formatted:
+                    value_elem.set("value", formatted)
+            continue
+
         data_type = _normalize_type(attr)
         param_elem = ET.SubElement(params_elem, f"{{{SSV_NAMESPACE}}}Parameter", attrib={"name": name})
         value_elem = ET.SubElement(param_elem, f"{{{SSV_NAMESPACE}}}{data_type}")

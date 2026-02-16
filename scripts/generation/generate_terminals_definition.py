@@ -12,29 +12,36 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR, ensure_parent_dir
-from sysml import (
+from pycps_sysmlv2 import (
     SysMLArchitecture,
     SysMLPartDefinition,
     SysMLPortDefinition,
     load_architecture,
 )
+from scripts.utils.sysml_compat import composition_components, part_ports
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_OUTPUT = GENERATED_DIR / "terminalsAndIcons.xml"
 
 
-def _select_components(architecture: SysMLArchitecture, names: Optional[Iterable[str]]) -> list[SysMLPartDefinition]:
+def _select_components(
+    architecture: SysMLArchitecture,
+    names: Optional[Iterable[str]],
+) -> list[tuple[str, SysMLPartDefinition]]:
+    component_pairs = composition_components(architecture)
     if names:
-        ordered: list[SysMLPartDefinition] = []
+        ordered: list[tuple[str, SysMLPartDefinition]] = []
         seen: set[str] = set()
-        for name in names:
-            name = name.strip()
-            if not name or name in seen or name not in architecture.parts:
+        requested = {name.strip() for name in names if name.strip()}
+        for instance_name, part in component_pairs:
+            if instance_name not in requested and part.name not in requested:
                 continue
-            ordered.append(architecture.parts[name])
-            seen.add(name)
+            if instance_name in seen:
+                continue
+            ordered.append((instance_name, part))
+            seen.add(instance_name)
         return ordered
-    return [architecture.parts[name] for name in sorted(architecture.parts)]
+    return component_pairs
 
 
 def _member_entries(port_def: Optional[SysMLPortDefinition], port_name: str, port_doc: Optional[str]) -> list[tuple[str, str, Optional[str]]]:
@@ -48,18 +55,20 @@ def _member_entries(port_def: Optional[SysMLPortDefinition], port_name: str, por
     return entries
 
 
-def build_terminals_tree(components: Iterable[SysMLPartDefinition]) -> ET.ElementTree:
+def build_terminals_tree(
+    components: Iterable[tuple[str, SysMLPartDefinition]],
+) -> ET.ElementTree:
     root = ET.Element("fmiTerminalsAndIcons", attrib={"fmiVersion": "3.0"})
     terminals_elem = ET.SubElement(root, "Terminals")
 
-    for component in components:
+    for component_name, component in components:
         port_counters: Dict[str, int] = {}
-        for port in component.ports:
+        for port in part_ports(component):
             if not port.payload:
                 continue
             counter = port_counters.get(port.name, 0) + 1
             port_counters[port.name] = counter
-            terminal_name = f"{component.name}_{port.name}_{counter}"
+            terminal_name = f"{component_name}_{port.name}_{counter}"
             term_attrs = {
                 "name": terminal_name,
                 "matchingRule": "plug",
