@@ -18,14 +18,14 @@ def fmu_resource_path(modelica_class: str) -> str:
     return f"resources/{fmu_filename(modelica_class)}"
 
 
-def architecture_model_map(architecture: SysMLArchitecture) -> Dict[str, str]:
-    """Convenience wrapper to build the part->Modelica class mapping."""
-    return component_modelica_map(architecture)
+# def architecture_model_map(architecture: SysMLArchitecture) -> Dict[str, str]:
+#     """Convenience wrapper to build the part->Modelica class mapping."""
+#     return component_modelica_map(architecture)
 
 
-def component_fmu_source(component_name: str, class_map: Dict[str, str]) -> str:
-    """Resolve the FMU resource path for a given component."""
-    modelica_class = class_map.get(component_name)
-    if not modelica_class:
-        raise KeyError(f"No Modelica class map defined for component '{component_name}'")
-    return fmu_resource_path(modelica_class)
+# def component_fmu_source(component_name: str, class_map: Dict[str, str]) -> str:
+#     """Resolve the FMU resource path for a given component."""
+#     modelica_class = class_map.get(component_name)
+#     if not modelica_class:
+#         raise KeyError(f"No Modelica class map defined for component '{component_name}'")
+#     return fmu_resource_path(modelica_class)

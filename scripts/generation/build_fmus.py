@@ -14,31 +14,20 @@ import re
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from scripts.common.paths import BUILD_DIR, MODELS_DIR, REPO_ROOT, ensure_directory
-DEFAULT_MODELS = [
-    "Aircraft.CompositeAirframe",
-    "Aircraft.TurbofanPropulsion",
-    "Aircraft.AdaptiveWingSystem",
-    "Aircraft.MissionComputer",
-    "Aircraft.AutopilotModule",
-    "Aircraft.InputOutput",
-    "Aircraft.FuelSystem",
-    "Aircraft.Environment",
-    "Aircraft.ControlInterface",
-]
-
+from scripts.common.paths import BUILD_DIR, MODELS_DIR, REPO_ROOT, DEFAULT_MODELS, ensure_directory
 
 def build_mos_script(model_name: str, output_dir: Path) -> str:
     package_path = MODELS_DIR / "Aircraft" / "package.mo"
     tmp_dir = BUILD_DIR / "tmp"
     ensure_directory(tmp_dir)
+
     return f"""
 installPackage(Modelica, \"4.0.0\", exactMatch=false);
 loadFile("{package_path.as_posix()}");
 cd("./build/tmp/");
 setCommandLineOptions("--fmiFlags=s:cvode");
 setCommandLineOptions("--fmuRuntimeDepends=all");
-filename := OpenModelica.Scripting.buildModelFMU({model_name}, version="2.0", fmuType="cs", platforms={{"static"}});
+filename := OpenModelica.Scripting.buildModelFMU(Aircraft.{model_name}, version="2.0", fmuType="cs", platforms={{"static"}});
 filename;
 getErrorString();
 """
@@ -80,7 +69,6 @@ def extract_fmu_path(output: str) -> Path | None:
     if not matches:
         return None
     return Path(matches[-1])
-
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)

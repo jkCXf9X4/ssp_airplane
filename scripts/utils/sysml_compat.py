@@ -12,8 +12,10 @@ from pycps_sysmlv2 import (
 )
 from pycps_sysmlv2.type_utils import parse_literal
 
-COMPOSITION_PART_NAMES = ("AircraftComposition", "AircraftComposiotion")
+from scripts.common.paths import COMPOSITION_NAME
 
+
+# All shpould be removed
 
 def architecture_port_definitions(
     architecture: SysMLArchitecture,
@@ -87,13 +89,14 @@ def composition_part(architecture: SysMLArchitecture) -> SysMLPartDefinition:
     if part_definitions is None:
         raise AttributeError("SysMLArchitecture does not expose part definitions.")
 
-    for name in COMPOSITION_PART_NAMES:
-        composition = part_definitions.get(name)
-        if composition is not None:
-            return composition
+
+    composition = part_definitions.get(COMPOSITION_NAME)
+    if composition is not None:
+        return composition
+    
     raise ValueError(
         "Required composition part not found. Expected one of: "
-        + ", ".join(COMPOSITION_PART_NAMES)
+        + ", ".join(COMPOSITION_NAME)
     )
 
 
@@ -102,3 +105,4 @@ def _iter_part_instances(parts: object) -> Iterable[object]:
     if isinstance(parts, dict):
         return parts.values()
     return parts
+

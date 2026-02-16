@@ -12,18 +12,9 @@ from typing import Iterable
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from scripts.common.paths import MODELS_DIR, REPO_ROOT
+from scripts.common.paths import MODELS_DIR, REPO_ROOT, PACKAGE_NAME, DEFAULT_MODELS
 
-PACKAGE_FILE = MODELS_DIR / "Aircraft" / "package.mo"
-DEFAULT_MODELS = [
-    "Aircraft.CompositeAirframe",
-    "Aircraft.TurbofanPropulsion",
-    "Aircraft.AdaptiveWingSystem",
-    "Aircraft.MissionComputer",
-    "Aircraft.AutopilotModule",
-    "Aircraft.FuelSystem",
-    "Aircraft.ControlInterface",
-]
+PACKAGE_FILE = MODELS_DIR / PACKAGE_NAME / "package.mo"
 
 
 def build_script(models: Iterable[str]) -> str:
@@ -55,7 +46,8 @@ def run_omc(omc: str, models: Iterable[str]) -> int:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--omc", default="omc", help="Path to the omc executable.")
-    parser.add_argument("--models", nargs="+", default=DEFAULT_MODELS, help="Fully qualified Modelica classes to check.")
+    DM = [f"{PACKAGE_NAME}.{m}" for m in DEFAULT_MODELS]
+    parser.add_argument("--models", nargs="+", default=DM, help="Fully qualified Modelica classes to check.")
     return parser.parse_args()
 
 

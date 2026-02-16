@@ -12,7 +12,7 @@ import zipfile
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from scripts.common.paths import ARCHITECTURE_DIR, BUILD_DIR
+from scripts.common.paths import ARCHITECTURE_DIR, BUILD_DIR, COMPOSITION_NAME
 from pycps_sysmlv2 import SysMLArchitecture, SysMLPartDefinition, load_architecture
 from scripts.utils.sysml_compat import composition_components, part_ports
 
@@ -65,17 +65,20 @@ def _resolve_parts(architecture: SysMLArchitecture, parts: Sequence[str] | None)
     return subset
 
 
-def verify_fmu_ios(arch_path: Path, fmu_dir: Path, parts: Sequence[str] | None = None) -> int:
+def verify_fmu_ios(arch_path: Path, fmu_dir: Path, part: str) -> int:
     architecture = load_architecture(arch_path)
-    target_parts = _resolve_parts(architecture, parts)
+    if part not in architecture.part_definitions:
+        print(f"Composition: {part} not found!")
+        return 2
+
+    target_parts = architecture.part_definitions[part].parts
     issues: List[str] = []
     checked_parts = 0
     checked_ports = 0
 
-    for part_name in sorted(target_parts):
-        part = target_parts[part_name]
+    for part_name, part in sorted(target_parts.items()):
         expected: List[Tuple[str, str, str]] = []
-        for port in part_ports(part):
+        for port in part.ports.values():
             payload = port.payload_def
             if payload is None:
                 issues.append(
@@ -141,8 +144,9 @@ def parse_args() -> argparse.Namespace:
         help="Directory containing the exported FMUs",
     )
     parser.add_argument(
-        "--parts",
-        nargs="+",
+        "--part",
+        type=str,
+        default=COMPOSITION_NAME,    
         help="Subset of SysML parts to verify (default: all parts with ports)",
     )
     return parser.parse_args()
@@ -150,7 +154,7 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
-    raise SystemExit(verify_fmu_ios(args.architecture, args.fmu_dir, args.parts))
+    raise SystemExit(verify_fmu_ios(args.architecture, args.fmu_dir, args.part))
 
 
 if __name__ == "__main__":

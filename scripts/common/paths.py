@@ -10,6 +10,20 @@ BUILD_DIR = REPO_ROOT / "build"
 MODELS_DIR = REPO_ROOT / "models"
 RESOURCES_DIR = REPO_ROOT / "resources"
 
+PACKAGE_NAME = "Aircraft"
+COMPOSITION_NAME = "AircraftComposition"
+
+DEFAULT_MODELS = [
+    "CompositeAirframe",
+    "TurbofanPropulsion",
+    "AdaptiveWingSystem",
+    "MissionComputer",
+    "AutopilotModule",
+    "InputOutput",
+    "FuelSystem",
+    "Environment",
+    "ControlInterface",
+]
 
 def ensure_directory(path: Path) -> Path:
     """Create the directory (or its parent) if missing and return it for chaining."""
