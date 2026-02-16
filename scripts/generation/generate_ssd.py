@@ -12,7 +12,7 @@ import xml.etree.ElementTree as ET
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR
+from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR, ensure_parent_dir
 from pycps_sysmlv2 import (
     SysMLArchitecture,
     SysMLAttribute,
@@ -38,7 +38,7 @@ from scripts.utils.ssp_helpers import (
 register_ssp_namespaces()
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
-BUILD_DIR = GENERATED_DIR
+DEFAULT_OUTPUT = GENERATED_DIR / "SystemStructure.ssd"
 
 
 def _unique_component_name(name: str, used: Dict[str, str]) -> str:
@@ -223,7 +223,7 @@ def build_ssd_tree(
     return ET.ElementTree(root)
 
 
-def main() -> None:
+def main(argv: Optional[list[str]] = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--architecture",
@@ -231,21 +231,22 @@ def main() -> None:
         default=DEFAULT_ARCH_PATH,
         help="Directory containing the SysML architecture (.sysml) files or a file within it.",
     )
-    parser.add_argument("--output", type=Path, default=BUILD_DIR / "SystemStructure.ssd")
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    args = parser.parse_args(argv)
 
-    args = parser.parse_args()
+    try:
+        architecture = load_architecture(args.architecture)
+        tree = build_ssd_tree(architecture)
+        ET.indent(tree, space="  ", level=0)
+        ensure_parent_dir(args.output)
+        tree.write(args.output, encoding="utf-8", xml_declaration=True)
+    except Exception as exc:  # noqa: BLE001
+        print(f"[error] {exc}", file=sys.stderr)
+        return 1
 
-    architecture = load_architecture(args.architecture)
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    tree = build_ssd_tree(architecture)
-    ET.indent(tree, space="  ", level=0)
-    tree.write(args.output, encoding="utf-8", xml_declaration=True)
     print(f"SSD written to {args.output}")
+    return 0
 
 
 if __name__ == "__main__":
-    try:
-        main()
-    except Exception as exc:  # noqa: BLE001
-        print(f"[error] {exc}", file=sys.stderr)
-        raise
+    raise SystemExit(main())

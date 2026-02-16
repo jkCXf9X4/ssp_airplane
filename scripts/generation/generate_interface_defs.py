@@ -5,7 +5,7 @@ from __future__ import annotations
 import argparse
 import sys
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, Optional
 
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
@@ -40,11 +40,11 @@ def generate_modelica_package(ports: Dict[str, SysMLPortDefinition]) -> str:
     return "\n".join(lines)
 
 
-def main() -> None:
+def main(argv: Optional[list[str]] = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--architecture", type=Path, default=DEFAULT_ARCH_PATH)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT_PATH)
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     architecture = load_architecture(args.architecture)
     port_definitions = architecture.port_definitions
@@ -55,9 +55,10 @@ def main() -> None:
     ensure_parent_dir(args.output)
     content = generate_modelica_package(port_definitions)
 
-    args.output.write_text(content)
+    args.output.write_text(content, encoding="utf-8")
     print(f"Wrote Modelica interfaces to {args.output}")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

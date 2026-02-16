@@ -70,7 +70,7 @@ def extract_fmu_path(output: str) -> Path | None:
         return None
     return Path(matches[-1])
 
-def parse_args() -> argparse.Namespace:
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--models",
@@ -94,11 +94,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Print omc commands without executing them",
     )
-    return parser.parse_args()
+    return parser.parse_args(argv)
 
 
-def main() -> None:
-    args = parse_args()
+def main(argv: list[str] | None = None) -> int:
+    args = parse_args(argv)
     output_dir = Path(args.output)
 
     if output_dir.exists():
@@ -124,7 +124,8 @@ def main() -> None:
         print(f"  -> {target_path}")
 
     print("FMU build process finished.")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

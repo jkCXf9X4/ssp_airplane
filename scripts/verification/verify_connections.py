@@ -72,7 +72,7 @@ def verify_connections(architecture_path: Path) -> int:
     return 0
 
 
-def parse_args() -> argparse.Namespace:
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--architecture",
@@ -80,13 +80,13 @@ def parse_args() -> argparse.Namespace:
         default=DEFAULT_ARCH_PATH,
         help="Directory containing the SysML .sysml sections.",
     )
-    return parser.parse_args()
+    return parser.parse_args(argv)
 
 
-def main() -> None:
-    args = parse_args()
-    raise SystemExit(verify_connections(args.architecture))
+def main(argv: list[str] | None = None) -> int:
+    args = parse_args(argv)
+    return verify_connections(args.architecture)
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

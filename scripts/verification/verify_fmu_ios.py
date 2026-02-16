@@ -5,7 +5,7 @@ from __future__ import annotations
 import argparse
 import sys
 from pathlib import Path
-from typing import Dict, List, Optional, Sequence, Tuple
+from typing import Dict, List, Optional, Tuple
 import xml.etree.ElementTree as ET
 import zipfile
 
@@ -13,8 +13,7 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, BUILD_DIR, COMPOSITION_NAME
-from pycps_sysmlv2 import SysMLArchitecture, SysMLPartDefinition, load_architecture
-from scripts.utils.sysml_compat import composition_components, part_ports
+from pycps_sysmlv2 import load_architecture
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_FMU_DIR = BUILD_DIR / "fmus"
@@ -40,29 +39,6 @@ def _load_scalar_variables(fmu_path: Path) -> Dict[str, Optional[str]]:
         if name:
             variables[name] = causality
     return variables
-
-
-def _resolve_parts(architecture: SysMLArchitecture, parts: Sequence[str] | None) -> Dict[str, SysMLPartDefinition]:
-    component_pairs = composition_components(architecture)
-    by_instance: Dict[str, SysMLPartDefinition] = {name: part for name, part in component_pairs}
-    by_definition: Dict[str, SysMLPartDefinition] = {}
-    for _, part in component_pairs:
-        by_definition.setdefault(part.name, part)
-
-    if not parts:
-        return by_instance
-
-    subset: Dict[str, SysMLPartDefinition] = {}
-    missing: List[str] = []
-    for part_name in parts:
-        selected = by_instance.get(part_name) or by_definition.get(part_name)
-        if selected is None:
-            missing.append(part_name)
-            continue
-        subset[part_name] = selected
-    if missing:
-        raise SystemExit(f"Unknown part(s) requested: {', '.join(sorted(missing))}")
-    return subset
 
 
 def verify_fmu_ios(arch_path: Path, fmu_dir: Path, part: str) -> int:
@@ -129,7 +105,7 @@ def verify_fmu_ios(arch_path: Path, fmu_dir: Path, part: str) -> int:
     return 0
 
 
-def parse_args() -> argparse.Namespace:
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--architecture",
@@ -149,13 +125,13 @@ def parse_args() -> argparse.Namespace:
         default=COMPOSITION_NAME,    
         help="Subset of SysML parts to verify (default: all parts with ports)",
     )
-    return parser.parse_args()
+    return parser.parse_args(argv)
 
 
-def main() -> None:
-    args = parse_args()
-    raise SystemExit(verify_fmu_ios(args.architecture, args.fmu_dir, args.part))
+def main(argv: list[str] | None = None) -> int:
+    args = parse_args(argv)
+    return verify_fmu_ios(args.architecture, args.fmu_dir, args.part)
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

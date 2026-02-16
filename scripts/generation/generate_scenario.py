@@ -80,7 +80,7 @@ def generate_scenario(
     }
 
 
-def parse_args() -> argparse.Namespace:
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True, help="Destination JSON file.")
     parser.add_argument("--points", type=int, default=None, help="Number of scenario points (3-10).")
@@ -89,11 +89,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-distance", type=float, default=1000.0)
     parser.add_argument("--min-altitude", type=float, default=100.0)
     parser.add_argument("--max-altitude", type=float, default=10000.0)
-    return parser.parse_args()
+    return parser.parse_args(argv)
 
 
-def main() -> None:
-    args = parse_args()
+def main(argv: list[str] | None = None) -> int:
+    args = parse_args(argv)
     if args.seed is not None:
         random.seed(args.seed)
     if args.points is not None and not (3 <= args.points <= 10):
@@ -107,9 +107,10 @@ def main() -> None:
         max_altitude_m=args.max_altitude,
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(scenario, indent=2))
+    args.output.write_text(json.dumps(scenario, indent=2), encoding="utf-8")
     print(f"Wrote scenario with {len(scenario['points'])} points to {args.output}")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
