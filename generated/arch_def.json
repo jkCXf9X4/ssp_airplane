@@ -6,31 +6,31 @@
         "aspect_ratio": {
           "doc": null,
           "name": "aspect_ratio",
-          "type": null,
+          "type": "Real",
           "value": 3.6
         },
         "control_authority_deg": {
           "doc": null,
           "name": "control_authority_deg",
-          "type": null,
+          "type": "Integer",
           "value": 25
         },
         "load_factor_limit_g": {
           "doc": null,
           "name": "load_factor_limit_g",
-          "type": null,
+          "type": "Integer",
           "value": 9
         },
         "reference_area_m2": {
           "doc": null,
           "name": "reference_area_m2",
-          "type": null,
+          "type": "Real",
           "value": 28.0
         },
         "span_m": {
           "doc": null,
           "name": "span_m",
-          "type": null,
+          "type": "Real",
           "value": 10.0
         }
       },
@@ -512,13 +512,13 @@
               "input_scheme": {
                 "doc": null,
                 "name": "input_scheme",
-                "type": null,
+                "type": "String",
                 "value": "HOTAS"
               },
               "telemetry_rate_hz": {
                 "doc": null,
                 "name": "telemetry_rate_hz",
-                "type": null,
+                "type": "Integer",
                 "value": 120
               }
             },
@@ -999,25 +999,25 @@
               "comment": {
                 "doc": null,
                 "name": "comment",
-                "type": null,
+                "type": "String",
                 "value": "uses waypoint tracking"
               },
               "waypointCount": {
                 "doc": null,
                 "name": "waypointCount",
-                "type": null,
+                "type": "Integer",
                 "value": 10
               },
               "waypointProximity_km": {
                 "doc": null,
                 "name": "waypointProximity_km",
-                "type": null,
+                "type": "Integer",
                 "value": 10
               },
               "waypointX_km": {
                 "doc": null,
                 "name": "waypointX_km",
-                "type": null,
+                "type": "List[Real]",
                 "value": [
                   0.0,
                   0.0,
@@ -1034,7 +1034,7 @@
               "waypointY_km": {
                 "doc": null,
                 "name": "waypointY_km",
-                "type": null,
+                "type": "List[Real]",
                 "value": [
                   0.0,
                   0.0,
@@ -1051,7 +1051,7 @@
               "waypointZ_km": {
                 "doc": null,
                 "name": "waypointZ_km",
-                "type": null,
+                "type": "List[Real]",
                 "value": [
                   0.0,
                   0.0,
@@ -1645,31 +1645,31 @@
               "dry_thrust_kn": {
                 "doc": null,
                 "name": "dry_thrust_kn",
-                "type": null,
+                "type": "Real",
                 "value": 79.0
               },
               "fuel_capacity_kg": {
                 "doc": null,
                 "name": "fuel_capacity_kg",
-                "type": null,
+                "type": "Integer",
                 "value": 3160
               },
               "generator_output_kw": {
                 "doc": null,
                 "name": "generator_output_kw",
-                "type": null,
+                "type": "Integer",
                 "value": 80
               },
               "max_thrust_kn": {
                 "doc": null,
                 "name": "max_thrust_kn",
-                "type": null,
+                "type": "Real",
                 "value": 129.7
               },
               "specific_fuel_consumption": {
                 "doc": null,
                 "name": "specific_fuel_consumption",
-                "type": null,
+                "type": "Real",
                 "value": 0.76
               }
             },
@@ -1797,13 +1797,13 @@
               "fuel_capacity_kg": {
                 "doc": null,
                 "name": "fuel_capacity_kg",
-                "type": null,
+                "type": "Integer",
                 "value": 3160
               },
               "reserve_fraction": {
                 "doc": null,
                 "name": "reserve_fraction",
-                "type": null,
+                "type": "Real",
                 "value": 0.08
               }
             },
@@ -1887,31 +1887,31 @@
               "dry_thrust_kn": {
                 "doc": null,
                 "name": "dry_thrust_kn",
-                "type": null,
+                "type": "Real",
                 "value": 79.0
               },
               "fuel_capacity_kg": {
                 "doc": null,
                 "name": "fuel_capacity_kg",
-                "type": null,
+                "type": "Integer",
                 "value": 3160
               },
               "generator_output_kw": {
                 "doc": null,
                 "name": "generator_output_kw",
-                "type": null,
+                "type": "Integer",
                 "value": 80
               },
               "max_thrust_kn": {
                 "doc": null,
                 "name": "max_thrust_kn",
-                "type": null,
+                "type": "Real",
                 "value": 129.7
               },
               "specific_fuel_consumption": {
                 "doc": null,
                 "name": "specific_fuel_consumption",
-                "type": null,
+                "type": "Real",
                 "value": 0.76
               }
             },
@@ -2027,31 +2027,31 @@
               "dry_thrust_kn": {
                 "doc": null,
                 "name": "dry_thrust_kn",
-                "type": null,
+                "type": "Real",
                 "value": 79.0
               },
               "fuel_capacity_kg": {
                 "doc": null,
                 "name": "fuel_capacity_kg",
-                "type": null,
+                "type": "Integer",
                 "value": 3160
               },
               "generator_output_kw": {
                 "doc": null,
                 "name": "generator_output_kw",
-                "type": null,
+                "type": "Integer",
                 "value": 80
               },
               "max_thrust_kn": {
                 "doc": null,
                 "name": "max_thrust_kn",
-                "type": null,
+                "type": "Real",
                 "value": 129.7
               },
               "specific_fuel_consumption": {
                 "doc": null,
                 "name": "specific_fuel_consumption",
-                "type": null,
+                "type": "Real",
                 "value": 0.76
               }
             },
@@ -2454,31 +2454,31 @@
               "aspect_ratio": {
                 "doc": null,
                 "name": "aspect_ratio",
-                "type": null,
+                "type": "Real",
                 "value": 3.6
               },
               "control_authority_deg": {
                 "doc": null,
                 "name": "control_authority_deg",
-                "type": null,
+                "type": "Integer",
                 "value": 25
               },
               "load_factor_limit_g": {
                 "doc": null,
                 "name": "load_factor_limit_g",
-                "type": null,
+                "type": "Integer",
                 "value": 9
               },
               "reference_area_m2": {
                 "doc": null,
                 "name": "reference_area_m2",
-                "type": null,
+                "type": "Real",
                 "value": 28.0
               },
               "span_m": {
                 "doc": null,
                 "name": "span_m",
-                "type": null,
+                "type": "Real",
                 "value": 10.0
               }
             },
@@ -3774,13 +3774,13 @@
               "fuel_capacity_kg": {
                 "doc": null,
                 "name": "fuel_capacity_kg",
-                "type": null,
+                "type": "Integer",
                 "value": 3160
               },
               "reserve_fraction": {
                 "doc": null,
                 "name": "reserve_fraction",
-                "type": null,
+                "type": "Real",
                 "value": 0.08
               }
             },
@@ -4165,31 +4165,31 @@
               "aspect_ratio": {
                 "doc": null,
                 "name": "aspect_ratio",
-                "type": null,
+                "type": "Real",
                 "value": 3.6
               },
               "control_authority_deg": {
                 "doc": null,
                 "name": "control_authority_deg",
-                "type": null,
+                "type": "Integer",
                 "value": 25
               },
               "load_factor_limit_g": {
                 "doc": null,
                 "name": "load_factor_limit_g",
-                "type": null,
+                "type": "Integer",
                 "value": 9
               },
               "reference_area_m2": {
                 "doc": null,
                 "name": "reference_area_m2",
-                "type": null,
+                "type": "Real",
                 "value": 28.0
               },
               "span_m": {
                 "doc": null,
                 "name": "span_m",
-                "type": null,
+                "type": "Real",
                 "value": 10.0
               }
             },
@@ -4670,31 +4670,31 @@
               "aspect_ratio": {
                 "doc": null,
                 "name": "aspect_ratio",
-                "type": null,
+                "type": "Real",
                 "value": 3.6
               },
               "control_authority_deg": {
                 "doc": null,
                 "name": "control_authority_deg",
-                "type": null,
+                "type": "Integer",
                 "value": 25
               },
               "load_factor_limit_g": {
                 "doc": null,
                 "name": "load_factor_limit_g",
-                "type": null,
+                "type": "Integer",
                 "value": 9
               },
               "reference_area_m2": {
                 "doc": null,
                 "name": "reference_area_m2",
-                "type": null,
+                "type": "Real",
                 "value": 28.0
               },
               "span_m": {
                 "doc": null,
                 "name": "span_m",
-                "type": null,
+                "type": "Real",
                 "value": 10.0
               }
             },
@@ -4888,25 +4888,25 @@
               "comment": {
                 "doc": null,
                 "name": "comment",
-                "type": null,
+                "type": "String",
                 "value": "uses waypoint tracking"
               },
               "waypointCount": {
                 "doc": null,
                 "name": "waypointCount",
-                "type": null,
+                "type": "Integer",
                 "value": 10
               },
               "waypointProximity_km": {
                 "doc": null,
                 "name": "waypointProximity_km",
-                "type": null,
+                "type": "Integer",
                 "value": 10
               },
               "waypointX_km": {
                 "doc": null,
                 "name": "waypointX_km",
-                "type": null,
+                "type": "List[Real]",
                 "value": [
                   0.0,
                   0.0,
@@ -4923,7 +4923,7 @@
               "waypointY_km": {
                 "doc": null,
                 "name": "waypointY_km",
-                "type": null,
+                "type": "List[Real]",
                 "value": [
                   0.0,
                   0.0,
@@ -4940,7 +4940,7 @@
               "waypointZ_km": {
                 "doc": null,
                 "name": "waypointZ_km",
-                "type": null,
+                "type": "List[Real]",
                 "value": [
                   0.0,
                   0.0,
@@ -5492,25 +5492,25 @@
               "comment": {
                 "doc": null,
                 "name": "comment",
-                "type": null,
+                "type": "String",
                 "value": "uses waypoint tracking"
               },
               "waypointCount": {
                 "doc": null,
                 "name": "waypointCount",
-                "type": null,
+                "type": "Integer",
                 "value": 10
               },
               "waypointProximity_km": {
                 "doc": null,
                 "name": "waypointProximity_km",
-                "type": null,
+                "type": "Integer",
                 "value": 10
               },
               "waypointX_km": {
                 "doc": null,
                 "name": "waypointX_km",
-                "type": null,
+                "type": "List[Real]",
                 "value": [
                   0.0,
                   0.0,
@@ -5527,7 +5527,7 @@
               "waypointY_km": {
                 "doc": null,
                 "name": "waypointY_km",
-                "type": null,
+                "type": "List[Real]",
                 "value": [
                   0.0,
                   0.0,
@@ -5544,7 +5544,7 @@
               "waypointZ_km": {
                 "doc": null,
                 "name": "waypointZ_km",
-                "type": null,
+                "type": "List[Real]",
                 "value": [
                   0.0,
                   0.0,
@@ -6096,25 +6096,25 @@
               "comment": {
                 "doc": null,
                 "name": "comment",
-                "type": null,
+                "type": "String",
                 "value": "uses waypoint tracking"
               },
               "waypointCount": {
                 "doc": null,
                 "name": "waypointCount",
-                "type": null,
+                "type": "Integer",
                 "value": 10
               },
               "waypointProximity_km": {
                 "doc": null,
                 "name": "waypointProximity_km",
-                "type": null,
+                "type": "Integer",
                 "value": 10
               },
               "waypointX_km": {
                 "doc": null,
                 "name": "waypointX_km",
-                "type": null,
+                "type": "List[Real]",
                 "value": [
                   0.0,
                   0.0,
@@ -6131,7 +6131,7 @@
               "waypointY_km": {
                 "doc": null,
                 "name": "waypointY_km",
-                "type": null,
+                "type": "List[Real]",
                 "value": [
                   0.0,
                   0.0,
@@ -6148,7 +6148,7 @@
               "waypointZ_km": {
                 "doc": null,
                 "name": "waypointZ_km",
-                "type": null,
+                "type": "List[Real]",
                 "value": [
                   0.0,
                   0.0,
@@ -6724,31 +6724,31 @@
               "aspect_ratio": {
                 "doc": null,
                 "name": "aspect_ratio",
-                "type": null,
+                "type": "Real",
                 "value": 3.6
               },
               "control_authority_deg": {
                 "doc": null,
                 "name": "control_authority_deg",
-                "type": null,
+                "type": "Integer",
                 "value": 25
               },
               "load_factor_limit_g": {
                 "doc": null,
                 "name": "load_factor_limit_g",
-                "type": null,
+                "type": "Integer",
                 "value": 9
               },
               "reference_area_m2": {
                 "doc": null,
                 "name": "reference_area_m2",
-                "type": null,
+                "type": "Real",
                 "value": 28.0
               },
               "span_m": {
                 "doc": null,
                 "name": "span_m",
-                "type": null,
+                "type": "Real",
                 "value": 10.0
               }
             },
@@ -8608,25 +8608,25 @@
               "comment": {
                 "doc": null,
                 "name": "comment",
-                "type": null,
+                "type": "String",
                 "value": "uses waypoint tracking"
               },
               "waypointCount": {
                 "doc": null,
                 "name": "waypointCount",
-                "type": null,
+                "type": "Integer",
                 "value": 10
               },
               "waypointProximity_km": {
                 "doc": null,
                 "name": "waypointProximity_km",
-                "type": null,
+                "type": "Integer",
                 "value": 10
               },
               "waypointX_km": {
                 "doc": null,
                 "name": "waypointX_km",
-                "type": null,
+                "type": "List[Real]",
                 "value": [
                   0.0,
                   0.0,
@@ -8643,7 +8643,7 @@
               "waypointY_km": {
                 "doc": null,
                 "name": "waypointY_km",
-                "type": null,
+                "type": "List[Real]",
                 "value": [
                   0.0,
                   0.0,
@@ -8660,7 +8660,7 @@
               "waypointZ_km": {
                 "doc": null,
                 "name": "waypointZ_km",
-                "type": null,
+                "type": "List[Real]",
                 "value": [
                   0.0,
                   0.0,
@@ -9806,25 +9806,25 @@
               "comment": {
                 "doc": null,
                 "name": "comment",
-                "type": null,
+                "type": "String",
                 "value": "uses waypoint tracking"
               },
               "waypointCount": {
                 "doc": null,
                 "name": "waypointCount",
-                "type": null,
+                "type": "Integer",
                 "value": 10
               },
               "waypointProximity_km": {
                 "doc": null,
                 "name": "waypointProximity_km",
-                "type": null,
+                "type": "Integer",
                 "value": 10
               },
               "waypointX_km": {
                 "doc": null,
                 "name": "waypointX_km",
-                "type": null,
+                "type": "List[Real]",
                 "value": [
                   0.0,
                   0.0,
@@ -9841,7 +9841,7 @@
               "waypointY_km": {
                 "doc": null,
                 "name": "waypointY_km",
-                "type": null,
+                "type": "List[Real]",
                 "value": [
                   0.0,
                   0.0,
@@ -9858,7 +9858,7 @@
               "waypointZ_km": {
                 "doc": null,
                 "name": "waypointZ_km",
-                "type": null,
+                "type": "List[Real]",
                 "value": [
                   0.0,
                   0.0,
@@ -10153,31 +10153,31 @@
               "aspect_ratio": {
                 "doc": null,
                 "name": "aspect_ratio",
-                "type": null,
+                "type": "Real",
                 "value": 3.6
               },
               "control_authority_deg": {
                 "doc": null,
                 "name": "control_authority_deg",
-                "type": null,
+                "type": "Integer",
                 "value": 25
               },
               "load_factor_limit_g": {
                 "doc": null,
                 "name": "load_factor_limit_g",
-                "type": null,
+                "type": "Integer",
                 "value": 9
               },
               "reference_area_m2": {
                 "doc": null,
                 "name": "reference_area_m2",
-                "type": null,
+                "type": "Real",
                 "value": 28.0
               },
               "span_m": {
                 "doc": null,
                 "name": "span_m",
-                "type": null,
+                "type": "Real",
                 "value": 10.0
               }
             },
@@ -10342,25 +10342,25 @@
               "comment": {
                 "doc": null,
                 "name": "comment",
-                "type": null,
+                "type": "String",
                 "value": "uses waypoint tracking"
               },
               "waypointCount": {
                 "doc": null,
                 "name": "waypointCount",
-                "type": null,
+                "type": "Integer",
                 "value": 10
               },
               "waypointProximity_km": {
                 "doc": null,
                 "name": "waypointProximity_km",
-                "type": null,
+                "type": "Integer",
                 "value": 10
               },
               "waypointX_km": {
                 "doc": null,
                 "name": "waypointX_km",
-                "type": null,
+                "type": "List[Real]",
                 "value": [
                   0.0,
                   0.0,
@@ -10377,7 +10377,7 @@
               "waypointY_km": {
                 "doc": null,
                 "name": "waypointY_km",
-                "type": null,
+                "type": "List[Real]",
                 "value": [
                   0.0,
                   0.0,
@@ -10394,7 +10394,7 @@
               "waypointZ_km": {
                 "doc": null,
                 "name": "waypointZ_km",
-                "type": null,
+                "type": "List[Real]",
                 "value": [
                   0.0,
                   0.0,
@@ -10642,37 +10642,37 @@
               "empty_weight_kg": {
                 "doc": null,
                 "name": "empty_weight_kg",
-                "type": null,
+                "type": "Integer",
                 "value": 8573
               },
               "fuselage_width_m": {
                 "doc": null,
                 "name": "fuselage_width_m",
-                "type": null,
+                "type": "Real",
                 "value": 3.0
               },
               "hardpoint_count": {
                 "doc": null,
                 "name": "hardpoint_count",
-                "type": null,
+                "type": "Integer",
                 "value": 9
               },
               "length_m": {
                 "doc": null,
                 "name": "length_m",
-                "type": null,
+                "type": "Real",
                 "value": 15.0
               },
               "payload_capacity_kg": {
                 "doc": null,
                 "name": "payload_capacity_kg",
-                "type": null,
+                "type": "Integer",
                 "value": 7700
               },
               "wingspan_m": {
                 "doc": null,
                 "name": "wingspan_m",
-                "type": null,
+                "type": "Real",
                 "value": 10.0
               }
             },
@@ -10692,13 +10692,13 @@
               "input_scheme": {
                 "doc": null,
                 "name": "input_scheme",
-                "type": null,
+                "type": "String",
                 "value": "HOTAS"
               },
               "telemetry_rate_hz": {
                 "doc": null,
                 "name": "telemetry_rate_hz",
-                "type": null,
+                "type": "Integer",
                 "value": 120
               }
             },
@@ -11039,13 +11039,13 @@
               "fuel_capacity_kg": {
                 "doc": null,
                 "name": "fuel_capacity_kg",
-                "type": null,
+                "type": "Integer",
                 "value": 3160
               },
               "reserve_fraction": {
                 "doc": null,
                 "name": "reserve_fraction",
-                "type": null,
+                "type": "Real",
                 "value": 0.08
               }
             },
@@ -11592,31 +11592,31 @@
               "dry_thrust_kn": {
                 "doc": null,
                 "name": "dry_thrust_kn",
-                "type": null,
+                "type": "Real",
                 "value": 79.0
               },
               "fuel_capacity_kg": {
                 "doc": null,
                 "name": "fuel_capacity_kg",
-                "type": null,
+                "type": "Integer",
                 "value": 3160
               },
               "generator_output_kw": {
                 "doc": null,
                 "name": "generator_output_kw",
-                "type": null,
+                "type": "Integer",
                 "value": 80
               },
               "max_thrust_kn": {
                 "doc": null,
                 "name": "max_thrust_kn",
-                "type": null,
+                "type": "Real",
                 "value": 129.7
               },
               "specific_fuel_consumption": {
                 "doc": null,
                 "name": "specific_fuel_consumption",
-                "type": null,
+                "type": "Real",
                 "value": 0.76
               }
             },
@@ -11714,25 +11714,25 @@
         "comment": {
           "doc": null,
           "name": "comment",
-          "type": null,
+          "type": "String",
           "value": "uses waypoint tracking"
         },
         "waypointCount": {
           "doc": null,
           "name": "waypointCount",
-          "type": null,
+          "type": "Integer",
           "value": 10
         },
         "waypointProximity_km": {
           "doc": null,
           "name": "waypointProximity_km",
-          "type": null,
+          "type": "Integer",
           "value": 10
         },
         "waypointX_km": {
           "doc": null,
           "name": "waypointX_km",
-          "type": null,
+          "type": "List[Real]",
           "value": [
             0.0,
             0.0,
@@ -11749,7 +11749,7 @@
         "waypointY_km": {
           "doc": null,
           "name": "waypointY_km",
-          "type": null,
+          "type": "List[Real]",
           "value": [
             0.0,
             0.0,
@@ -11766,7 +11766,7 @@
         "waypointZ_km": {
           "doc": null,
           "name": "waypointZ_km",
-          "type": null,
+          "type": "List[Real]",
           "value": [
             0.0,
             0.0,
@@ -12009,37 +12009,37 @@
         "empty_weight_kg": {
           "doc": null,
           "name": "empty_weight_kg",
-          "type": null,
+          "type": "Integer",
           "value": 8573
         },
         "fuselage_width_m": {
           "doc": null,
           "name": "fuselage_width_m",
-          "type": null,
+          "type": "Real",
           "value": 3.0
         },
         "hardpoint_count": {
           "doc": null,
           "name": "hardpoint_count",
-          "type": null,
+          "type": "Integer",
           "value": 9
         },
         "length_m": {
           "doc": null,
           "name": "length_m",
-          "type": null,
+          "type": "Real",
           "value": 15.0
         },
         "payload_capacity_kg": {
           "doc": null,
           "name": "payload_capacity_kg",
-          "type": null,
+          "type": "Integer",
           "value": 7700
         },
         "wingspan_m": {
           "doc": null,
           "name": "wingspan_m",
-          "type": null,
+          "type": "Real",
           "value": 10.0
         }
       },
@@ -12054,13 +12054,13 @@
         "input_scheme": {
           "doc": null,
           "name": "input_scheme",
-          "type": null,
+          "type": "String",
           "value": "HOTAS"
         },
         "telemetry_rate_hz": {
           "doc": null,
           "name": "telemetry_rate_hz",
-          "type": null,
+          "type": "Integer",
           "value": 120
         }
       },
@@ -12391,13 +12391,13 @@
         "fuel_capacity_kg": {
           "doc": null,
           "name": "fuel_capacity_kg",
-          "type": null,
+          "type": "Integer",
           "value": 3160
         },
         "reserve_fraction": {
           "doc": null,
           "name": "reserve_fraction",
-          "type": null,
+          "type": "Real",
           "value": 0.08
         }
       },
@@ -12929,31 +12929,31 @@
         "dry_thrust_kn": {
           "doc": null,
           "name": "dry_thrust_kn",
-          "type": null,
+          "type": "Real",
           "value": 79.0
         },
         "fuel_capacity_kg": {
           "doc": null,
           "name": "fuel_capacity_kg",
-          "type": null,
+          "type": "Integer",
           "value": 3160
         },
         "generator_output_kw": {
           "doc": null,
           "name": "generator_output_kw",
-          "type": null,
+          "type": "Integer",
           "value": 80
         },
         "max_thrust_kn": {
           "doc": null,
           "name": "max_thrust_kn",
-          "type": null,
+          "type": "Real",
           "value": 129.7
         },
         "specific_fuel_consumption": {
           "doc": null,
           "name": "specific_fuel_consumption",
-          "type": null,
+          "type": "Real",
           "value": 0.76
         }
       },

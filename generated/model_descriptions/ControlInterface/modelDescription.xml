@@ -1,48 +1,46 @@
 <?xml version='1.0' encoding='utf-8'?>
-<fmiModelDescription fmiVersion="2.0" modelName="Aircraft.ControlInterface" guid="{80ef809e-e478-5e70-856b-075eaf4b04f0}" description="F-16 HOTAS + side-stick interface for pilot inputs and trim switches." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2026-02-16T10:27:08Z" variableNamingConvention="structured" numberOfEventIndicators="0">
+<fmiModelDescription fmiVersion="2.0" modelName="Aircraft.ControlInterface" guid="{80ef809e-e478-5e70-856b-075eaf4b04f0}" description="F-16 HOTAS + side-stick interface for pilot inputs and trim switches." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2026-02-16T15:56:19Z" variableNamingConvention="structured" numberOfEventIndicators="0">
   <CoSimulation modelIdentifier="ControlInterface" />
   <ModelVariables>
-    <ScalarVariable name="pilotCommand.button_mask" valueReference="1" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
-      <Integer />
-    </ScalarVariable>
-    <ScalarVariable name="pilotCommand.hat_x" valueReference="2" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
-      <Integer />
-    </ScalarVariable>
-    <ScalarVariable name="pilotCommand.hat_y" valueReference="3" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
-      <Integer />
-    </ScalarVariable>
-    <ScalarVariable name="pilotCommand.mode_switch" valueReference="4" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
-      <Integer />
-    </ScalarVariable>
-    <ScalarVariable name="pilotCommand.reserved" valueReference="5" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
-      <Integer />
-    </ScalarVariable>
-    <ScalarVariable name="pilotCommand.rudder_norm" valueReference="6" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
-      <Real />
-    </ScalarVariable>
-    <ScalarVariable name="pilotCommand.stick_pitch_norm" valueReference="7" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
-      <Real />
-    </ScalarVariable>
-    <ScalarVariable name="pilotCommand.stick_roll_norm" valueReference="8" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
-      <Real />
-    </ScalarVariable>
-    <ScalarVariable name="pilotCommand.throttle_aux_norm" valueReference="9" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
-      <Real />
-    </ScalarVariable>
-    <ScalarVariable name="pilotCommand.throttle_norm" valueReference="10" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
-      <Real />
-    </ScalarVariable>
-    <ScalarVariable name="input_scheme" valueReference="11" causality="parameter" variability="fixed">
+    <ScalarVariable name="input_scheme" valueReference="0" causality="parameter" variability="fixed">
       <String start="HOTAS" />
     </ScalarVariable>
-    <ScalarVariable name="telemetry_rate_hz" valueReference="12" causality="parameter" variability="fixed">
+    <ScalarVariable name="telemetry_rate_hz" valueReference="1" causality="parameter" variability="fixed">
       <Integer start="120" />
+    </ScalarVariable>
+    <ScalarVariable name="pilotCommand.stick_pitch_norm" valueReference="2" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="pilotCommand.stick_roll_norm" valueReference="3" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="pilotCommand.rudder_norm" valueReference="4" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="pilotCommand.throttle_norm" valueReference="5" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="pilotCommand.throttle_aux_norm" valueReference="6" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="pilotCommand.button_mask" valueReference="7" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="pilotCommand.hat_x" valueReference="8" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="pilotCommand.hat_y" valueReference="9" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="pilotCommand.mode_switch" valueReference="10" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="pilotCommand.reserved" valueReference="11" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
+      <Integer />
     </ScalarVariable>
   </ModelVariables>
   <ModelStructure>
     <Outputs>
-      <Unknown index="1" />
-      <Unknown index="2" />
       <Unknown index="3" />
       <Unknown index="4" />
       <Unknown index="5" />
@@ -51,10 +49,10 @@
       <Unknown index="8" />
       <Unknown index="9" />
       <Unknown index="10" />
+      <Unknown index="11" />
+      <Unknown index="12" />
     </Outputs>
     <InitialUnknowns>
-      <Unknown index="1" />
-      <Unknown index="2" />
       <Unknown index="3" />
       <Unknown index="4" />
       <Unknown index="5" />
@@ -63,6 +61,8 @@
       <Unknown index="8" />
       <Unknown index="9" />
       <Unknown index="10" />
+      <Unknown index="11" />
+      <Unknown index="12" />
     </InitialUnknowns>
   </ModelStructure>
 </fmiModelDescription>

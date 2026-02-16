@@ -1,56 +1,56 @@
 <?xml version='1.0' encoding='utf-8'?>
-<fmiModelDescription fmiVersion="2.0" modelName="Aircraft.TurbofanPropulsion" guid="{e1076483-7e94-5a09-886a-05a6af2c5c06}" description="Pratt &amp; Whitney F100 / GE F110 class augmented turbofan powering the F-16." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2026-02-16T10:27:08Z" variableNamingConvention="structured" numberOfEventIndicators="0">
+<fmiModelDescription fmiVersion="2.0" modelName="Aircraft.TurbofanPropulsion" guid="{e1076483-7e94-5a09-886a-05a6af2c5c06}" description="Pratt &amp; Whitney F100 / GE F110 class augmented turbofan powering the F-16." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2026-02-16T15:56:19Z" variableNamingConvention="structured" numberOfEventIndicators="0">
   <CoSimulation modelIdentifier="TurbofanPropulsion" />
   <ModelVariables>
-    <ScalarVariable name="fuel_consumption.mass_flow_kgps" valueReference="1" causality="output" description="Mass flow telemetry">
-      <Real />
-    </ScalarVariable>
-    <ScalarVariable name="throttleCmd.afterburner_enable" valueReference="2" causality="input" description="Mission computer throttle + afterburner command input.">
-      <Boolean />
-    </ScalarVariable>
-    <ScalarVariable name="throttleCmd.fuel_enable" valueReference="3" causality="input" description="Mission computer throttle + afterburner command input.">
-      <Boolean />
-    </ScalarVariable>
-    <ScalarVariable name="throttleCmd.throttle_norm" valueReference="4" causality="input" description="Mission computer throttle + afterburner command input.">
-      <Real />
-    </ScalarVariable>
-    <ScalarVariable name="thrustOut.exhaust_velocity_mps" valueReference="5" causality="output" description="Propulsion thrust telemetry exported to airframe.">
-      <Real />
-    </ScalarVariable>
-    <ScalarVariable name="thrustOut.mass_flow_kgps" valueReference="6" causality="output" description="Propulsion thrust telemetry exported to airframe.">
-      <Real />
-    </ScalarVariable>
-    <ScalarVariable name="thrustOut.thrust_kn" valueReference="7" causality="output" description="Propulsion thrust telemetry exported to airframe.">
-      <Real />
-    </ScalarVariable>
-    <ScalarVariable name="dry_thrust_kn" valueReference="8" causality="parameter" variability="fixed">
-      <Real start="79" />
-    </ScalarVariable>
-    <ScalarVariable name="fuel_capacity_kg" valueReference="9" causality="parameter" variability="fixed">
-      <Integer start="3160" />
-    </ScalarVariable>
-    <ScalarVariable name="generator_output_kw" valueReference="10" causality="parameter" variability="fixed">
-      <Integer start="80" />
-    </ScalarVariable>
-    <ScalarVariable name="max_thrust_kn" valueReference="11" causality="parameter" variability="fixed">
+    <ScalarVariable name="max_thrust_kn" valueReference="0" causality="parameter" variability="fixed">
       <Real start="129.7" />
     </ScalarVariable>
-    <ScalarVariable name="specific_fuel_consumption" valueReference="12" causality="parameter" variability="fixed">
+    <ScalarVariable name="dry_thrust_kn" valueReference="1" causality="parameter" variability="fixed">
+      <Real start="79" />
+    </ScalarVariable>
+    <ScalarVariable name="specific_fuel_consumption" valueReference="2" causality="parameter" variability="fixed">
       <Real start="0.76" />
+    </ScalarVariable>
+    <ScalarVariable name="fuel_capacity_kg" valueReference="3" causality="parameter" variability="fixed">
+      <Integer start="3160" />
+    </ScalarVariable>
+    <ScalarVariable name="generator_output_kw" valueReference="4" causality="parameter" variability="fixed">
+      <Integer start="80" />
+    </ScalarVariable>
+    <ScalarVariable name="throttleCmd.throttle_norm" valueReference="5" causality="input" description="Mission computer throttle + afterburner command input.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="throttleCmd.fuel_enable" valueReference="6" causality="input" description="Mission computer throttle + afterburner command input.">
+      <Boolean />
+    </ScalarVariable>
+    <ScalarVariable name="throttleCmd.afterburner_enable" valueReference="7" causality="input" description="Mission computer throttle + afterburner command input.">
+      <Boolean />
+    </ScalarVariable>
+    <ScalarVariable name="thrustOut.thrust_kn" valueReference="8" causality="output" description="Propulsion thrust telemetry exported to airframe.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="thrustOut.mass_flow_kgps" valueReference="9" causality="output" description="Propulsion thrust telemetry exported to airframe.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="thrustOut.exhaust_velocity_mps" valueReference="10" causality="output" description="Propulsion thrust telemetry exported to airframe.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="fuel_consumption.mass_flow_kgps" valueReference="11" causality="output" description="Mass flow telemetry">
+      <Real />
     </ScalarVariable>
   </ModelVariables>
   <ModelStructure>
     <Outputs>
-      <Unknown index="1" />
-      <Unknown index="5" />
-      <Unknown index="6" />
-      <Unknown index="7" />
+      <Unknown index="9" />
+      <Unknown index="10" />
+      <Unknown index="11" />
+      <Unknown index="12" />
     </Outputs>
     <InitialUnknowns>
-      <Unknown index="1" />
-      <Unknown index="5" />
-      <Unknown index="6" />
-      <Unknown index="7" />
+      <Unknown index="9" />
+      <Unknown index="10" />
+      <Unknown index="11" />
+      <Unknown index="12" />
     </InitialUnknowns>
   </ModelStructure>
 </fmiModelDescription>

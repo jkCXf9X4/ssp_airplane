@@ -1,111 +1,111 @@
 <?xml version='1.0' encoding='utf-8'?>
-<fmiModelDescription fmiVersion="2.0" modelName="Aircraft.MissionComputer" guid="{1660e286-75ad-55ad-aeec-d29c86d6d3e8}" description="F-16C/D mission computer blending pilot HOTAS inputs with fly-by-wire control laws and stores management." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2026-02-16T10:27:08Z" variableNamingConvention="structured" numberOfEventIndicators="0">
+<fmiModelDescription fmiVersion="2.0" modelName="Aircraft.MissionComputer" guid="{1660e286-75ad-55ad-aeec-d29c86d6d3e8}" description="F-16C/D mission computer blending pilot HOTAS inputs with fly-by-wire control laws and stores management." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2026-02-16T15:56:19Z" variableNamingConvention="structured" numberOfEventIndicators="0">
   <CoSimulation modelIdentifier="MissionComputer" />
   <ModelVariables>
-    <ScalarVariable name="autopilotInput.button_mask" valueReference="1" causality="input" description="Autopilot command bundle using same HOTAS signal structure.">
+    <ScalarVariable name="manualInput.stick_pitch_norm" valueReference="0" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="manualInput.stick_roll_norm" valueReference="1" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="manualInput.rudder_norm" valueReference="2" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="manualInput.throttle_norm" valueReference="3" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="manualInput.throttle_aux_norm" valueReference="4" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="manualInput.button_mask" valueReference="5" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="autopilotInput.hat_x" valueReference="2" causality="input" description="Autopilot command bundle using same HOTAS signal structure.">
+    <ScalarVariable name="manualInput.hat_x" valueReference="6" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="autopilotInput.hat_y" valueReference="3" causality="input" description="Autopilot command bundle using same HOTAS signal structure.">
+    <ScalarVariable name="manualInput.hat_y" valueReference="7" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="autopilotInput.mode_switch" valueReference="4" causality="input" description="Autopilot command bundle using same HOTAS signal structure.">
+    <ScalarVariable name="manualInput.mode_switch" valueReference="8" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="autopilotInput.reserved" valueReference="5" causality="input" description="Autopilot command bundle using same HOTAS signal structure.">
+    <ScalarVariable name="manualInput.reserved" valueReference="9" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="autopilotInput.rudder_norm" valueReference="6" causality="input" description="Autopilot command bundle using same HOTAS signal structure.">
+    <ScalarVariable name="autopilotInput.stick_pitch_norm" valueReference="10" causality="input" description="Autopilot command bundle using same HOTAS signal structure.">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="autopilotInput.stick_pitch_norm" valueReference="7" causality="input" description="Autopilot command bundle using same HOTAS signal structure.">
+    <ScalarVariable name="autopilotInput.stick_roll_norm" valueReference="11" causality="input" description="Autopilot command bundle using same HOTAS signal structure.">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="autopilotInput.stick_roll_norm" valueReference="8" causality="input" description="Autopilot command bundle using same HOTAS signal structure.">
+    <ScalarVariable name="autopilotInput.rudder_norm" valueReference="12" causality="input" description="Autopilot command bundle using same HOTAS signal structure.">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="autopilotInput.throttle_aux_norm" valueReference="9" causality="input" description="Autopilot command bundle using same HOTAS signal structure.">
+    <ScalarVariable name="autopilotInput.throttle_norm" valueReference="13" causality="input" description="Autopilot command bundle using same HOTAS signal structure.">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="autopilotInput.throttle_norm" valueReference="10" causality="input" description="Autopilot command bundle using same HOTAS signal structure.">
+    <ScalarVariable name="autopilotInput.throttle_aux_norm" valueReference="14" causality="input" description="Autopilot command bundle using same HOTAS signal structure.">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="direction_command.pitch_deg" valueReference="11" causality="output" description="Command how to alter the current velocity vector, pith, yaw, roll">
+    <ScalarVariable name="autopilotInput.button_mask" valueReference="15" causality="input" description="Autopilot command bundle using same HOTAS signal structure.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="autopilotInput.hat_x" valueReference="16" causality="input" description="Autopilot command bundle using same HOTAS signal structure.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="autopilotInput.hat_y" valueReference="17" causality="input" description="Autopilot command bundle using same HOTAS signal structure.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="autopilotInput.mode_switch" valueReference="18" causality="input" description="Autopilot command bundle using same HOTAS signal structure.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="autopilotInput.reserved" valueReference="19" causality="input" description="Autopilot command bundle using same HOTAS signal structure.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="fuelStatus.fuel_remaining_kg" valueReference="20" causality="input" description="Fuel telemetry used for command blending and power limiting.">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="direction_command.roll_deg" valueReference="12" causality="output" description="Command how to alter the current velocity vector, pith, yaw, roll">
+    <ScalarVariable name="fuelStatus.fuel_level_norm" valueReference="21" causality="input" description="Fuel telemetry used for command blending and power limiting.">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="direction_command.yaw_deg" valueReference="13" causality="output" description="Command how to alter the current velocity vector, pith, yaw, roll">
-      <Real />
-    </ScalarVariable>
-    <ScalarVariable name="engineThrottle.afterburner_enable" valueReference="14" causality="output" description="Structured throttle/fuel enable command to propulsion.">
+    <ScalarVariable name="fuelStatus.fuel_starved" valueReference="22" causality="input" description="Fuel telemetry used for command blending and power limiting.">
       <Boolean />
     </ScalarVariable>
-    <ScalarVariable name="engineThrottle.fuel_enable" valueReference="15" causality="output" description="Structured throttle/fuel enable command to propulsion.">
+    <ScalarVariable name="engineThrottle.throttle_norm" valueReference="23" causality="output" description="Structured throttle/fuel enable command to propulsion.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="engineThrottle.fuel_enable" valueReference="24" causality="output" description="Structured throttle/fuel enable command to propulsion.">
       <Boolean />
     </ScalarVariable>
-    <ScalarVariable name="engineThrottle.throttle_norm" valueReference="16" causality="output" description="Structured throttle/fuel enable command to propulsion.">
-      <Real />
-    </ScalarVariable>
-    <ScalarVariable name="fuelStatus.fuel_level_norm" valueReference="17" causality="input" description="Fuel telemetry used for command blending and power limiting.">
-      <Real />
-    </ScalarVariable>
-    <ScalarVariable name="fuelStatus.fuel_remaining_kg" valueReference="18" causality="input" description="Fuel telemetry used for command blending and power limiting.">
-      <Real />
-    </ScalarVariable>
-    <ScalarVariable name="fuelStatus.fuel_starved" valueReference="19" causality="input" description="Fuel telemetry used for command blending and power limiting.">
+    <ScalarVariable name="engineThrottle.afterburner_enable" valueReference="25" causality="output" description="Structured throttle/fuel enable command to propulsion.">
       <Boolean />
     </ScalarVariable>
-    <ScalarVariable name="manualInput.button_mask" valueReference="20" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
-      <Integer />
-    </ScalarVariable>
-    <ScalarVariable name="manualInput.hat_x" valueReference="21" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
-      <Integer />
-    </ScalarVariable>
-    <ScalarVariable name="manualInput.hat_y" valueReference="22" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
-      <Integer />
-    </ScalarVariable>
-    <ScalarVariable name="manualInput.mode_switch" valueReference="23" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
-      <Integer />
-    </ScalarVariable>
-    <ScalarVariable name="manualInput.reserved" valueReference="24" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
-      <Integer />
-    </ScalarVariable>
-    <ScalarVariable name="manualInput.rudder_norm" valueReference="25" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
+    <ScalarVariable name="direction_command.roll_deg" valueReference="26" causality="output" description="Command how to alter the current velocity vector, pith, yaw, roll">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="manualInput.stick_pitch_norm" valueReference="26" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
+    <ScalarVariable name="direction_command.pitch_deg" valueReference="27" causality="output" description="Command how to alter the current velocity vector, pith, yaw, roll">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="manualInput.stick_roll_norm" valueReference="27" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
-      <Real />
-    </ScalarVariable>
-    <ScalarVariable name="manualInput.throttle_aux_norm" valueReference="28" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
-      <Real />
-    </ScalarVariable>
-    <ScalarVariable name="manualInput.throttle_norm" valueReference="29" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
+    <ScalarVariable name="direction_command.yaw_deg" valueReference="28" causality="output" description="Command how to alter the current velocity vector, pith, yaw, roll">
       <Real />
     </ScalarVariable>
   </ModelVariables>
   <ModelStructure>
     <Outputs>
-      <Unknown index="11" />
-      <Unknown index="12" />
-      <Unknown index="13" />
-      <Unknown index="14" />
-      <Unknown index="15" />
-      <Unknown index="16" />
+      <Unknown index="24" />
+      <Unknown index="25" />
+      <Unknown index="26" />
+      <Unknown index="27" />
+      <Unknown index="28" />
+      <Unknown index="29" />
     </Outputs>
     <InitialUnknowns>
-      <Unknown index="11" />
-      <Unknown index="12" />
-      <Unknown index="13" />
-      <Unknown index="14" />
-      <Unknown index="15" />
-      <Unknown index="16" />
+      <Unknown index="24" />
+      <Unknown index="25" />
+      <Unknown index="26" />
+      <Unknown index="27" />
+      <Unknown index="28" />
+      <Unknown index="29" />
     </InitialUnknowns>
   </ModelStructure>
 </fmiModelDescription>

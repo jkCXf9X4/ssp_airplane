@@ -1,32 +1,35 @@
 <?xml version='1.0' encoding='utf-8'?>
-<fmiModelDescription fmiVersion="2.0" modelName="Aircraft.AdaptiveWingSystem" guid="{3ed224a1-3c10-5119-adfc-eef871b98657}" description="Leading-edge strake and cropped-delta wing sized to F-16 Block 50 geometry with 9g capability. This model includes the control system" version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2026-02-16T10:27:08Z" variableNamingConvention="structured" numberOfEventIndicators="0">
+<fmiModelDescription fmiVersion="2.0" modelName="Aircraft.AdaptiveWingSystem" guid="{3ed224a1-3c10-5119-adfc-eef871b98657}" description="Leading-edge strake and cropped-delta wing sized to F-16 Block 50 geometry with 9g capability. This model includes the control system" version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2026-02-16T15:56:19Z" variableNamingConvention="structured" numberOfEventIndicators="0">
   <CoSimulation modelIdentifier="AdaptiveWingSystem" />
   <ModelVariables>
-    <ScalarVariable name="actuation_command.elevator_deg" valueReference="1" causality="output" description="Actuation commands, sent to environment to track and calculate new position">
-      <Real />
+    <ScalarVariable name="reference_area_m2" valueReference="0" causality="parameter" variability="fixed">
+      <Real start="28" />
     </ScalarVariable>
-    <ScalarVariable name="actuation_command.flaperon_deg" valueReference="2" causality="output" description="Actuation commands, sent to environment to track and calculate new position">
-      <Real />
+    <ScalarVariable name="span_m" valueReference="1" causality="parameter" variability="fixed">
+      <Real start="10" />
     </ScalarVariable>
-    <ScalarVariable name="actuation_command.left_aileron_deg" valueReference="3" causality="output" description="Actuation commands, sent to environment to track and calculate new position">
-      <Real />
+    <ScalarVariable name="aspect_ratio" valueReference="2" causality="parameter" variability="fixed">
+      <Real start="3.6" />
     </ScalarVariable>
-    <ScalarVariable name="actuation_command.right_aileron_deg" valueReference="4" causality="output" description="Actuation commands, sent to environment to track and calculate new position">
-      <Real />
+    <ScalarVariable name="control_authority_deg" valueReference="3" causality="parameter" variability="fixed">
+      <Integer start="25" />
     </ScalarVariable>
-    <ScalarVariable name="actuation_command.rudder_deg" valueReference="5" causality="output" description="Actuation commands, sent to environment to track and calculate new position">
+    <ScalarVariable name="load_factor_limit_g" valueReference="4" causality="parameter" variability="fixed">
+      <Integer start="9" />
+    </ScalarVariable>
+    <ScalarVariable name="direction_command.roll_deg" valueReference="5" causality="input" description="Mission-computer command bus input. Desired change in speed vector">
       <Real />
     </ScalarVariable>
     <ScalarVariable name="direction_command.pitch_deg" valueReference="6" causality="input" description="Mission-computer command bus input. Desired change in speed vector">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="direction_command.roll_deg" valueReference="7" causality="input" description="Mission-computer command bus input. Desired change in speed vector">
+    <ScalarVariable name="direction_command.yaw_deg" valueReference="7" causality="input" description="Mission-computer command bus input. Desired change in speed vector">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="direction_command.yaw_deg" valueReference="8" causality="input" description="Mission-computer command bus input. Desired change in speed vector">
+    <ScalarVariable name="flight_speed.airspeed_mps" valueReference="8" causality="input" description="Mission computer status feedback consumed by autonomy and analysis models.">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="flight_speed.airspeed_mps" valueReference="9" causality="input" description="Mission computer status feedback consumed by autonomy and analysis models.">
+    <ScalarVariable name="flight_speed.energy_state_norm" valueReference="9" causality="input" description="Mission computer status feedback consumed by autonomy and analysis models.">
       <Real />
     </ScalarVariable>
     <ScalarVariable name="flight_speed.angle_of_attack_deg" valueReference="10" causality="input" description="Mission computer status feedback consumed by autonomy and analysis models.">
@@ -35,57 +38,54 @@
     <ScalarVariable name="flight_speed.climb_rate" valueReference="11" causality="input" description="Mission computer status feedback consumed by autonomy and analysis models.">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="flight_speed.energy_state_norm" valueReference="12" causality="input" description="Mission computer status feedback consumed by autonomy and analysis models.">
-      <Real />
-    </ScalarVariable>
-    <ScalarVariable name="flight_speed.health_code" valueReference="13" causality="input" description="Mission computer status feedback consumed by autonomy and analysis models.">
+    <ScalarVariable name="flight_speed.health_code" valueReference="12" causality="input" description="Mission computer status feedback consumed by autonomy and analysis models.">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="liftInterface.drag_kn" valueReference="14" causality="output" description="Tracking of lift, drag">
+    <ScalarVariable name="actuation_command.left_aileron_deg" valueReference="13" causality="output" description="Actuation commands, sent to environment to track and calculate new position">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="liftInterface.lift_kn" valueReference="15" causality="output" description="Tracking of lift, drag">
+    <ScalarVariable name="actuation_command.right_aileron_deg" valueReference="14" causality="output" description="Actuation commands, sent to environment to track and calculate new position">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="liftInterface.pitching_moment_knm" valueReference="16" causality="output" description="Tracking of lift, drag">
+    <ScalarVariable name="actuation_command.elevator_deg" valueReference="15" causality="output" description="Actuation commands, sent to environment to track and calculate new position">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="aspect_ratio" valueReference="17" causality="parameter" variability="fixed">
-      <Real start="3.6" />
+    <ScalarVariable name="actuation_command.rudder_deg" valueReference="16" causality="output" description="Actuation commands, sent to environment to track and calculate new position">
+      <Real />
     </ScalarVariable>
-    <ScalarVariable name="control_authority_deg" valueReference="18" causality="parameter" variability="fixed">
-      <Integer start="25" />
+    <ScalarVariable name="actuation_command.flaperon_deg" valueReference="17" causality="output" description="Actuation commands, sent to environment to track and calculate new position">
+      <Real />
     </ScalarVariable>
-    <ScalarVariable name="load_factor_limit_g" valueReference="19" causality="parameter" variability="fixed">
-      <Integer start="9" />
+    <ScalarVariable name="liftInterface.lift_kn" valueReference="18" causality="output" description="Tracking of lift, drag">
+      <Real />
     </ScalarVariable>
-    <ScalarVariable name="reference_area_m2" valueReference="20" causality="parameter" variability="fixed">
-      <Real start="28" />
+    <ScalarVariable name="liftInterface.drag_kn" valueReference="19" causality="output" description="Tracking of lift, drag">
+      <Real />
     </ScalarVariable>
-    <ScalarVariable name="span_m" valueReference="21" causality="parameter" variability="fixed">
-      <Real start="10" />
+    <ScalarVariable name="liftInterface.pitching_moment_knm" valueReference="20" causality="output" description="Tracking of lift, drag">
+      <Real />
     </ScalarVariable>
   </ModelVariables>
   <ModelStructure>
     <Outputs>
-      <Unknown index="1" />
-      <Unknown index="2" />
-      <Unknown index="3" />
-      <Unknown index="4" />
-      <Unknown index="5" />
       <Unknown index="14" />
       <Unknown index="15" />
       <Unknown index="16" />
+      <Unknown index="17" />
+      <Unknown index="18" />
+      <Unknown index="19" />
+      <Unknown index="20" />
+      <Unknown index="21" />
     </Outputs>
     <InitialUnknowns>
-      <Unknown index="1" />
-      <Unknown index="2" />
-      <Unknown index="3" />
-      <Unknown index="4" />
-      <Unknown index="5" />
       <Unknown index="14" />
       <Unknown index="15" />
       <Unknown index="16" />
+      <Unknown index="17" />
+      <Unknown index="18" />
+      <Unknown index="19" />
+      <Unknown index="20" />
+      <Unknown index="21" />
     </InitialUnknowns>
   </ModelStructure>
 </fmiModelDescription>
