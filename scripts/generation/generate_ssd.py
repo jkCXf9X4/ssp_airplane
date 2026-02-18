@@ -6,7 +6,7 @@ from __future__ import annotations
 import argparse
 import sys
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Optional
 
 
 if __package__ in {None, ""}:
@@ -21,7 +21,6 @@ from scripts.common.paths import (
 from scripts.common.fmi_helpers import (
     fmu_resource_path,
     to_fmi_direction_definition,
-    map_fmi_type,
 )
 
 from pyssp_standard.common_content_ssc import (
@@ -39,112 +38,17 @@ from pyssp_standard.ssd import (
     System,
 )
 from pycps_sysmlv2 import (
-    SysMLArchitecture,
-    SysMLAttribute,
-    SysMLPortDefinition,
-    SysMLPortReference,
     SysMLPartDefinition,
-    SysMLPartReference,
     load_system,
 )
 
-# from scripts.common.sysml import (
-#     architecture_package,
-#     architecture_connections,
-#     composition_components,
-#     architecture_port_definitions,
-#     literal_value,
-#     part_ports,
-# )
-
 import logging
-
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.WARNING)
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_OUTPUT = GENERATED_DIR / "SystemStructure.ssd"
 
 
-# Configure logging
-
-
-# def _expand_payload_definition(
-#     payload_def: Optional[SysMLPortDefinition],
-#     definitions: Dict[str, SysMLPortDefinition],
-#     visited: Optional[Tuple[str, ...]] = None,
-# ) -> List[Tuple[str, str]]:
-#     if payload_def is None:
-#         return [("", "Real")]
-#     visited = tuple(visited or ())
-#     if payload_def.name in visited:
-#         return [("", "Real")]
-
-#     entries: List[Tuple[str, str]] = []
-#     for attr in payload_def.attributes.values():
-#         attr_type = attr.type or ""
-#         if attr_type in definitions:
-#             nested = definitions[attr_type]
-#             for suffix, primitive in _expand_payload_definition(
-#                 nested, definitions, visited + (payload_def.name,)
-#             ):
-#                 field_name = attr.name if not suffix else f"{attr.name}.{suffix}"
-#                 entries.append((field_name, primitive))
-#         else:
-#             entries.append((attr.name, normalize_primitive(attr.type)))
-#     if not entries:
-#         entries.append(("", "Real"))
-#     return entries
-
-
-# def _expand_port_entries(
-#     port: SysMLPortReference, architecture: SysMLArchitecture
-# ) -> List[Dict[str, str]]:
-#     if port.direction not in {"in", "out"}:
-#         return []
-#     kind = "input" if port.direction == "in" else "output"
-#     payload_entries = _expand_payload_definition(
-#         port.payload_def,
-#         architecture_port_definitions(architecture),
-#     )
-#     results: List[Dict[str, str]] = []
-#     for suffix, primitive in payload_entries:
-#         connector_name = port.name if not suffix else f"{port.name}.{suffix}"
-#         results.append(
-#             {
-#                 "connector_name": connector_name,
-#                 "kind": kind,
-#                 "primitive": primitive,
-#                 "suffix": suffix,
-#             }
-#         )
-#     return results
-
-
-# def _parameter_connector_entries(
-#     attributes: Dict[str, SysMLAttribute],
-# ) -> List[Dict[str, str]]:
-#     entries: List[Dict[str, str]] = []
-#     for name in sorted(attributes):
-#         attr = attributes[name]
-#         literal = literal_value(attr.value)
-#         if isinstance(literal, (list, tuple)):
-#             sample = next((item for item in literal if item is not None), None)
-#             primitive = infer_primitive(attr.type, sample)
-#             if literal:
-#                 for idx, _ in enumerate(literal, start=1):
-#                     entries.append(
-#                         {
-#                             "connector_name": f"{attr.name}[{idx}]",
-#                             "primitive": primitive,
-#                         }
-#                     )
-#             else:
-#                 entries.append({"connector_name": attr.name, "primitive": primitive})
-#             continue
-
-#         primitive = infer_primitive(attr.type, literal)
-#         entries.append({"connector_name": attr.name, "primitive": primitive})
-#     return entries
 
 
 def _type_from_primitive(type: str):
@@ -188,11 +92,7 @@ def build_ssd(ssd: SSD, system: SysMLPartDefinition) -> None:
         for attrib_name, attribute in part.attributes.items():
             logging.debug(f"Parsing parameter {attrib_name}")
 
-            value = attribute.value
-            if not isinstance(value, list):
-                value = [value]
-
-            for idx, _ in enumerate(value, start=0):
+            for idx, _ in attribute.enumerator():
                 if attribute.is_list():
                     name = f"{attrib_name}[{idx}]"
                 else:
@@ -232,7 +132,6 @@ def build_ssd(ssd: SSD, system: SysMLPartDefinition) -> None:
             ssd.add_connection(c)
 
     logging.info("Adding default experiment")
-    # ssd.default_experiment = DefaultExperiment(start_time=0, stop_time=3600)
     default_experiment = DefaultExperiment()
     default_experiment.start_time = 0
     default_experiment.stop_time = 3600
