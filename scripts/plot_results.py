@@ -8,7 +8,7 @@ import os
 from pathlib import Path
 from typing import Dict, List, Optional, Sequence, Tuple
 
-from scripts.utils.map_geometry import project_waypoints_to_local_km
+from scripts.common.map_geometry import project_waypoints_to_local_km
 
 
 def _numeric_series(

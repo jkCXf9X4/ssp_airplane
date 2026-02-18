@@ -14,6 +14,7 @@ python3 -m scripts.generation.save_architecture
 echo "Generating Modelica interfaces..."
 python3 -m scripts.generation.generate_interface_defs
 python3 -m scripts.generation.generate_model_descriptions
+python3 -m scripts.generation.generate_parameter_set
 
 echo "Verifying Modelica interfaces and SysML connections..."
 python3 -m scripts.verification.verify_connections

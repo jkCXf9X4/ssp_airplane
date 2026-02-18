@@ -14,9 +14,9 @@ if __package__ in {None, ""}:
 
 from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR, ensure_parent_dir
 from pyssp_standard.ssd import Component, Connection, Connector, DefaultExperiment, SSD, System
-from scripts.utils.fmi_helpers import architecture_model_map, component_fmu_source
+from scripts.common.fmi_helpers import architecture_model_map, component_fmu_source
 from pycps_sysmlv2 import SysMLArchitecture, load_architecture
-from scripts.utils.sysml_compat import (
+from scripts.common.sysml import (
     architecture_connections,
     architecture_package,
     composition_components,

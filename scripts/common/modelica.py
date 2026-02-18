@@ -4,7 +4,7 @@ from __future__ import annotations
 from typing import Dict, Optional
 
 from pycps_sysmlv2 import SysMLArchitecture
-from scripts.utils.sysml_compat import architecture_package, composition_components
+from scripts.common.sysml import architecture_package, composition_components
 
 
 MODELICA_TYPE_MAP = {

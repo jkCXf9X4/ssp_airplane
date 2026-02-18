@@ -20,7 +20,7 @@ from scripts.common.paths import (
 
 from pycps_sysmlv2 import SysMLPortDefinition, load_architecture
 
-from scripts.utils.modelica import map_modelica_type
+from scripts.common.modelica import map_modelica_type
 
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR

@@ -20,18 +20,18 @@ from scripts.common.paths import (
     ARCHITECTURE_DIR,
     BUILD_DIR,
     GENERATED_DIR,
-    DEFAULT_MODELS,
+    COMPOSITION_NAME,
     ensure_directory,
 )
 
-from scripts.utils.fmi_helpers import format_start_value, map_fmi_type
+from scripts.common.fmi_helpers import format_value, map_fmi_type
 
 from pycps_sysmlv2 import (
     SysMLArchitecture,
     SysMLPartDefinition,
     SysMLPortDefinition,
     SysMLType,
-    load_architecture,
+    load_system
 )
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
@@ -109,7 +109,7 @@ def _parameter_variables(
                     fmi_type=fmi_type,
                     variability="fixed",
                     description=attr.doc,
-                    start_value=format_start_value(fmi_type, item),
+                    start_value=format_value(fmi_type, item),
                     index=value_index,
                 )
                 variables.append(spec)
@@ -127,7 +127,7 @@ def _parameter_variables(
                 fmi_type=fmi_type,
                 variability="fixed",
                 description=attr.doc,
-                start_value=format_start_value(fmi_type, attr.value),
+                start_value=format_value(fmi_type, attr.value),
                 index=value_index,
             )
             variables.append(spec)
@@ -218,25 +218,25 @@ def _build_model_description_tree(
 def generate_model_descriptions(
     architecture_path: Path,
     output_dir: Path,
-    components: Optional[Iterable[str]] = None,
+    composition: str,
 ) -> list[Path]:
     ensure_directory(output_dir)
 
-    architecture = load_architecture(architecture_path)
-    targets = [x for x in architecture.part_definitions.values() if x.name in components]
+    system = load_system(architecture_path, composition)
+    parts = system.parts
 
     written: list[Path] = []
-    for part in targets:
-        print(f"Generating MD for {part.name}")
+    for part_name, part in parts.items():
+        print(f"Generating MD for {part_name}")
 
-        component_dir = output_dir / part.name
+        component_dir = output_dir / part_name
         output_path = component_dir / "modelDescription.xml"
         fmu_dir = BUILD_DIR / "fmu_pre"
 
         ensure_directory(component_dir)
         ensure_directory(fmu_dir)
 
-        tree = _build_model_description_tree(part, architecture.package)
+        tree = _build_model_description_tree(part.part_def, system.name)
 
         tree.write(output_path, encoding="utf-8", xml_declaration=True)
         written.append(output_path)
@@ -259,16 +259,15 @@ def main(argv: Optional[list[str]] = None) -> int:
         help="Directory that will contain one sub-folder per component, each with a modelDescription.xml.",
     )
     parser.add_argument(
-        "--components",
-        nargs="*",
-        default=DEFAULT_MODELS,
+        "--composition",
+        default=COMPOSITION_NAME,
         help="Optional subset of component instance/definition names to generate.",
     )
     args = parser.parse_args(argv)
 
     try:
         written = generate_model_descriptions(
-            args.architecture, args.output_dir, args.components
+            args.architecture, args.output_dir, args.composition
         )
     except Exception as exc:  # noqa: BLE001
         print(f"[error] {exc}", file=sys.stderr)

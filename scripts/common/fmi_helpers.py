@@ -38,28 +38,16 @@ def map_fmi_type(type_name: Optional[str], default: str = "Real") -> str:
     key = type_name.strip().lower()
     return FMI_TYPE_MAP.get(key, default)
 
-
-def format_start_value(fmi_type: str, literal: Optional[object]) -> Optional[str]:
+def format_value(tag: str, literal):
     if literal is None:
-        return None
-    if fmi_type == "Real":
+        return ""
+    if tag == "Real":
         return f"{float(literal):g}"
-    if fmi_type == "Integer":
+    if tag == "Integer":
         return str(int(literal))
-    if fmi_type == "Boolean":
+    if tag == "Boolean":
         return "true" if bool(literal) else "false"
-    if fmi_type == "String":
+    if tag == "String":
         return str(literal)
-    return None
+    raise Exception("[format_value] Unknown tag")
 
-# def architecture_model_map(architecture: SysMLArchitecture) -> Dict[str, str]:
-#     """Convenience wrapper to build the part->Modelica class mapping."""
-#     return component_modelica_map(architecture)
-
-
-# def component_fmu_source(component_name: str, class_map: Dict[str, str]) -> str:
-#     """Resolve the FMU resource path for a given component."""
-#     modelica_class = class_map.get(component_name)
-#     if not modelica_class:
-#         raise KeyError(f"No Modelica class map defined for component '{component_name}'")
-#     return fmu_resource_path(modelica_class)

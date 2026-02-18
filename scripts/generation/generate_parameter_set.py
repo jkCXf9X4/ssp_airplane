@@ -12,70 +12,36 @@ if __package__ in {None, ""}:
 
 from pyssp_standard.ssv import SSV
 
-
-from pycps_sysmlv2 import SysMLArchitecture, SysMLAttribute, SysMLPartDefinition, load_architecture
-
-from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR, DEFAULT_MODELS, ensure_parent_dir
-from scripts.utils.sysml_compat import composition_components, literal_value
+from pycps_sysmlv2 import SysMLAttribute, load_system
+from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR, COMPOSITION_NAME, ensure_parent_dir
+from scripts.common.fmi_helpers import format_value
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_OUTPUT = GENERATED_DIR / "parameters.ssv"
 
 
-def _normalize_type(attr: SysMLAttribute) -> str:
-    literal = literal_value(attr.value)
-    return infer_primitive(attr.type, literal)
-
-
-def _format_value(tag: str, literal):
-    if literal is None:
-        return ""
-    if tag == "Boolean":
-        return "true" if bool(literal) else "false"
-    if tag == "Integer":
-        return int(literal)
-    if tag == "Real":
-        return f"{float(literal):g}"
-    return str(literal)
-
-
-def _parameter_entries(architecture: SysMLArchitecture, components: Optional[Iterable[str]]) -> list[tuple[str, SysMLAttribute]]:
-    component_pairs = composition_components(architecture)
-    selected: list[tuple[str, SysMLPartDefinition]] = []
-    if components:
-        requested = {name.strip() for name in components if name.strip()}
-        for instance_name, part in component_pairs:
-            if instance_name in requested or part.name in requested:
-                selected.append((instance_name, part))
-    else:
-        selected = component_pairs
-
-    entries: list[tuple[str, SysMLAttribute]] = []
-    for instance_name, part in selected:
-        for attr_name in sorted(part.attributes):
-            attr = part.attributes[attr_name]
-            full_name = f"{instance_name}.{attr.name}"
-            entries.append((full_name, attr))
-    return entries
-
-
-def _populate_parameter_set(ssv: SSV, parameter_pairs: Iterable[tuple[str, SysMLAttribute]]) -> None:
+def populate_parameter_set(ssv: SSV, parameter_pairs: Iterable[tuple[str, SysMLAttribute]]) -> None:
+    print("Populate parameter set")
     for name, attr in parameter_pairs:
-        literal = literal_value(attr.value)
-        if isinstance(literal, (list, tuple)):
-            sample = next((item for item in literal if item is not None), None)
-            data_type = infer_primitive(attr.type, sample)
-            for idx, item in enumerate(literal, start=1):
+
+        data_type = attr.type.primitive_type_str()
+        if attr.value is None:
+            continue
+
+        if isinstance(attr.value, (list, tuple)):
+
+            for idx, item in enumerate(attr.value, start=1):
                 indexed_name = f"{name}[{idx}]"
-                formatted = _format_value(data_type, item)
+                formatted = format_value(data_type, item)
                 ssv.add_parameter(indexed_name, ptype=data_type, value=formatted)
             continue
 
-        data_type = _normalize_type(attr)
-        formatted = _format_value(data_type, literal)
+        formatted = format_value(data_type, attr.value)
         ssv.add_parameter(name, ptype=data_type, value=formatted)
+    print("Populate parameter set -- DONE")
 
 
+#  Evaluate why this is needed...
 def _strip_none_parameter_attrs(ssv: SSV) -> None:
     for parameter in ssv.parameters:
         type_value = parameter["type_value"]
@@ -85,17 +51,25 @@ def _strip_none_parameter_attrs(ssv: SSV) -> None:
             if value is not None
         }
 
-
 def generate_parameter_set(
     architecture_path: Path,
     output_path: Path,
-    components: Optional[Iterable[str]] = None,
+    composition: str = None,
 ) -> Path:
-    architecture = load_architecture(architecture_path)
-    pairs = _parameter_entries(architecture, components)
+    
+    system = load_system(architecture_path, composition)
+
+    attributes = []
+
+    for part_name, part in system.parts.items():
+        for attr_name, attr in part.part_def.attributes.items():
+            attributes.append((part_name, attr_name, attr))
+
+    pairs = [(f"{p}.{a}", attr) for p, a, attr in attributes]
+
     ensure_parent_dir(output_path)
     with SSV(output_path, mode="w", name="ArchitecturalDefaults") as ssv:
-        _populate_parameter_set(ssv, pairs)
+        populate_parameter_set(ssv, pairs)
         _strip_none_parameter_attrs(ssv)
     return output_path
 
@@ -115,15 +89,14 @@ def main(argv: Optional[list[str]] = None) -> int:
         help="Destination for the generated .ssv file.",
     )
     parser.add_argument(
-        "--components",
-        nargs="*",
-        default=DEFAULT_MODELS,
+        "--composition",
+        default=COMPOSITION_NAME,
         help="Optional subset of component names to include.",
     )
     args = parser.parse_args(argv)
 
     try:
-        output_path = generate_parameter_set(args.architecture, args.output, args.components)
+        output_path = generate_parameter_set(args.architecture, args.output, args.composition)
     except Exception as exc:  # noqa: BLE001
         print(f"[error] {exc}", file=sys.stderr)
         return 1

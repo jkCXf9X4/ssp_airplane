@@ -15,6 +15,10 @@ from pycps_sysmlv2.type_utils import parse_literal
 from scripts.common.paths import COMPOSITION_NAME
 
 
+def select_parts(architecture: SysMLArchitecture, parts: List[str]):
+    return [x for x in architecture.part_definitions.values() if x.name in parts]
+
+
 # All shpould be removed
 
 def architecture_port_definitions(

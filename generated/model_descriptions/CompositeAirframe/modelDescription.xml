@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<fmiModelDescription fmiVersion="2.0" modelName="Aircraft.CompositeAirframe" guid="{93976a6d-77c5-5a57-8beb-8e792e396f21}" description="F-16 aluminum/composite fuselage sized for high-supersonic operations with dorsal spine for avionics." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2026-02-18T10:39:19Z" variableNamingConvention="structured" numberOfEventIndicators="0">
+<fmiModelDescription fmiVersion="2.0" modelName="AircraftComposition.CompositeAirframe" guid="{d6f85c32-479b-58b1-8979-583d01eb3aaf}" description="F-16 aluminum/composite fuselage sized for high-supersonic operations with dorsal spine for avionics." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2026-02-18T11:06:56Z" variableNamingConvention="structured" numberOfEventIndicators="0">
   <CoSimulation modelIdentifier="CompositeAirframe" />
   <ModelVariables>
     <ScalarVariable name="length_m" valueReference="0" causality="parameter" variability="fixed">

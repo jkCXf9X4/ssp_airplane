@@ -18,7 +18,7 @@ from pycps_sysmlv2 import (
     SysMLPortDefinition,
     load_architecture,
 )
-from scripts.utils.sysml_compat import composition_components, part_ports
+from scripts.common.sysml import composition_components, part_ports
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_OUTPUT = GENERATED_DIR / "terminalsAndIcons.xml"

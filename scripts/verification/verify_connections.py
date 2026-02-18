@@ -12,7 +12,7 @@ if __package__ in {None, ""}:
 
 from scripts.common.paths import ARCHITECTURE_DIR
 from pycps_sysmlv2 import SysMLArchitecture, SysMLPortReference, load_architecture
-from scripts.utils.sysml_compat import (
+from scripts.common.sysml import (
     architecture_connections,
     composition_components,
     part_ports,

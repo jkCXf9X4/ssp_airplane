@@ -21,8 +21,8 @@ from pycps_sysmlv2 import (
     load_architecture,
 )
 from pycps_sysmlv2.type_utils import infer_primitive, normalize_primitive
-from scripts.utils.fmi_helpers import architecture_model_map, component_fmu_source
-from scripts.utils.sysml_compat import (
+from scripts.common.fmi_helpers import architecture_model_map, component_fmu_source
+from scripts.common.sysml import (
     architecture_package,
     architecture_connections,
     composition_components,
