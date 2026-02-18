@@ -29,14 +29,9 @@ from scripts.utils.fmi_helpers import format_start_value, map_fmi_type
 from pycps_sysmlv2 import (
     SysMLArchitecture,
     SysMLPartDefinition,
+    SysMLPortDefinition,
+    SysMLType,
     load_architecture,
-)
-
-from scripts.utils.sysml_compat import (
-    architecture_package,
-    composition_components,
-    literal_value,
-    part_ports,
 )
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
@@ -68,29 +63,23 @@ def _port_attribute_variables(
     value_ref = starting_ref
     value_index = starting_index
 
-    for port in part.ports.values():
-        port_def = port.payload_def
-        attributes = port_def.attributes.values()
+    for port, port_def, attr in part.get_all_port_attributes():
 
-        if not attributes:
-            print(f"WARNING: The port {port.name} does not have any attributes")
-            continue
+        var_name = f"{port.name}.{attr.name}"
+        fmi_type = attr.type.as_string()
+        description = attr.doc or port.doc or (port_def.doc if port_def else None)
 
-        for attr in attributes:
-            var_name = f"{port.name}.{attr.name}"
-            fmi_type = attr.type
-            description = attr.doc or port.doc or (port_def.doc if port_def else None)
-            spec = VariableSpec(
-                name=var_name,
-                causality="input" if port.direction == "in" else "output",
-                value_reference=value_ref,
-                fmi_type=fmi_type,
-                description=description,
-                index=value_index,
-            )
-            variables.append(spec)
-            value_ref += 1
-            value_index += 1
+        spec = VariableSpec(
+            name=var_name,
+            causality="input" if port.direction == "in" else "output",
+            value_reference=value_ref,
+            fmi_type=fmi_type,
+            description=description,
+            index=value_index,
+        )
+        variables.append(spec)
+        value_ref += 1
+        value_index += 1
 
     return variables, value_ref, value_index
 
@@ -107,19 +96,12 @@ def _parameter_variables(
 
     for attr_name, attr in part.attributes.items():
         print(f"Parsing {attr_name}, {attr.type}")
-        literal = attr.value
 
-        if isinstance(literal, (list, tuple)):
-            print("List")
-            if not literal:
-                print(
-                    f"Unable to infer fmi type from attribute, {part.name}.{attr_name}"
-                )
-                continue
+        fmi_type = "Real"
 
-            fmi_type = map_fmi_type("Real")
+        if attr.is_list():
 
-            for idx, item in enumerate(literal, start=0):
+            for idx, item in enumerate(attr.value, start=0):
                 spec = VariableSpec(
                     name=f"{attr.name}[{idx}]",
                     causality="parameter",
@@ -136,7 +118,7 @@ def _parameter_variables(
 
         else:
             print("Not list")
-            fmi_type = map_fmi_type(attr.type)
+            fmi_type = map_fmi_type(attr.type.as_string())
 
             spec = VariableSpec(
                 name=attr.name,
@@ -145,7 +127,7 @@ def _parameter_variables(
                 fmi_type=fmi_type,
                 variability="fixed",
                 description=attr.doc,
-                start_value=format_start_value(fmi_type, literal),
+                start_value=format_start_value(fmi_type, attr.value),
                 index=value_index,
             )
             variables.append(spec)

@@ -1,142 +1,137 @@
 # ssp_airplane
 
-This repository tracks an SSP for an F-16 Fighting Falcon inspired single-seat multirole fighter, re-parameterized from the earlier loyal-wingman concept.
+System Structure and simulation workflow for an F-16-inspired aircraft model.  
+The repository combines:
 
-# Getting started
+- SysML v2 architecture (`architecture/`)
+- Modelica subsystem models (`models/Aircraft/`)
+- Python tooling to generate SSP artifacts, verify consistency, and run scenarios (`scripts/`)
 
-- Ensure Python 3.11+ and ssp4sim runtime are available. The Python API for ssp4sim is installed via the editable dependency in `requirements.txt` (points to `../ssp4sim/build/public/python_api` by default).
-- Create a virtual environment and install deps:
-  ```
-  python3.11 -m venv venv &&. venv/bin/activate &&  pip install -r requirements.txt
+## Prerequisites
 
-  ```
+- Python 3.11+
+- OpenModelica (`omc`) for FMU export
+- `pyssp4sim` runtime (installed by `requirements.txt` via a Linux wheel URL)
 
-- Build the SSP
-  ```
-  . venv/bin/activate
-  ./scripts/workflows/build.sh
+## Setup
 
-  ```
+### Standard setup
 
-- Always use the virtual environment when running helper modules to avoid missing `pyssp4sim` (`python3 -m scripts.<module>` or `source venv/bin/activate` first).
-- Prebuilt SSPs live in `build/ssp/`; the default is `build/ssp/aircraft.ssp`.
-- Curated mission scenarios live in `resources/scenarios/` (see `docs/use_cases.md` for requirement linkage).
-- Regenerate the SSD with parameter connectors plus a fresh default parameter set via:
-  - `python3 -m scripts.generation.generate_ssd --output generated/SystemStructure.ssd`
-  - `python3 -m scripts.generation.generate_parameter_set --output generated/parameters.ssv`
-  These outputs expose every component attribute as a parameter connector so you can bind SSVs in OMSimulator or CI runs without hand-editing XML.
+```bash
+python3.11 -m venv venv
+. venv/bin/activate
+pip install -r requirements.txt
+```
 
-## Script catalog
+### Local dependency setup (submodules)
 
-Scripts are grouped by intent under `scripts/`:
+Use this when working on vendored dependencies in `3rd_party/`.
 
-- `scripts/generation/` – emit SysML-derived artifacts (architecture JSON, SSD, parameter sets, terminals, Modelica interfaces, scenarios).
-- `scripts/verification/` – statically inspect SysML connectors, FMU I/O, Modelica definitions, and SSD XML compliance.
-- `scripts/workflows/` – orchestration utilities for building FMUs, packaging SSPs, and simulating mission scenarios.
-- SysML parser package is now external: `py_sysml_v2_cps` (`https://github.com/jkCXf9X4/py_sysml_v2_cps`).
-- `scripts/utils/` – non-SysML shared helpers such as `fmi_helpers` (FMU naming), `ssp_helpers` (namespace registration), and `map_geometry` (waypoint calculations).
+```bash
+git submodule update --init --recursive
+python3.11 -m venv venv
+. venv/bin/activate
+pip install -r requirements_local.txt
+```
 
-Common entry points:
+## Quickstart
 
-| Task | Command | Purpose |
-| --- | --- | --- |
-| Merge SysML sections into JSON | `python3 -m scripts.generation.save_architecture --output generated/arch_def.json` | Creates a single architecture snapshot for downstream tooling. |
-| Generate SSD and parameter set | `python3 -m scripts.generation.generate_ssd` / `python3 -m scripts.generation.generate_parameter_set` | Produces SSP-compliant descriptions with parameter connectors. |
-| Build FMUs via OpenModelica | `python3 -m scripts.generation.build_fmus --omc omc` | Exports each Modelica component into `build/fmus`. |
-| Package SSP archive | `python3 -m scripts.generation.package_ssp --fmu-dir build/fmus --ssd generated/SystemStructure.ssd` | Bundles FMUs and SSD into `build/ssp/aircraft.ssp`. |
-| Simulate a scenario | `python3 -m scripts.workflows.simulate_scenario --scenario build/scenarios/test_scenario.json` | Runs OMSimulator (or reuses results) and emits summaries/plots. |
-| Verify architecture and FMUs | `python3 -m scripts.verification.verify_connections`, `python3 -m scripts.verification.verify_fmu_ios`, etc. | Guards against connector, FMU, and SSD regressions. |
+Build FMUs + SSD + SSP and run the reference scenario:
 
+```bash
+. venv/bin/activate
+./scripts/workflows/build.sh
+```
 
-# Architecture
-The architecture is captured as SysML v2 textual notation split across:
+The build script removes `build/` at the start, then regenerates artifacts.
 
-- `architecture/architecture.sysml` – package metadata and part definitions
-- `architecture/data_definitions.sysml` – all structured payload definitions
-- `architecture/system_connections.sysml` – all `connect` statements
-- `architecture/requirements.sysml` – top-level capability requirements
-- `architecture/simulation.sysml` – top-level simulation arch requirements and design choices
+Main outputs:
 
-## Components
+- SSP archive: `build/ssp/aircraft.ssp`
+- FMUs: `build/fmus/*.fmu`
+- Generated SSD: `generated/SystemStructure.ssd`
+- Scenario results: `build/results/*`
 
-The system is defined on a high level of abstraction with low fidelity models
-It contains models for:
- - F-16 composite/aluminum airframe
- - cropped-delta wing and control surfaces
- - F100/F110 turbofan propulsion module
- - mission computer with HOTAS, stores management, and flight control exports
- - autopilot module, to navigate around points in space
- - power distribution system sized for 270 VDC generation
- - cockpit HOTAS interface
- - telemetry sink (`InputOutput`) that taps the environment state, autopilot outputs (pilot command + mission status), and flight status for logging and validation
+## Common Commands
 
-# Build
+| Task | Command |
+| --- | --- |
+| Merge SysML into JSON | `python3 -m scripts.generation.save_architecture --output generated/arch_def.json` |
+| Generate SSD | `python3 -m scripts.generation.generate_ssd --output generated/SystemStructure.ssd` |
+| Generate default parameter set | `python3 -m scripts.generation.generate_parameter_set --output generated/parameters.ssv` |
+| Export FMUs | `python3 -m scripts.generation.build_fmus --omc-path omc` |
+| Validate SSD XML | `python3 -m scripts.verification.verify_ssd_xml_compliance --ssd generated/SystemStructure.ssd` |
+| Package SSP | `python3 -m scripts.generation.package_ssp --fmu-dir build/fmus --ssd generated/SystemStructure.ssd --output build/ssp/aircraft.ssp` |
+| Run scenario | `python3 -m scripts.workflows.simulate_scenario --scenario resources/scenarios/test_scenario.json` |
+| Re-evaluate existing results only | `python3 -m scripts.workflows.simulate_scenario --scenario resources/scenarios/test_scenario.json --reuse-results` |
+| Plot scenario outputs | `python3 -m scripts.plot_results --results-csv build/results/test_scenario_results.csv --scenario resources/scenarios/test_scenario.json --plot-path --plot-3d --plot-fuel-altitude` |
 
-all sub-systems are to be exported into into Functional mockup units, FMUs. Packaged into a SSP for executing the simulation in the optimization loop.
+## Architecture Inputs
 
-## Models
+SysML sources currently used by the generators:
 
-All subsystem FMUs are generated from the `models/Aircraft` Modelica package using the OpenModelica compiler (`omc`).
+- `architecture/aircraft.sysml`
+- `architecture/part_definition.sysml`
+- `architecture/port_definitions.sysml`
+- `architecture/requirements.sysml`
+- `architecture/simulation.sysml`
 
-## The SSD
+The parser is provided by `py_sysml_v2_cps` (installed from GitHub in `requirements.txt`, or from submodule in local mode).
 
-The ssd is build by a script that parses the architecture and creates a system structure definition (SSD). FMU source names are now derived directly from the SysML package/component names via `scripts.utils.fmi_helpers`, so adding a new part to the architecture automatically wires up its FMU in the SSD.
+## Simulation Workflow
 
-## SSP 
+1. Create or choose a scenario JSON from `resources/scenarios/` (or generate one with `scripts.generation.generate_scenario`).
+2. Build/regenerate SSP artifacts (`./scripts/workflows/build.sh` or individual generation commands).
+3. Run:
 
-FMUs and SSD are packaged into a zip file, renamed *.ssp
+```bash
+python3 -m scripts.workflows.simulate_scenario --scenario resources/scenarios/test_scenario.json
+```
 
+`simulate_scenario` writes:
 
-# Simulation 
+- CSV timeseries: `build/results/<scenario>_results.csv`
+- Summary JSON: `build/results/<scenario>_summary.json`
+- Waypoint parameter set: `build/results/<scenario>_waypoints.ssv`
 
-Utilize OMSimulator as simulation engine, via python
+Requirement checks in the summary include:
 
-## Scenario workflow
+- `REQ_Performance`
+- `REQ_Fuel`
+- `REQ_Control`
+- `REQ_Mission`
+- `REQ_Propulsion`
 
-1. Generate mission waypoints via `python3 -m scripts.generation.generate_scenario --output build/scenarios/demo.json`.
-2. Rebuild the FMUs/SSD/SSP with the helper scripts whenever the models change.
-3. Run `python3 -m scripts.workflows.simulate_scenario --scenario build/scenarios/demo.json` to execute OMSimulator or post-process existing results (`--reuse-results`) and optional custom `--ssp` or `--stop-time`.
-4. Execute `pytest` to run the scenario-based unit tests and validate requirement coverage (range, fuel exhaustion).
+See `docs/results_and_evaluation.md` for metric definitions and interpretation.
 
-## Autopilot waypoint tracking
+## Verification and Tests
 
-- Waypoints are injected into `AutopilotModule` as local `x/y/z` kilometers (`waypointX_km[]/waypointY_km[]/waypointZ_km[]`); `simulate_scenario.py` emits an SSV parameter set for each scenario so the FMU receives the route automatically.
-- The autopilot computes a heading and altitude error toward the active waypoint directly in this grid, advancing once the aircraft is within `waypointProximity_km` (10 km default), updating `MissionStatus` for logging and requirement evaluation.
-- You can sanity-check the navigation math without rebuilding FMUs by running `pytest tests/test_autopilot_logic.py`, which mirrors the Modelica heading/error calculations.
+Verification helpers:
 
-### Simulation and results
-
-- `scripts.workflows.simulate_scenario` always produces a timeseries CSV at `build/results/<scenario>_results.csv` and a requirement-focused summary at `build/results/<scenario>_summary.json`.
-- Pass `--reuse-results` to skip OMSimulator when a CSV already exists (useful in CI and for quick requirement checks).
-- Summaries include pass/fail for REQ_Performance/REQ_Fuel/REQ_Control/REQ_Mission/REQ_Propulsion plus evidence strings and key metrics (max Mach, g-load, fuel used, stores available, thrust).
-- Waypoint-tracking metrics are computed from simulated local `x/y` traces (`waypoint_miss_*`, `waypoint_hits`, `waypoints_followed`), so you can verify path following directly from the summary.
-- See `docs/results_and_evaluation.md` for the metric/summary fields and how to interpret them.
-- Pre-generated data stored under `resources/scenarios/test_scenario.json` and `resources/references/test_scenario_results.csv` is copied into `build/` on demand so tests can run without a fresh simulation.
-- Waypoints are exported as a comma-separated string to `build/results/<scenario>_waypoints.txt` (format: `x_km,y_km,z_km,...`) that feeds the Autopilot parameter set via `stringToRealVector`.
-- Use `python3 -m scripts.plot_results --results-csv build/results/<scenario>_results.csv --scenario build/scenarios/<scenario>.json --plot-path --plot-3d --plot-fuel-altitude` to generate visualizations after a run.
-
-## Verification helpers
-
-- `python3 -m scripts.verification.verify_modelica_variables`
 - `python3 -m scripts.verification.verify_connections`
 - `python3 -m scripts.verification.verify_model_equations --omc /path/to/omc`
-- `python3 -m scripts.workflows.simulate_scenario --scenario ... --ssp ...`
+- `python3 -m scripts.verification.verify_modelica_variables`
+- `python3 -m scripts.verification.verify_fmu_ios`
+- `python3 -m scripts.verification.verify_ssd_xml_compliance`
 
+Run tests:
 
-# File disposition
+```bash
+pytest
+```
 
-architecture/ - the system architecture 
-models/ - all models are located here
-scripts/ - Python package containing `generation/`, `verification/`, `workflows/`, and shared non-SysML utilities
-SysML parsing/helpers are provided by the external `py_sysml_v2_cps` package
+Useful focused test:
 
+```bash
+pytest tests/test_autopilot_logic.py
+```
 
-## Results and requirement evaluation
+## Repository Layout
 
-- OMSimulator outputs a full timeseries CSV per scenario at `build/results/<scenario>_results.csv`.
-- Post-processing writes `build/results/<scenario>_summary.json` with requirement evaluations (REQ_Performance, REQ_Fuel, REQ_Control, REQ_Mission, REQ_Propulsion) and key metrics such as max Mach, g-load, fuel used, and available stores.
-- Use `python3 -m scripts.workflows.simulate_scenario --scenario <path> --results-dir build/results --reuse-results` to evaluate an existing OMS run without re-simulating. Sample data is kept under `resources/scenarios/test_scenario.json` and `resources/references/test_scenario_results.csv` and mirrored into `build/` when missing.
-
-# Development
-
-The tracking of tasks for this project is defined in the file todo.md
+- `architecture/`: SysML architecture sources
+- `models/`: Modelica package used for FMU export
+- `scripts/generation/`: SSP/FMU/interface/scenario generation
+- `scripts/verification/`: static and artifact checks
+- `scripts/workflows/`: end-to-end orchestration
+- `resources/scenarios/`: curated scenario JSONs
+- `docs/`: supplementary design and evaluation notes

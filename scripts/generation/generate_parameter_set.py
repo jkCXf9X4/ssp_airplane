@@ -11,9 +11,11 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from pyssp_standard.ssv import SSV
-from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR, ensure_parent_dir
+
+
 from pycps_sysmlv2 import SysMLArchitecture, SysMLAttribute, SysMLPartDefinition, load_architecture
-from pycps_sysmlv2.type_utils import infer_primitive
+
+from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR, DEFAULT_MODELS, ensure_parent_dir
 from scripts.utils.sysml_compat import composition_components, literal_value
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
@@ -115,6 +117,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     parser.add_argument(
         "--components",
         nargs="*",
+        default=DEFAULT_MODELS,
         help="Optional subset of component names to include.",
     )
     args = parser.parse_args(argv)

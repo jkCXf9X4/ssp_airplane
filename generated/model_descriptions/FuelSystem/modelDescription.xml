@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<fmiModelDescription fmiVersion="2.0" modelName="Aircraft.FuelSystem" guid="{743344f9-38dd-5759-8d3d-fa91ca560eff}" description="Internal + conformal fuel storage management with transfer pumps feeding engine feed tanks." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2026-02-16T15:56:19Z" variableNamingConvention="structured" numberOfEventIndicators="0">
+<fmiModelDescription fmiVersion="2.0" modelName="Aircraft.FuelSystem" guid="{743344f9-38dd-5759-8d3d-fa91ca560eff}" description="Internal + conformal fuel storage management with transfer pumps feeding engine feed tanks." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2026-02-18T10:39:19Z" variableNamingConvention="structured" numberOfEventIndicators="0">
   <CoSimulation modelIdentifier="FuelSystem" />
   <ModelVariables>
     <ScalarVariable name="fuel_capacity_kg" valueReference="0" causality="parameter" variability="fixed">

@@ -1,0 +1,6 @@
+[submodule "3rd_party/pycps_sysml"]
+	path = 3rd_party/pycps_sysml
+	url = git@github.com:jkCXf9X4/py_sysml_v2_cps.git
+[submodule "3rd_party/pyssp_standard"]
+	path = 3rd_party/pyssp_standard
+	url = git@github.com:pyssporg/pyssp_standard.git
