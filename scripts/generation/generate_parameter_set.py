@@ -21,7 +21,7 @@ DEFAULT_OUTPUT = GENERATED_DIR / "parameters.ssv"
 
 
 def populate_parameter_set(ssv: SSV, parameter_pairs: Iterable[tuple[str, SysMLAttribute]]) -> None:
-    print("Populate parameter set")
+    # print("Populate parameter set")
     for name, attr in parameter_pairs:
 
         data_type = attr.type.primitive_type_str()
@@ -38,7 +38,7 @@ def populate_parameter_set(ssv: SSV, parameter_pairs: Iterable[tuple[str, SysMLA
 
         formatted = format_value(data_type, attr.value)
         ssv.add_parameter(name, ptype=data_type, value=formatted)
-    print("Populate parameter set -- DONE")
+    # print("Populate parameter set -- DONE")
 
 
 #  Evaluate why this is needed...

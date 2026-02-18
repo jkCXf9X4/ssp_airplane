@@ -51,3 +51,9 @@ def format_value(tag: str, literal):
         return str(literal)
     raise Exception("[format_value] Unknown tag")
 
+def to_fmi_direction_definition(dir: str):
+    if dir == "in":
+        return "input"
+    elif dir == "out":
+        return "output"
+    raise Exception("Direction conversion is unknown")

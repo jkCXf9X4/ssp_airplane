@@ -63,7 +63,7 @@ def _port_attribute_variables(
     value_ref = starting_ref
     value_index = starting_index
 
-    for port, port_def, attr in part.get_all_port_attributes():
+    for port, port_def, attr in part.get_port_attributes():
 
         var_name = f"{port.name}.{attr.name}"
         fmi_type = attr.type.as_string()
