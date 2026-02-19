@@ -11,7 +11,7 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR, ensure_parent_dir
-from pycps_sysmlv2 import load_architecture
+from pycps_sysmlv2 import load_architecture, json_dumps
 
 DEFAULT_ARCH_DIR = ARCHITECTURE_DIR
 DEFAULT_OUTPUT = GENERATED_DIR / "arch_def.json"
@@ -36,7 +36,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     architecture = load_architecture(args.source)
 
     ensure_parent_dir(args.output)
-    args.output.write_text(str(architecture))
+    args.output.write_text(json_dumps(architecture, []))
     print(f"Architecture saved to {args.output}")
 
     return 0

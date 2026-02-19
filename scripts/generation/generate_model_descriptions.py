@@ -8,10 +8,9 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 import sys
 from pathlib import Path
-from typing import Iterable, Optional
+from typing import Optional
 from uuid import NAMESPACE_URL, uuid5
 import xml.etree.ElementTree as ET
-import zipfile
 
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
@@ -27,10 +26,7 @@ from scripts.common.paths import (
 from scripts.common.fmi_helpers import format_value, map_fmi_type
 
 from pycps_sysmlv2 import (
-    SysMLArchitecture,
     SysMLPartDefinition,
-    SysMLPortDefinition,
-    SysMLType,
     load_system
 )
 

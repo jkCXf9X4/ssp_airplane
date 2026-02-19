@@ -18,10 +18,7 @@ from scripts.common.paths import (
     GENERATED_DIR,
     ensure_parent_dir,
 )
-from scripts.common.fmi_helpers import (
-    fmu_resource_path,
-    to_fmi_direction_definition,
-)
+from scripts.common.fmi_helpers import fmu_resource_path, to_fmi_direction_definition
 
 from pyssp_standard.common_content_ssc import (
     TypeBoolean,
@@ -37,18 +34,13 @@ from pyssp_standard.ssd import (
     SSD,
     System,
 )
-from pycps_sysmlv2 import (
-    SysMLPartDefinition,
-    load_system,
-)
+from pycps_sysmlv2 import SysMLPartDefinition, load_system
 
 import logging
 logging.basicConfig(level=logging.WARNING)
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_OUTPUT = GENERATED_DIR / "SystemStructure.ssd"
-
-
 
 
 def _type_from_primitive(type: str):
