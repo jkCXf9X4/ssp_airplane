@@ -36,7 +36,7 @@ def generate_modelica_package(ports: Dict[str, SysMLPortDefinition]) -> str:
 
         lines.append(f"  connector {port_name}")
         for variable in port.attributes.values():
-            mo_type = map_modelica_type(variable.type)
+            mo_type = map_modelica_type(variable.type.as_string())
             lines.append(f"    {mo_type} {variable.name};")
         lines.append(f"  end {port_name};\n")
 

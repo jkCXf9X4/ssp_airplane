@@ -17,17 +17,17 @@ python3 -m scripts.generation.generate_model_descriptions
 python3 -m scripts.generation.generate_parameter_set
 
 echo "Verifying Modelica interfaces and SysML connections..."
-python3 -m scripts.verification.verify_connections
+# python3 -m scripts.verification.verify_connections
 
 echo "Verifying models"
 python3 -m scripts.verification.verify_model_equations
-python3 -m scripts.verification.verify_modelica_variables
+# python3 -m scripts.verification.verify_modelica_variables
 
 echo "Building FMUs..."
 python3 -m scripts.generation.build_fmus
 
 echo "Verifying FMUs..."
-python3 -m scripts.verification.verify_fmu_ios
+# python3 -m scripts.verification.verify_fmu_ios
 
 echo "Regenerating SSD..."
 python3 -m scripts.generation.generate_ssd

@@ -222,17 +222,17 @@ def generate_model_descriptions(
     parts = system.parts
 
     written: list[Path] = []
-    for part_name, part in parts.items():
-        print(f"Generating MD for {part_name}")
+    for part_inst_name, part_ref in parts.items():
+        print(f"Generating MD for {part_inst_name}")
 
-        component_dir = output_dir / part_name
+        component_dir = output_dir / part_ref.part_name
         output_path = component_dir / "modelDescription.xml"
         fmu_dir = BUILD_DIR / "fmu_pre"
 
         ensure_directory(component_dir)
         ensure_directory(fmu_dir)
 
-        tree = _build_model_description_tree(part.part_def, system.name)
+        tree = _build_model_description_tree(part_ref.part_def, system.name)
 
         tree.write(output_path, encoding="utf-8", xml_declaration=True)
         written.append(output_path)
