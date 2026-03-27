@@ -66,6 +66,8 @@ def _build_model_description(output_path: Path) -> None:
     )
     source_files = ET.SubElement(co_sim, "SourceFiles")
     ET.SubElement(source_files, "File", attrib={"name": "FlightGearBridge.cpp"})
+    ET.SubElement(source_files, "File", attrib={"name": "BridgeRuntime.cpp"})
+    ET.SubElement(source_files, "File", attrib={"name": "BridgeRuntime.hpp"})
 
     model_variables = ET.SubElement(root, "ModelVariables")
     output_indexes: list[int] = []
@@ -159,6 +161,8 @@ def build_flightgear_bridge_fmu(output_fmu: Path = DEFAULT_OUTPUT, build_dir: Pa
 
     shutil.copy2(built_lib, binary_dir / f"{MODEL_IDENTIFIER}.so")
     shutil.copy2(NATIVE_ROOT / "src" / "FlightGearBridge.cpp", source_dir / "FlightGearBridge.cpp")
+    shutil.copy2(NATIVE_ROOT / "src" / "BridgeRuntime.cpp", source_dir / "BridgeRuntime.cpp")
+    shutil.copy2(NATIVE_ROOT / "src" / "BridgeRuntime.hpp", source_dir / "BridgeRuntime.hpp")
     _build_model_description(stage_dir / "modelDescription.xml")
 
     ensure_parent_dir(output_fmu)
