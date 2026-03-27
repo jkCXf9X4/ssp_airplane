@@ -14,12 +14,16 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import BUILD_DIR, REPO_ROOT, ensure_directory, ensure_parent_dir
+from scripts.generation.generate_c_interface_defs import generate_header
+from scripts.utils.c_interface_export import output_indexes, part_variable_specs
+from scripts.utils.sysml_helpers import load_architecture
 
 NATIVE_ROOT = REPO_ROOT / "native" / "flightgear_bridge"
 DEFAULT_OUTPUT = BUILD_DIR / "fmus" / "Aircraft_FlightGearBridge.fmu"
 DEFAULT_BUILD_DIR = BUILD_DIR / "native" / "flightgear_bridge"
 MODEL_IDENTIFIER = "FlightGearBridge"
 MODEL_GUID = "{2d7d0b06-4525-4e59-b188-2a9b0b8cb5bb}"
+GENERATED_HEADER = REPO_ROOT / "generated" / "architecture_interface.h"
 
 
 def _add_scalar(parent: ET.Element, *, name: str, value_reference: int, causality: str, fmi_type: str, variability: str | None = None, start: str | None = None) -> None:
@@ -33,6 +37,10 @@ def _add_scalar(parent: ET.Element, *, name: str, value_reference: int, causalit
 
 
 def _build_model_description(output_path: Path) -> None:
+    architecture = load_architecture(REPO_ROOT / "architecture")
+    part = architecture.parts[MODEL_IDENTIFIER]
+    specs = part_variable_specs(part)
+
     root = ET.Element(
         "fmiModelDescription",
         attrib={
@@ -68,62 +76,24 @@ def _build_model_description(output_path: Path) -> None:
     ET.SubElement(source_files, "File", attrib={"name": "FlightGearBridge.cpp"})
     ET.SubElement(source_files, "File", attrib={"name": "BridgeRuntime.cpp"})
     ET.SubElement(source_files, "File", attrib={"name": "BridgeRuntime.hpp"})
+    ET.SubElement(source_files, "File", attrib={"name": "architecture_interface.h"})
 
     model_variables = ET.SubElement(root, "ModelVariables")
-    output_indexes: list[int] = []
-
-    # Parameters
-    _add_scalar(model_variables, name="transport", value_reference=0, causality="parameter", variability="fixed", fmi_type="String", start="FlightGearGeneric")
-    _add_scalar(model_variables, name="reference_latitude_deg", value_reference=1, causality="parameter", variability="fixed", fmi_type="Real", start="0")
-    _add_scalar(model_variables, name="reference_longitude_deg", value_reference=2, causality="parameter", variability="fixed", fmi_type="Real", start="0")
-    _add_scalar(model_variables, name="reference_altitude_m", value_reference=3, causality="parameter", variability="fixed", fmi_type="Real", start="0")
-    _add_scalar(model_variables, name="remote_host", value_reference=4, causality="parameter", variability="fixed", fmi_type="String", start="127.0.0.1")
-    _add_scalar(model_variables, name="telemetry_port", value_reference=5, causality="parameter", variability="fixed", fmi_type="Integer", start="5501")
-    _add_scalar(model_variables, name="control_port", value_reference=6, causality="parameter", variability="fixed", fmi_type="Integer", start="5502")
-
-    # Inputs
-    input_specs = [
-        ("statePosition.x_km", 10, "Real"),
-        ("statePosition.y_km", 11, "Real"),
-        ("statePosition.z_km", 12, "Real"),
-        ("stateOrientation.roll_deg", 13, "Real"),
-        ("stateOrientation.pitch_deg", 14, "Real"),
-        ("stateOrientation.yaw_deg", 15, "Real"),
-        ("flightStatus.airspeed_mps", 16, "Real"),
-        ("flightStatus.energy_state_norm", 17, "Real"),
-        ("flightStatus.angle_of_attack_deg", 18, "Real"),
-        ("flightStatus.climb_rate", 19, "Real"),
-        ("flightStatus.health_code", 20, "Integer"),
-        ("missionStatus.waypoint_index", 21, "Integer"),
-        ("missionStatus.total_waypoints", 22, "Integer"),
-        ("missionStatus.distance_to_waypoint_km", 23, "Real"),
-        ("missionStatus.arrived", 24, "Boolean"),
-        ("missionStatus.complete", 25, "Boolean"),
-    ]
-    for name, vr, fmi_type in input_specs:
-        _add_scalar(model_variables, name=name, value_reference=vr, causality="input", fmi_type=fmi_type)
-
-    # Outputs
-    output_specs = [
-        ("pilotCommand.stick_pitch_norm", 40, "Real"),
-        ("pilotCommand.stick_roll_norm", 41, "Real"),
-        ("pilotCommand.rudder_norm", 42, "Real"),
-        ("pilotCommand.throttle_norm", 43, "Real"),
-        ("pilotCommand.throttle_aux_norm", 44, "Real"),
-        ("pilotCommand.button_mask", 45, "Integer"),
-        ("pilotCommand.hat_x", 46, "Integer"),
-        ("pilotCommand.hat_y", 47, "Integer"),
-        ("pilotCommand.mode_switch", 48, "Integer"),
-        ("pilotCommand.reserved", 49, "Integer"),
-    ]
-    for index, (name, vr, fmi_type) in enumerate(output_specs, start=1):
-        _add_scalar(model_variables, name=name, value_reference=vr, causality="output", fmi_type=fmi_type)
-        output_indexes.append(len(input_specs) + 7 + index)
+    for spec in specs:
+        _add_scalar(
+            model_variables,
+            name=spec.name,
+            value_reference=spec.value_reference,
+            causality=spec.causality,
+            fmi_type=spec.fmi_type,
+            variability=spec.variability,
+            start=spec.start_value,
+        )
 
     model_structure = ET.SubElement(root, "ModelStructure")
     outputs_elem = ET.SubElement(model_structure, "Outputs")
     initial_unknowns = ET.SubElement(model_structure, "InitialUnknowns")
-    for idx in output_indexes:
+    for idx in output_indexes(specs):
         ET.SubElement(outputs_elem, "Unknown", attrib={"index": str(idx)})
         ET.SubElement(initial_unknowns, "Unknown", attrib={"index": str(idx)})
 
@@ -137,6 +107,8 @@ def build_flightgear_bridge_fmu(output_fmu: Path = DEFAULT_OUTPUT, build_dir: Pa
     stage_dir = build_dir / "stage"
     binary_dir = stage_dir / "binaries" / "linux64"
     source_dir = stage_dir / "sources"
+
+    generate_header(REPO_ROOT / "architecture", GENERATED_HEADER)
 
     if build_dir.exists():
         shutil.rmtree(build_dir)
@@ -163,6 +135,7 @@ def build_flightgear_bridge_fmu(output_fmu: Path = DEFAULT_OUTPUT, build_dir: Pa
     shutil.copy2(NATIVE_ROOT / "src" / "FlightGearBridge.cpp", source_dir / "FlightGearBridge.cpp")
     shutil.copy2(NATIVE_ROOT / "src" / "BridgeRuntime.cpp", source_dir / "BridgeRuntime.cpp")
     shutil.copy2(NATIVE_ROOT / "src" / "BridgeRuntime.hpp", source_dir / "BridgeRuntime.hpp")
+    shutil.copy2(GENERATED_HEADER, source_dir / "architecture_interface.h")
     _build_model_description(stage_dir / "modelDescription.xml")
 
     ensure_parent_dir(output_fmu)
