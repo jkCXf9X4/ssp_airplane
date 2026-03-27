@@ -15,13 +15,13 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import BUILD_DIR, MODELS_DIR, REPO_ROOT, ensure_directory
+from scripts.generation.build_native_fmus import build_flightgear_bridge_fmu
 DEFAULT_MODELS = [
     "Aircraft.CompositeAirframe",
     "Aircraft.TurbofanPropulsion",
     "Aircraft.AdaptiveWingSystem",
     "Aircraft.MissionComputer",
     "Aircraft.AutopilotModule",
-    "Aircraft.FlightGearBridge",
     "Aircraft.InputOutput",
     "Aircraft.FuelSystem",
     "Aircraft.Environment",
@@ -135,6 +135,9 @@ def main() -> None:
         except FileNotFoundError as exc:
             raise SystemExit(f"FMU file {built_path} missing after omc run for {model}") from exc
         print(f"  -> {target_path}")
+
+    native_fmu = build_flightgear_bridge_fmu(output_dir / "Aircraft_FlightGearBridge.fmu")
+    print(f"  -> {native_fmu}")
 
     print("FMU build process finished.")
 

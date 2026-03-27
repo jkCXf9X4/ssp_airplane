@@ -69,6 +69,8 @@ The bridge is responsible for:
 
 Model the bridge as a dedicated adapter component, for example `FlightGearBridge`, rather than placing socket/protocol logic directly inside the airframe or autopilot models.
 
+The first concrete implementation in this repository uses a dedicated native FMI 2.0 co-simulation FMU written in C++ for `FlightGearBridge`. This keeps the network/socket logic out of ordinary Modelica equations while preserving the same architectural boundary in the SSP.
+
 Recommended signal responsibilities:
 
 - inputs from simulation:

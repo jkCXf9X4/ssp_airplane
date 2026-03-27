@@ -21,6 +21,9 @@ package Aircraft {
     attribute reference_latitude_deg = 0.0;
     attribute reference_longitude_deg = 0.0;
     attribute reference_altitude_m = 0.0;
+    attribute remote_host = "127.0.0.1";
+    attribute telemetry_port = 5501;
+    attribute control_port = 5502;
 
     doc /* Aircraft position from the simulated environment. */
     in port statePosition : PositionXYZ;
