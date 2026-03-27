@@ -23,6 +23,9 @@ package Aircraft {
   FlightGear is used as the visual frontend and pilot I/O frontend.
   Generic socket communication is preferred for the first implementation because it keeps the
   exchanged signals explicit and easier to debug than a larger native protocol mapping.
+  The first timing solution should use the existing ssp4sim realtime execution option.
+  A future Python API doStep(t) method and external package synchronization support are planned,
+  but should not be introduced in the initial integration.
   */
 
 

@@ -13,6 +13,8 @@ Use:
 
 The intent is to preserve the existing SSP/FMU-based aircraft composition while adding a live visualization and manual control path.
 
+For the initial runtime, use the existing `ssp4sim` realtime mode to provide timing. Do not add new synchronization methods to the Python API yet.
+
 ## Why this approach
 
 The current airplane package is already organized around:
@@ -56,7 +58,7 @@ The bridge functionality must still exist even when it is embedded into the mode
 
 The bridge is responsible for:
 
-- stepping or synchronizing with the running simulation time
+- coordinating with the running simulation time
 - reading aircraft state from the SSP
 - writing pilot/manual command values back into the SSP
 - converting local `x_km/y_km/z_km` coordinates into a geodetic frame suitable for FlightGear
@@ -105,12 +107,19 @@ The bridge must be non-blocking from the simulation master's perspective.
 
 Recommended timing behavior:
 
-- run the co-simulation in fixed communication steps
-- sample FlightGear input once per step
-- update outgoing visualization state once per step
+- use `ssp4sim` realtime execution to pace the simulation as the starting point
+- sample FlightGear input once per realtime update
+- update outgoing visualization state once per realtime update
 - avoid letting socket reads block the simulation loop
 
-If wall-clock pacing is needed, pace the simulation runner around the communication step instead of blocking inside the bridge protocol handlers.
+The initial implementation should avoid adding extra synchronization methods to `pyssp4sim`.
+
+Documented follow-up plans:
+
+1. add a `doStep(t)` method to the Python API so a caller can drive communication-step timing explicitly
+2. add an external package sync mechanism only when there is a concrete need to synchronize against another runtime or timing source
+
+Until then, realtime pacing should come from the existing `ssp4sim` capability rather than a new custom synchronization layer.
 
 ## Coordinate and signal mapping
 

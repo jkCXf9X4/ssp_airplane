@@ -21,6 +21,7 @@ DEFAULT_MODELS = [
     "Aircraft.AdaptiveWingSystem",
     "Aircraft.MissionComputer",
     "Aircraft.AutopilotModule",
+    "Aircraft.FlightGearBridge",
     "Aircraft.FuelSystem",
     "Aircraft.ControlInterface",
 ]

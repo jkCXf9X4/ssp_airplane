@@ -1,5 +1,6 @@
 package Aircraft {
   doc /* ControlInterface */
+  connect FlightGearBridge.pilotCommand to ControlInterface.bridgeInput;
   connect ControlInterface.pilotCommand to MissionComputer.manualInput;
 
   doc /* AutopilotModule */
@@ -26,6 +27,12 @@ package Aircraft {
   connect Environment.location to AutopilotModule.currentLocation;
   connect Environment.flight_status to AutopilotModule.feedbackBus;
   connect Environment.flight_status to AdaptiveWingSystem.flight_speed;
+  connect Environment.location to FlightGearBridge.statePosition;
+  connect Environment.orientation to FlightGearBridge.stateOrientation;
+  connect Environment.flight_status to FlightGearBridge.flightStatus;
+
+  doc /* FlightGearBridge */
+  connect AutopilotModule.missionStatus to FlightGearBridge.missionStatus;
 
   doc /* InputOutput telemetry taps */
   connect Environment.location to InputOutput.locationXYZ;
@@ -34,4 +41,3 @@ package Aircraft {
   connect Environment.flight_status to InputOutput.flightStatus;
   connect AutopilotModule.missionStatus to InputOutput.missionStatus;
 }
-

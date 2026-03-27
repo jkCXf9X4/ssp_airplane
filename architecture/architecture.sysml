@@ -6,8 +6,35 @@ package Aircraft {
     doc /* F-16 HOTAS + side-stick interface for pilot inputs and trim switches. */
     attribute input_scheme = "HOTAS";
     attribute telemetry_rate_hz = 120;
+    attribute useBridgeInput = false;
+
+    doc /* External pilot command provided by an interactive bridge/frontend adapter. */
+    in port bridgeInput : PilotCommand;
   
     doc /* HOTAS-control bundle forwarded for mission computer sensor fusion. */
+    out port pilotCommand : PilotCommand;
+  }
+
+  part def FlightGearBridge {
+    doc /* Adapter component for visual/frontend coupling to FlightGear using generic socket communication. */
+    attribute transport = "FlightGearGeneric";
+    attribute reference_latitude_deg = 0.0;
+    attribute reference_longitude_deg = 0.0;
+    attribute reference_altitude_m = 0.0;
+
+    doc /* Aircraft position from the simulated environment. */
+    in port statePosition : PositionXYZ;
+
+    doc /* Aircraft attitude from the simulated environment. */
+    in port stateOrientation : OrientationEuler;
+
+    doc /* Flight status exported for overlays and diagnostics. */
+    in port flightStatus : FlightStatusPacket;
+
+    doc /* Mission/autopilot status exported for overlays and diagnostics. */
+    in port missionStatus : MissionStatus;
+
+    doc /* Pilot command returned from the interactive frontend into the vehicle control path. */
     out port pilotCommand : PilotCommand;
   }
 

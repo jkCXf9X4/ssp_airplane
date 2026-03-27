@@ -1,6 +1,12 @@
 {
   "connections": [
     {
+      "dst_component": "ControlInterface",
+      "dst_port": "bridgeInput",
+      "src_component": "FlightGearBridge",
+      "src_port": "pilotCommand"
+    },
+    {
       "dst_component": "MissionComputer",
       "dst_port": "manualInput",
       "src_component": "ControlInterface",
@@ -83,6 +89,30 @@
       "dst_port": "flight_speed",
       "src_component": "Environment",
       "src_port": "flight_status"
+    },
+    {
+      "dst_component": "FlightGearBridge",
+      "dst_port": "statePosition",
+      "src_component": "Environment",
+      "src_port": "location"
+    },
+    {
+      "dst_component": "FlightGearBridge",
+      "dst_port": "stateOrientation",
+      "src_component": "Environment",
+      "src_port": "orientation"
+    },
+    {
+      "dst_component": "FlightGearBridge",
+      "dst_port": "flightStatus",
+      "src_component": "Environment",
+      "src_port": "flight_status"
+    },
+    {
+      "dst_component": "FlightGearBridge",
+      "dst_port": "missionStatus",
+      "src_component": "AutopilotModule",
+      "src_port": "missionStatus"
     },
     {
       "dst_component": "InputOutput",
@@ -618,12 +648,90 @@
           "name": "telemetry_rate_hz",
           "type": null,
           "value": "120"
+        },
+        "useBridgeInput": {
+          "doc": null,
+          "name": "useBridgeInput",
+          "type": null,
+          "value": "false"
         }
       },
       "doc": "F-16 HOTAS + side-stick interface for pilot inputs and trim switches.",
       "name": "ControlInterface",
       "parts": [],
       "ports": [
+        {
+          "direction": "in",
+          "doc": "External pilot command provided by an interactive bridge/frontend adapter.",
+          "name": "bridgeInput",
+          "payload": "PilotCommand",
+          "payload_def": {
+            "attributes": {
+              "button_mask": {
+                "doc": null,
+                "name": "button_mask",
+                "type": "Integer",
+                "value": null
+              },
+              "hat_x": {
+                "doc": null,
+                "name": "hat_x",
+                "type": "Integer",
+                "value": null
+              },
+              "hat_y": {
+                "doc": null,
+                "name": "hat_y",
+                "type": "Integer",
+                "value": null
+              },
+              "mode_switch": {
+                "doc": null,
+                "name": "mode_switch",
+                "type": "Integer",
+                "value": null
+              },
+              "reserved": {
+                "doc": null,
+                "name": "reserved",
+                "type": "Integer",
+                "value": null
+              },
+              "rudder_norm": {
+                "doc": null,
+                "name": "rudder_norm",
+                "type": "Real",
+                "value": null
+              },
+              "stick_pitch_norm": {
+                "doc": null,
+                "name": "stick_pitch_norm",
+                "type": "Real",
+                "value": null
+              },
+              "stick_roll_norm": {
+                "doc": null,
+                "name": "stick_roll_norm",
+                "type": "Real",
+                "value": null
+              },
+              "throttle_aux_norm": {
+                "doc": null,
+                "name": "throttle_aux_norm",
+                "type": "Real",
+                "value": null
+              },
+              "throttle_norm": {
+                "doc": null,
+                "name": "throttle_norm",
+                "type": "Real",
+                "value": null
+              }
+            },
+            "doc": "HOTAS-style control payload shared across control surfaces and mission computer consumers.",
+            "name": "PilotCommand"
+          }
+        },
         {
           "direction": "out",
           "doc": "HOTAS-control bundle forwarded for mission computer sensor fusion.",
@@ -936,6 +1044,255 @@
             },
             "doc": "Mission computer status feedback consumed by autonomy and analysis models.",
             "name": "FlightStatusPacket"
+          }
+        }
+      ]
+    },
+    "FlightGearBridge": {
+      "attributes": {
+        "reference_altitude_m": {
+          "doc": null,
+          "name": "reference_altitude_m",
+          "type": null,
+          "value": "0.0"
+        },
+        "reference_latitude_deg": {
+          "doc": null,
+          "name": "reference_latitude_deg",
+          "type": null,
+          "value": "0.0"
+        },
+        "reference_longitude_deg": {
+          "doc": null,
+          "name": "reference_longitude_deg",
+          "type": null,
+          "value": "0.0"
+        },
+        "transport": {
+          "doc": null,
+          "name": "transport",
+          "type": null,
+          "value": "\"FlightGearGeneric\""
+        }
+      },
+      "doc": "Adapter component for visual/frontend coupling to FlightGear using generic socket communication.",
+      "name": "FlightGearBridge",
+      "parts": [],
+      "ports": [
+        {
+          "direction": "in",
+          "doc": "Aircraft position from the simulated environment.",
+          "name": "statePosition",
+          "payload": "PositionXYZ",
+          "payload_def": {
+            "attributes": {
+              "x_km": {
+                "doc": null,
+                "name": "x_km",
+                "type": "Real",
+                "value": null
+              },
+              "y_km": {
+                "doc": null,
+                "name": "y_km",
+                "type": "Real",
+                "value": null
+              },
+              "z_km": {
+                "doc": null,
+                "name": "z_km",
+                "type": "Real",
+                "value": null
+              }
+            },
+            "doc": "Local navigation frame expressed in kilometers (x=North, y=East, z=Up).",
+            "name": "PositionXYZ"
+          }
+        },
+        {
+          "direction": "in",
+          "doc": "Aircraft attitude from the simulated environment.",
+          "name": "stateOrientation",
+          "payload": "OrientationEuler",
+          "payload_def": {
+            "attributes": {
+              "pitch_deg": {
+                "doc": null,
+                "name": "pitch_deg",
+                "type": "Real",
+                "value": null
+              },
+              "roll_deg": {
+                "doc": null,
+                "name": "roll_deg",
+                "type": "Real",
+                "value": null
+              },
+              "yaw_deg": {
+                "doc": null,
+                "name": "yaw_deg",
+                "type": "Real",
+                "value": null
+              }
+            },
+            "doc": "Air vehicle orientation expressed as Euler angles in degrees.",
+            "name": "OrientationEuler"
+          }
+        },
+        {
+          "direction": "in",
+          "doc": "Flight status exported for overlays and diagnostics.",
+          "name": "flightStatus",
+          "payload": "FlightStatusPacket",
+          "payload_def": {
+            "attributes": {
+              "airspeed_mps": {
+                "doc": null,
+                "name": "airspeed_mps",
+                "type": "Real",
+                "value": null
+              },
+              "angle_of_attack_deg": {
+                "doc": null,
+                "name": "angle_of_attack_deg",
+                "type": "Real",
+                "value": null
+              },
+              "climb_rate": {
+                "doc": null,
+                "name": "climb_rate",
+                "type": "Real",
+                "value": null
+              },
+              "energy_state_norm": {
+                "doc": null,
+                "name": "energy_state_norm",
+                "type": "Real",
+                "value": null
+              },
+              "health_code": {
+                "doc": null,
+                "name": "health_code",
+                "type": "Integer",
+                "value": null
+              }
+            },
+            "doc": "Mission computer status feedback consumed by autonomy and analysis models.",
+            "name": "FlightStatusPacket"
+          }
+        },
+        {
+          "direction": "in",
+          "doc": "Mission/autopilot status exported for overlays and diagnostics.",
+          "name": "missionStatus",
+          "payload": "MissionStatus",
+          "payload_def": {
+            "attributes": {
+              "arrived": {
+                "doc": null,
+                "name": "arrived",
+                "type": "Boolean",
+                "value": null
+              },
+              "complete": {
+                "doc": null,
+                "name": "complete",
+                "type": "Boolean",
+                "value": null
+              },
+              "distance_to_waypoint_km": {
+                "doc": null,
+                "name": "distance_to_waypoint_km",
+                "type": "Real",
+                "value": null
+              },
+              "total_waypoints": {
+                "doc": null,
+                "name": "total_waypoints",
+                "type": "Integer",
+                "value": null
+              },
+              "waypoint_index": {
+                "doc": null,
+                "name": "waypoint_index",
+                "type": "Integer",
+                "value": null
+              }
+            },
+            "doc": "Waypoint-tracking status produced by the autopilot for logging and requirement evaluation.",
+            "name": "MissionStatus"
+          }
+        },
+        {
+          "direction": "out",
+          "doc": "Pilot command returned from the interactive frontend into the vehicle control path.",
+          "name": "pilotCommand",
+          "payload": "PilotCommand",
+          "payload_def": {
+            "attributes": {
+              "button_mask": {
+                "doc": null,
+                "name": "button_mask",
+                "type": "Integer",
+                "value": null
+              },
+              "hat_x": {
+                "doc": null,
+                "name": "hat_x",
+                "type": "Integer",
+                "value": null
+              },
+              "hat_y": {
+                "doc": null,
+                "name": "hat_y",
+                "type": "Integer",
+                "value": null
+              },
+              "mode_switch": {
+                "doc": null,
+                "name": "mode_switch",
+                "type": "Integer",
+                "value": null
+              },
+              "reserved": {
+                "doc": null,
+                "name": "reserved",
+                "type": "Integer",
+                "value": null
+              },
+              "rudder_norm": {
+                "doc": null,
+                "name": "rudder_norm",
+                "type": "Real",
+                "value": null
+              },
+              "stick_pitch_norm": {
+                "doc": null,
+                "name": "stick_pitch_norm",
+                "type": "Real",
+                "value": null
+              },
+              "stick_roll_norm": {
+                "doc": null,
+                "name": "stick_roll_norm",
+                "type": "Real",
+                "value": null
+              },
+              "throttle_aux_norm": {
+                "doc": null,
+                "name": "throttle_aux_norm",
+                "type": "Real",
+                "value": null
+              },
+              "throttle_norm": {
+                "doc": null,
+                "name": "throttle_norm",
+                "type": "Real",
+                "value": null
+              }
+            },
+            "doc": "HOTAS-style control payload shared across control surfaces and mission computer consumers.",
+            "name": "PilotCommand"
           }
         }
       ]
@@ -1973,6 +2330,10 @@
     {
       "identifier": "waypoint_solutions",
       "text": "The waypoints should be injected into the simulation by utilizing SSP parameter set"
+    },
+    {
+      "identifier": "visualization_and_io_solution",
+      "text": "The recommended interactive solution keeps ssp4sim as the simulation master and connects the packaged aircraft SSP to FlightGear through a dedicated bridge/adapter component. FlightGear is used as the visual frontend and pilot I/O frontend. Generic socket communication is preferred for the first implementation because it keeps the exchanged signals explicit and easier to debug than a larger native protocol mapping."
     }
   ]
 }
