@@ -1,4 +1,4 @@
-"""Helpers for exporting architecture interfaces to C-compatible artifacts."""
+"""Helpers for exporting architecture interfaces to C/C++ artifacts."""
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -17,6 +17,9 @@ class VariableSpec:
     causality: str
     variability: Optional[str] = None
     start_value: Optional[str] = None
+    c_member_type: str = "double"
+    cpp_member_type: str = "double"
+    field_path: str = ""
 
 
 def c_primitive(type_name: str) -> str:
@@ -26,6 +29,16 @@ def c_primitive(type_name: str) -> str:
         "Integer": "int",
         "Boolean": "bool",
         "String": "const char*",
+    }.get(primitive, "double")
+
+
+def cpp_member_type(type_name: str) -> str:
+    primitive = normalize_primitive(type_name)
+    return {
+        "Real": "double",
+        "Integer": "int",
+        "Boolean": "bool",
+        "String": "std::string",
     }.get(primitive, "double")
 
 
@@ -44,6 +57,20 @@ def port_struct_fields(port_def: SysMLPortDefinition) -> List[tuple[str, str]]:
     for attr in port_def.attributes.values():
         fields.append((attr.name, c_primitive(attr.type or "Real")))
     return fields
+
+
+def format_cpp_default(type_name: str, value: object | None) -> str:
+    primitive = normalize_primitive(type_name)
+    if value is None or isinstance(value, list):
+        return "{}"
+    if primitive != "String" and isinstance(value, str) and value.strip().startswith("[") and value.strip().endswith("]"):
+        return "{}"
+    if primitive == "Boolean":
+        return "true" if bool(value) else "false"
+    if primitive == "String":
+        escaped = str(value).replace("\\", "\\\\").replace('"', '\\"')
+        return f'"{escaped}"'
+    return str(value)
 
 
 def part_variable_specs(part: SysMLPartDefinition) -> List[VariableSpec]:
@@ -67,6 +94,9 @@ def part_variable_specs(part: SysMLPartDefinition) -> List[VariableSpec]:
                 causality="parameter",
                 variability="fixed",
                 start_value=start_value,
+                c_member_type=c_primitive(attr.type or primitive),
+                cpp_member_type=cpp_member_type(attr.type or primitive),
+                field_path=attr.name,
             )
         )
         value_reference += 1
@@ -82,6 +112,9 @@ def part_variable_specs(part: SysMLPartDefinition) -> List[VariableSpec]:
                     value_reference=value_reference,
                     fmi_type=normalize_primitive(attr.type),
                     causality="input" if port.direction == "in" else "output",
+                    c_member_type=c_primitive(attr.type or "Real"),
+                    cpp_member_type=cpp_member_type(attr.type or "Real"),
+                    field_path=f"{port.name}.{attr.name}",
                 )
             )
             value_reference += 1
@@ -99,3 +132,38 @@ def output_indexes(specs: Iterable[VariableSpec]) -> List[int]:
         if spec.causality == "output":
             indexes.append(idx)
     return indexes
+
+
+def part_instance_fields(package: str, part: SysMLPartDefinition) -> List[tuple[str, str, str]]:
+    fields: List[tuple[str, str, str]] = []
+    for attr in part.attributes.values():
+        literal = parse_literal(attr.value)
+        primitive = infer_primitive(attr.type, literal)
+        fields.append(
+            (
+                cpp_member_type(attr.type or primitive),
+                attr.name,
+                format_cpp_default(attr.type or primitive, literal),
+            )
+        )
+    for port in part.ports:
+        if port.payload_def is None:
+            continue
+        fields.append((f"{package}_{port.payload_def.name}", port.name, "{}"))
+    return fields
+
+
+def binding_offset_expression(package: str, part: SysMLPartDefinition, spec: VariableSpec) -> str:
+    instance_name = f"{package}_{part.name}_Instance"
+    if "." not in spec.field_path:
+        return f"offsetof({instance_name}, {spec.field_path})"
+    head, tail = spec.field_path.split(".", 1)
+    payload_name = next(
+        port.payload_def.name
+        for port in part.ports
+        if port.name == head and port.payload_def is not None
+    )
+    return (
+        f"offsetof({instance_name}, {head}) + "
+        f"offsetof({package}_{payload_name}, {tail})"
+    )

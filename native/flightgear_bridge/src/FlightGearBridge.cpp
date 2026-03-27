@@ -6,6 +6,26 @@ namespace {
 
 inline fgbridge::ModelInstance* as_instance(fmi2Component component) { return reinterpret_cast<fgbridge::ModelInstance*>(component); }
 
+const Aircraft_FieldBinding* find_binding(fmi2ValueReference value_reference, Aircraft_ScalarType scalar_type) {
+  for (size_t i = 0; i < Aircraft_FlightGearBridge_BindingCount; ++i) {
+    const auto& binding = Aircraft_FlightGearBridge_Bindings[i];
+    if (binding.value_reference == static_cast<int>(value_reference) && binding.scalar_type == scalar_type) {
+      return &binding;
+    }
+  }
+  return nullptr;
+}
+
+template <typename T>
+T* binding_ptr(fgbridge::ModelInstance* instance, const Aircraft_FieldBinding& binding) {
+  return reinterpret_cast<T*>(reinterpret_cast<char*>(instance) + binding.offset);
+}
+
+template <typename T>
+const T* binding_ptr(const fgbridge::ModelInstance* instance, const Aircraft_FieldBinding& binding) {
+  return reinterpret_cast<const T*>(reinterpret_cast<const char*>(instance) + binding.offset);
+}
+
 }  // namespace
 
 extern "C" {
@@ -54,74 +74,49 @@ fmi2Status fmi2Terminate(fmi2Component component) { return fgbridge::reset_insta
 fmi2Status fmi2Reset(fmi2Component component) { return fgbridge::reset_instance(as_instance(component)); }
 
 fmi2Status fmi2GetReal(fmi2Component component, const fmi2ValueReference vr[], size_t nvr, fmi2Real value[]) {
-  auto* instance = as_instance(component);
+  const auto* instance = as_instance(component);
   for (size_t i = 0; i < nvr; ++i) {
-    switch (vr[i]) {
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_REFERENCE_LATITUDE_DEG: value[i] = instance->reference_latitude_deg; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_REFERENCE_LONGITUDE_DEG: value[i] = instance->reference_longitude_deg; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_REFERENCE_ALTITUDE_M: value[i] = instance->reference_altitude_m; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_STATEPOSITION_X_KM: value[i] = instance->statePosition.x_km; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_STATEPOSITION_Y_KM: value[i] = instance->statePosition.y_km; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_STATEPOSITION_Z_KM: value[i] = instance->statePosition.z_km; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_STATEORIENTATION_ROLL_DEG: value[i] = instance->stateOrientation.roll_deg; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_STATEORIENTATION_PITCH_DEG: value[i] = instance->stateOrientation.pitch_deg; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_STATEORIENTATION_YAW_DEG: value[i] = instance->stateOrientation.yaw_deg; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_FLIGHTSTATUS_AIRSPEED_MPS: value[i] = instance->flightStatus.airspeed_mps; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_FLIGHTSTATUS_ENERGY_STATE_NORM: value[i] = instance->flightStatus.energy_state_norm; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_FLIGHTSTATUS_ANGLE_OF_ATTACK_DEG: value[i] = instance->flightStatus.angle_of_attack_deg; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_FLIGHTSTATUS_CLIMB_RATE: value[i] = instance->flightStatus.climb_rate; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_MISSIONSTATUS_DISTANCE_TO_WAYPOINT_KM: value[i] = instance->missionStatus.distance_to_waypoint_km; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_STICK_PITCH_NORM: value[i] = instance->pilotCommand.stick_pitch_norm; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_STICK_ROLL_NORM: value[i] = instance->pilotCommand.stick_roll_norm; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_RUDDER_NORM: value[i] = instance->pilotCommand.rudder_norm; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_THROTTLE_NORM: value[i] = instance->pilotCommand.throttle_norm; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_THROTTLE_AUX_NORM: value[i] = instance->pilotCommand.throttle_aux_norm; break;
-      default: return fmi2Error;
+    const auto* binding = find_binding(vr[i], AIRCRAFT_SCALAR_REAL);
+    if (binding == nullptr) {
+      return fmi2Error;
     }
+    value[i] = *binding_ptr<double>(instance, *binding);
   }
   return fmi2OK;
 }
 
 fmi2Status fmi2GetInteger(fmi2Component component, const fmi2ValueReference vr[], size_t nvr, fmi2Integer value[]) {
-  auto* instance = as_instance(component);
+  const auto* instance = as_instance(component);
   for (size_t i = 0; i < nvr; ++i) {
-    switch (vr[i]) {
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_TELEMETRY_PORT: value[i] = instance->telemetry_port; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_CONTROL_PORT: value[i] = instance->control_port; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_FLIGHTSTATUS_HEALTH_CODE: value[i] = instance->flightStatus.health_code; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_MISSIONSTATUS_WAYPOINT_INDEX: value[i] = instance->missionStatus.waypoint_index; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_MISSIONSTATUS_TOTAL_WAYPOINTS: value[i] = instance->missionStatus.total_waypoints; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_BUTTON_MASK: value[i] = instance->pilotCommand.button_mask; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_HAT_X: value[i] = instance->pilotCommand.hat_x; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_HAT_Y: value[i] = instance->pilotCommand.hat_y; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_MODE_SWITCH: value[i] = instance->pilotCommand.mode_switch; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_RESERVED: value[i] = instance->pilotCommand.reserved; break;
-      default: return fmi2Error;
+    const auto* binding = find_binding(vr[i], AIRCRAFT_SCALAR_INTEGER);
+    if (binding == nullptr) {
+      return fmi2Error;
     }
+    value[i] = *binding_ptr<int>(instance, *binding);
   }
   return fmi2OK;
 }
 
 fmi2Status fmi2GetBoolean(fmi2Component component, const fmi2ValueReference vr[], size_t nvr, fmi2Boolean value[]) {
-  auto* instance = as_instance(component);
+  const auto* instance = as_instance(component);
   for (size_t i = 0; i < nvr; ++i) {
-    switch (vr[i]) {
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_MISSIONSTATUS_ARRIVED: value[i] = static_cast<fmi2Boolean>(instance->missionStatus.arrived); break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_MISSIONSTATUS_COMPLETE: value[i] = static_cast<fmi2Boolean>(instance->missionStatus.complete); break;
-      default: return fmi2Error;
+    const auto* binding = find_binding(vr[i], AIRCRAFT_SCALAR_BOOLEAN);
+    if (binding == nullptr) {
+      return fmi2Error;
     }
+    value[i] = static_cast<fmi2Boolean>(*binding_ptr<bool>(instance, *binding));
   }
   return fmi2OK;
 }
 
 fmi2Status fmi2GetString(fmi2Component component, const fmi2ValueReference vr[], size_t nvr, fmi2String value[]) {
-  auto* instance = as_instance(component);
+  const auto* instance = as_instance(component);
   for (size_t i = 0; i < nvr; ++i) {
-    switch (vr[i]) {
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_TRANSPORT: value[i] = instance->transport.c_str(); break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_REMOTE_HOST: value[i] = instance->remote_host.c_str(); break;
-      default: return fmi2Error;
+    const auto* binding = find_binding(vr[i], AIRCRAFT_SCALAR_STRING);
+    if (binding == nullptr) {
+      return fmi2Error;
     }
+    value[i] = binding_ptr<std::string>(instance, *binding)->c_str();
   }
   return fmi2OK;
 }
@@ -129,23 +124,11 @@ fmi2Status fmi2GetString(fmi2Component component, const fmi2ValueReference vr[],
 fmi2Status fmi2SetReal(fmi2Component component, const fmi2ValueReference vr[], size_t nvr, const fmi2Real value[]) {
   auto* instance = as_instance(component);
   for (size_t i = 0; i < nvr; ++i) {
-    switch (vr[i]) {
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_REFERENCE_LATITUDE_DEG: instance->reference_latitude_deg = value[i]; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_REFERENCE_LONGITUDE_DEG: instance->reference_longitude_deg = value[i]; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_REFERENCE_ALTITUDE_M: instance->reference_altitude_m = value[i]; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_STATEPOSITION_X_KM: instance->statePosition.x_km = value[i]; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_STATEPOSITION_Y_KM: instance->statePosition.y_km = value[i]; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_STATEPOSITION_Z_KM: instance->statePosition.z_km = value[i]; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_STATEORIENTATION_ROLL_DEG: instance->stateOrientation.roll_deg = value[i]; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_STATEORIENTATION_PITCH_DEG: instance->stateOrientation.pitch_deg = value[i]; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_STATEORIENTATION_YAW_DEG: instance->stateOrientation.yaw_deg = value[i]; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_FLIGHTSTATUS_AIRSPEED_MPS: instance->flightStatus.airspeed_mps = value[i]; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_FLIGHTSTATUS_ENERGY_STATE_NORM: instance->flightStatus.energy_state_norm = value[i]; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_FLIGHTSTATUS_ANGLE_OF_ATTACK_DEG: instance->flightStatus.angle_of_attack_deg = value[i]; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_FLIGHTSTATUS_CLIMB_RATE: instance->flightStatus.climb_rate = value[i]; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_MISSIONSTATUS_DISTANCE_TO_WAYPOINT_KM: instance->missionStatus.distance_to_waypoint_km = value[i]; break;
-      default: return fmi2Error;
+    const auto* binding = find_binding(vr[i], AIRCRAFT_SCALAR_REAL);
+    if (binding == nullptr || !binding->writable) {
+      return fmi2Error;
     }
+    *binding_ptr<double>(instance, *binding) = value[i];
   }
   return fmi2OK;
 }
@@ -154,19 +137,14 @@ fmi2Status fmi2SetInteger(fmi2Component component, const fmi2ValueReference vr[]
   auto* instance = as_instance(component);
   bool network_param_changed = false;
   for (size_t i = 0; i < nvr; ++i) {
-    switch (vr[i]) {
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_TELEMETRY_PORT: instance->telemetry_port = value[i]; network_param_changed = true; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_CONTROL_PORT: instance->control_port = value[i]; network_param_changed = true; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_FLIGHTSTATUS_HEALTH_CODE: instance->flightStatus.health_code = value[i]; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_MISSIONSTATUS_WAYPOINT_INDEX: instance->missionStatus.waypoint_index = value[i]; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_MISSIONSTATUS_TOTAL_WAYPOINTS: instance->missionStatus.total_waypoints = value[i]; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_BUTTON_MASK: instance->pilotCommand.button_mask = value[i]; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_HAT_X: instance->pilotCommand.hat_x = value[i]; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_HAT_Y: instance->pilotCommand.hat_y = value[i]; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_MODE_SWITCH: instance->pilotCommand.mode_switch = value[i]; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_RESERVED: instance->pilotCommand.reserved = value[i]; break;
-      default: return fmi2Error;
+    const auto* binding = find_binding(vr[i], AIRCRAFT_SCALAR_INTEGER);
+    if (binding == nullptr || !binding->writable) {
+      return fmi2Error;
     }
+    *binding_ptr<int>(instance, *binding) = value[i];
+    network_param_changed = network_param_changed
+        || vr[i] == AIRCRAFT_FLIGHTGEARBRIDGE_VR_TELEMETRY_PORT
+        || vr[i] == AIRCRAFT_FLIGHTGEARBRIDGE_VR_CONTROL_PORT;
   }
   if (network_param_changed) {
     fgbridge::invalidate_network(instance);
@@ -177,11 +155,11 @@ fmi2Status fmi2SetInteger(fmi2Component component, const fmi2ValueReference vr[]
 fmi2Status fmi2SetBoolean(fmi2Component component, const fmi2ValueReference vr[], size_t nvr, const fmi2Boolean value[]) {
   auto* instance = as_instance(component);
   for (size_t i = 0; i < nvr; ++i) {
-    switch (vr[i]) {
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_MISSIONSTATUS_ARRIVED: instance->missionStatus.arrived = value[i]; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_MISSIONSTATUS_COMPLETE: instance->missionStatus.complete = value[i]; break;
-      default: return fmi2Error;
+    const auto* binding = find_binding(vr[i], AIRCRAFT_SCALAR_BOOLEAN);
+    if (binding == nullptr || !binding->writable) {
+      return fmi2Error;
     }
+    *binding_ptr<bool>(instance, *binding) = value[i] != fmi2False;
   }
   return fmi2OK;
 }
@@ -190,11 +168,12 @@ fmi2Status fmi2SetString(fmi2Component component, const fmi2ValueReference vr[],
   auto* instance = as_instance(component);
   bool network_param_changed = false;
   for (size_t i = 0; i < nvr; ++i) {
-    switch (vr[i]) {
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_TRANSPORT: instance->transport = value[i] ? value[i] : ""; break;
-      case AIRCRAFT_FLIGHTGEARBRIDGE_VR_REMOTE_HOST: instance->remote_host = value[i] ? value[i] : ""; network_param_changed = true; break;
-      default: return fmi2Error;
+    const auto* binding = find_binding(vr[i], AIRCRAFT_SCALAR_STRING);
+    if (binding == nullptr || !binding->writable) {
+      return fmi2Error;
     }
+    *binding_ptr<std::string>(instance, *binding) = value[i] ? value[i] : "";
+    network_param_changed = network_param_changed || vr[i] == AIRCRAFT_FLIGHTGEARBRIDGE_VR_REMOTE_HOST;
   }
   if (network_param_changed) {
     fgbridge::invalidate_network(instance);

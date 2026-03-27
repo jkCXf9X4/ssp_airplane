@@ -12,7 +12,8 @@ if __package__ in {None, ""}:
 from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR, ensure_parent_dir
 from scripts.utils.c_interface_export import (
     architecture_part_specs,
-    c_primitive,
+    binding_offset_expression,
+    part_instance_fields,
     port_struct_fields,
     sanitize_c_identifier,
 )
@@ -30,9 +31,24 @@ def generate_header(source: Path, output: Path) -> Path:
         "#pragma once",
         "",
         "#include <stdbool.h>",
+        "#include <stddef.h>",
         "#include <stdint.h>",
         "",
         f"/* Generated from architecture package {architecture.package}. Do not edit manually. */",
+        "",
+        f"typedef enum {architecture.package}_ScalarType {{",
+        f"  {architecture.package.upper()}_SCALAR_REAL = 0,",
+        f"  {architecture.package.upper()}_SCALAR_INTEGER = 1,",
+        f"  {architecture.package.upper()}_SCALAR_BOOLEAN = 2,",
+        f"  {architecture.package.upper()}_SCALAR_STRING = 3,",
+        f"}} {architecture.package}_ScalarType;",
+        "",
+        f"typedef struct {architecture.package}_FieldBinding {{",
+        "  int value_reference;",
+        f"  {architecture.package}_ScalarType scalar_type;",
+        "  size_t offset;",
+        "  bool writable;",
+        f"}} {architecture.package}_FieldBinding;",
         "",
     ]
 
@@ -54,6 +70,48 @@ def generate_header(source: Path, output: Path) -> Path:
             )
         lines.append(f"}} {architecture.package}_{part_name}_ValueReference;")
         lines.append("")
+
+    lines.extend(
+        [
+            "#ifdef __cplusplus",
+            '#include <string>',
+            "",
+        ]
+    )
+
+    for part_name, part in architecture.parts.items():
+        if part_name == architecture.package:
+            continue
+        specs = part_specs[part_name]
+        lines.append(f"struct {architecture.package}_{part_name}_Instance {{")
+        for field_type, field_name, default_value in part_instance_fields(architecture.package, part):
+            lines.append(f"  {field_type} {field_name} = {default_value};")
+        lines.append("};")
+        lines.append("")
+
+        lines.append(
+            f"inline constexpr {architecture.package}_FieldBinding {architecture.package}_{part_name}_Bindings[] = {{"
+        )
+        for spec in specs:
+            scalar_name = f"{architecture.package.upper()}_SCALAR_{spec.fmi_type.upper()}"
+            writable = "false" if spec.causality == "output" else "true"
+            lines.append(
+                "  "
+                + "{"
+                + f"{architecture.package.upper()}_{part_name.upper()}_VR_{sanitize_c_identifier(spec.name)}, "
+                + f"{scalar_name}, "
+                + f"{binding_offset_expression(architecture.package, part, spec)}, "
+                + f"{writable}"
+                + "},"
+            )
+        lines.append("};")
+        lines.append(
+            f"inline constexpr size_t {architecture.package}_{part_name}_BindingCount = "
+            f"sizeof({architecture.package}_{part_name}_Bindings) / sizeof({architecture.package}_{part_name}_Bindings[0]);"
+        )
+        lines.append("")
+
+    lines.append("#endif  /* __cplusplus */")
 
     ensure_parent_dir(output)
     output.write_text("\n".join(lines))
