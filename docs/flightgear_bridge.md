@@ -1,0 +1,158 @@
+# FlightGear interactive bridge
+
+This document records the recommended solution for adding an interactive visual layer and manual steering to the airplane SSP without replacing the existing simulation stack.
+
+## Decision
+
+Use:
+
+- `ssp4sim` as the simulation master and execution engine
+- `FlightGear` as the visual frontend and pilot I/O frontend
+- a `FlightGearBridge` adapter component integrated into the vehicle simulation architecture
+- FlightGear `generic` socket communication for the first implementation
+
+The intent is to preserve the existing SSP/FMU-based aircraft composition while adding a live visualization and manual control path.
+
+## Why this approach
+
+The current airplane package is already organized around:
+
+- subsystem FMUs packaged into a SSP
+- `ssp4sim`/`pyssp4sim` execution
+- a manual-input path via `ControlInterface`
+- an autopilot-input path via `AutopilotModule`
+- state generation via `Environment`
+
+This makes it practical to add an adapter around the existing simulation instead of replacing the dynamics stack with a separate game or robotics simulator.
+
+## High-level architecture
+
+The target runtime architecture is:
+
+`FlightGear <-> FlightGearBridge <-> ssp4sim SSP`
+
+Roles:
+
+- `FlightGear` renders the aircraft, camera views, HUD overlays, and captures pilot controls.
+- `FlightGearBridge` translates between FlightGear socket messages and simulation signals.
+- `ssp4sim` remains the co-simulation master for the packaged aircraft SSP.
+
+## Why use FlightGear generic communication first
+
+FlightGear native protocol slaving is viable, but the initial implementation should prefer `generic` communication because it is easier to control and debug during integration.
+
+Benefits of `generic` communication:
+
+- explicit field selection instead of packing a larger native protocol structure
+- easier inspection of values during early integration
+- simpler mapping from local simulation signals to frontend properties
+- lower coupling while the bridge interface is still evolving
+
+The native protocol can still be adopted later if tighter FlightGear coupling becomes valuable.
+
+## Bridge responsibilities
+
+The bridge functionality must still exist even when it is embedded into the modeled system.
+
+The bridge is responsible for:
+
+- stepping or synchronizing with the running simulation time
+- reading aircraft state from the SSP
+- writing pilot/manual command values back into the SSP
+- converting local `x_km/y_km/z_km` coordinates into a geodetic frame suitable for FlightGear
+- mapping FlightGear control channels into the airplane `PilotCommand` structure
+- handling manual/autopilot mode selection without altering the rest of the vehicle architecture
+
+## Recommended model integration
+
+Model the bridge as a dedicated adapter component, for example `FlightGearBridge`, rather than placing socket/protocol logic directly inside the airframe or autopilot models.
+
+Recommended signal responsibilities:
+
+- inputs from simulation:
+  - environment position
+  - environment orientation
+  - flight status
+  - optional mission status / fuel / engine state for overlay and diagnostics
+- outputs into simulation:
+  - manual stick roll
+  - manual stick pitch
+  - manual rudder
+  - throttle
+  - auxiliary throttle / afterburner intent
+  - mode switch / autopilot enable
+
+This keeps:
+
+- aircraft dynamics in the existing aircraft subsystem models
+- pilot-command semantics in the control path
+- external protocol handling in a single adapter
+
+## Suggested repository-level design
+
+Recommended additions:
+
+1. Add a new bridge component to the architecture and generated interfaces.
+2. Connect environment and status outputs into the bridge for visualization.
+3. Route bridge-produced manual control values into the manual input path used by `MissionComputer`.
+4. Keep the autopilot path unchanged so manual and autopilot modes can coexist.
+
+The current `ControlInterface` model is a scripted placeholder and should be treated as the first candidate for replacement or refactoring when introducing live manual input.
+
+## Timing model
+
+The bridge must be non-blocking from the simulation master's perspective.
+
+Recommended timing behavior:
+
+- run the co-simulation in fixed communication steps
+- sample FlightGear input once per step
+- update outgoing visualization state once per step
+- avoid letting socket reads block the simulation loop
+
+If wall-clock pacing is needed, pace the simulation runner around the communication step instead of blocking inside the bridge protocol handlers.
+
+## Coordinate and signal mapping
+
+The current aircraft model exposes a local frame:
+
+- `x_km`: north
+- `y_km`: east
+- `z_km`: up
+
+FlightGear visualization will usually expect:
+
+- latitude
+- longitude
+- altitude
+- attitude/orientation in its property/protocol conventions
+
+Therefore the bridge must choose a reference origin and perform:
+
+- local-to-geodetic position conversion
+- orientation/sign convention mapping
+- normalization mapping between FlightGear controls and `PilotCommand`
+
+## Traceability to current models
+
+This solution is aligned with the current airplane package structure:
+
+- `models/Aircraft/ControlInterface.mo`
+- `models/Aircraft/MissionComputer.mo`
+- `models/Aircraft/Environment.mo`
+- `models/Aircraft/InputOutput.mo`
+- `architecture/system_connections.sysml`
+- `scripts/workflows/simulate_scenario.py`
+
+These files already define the manual-input path, autopilot path, environment state, telemetry taps, and SSP workflow needed by the bridge design.
+
+## Implementation notes
+
+Initial implementation priority:
+
+1. establish outbound visualization from simulation state to FlightGear
+2. establish inbound manual control from FlightGear into the manual input path
+3. support explicit switching between manual control and autopilot
+4. add optional cockpit/status overlays after the control loop is stable
+
+The first implementation should prioritize observability and stable signal mapping over visual polish.

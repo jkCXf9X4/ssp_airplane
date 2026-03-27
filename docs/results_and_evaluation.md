@@ -2,7 +2,7 @@
 
 When `scripts.workflows.simulate_scenario` runs, it always writes two artifacts into `build/results/`:
 
-1) `<scenario>_results.csv` — full OMSimulator timeseries for every exported variable.  
+1) `<scenario>_results.csv` — full ssp4sim timeseries for every exported variable.  
 2) `<scenario>_summary.json` — compact requirement view with evidence and key metrics for humans and LLM agents.
 
 ## Summary JSON fields
@@ -53,10 +53,10 @@ When `scripts.workflows.simulate_scenario` runs, it always writes two artifacts 
 
 ## Reusing results vs. re-simulating
 
-- Use `--reuse-results` to only post-process an existing `<scenario>_results.csv` without invoking OMSimulator. This keeps CI fast and allows offline exploration of prior runs.
+- Use `--reuse-results` to only post-process an existing `<scenario>_results.csv` without invoking ssp4sim. This keeps CI fast and allows offline exploration of prior runs.
 - Drop `--reuse-results` (or delete the CSV) to regenerate results from the SSP; pass `--stop-time` to control simulation horizon.
 
 ## Scenario provenance
 
 - Curated scenarios and their linked requirements are documented in `docs/use_cases.md`.
-- A pre-generated dataset (see `resources/scenarios/test_scenario.json` and `resources/references/test_scenario_results.csv`) is copied into `build/` on demand so `pytest` can run without invoking OMSimulator.
+- A pre-generated dataset (see `resources/scenarios/test_scenario.json` and `resources/references/test_scenario_results.csv`) is copied into `build/` on demand so `pytest` can run without invoking ssp4sim.

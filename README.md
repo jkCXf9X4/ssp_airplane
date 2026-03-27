@@ -24,7 +24,7 @@ This repository tracks an SSP for an F-16 Fighting Falcon inspired single-seat m
 - Regenerate the SSD with parameter connectors plus a fresh default parameter set via:
   - `python3 -m scripts.generation.generate_ssd --output generated/SystemStructure.ssd`
   - `python3 -m scripts.generation.generate_parameter_set --output generated/parameters.ssv`
-  These outputs expose every component attribute as a parameter connector so you can bind SSVs in OMSimulator or CI runs without hand-editing XML.
+  These outputs expose every component attribute as a parameter connector so you can bind SSVs in ssp4sim or CI runs without hand-editing XML.
 
 ## Script catalog
 
@@ -43,7 +43,7 @@ Common entry points:
 | Generate SSD and parameter set | `python3 -m scripts.generation.generate_ssd` / `python3 -m scripts.generation.generate_parameter_set` | Produces SSP-compliant descriptions with parameter connectors. |
 | Build FMUs via OpenModelica | `python3 -m scripts.generation.build_fmus --omc omc` | Exports each Modelica component into `build/fmus`. |
 | Package SSP archive | `python3 -m scripts.generation.package_ssp --fmu-dir build/fmus --ssd generated/SystemStructure.ssd` | Bundles FMUs and SSD into `build/ssp/aircraft.ssp`. |
-| Simulate a scenario | `python3 -m scripts.workflows.simulate_scenario --scenario build/scenarios/test_scenario.json` | Runs OMSimulator (or reuses results) and emits summaries/plots. |
+| Simulate a scenario | `python3 -m scripts.workflows.simulate_scenario --scenario build/scenarios/test_scenario.json` | Runs ssp4sim (or reuses results) and emits summaries/plots. |
 | Verify architecture and FMUs | `python3 -m scripts.verification.verify_connections`, `python3 -m scripts.verification.verify_fmu_ios`, etc. | Guards against connector, FMU, and SSD regressions. |
 
 
@@ -88,14 +88,20 @@ FMUs and SSD are packaged into a zip file, renamed *.ssp
 
 # Simulation 
 
-Utilize OMSimulator as simulation engine, via python
+Utilize ssp4sim as simulation engine, via python
 
 ## Scenario workflow
 
 1. Generate mission waypoints via `python3 -m scripts.generation.generate_scenario --output build/scenarios/demo.json`.
 2. Rebuild the FMUs/SSD/SSP with the helper scripts whenever the models change.
-3. Run `python3 -m scripts.workflows.simulate_scenario --scenario build/scenarios/demo.json` to execute OMSimulator or post-process existing results (`--reuse-results`) and optional custom `--ssp` or `--stop-time`.
+3. Run `python3 -m scripts.workflows.simulate_scenario --scenario build/scenarios/demo.json` to execute ssp4sim or post-process existing results (`--reuse-results`) and optional custom `--ssp` or `--stop-time`.
 4. Execute `pytest` to run the scenario-based unit tests and validate requirement coverage (range, fuel exhaustion).
+
+## Interactive visualization direction
+
+The recommended path for live visualization and manual steering is to keep `ssp4sim` as the simulation master and use `FlightGear` as the frontend over a dedicated bridge component using FlightGear `generic` communication. This preserves the current SSP/FMU workflow and adds a pilot/visualization layer without replacing the simulation engine.
+
+- See `docs/flightgear_bridge.md` for the architecture and integration rationale.
 
 ## Autopilot waypoint tracking
 
@@ -106,7 +112,7 @@ Utilize OMSimulator as simulation engine, via python
 ### Simulation and results
 
 - `scripts.workflows.simulate_scenario` always produces a timeseries CSV at `build/results/<scenario>_results.csv` and a requirement-focused summary at `build/results/<scenario>_summary.json`.
-- Pass `--reuse-results` to skip OMSimulator when a CSV already exists (useful in CI and for quick requirement checks).
+- Pass `--reuse-results` to skip ssp4sim when a CSV already exists (useful in CI and for quick requirement checks).
 - Summaries include pass/fail for REQ_Performance/REQ_Fuel/REQ_Control/REQ_Mission/REQ_Propulsion plus evidence strings and key metrics (max Mach, g-load, fuel used, stores available, thrust).
 - Waypoint-tracking metrics are computed from simulated local `x/y` traces (`waypoint_miss_*`, `waypoint_hits`, `waypoints_followed`), so you can verify path following directly from the summary.
 - See `docs/results_and_evaluation.md` for the metric/summary fields and how to interpret them.
@@ -131,7 +137,7 @@ scripts/ - Python package containing `generation/`, `verification/`, `workflows/
 
 ## Results and requirement evaluation
 
-- OMSimulator outputs a full timeseries CSV per scenario at `build/results/<scenario>_results.csv`.
+- ssp4sim outputs a full timeseries CSV per scenario at `build/results/<scenario>_results.csv`.
 - Post-processing writes `build/results/<scenario>_summary.json` with requirement evaluations (REQ_Performance, REQ_Fuel, REQ_Control, REQ_Mission, REQ_Propulsion) and key metrics such as max Mach, g-load, fuel used, and available stores.
 - Use `python3 -m scripts.workflows.simulate_scenario --scenario <path> --results-dir build/results --reuse-results` to evaluate an existing OMS run without re-simulating. Sample data is kept under `resources/scenarios/test_scenario.json` and `resources/references/test_scenario_results.csv` and mirrored into `build/` when missing.
 

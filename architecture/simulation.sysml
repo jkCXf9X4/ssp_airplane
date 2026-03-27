@@ -17,5 +17,13 @@ package Aircraft {
   The waypoints should be injected into the simulation by utilizing SSP parameter set
   */
 
+  comment visualization_and_io_solution /*
+  The recommended interactive solution keeps ssp4sim as the simulation master and connects
+  the packaged aircraft SSP to FlightGear through a dedicated bridge/adapter component.
+  FlightGear is used as the visual frontend and pilot I/O frontend.
+  Generic socket communication is preferred for the first implementation because it keeps the
+  exchanged signals explicit and easier to debug than a larger native protocol mapping.
+  */
+
 
 }

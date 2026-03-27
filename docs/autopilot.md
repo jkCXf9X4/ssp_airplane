@@ -6,9 +6,9 @@
 - Normalizes heading error into `[-180, 180]` before applying the roll command so the aircraft turns the short way.
 - Drives the pitch command toward the target waypoint altitude and advances to the next waypoint once within `waypointProximity_km` (10 km default) **and** altitude proximity `waypointAltitudeProximity_km` (0.5 km default) to avoid skipping climbs/descents.
 - Latches `MissionStatus` (`waypoint_index`, `distance_to_waypoint_km`, `arrived`, `complete`) so downstream logging can trace progress.
-- The SSD generator now expands list-valued SysML attributes such as `waypointX_km`/`waypointY_km`/`waypointZ_km` into indexed real parameter connectors (`waypointX_km[1]`..`[10]`, etc.), keeping the array defaults intact for OMSimulator parameter binding.
+- The SSD generator now expands list-valued SysML attributes such as `waypointX_km`/`waypointY_km`/`waypointZ_km` into indexed real parameter connectors (`waypointX_km[1]`..`[10]`, etc.), keeping the array defaults intact for ssp4sim parameter binding.
 
-## Quick checks without OMSimulator
+## Quick checks without ssp4sim
 
 - `pytest tests/test_autopilot_logic.py` runs the same heading/distance math in Python to guard against regressions in the navigation arithmetic without rebuilding FMUs.
 - `python3 -m scripts.workflows.simulate_scenario --scenario build/scenarios/test_scenario.json --reuse-results` exercises the parameter-injection path and produces `build/results/test_scenario_waypoints.txt` so you can confirm the FMU receives the expected waypoint list (now X/Y/Z kilometers).

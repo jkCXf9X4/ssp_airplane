@@ -1,6 +1,6 @@
 # Mission Use Cases
 
-The following mission-driven use cases connect the SysML requirements to concrete simulation scenarios stored in `resources/scenarios/`. Each use case is backed by deterministic waypoint files so unit tests and OMSimulator runs can validate requirement coverage.
+The following mission-driven use cases connect the SysML requirements to concrete simulation scenarios stored in `resources/scenarios/`. Each use case is backed by deterministic waypoint files so unit tests and ssp4sim runs can validate requirement coverage.
 
 | Use case | Scenario file | Linked requirements | Summary |
 | --- | --- | --- | --- |

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Simulate a waypoint scenario with OMSimulator and post-process the results."""
+"""Simulate a waypoint scenario with ssp4sim and post-process the results."""
 
 from __future__ import annotations
 
@@ -614,13 +614,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--reuse-results",
         action="store_true",
-        help="Skip OMSimulator run when a result CSV already exists for the scenario.",
+        help="Skip ssp4sim run when a result CSV already exists for the scenario.",
     )
     parser.add_argument(
         "--stop-time",
         type=float,
         default=None,
-        help="Override OMSimulator stop time in seconds.",
+        help="Override ssp4sim stop time in seconds.",
     )
 
     return parser.parse_args()
