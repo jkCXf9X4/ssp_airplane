@@ -39,16 +39,7 @@ void destroy_instance(ModelInstance* instance);
 
 fmi2Status enter_initialization(ModelInstance* instance);
 fmi2Status reset_instance(ModelInstance* instance);
+void invalidate_network(ModelInstance* instance);
 fmi2Status do_step(ModelInstance* instance);
-
-fmi2Status get_real(ModelInstance* instance, const fmi2ValueReference vr[], size_t nvr, fmi2Real value[]);
-fmi2Status get_integer(ModelInstance* instance, const fmi2ValueReference vr[], size_t nvr, fmi2Integer value[]);
-fmi2Status get_boolean(ModelInstance* instance, const fmi2ValueReference vr[], size_t nvr, fmi2Boolean value[]);
-fmi2Status get_string(ModelInstance* instance, const fmi2ValueReference vr[], size_t nvr, fmi2String value[]);
-
-fmi2Status set_real(ModelInstance* instance, const fmi2ValueReference vr[], size_t nvr, const fmi2Real value[]);
-fmi2Status set_integer(ModelInstance* instance, const fmi2ValueReference vr[], size_t nvr, const fmi2Integer value[]);
-fmi2Status set_boolean(ModelInstance* instance, const fmi2ValueReference vr[], size_t nvr, const fmi2Boolean value[]);
-fmi2Status set_string(ModelInstance* instance, const fmi2ValueReference vr[], size_t nvr, const fmi2String value[]);
 
 }  // namespace fgbridge
