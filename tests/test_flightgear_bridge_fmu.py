@@ -49,8 +49,8 @@ def _value_refs(tree: ET.ElementTree) -> dict[str, int]:
 
 def _load_library(path: Path) -> ctypes.CDLL:
     lib = ctypes.CDLL(str(path))
-    lib.FlightGearBridge_fmi2Instantiate.restype = ctypes.c_void_p
-    lib.FlightGearBridge_fmi2Instantiate.argtypes = [
+    lib.fmi2Instantiate.restype = ctypes.c_void_p
+    lib.fmi2Instantiate.argtypes = [
         ctypes.c_char_p,
         ctypes.c_int,
         ctypes.c_char_p,
@@ -59,7 +59,7 @@ def _load_library(path: Path) -> ctypes.CDLL:
         ctypes.c_int,
         ctypes.c_int,
     ]
-    lib.FlightGearBridge_fmi2SetupExperiment.argtypes = [
+    lib.fmi2SetupExperiment.argtypes = [
         ctypes.c_void_p,
         ctypes.c_int,
         ctypes.c_double,
@@ -67,47 +67,47 @@ def _load_library(path: Path) -> ctypes.CDLL:
         ctypes.c_int,
         ctypes.c_double,
     ]
-    lib.FlightGearBridge_fmi2EnterInitializationMode.argtypes = [ctypes.c_void_p]
-    lib.FlightGearBridge_fmi2ExitInitializationMode.argtypes = [ctypes.c_void_p]
-    lib.FlightGearBridge_fmi2SetReal.argtypes = [
+    lib.fmi2EnterInitializationMode.argtypes = [ctypes.c_void_p]
+    lib.fmi2ExitInitializationMode.argtypes = [ctypes.c_void_p]
+    lib.fmi2SetReal.argtypes = [
         ctypes.c_void_p,
         ctypes.POINTER(ctypes.c_uint),
         ctypes.c_size_t,
         ctypes.POINTER(ctypes.c_double),
     ]
-    lib.FlightGearBridge_fmi2SetInteger.argtypes = [
+    lib.fmi2SetInteger.argtypes = [
         ctypes.c_void_p,
         ctypes.POINTER(ctypes.c_uint),
         ctypes.c_size_t,
         ctypes.POINTER(ctypes.c_int),
     ]
-    lib.FlightGearBridge_fmi2SetBoolean.argtypes = [
+    lib.fmi2SetBoolean.argtypes = [
         ctypes.c_void_p,
         ctypes.POINTER(ctypes.c_uint),
         ctypes.c_size_t,
         ctypes.POINTER(ctypes.c_int),
     ]
-    lib.FlightGearBridge_fmi2SetString.argtypes = [
+    lib.fmi2SetString.argtypes = [
         ctypes.c_void_p,
         ctypes.POINTER(ctypes.c_uint),
         ctypes.c_size_t,
         ctypes.POINTER(ctypes.c_char_p),
     ]
-    lib.FlightGearBridge_fmi2DoStep.argtypes = [ctypes.c_void_p, ctypes.c_double, ctypes.c_double, ctypes.c_int]
-    lib.FlightGearBridge_fmi2GetReal.argtypes = [
+    lib.fmi2DoStep.argtypes = [ctypes.c_void_p, ctypes.c_double, ctypes.c_double, ctypes.c_int]
+    lib.fmi2GetReal.argtypes = [
         ctypes.c_void_p,
         ctypes.POINTER(ctypes.c_uint),
         ctypes.c_size_t,
         ctypes.POINTER(ctypes.c_double),
     ]
-    lib.FlightGearBridge_fmi2GetInteger.argtypes = [
+    lib.fmi2GetInteger.argtypes = [
         ctypes.c_void_p,
         ctypes.POINTER(ctypes.c_uint),
         ctypes.c_size_t,
         ctypes.POINTER(ctypes.c_int),
     ]
-    lib.FlightGearBridge_fmi2Terminate.argtypes = [ctypes.c_void_p]
-    lib.FlightGearBridge_fmi2FreeInstance.argtypes = [ctypes.c_void_p]
+    lib.fmi2Terminate.argtypes = [ctypes.c_void_p]
+    lib.fmi2FreeInstance.argtypes = [ctypes.c_void_p]
     return lib
 
 
@@ -142,7 +142,7 @@ def test_native_flightgear_bridge_fmu_exchanges_udp_packets(tmp_path: Path):
 
     lib = _load_library(library_path)
     callbacks = CallbackFunctions()
-    component = lib.FlightGearBridge_fmi2Instantiate(
+    component = lib.fmi2Instantiate(
         b"bridge-test",
         1,
         guid.encode(),
@@ -154,16 +154,16 @@ def test_native_flightgear_bridge_fmu_exchanges_udp_packets(tmp_path: Path):
     assert component
 
     try:
-        assert lib.FlightGearBridge_fmi2SetupExperiment(component, 0, 0.0, 0.0, 0, 0.0) == 0
-        assert lib.FlightGearBridge_fmi2EnterInitializationMode(component) == 0
+        assert lib.fmi2SetupExperiment(component, 0, 0.0, 0.0, 0, 0.0) == 0
+        assert lib.fmi2EnterInitializationMode(component) == 0
 
         string_refs = (ctypes.c_uint * 1)(refs["remote_host"])
         string_values = (ctypes.c_char_p * 1)(b"127.0.0.1")
-        assert lib.FlightGearBridge_fmi2SetString(component, string_refs, 1, string_values) == 0
+        assert lib.fmi2SetString(component, string_refs, 1, string_values) == 0
 
         int_refs = (ctypes.c_uint * 2)(refs["telemetry_port"], refs["control_port"])
         int_values = (ctypes.c_int * 2)(telemetry_port, control_port)
-        assert lib.FlightGearBridge_fmi2SetInteger(component, int_refs, 2, int_values) == 0
+        assert lib.fmi2SetInteger(component, int_refs, 2, int_values) == 0
 
         real_pairs = [
             ("reference_latitude_deg", 57.700000),
@@ -183,7 +183,7 @@ def test_native_flightgear_bridge_fmu_exchanges_udp_packets(tmp_path: Path):
         ]
         real_refs = (ctypes.c_uint * len(real_pairs))(*(refs[name] for name, _ in real_pairs))
         real_values = (ctypes.c_double * len(real_pairs))(*(value for _, value in real_pairs))
-        assert lib.FlightGearBridge_fmi2SetReal(component, real_refs, len(real_pairs), real_values) == 0
+        assert lib.fmi2SetReal(component, real_refs, len(real_pairs), real_values) == 0
 
         mission_int_refs = (ctypes.c_uint * 3)(
             refs["flightStatus.health_code"],
@@ -191,13 +191,13 @@ def test_native_flightgear_bridge_fmu_exchanges_udp_packets(tmp_path: Path):
             refs["missionStatus.total_waypoints"],
         )
         mission_int_values = (ctypes.c_int * 3)(2, 3, 9)
-        assert lib.FlightGearBridge_fmi2SetInteger(component, mission_int_refs, 3, mission_int_values) == 0
+        assert lib.fmi2SetInteger(component, mission_int_refs, 3, mission_int_values) == 0
 
         mission_bool_refs = (ctypes.c_uint * 2)(refs["missionStatus.arrived"], refs["missionStatus.complete"])
         mission_bool_values = (ctypes.c_int * 2)(1, 0)
-        assert lib.FlightGearBridge_fmi2SetBoolean(component, mission_bool_refs, 2, mission_bool_values) == 0
+        assert lib.fmi2SetBoolean(component, mission_bool_refs, 2, mission_bool_values) == 0
 
-        assert lib.FlightGearBridge_fmi2ExitInitializationMode(component) in (0, 1)
+        assert lib.fmi2ExitInitializationMode(component) in (0, 1)
 
         control_sender = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         control_sender.sendto(
@@ -206,7 +206,7 @@ def test_native_flightgear_bridge_fmu_exchanges_udp_packets(tmp_path: Path):
         )
         control_sender.close()
 
-        assert lib.FlightGearBridge_fmi2DoStep(component, 0.0, 0.1, 1) == 0
+        assert lib.fmi2DoStep(component, 0.0, 0.1, 1) == 0
 
         listener.join(timeout=3.0)
         assert received_packets, "Expected telemetry packet from native bridge FMU"
@@ -228,7 +228,7 @@ def test_native_flightgear_bridge_fmu_exchanges_udp_packets(tmp_path: Path):
             refs["pilotCommand.throttle_aux_norm"],
         )
         output_real_values = (ctypes.c_double * 5)()
-        assert lib.FlightGearBridge_fmi2GetReal(component, output_real_refs, 5, output_real_values) == 0
+        assert lib.fmi2GetReal(component, output_real_refs, 5, output_real_values) == 0
         assert [round(value, 3) for value in output_real_values] == [0.25, -0.5, 0.1, 0.8, 0.82]
 
         output_int_refs = (ctypes.c_uint * 5)(
@@ -239,8 +239,8 @@ def test_native_flightgear_bridge_fmu_exchanges_udp_packets(tmp_path: Path):
             refs["pilotCommand.reserved"],
         )
         output_int_values = (ctypes.c_int * 5)()
-        assert lib.FlightGearBridge_fmi2GetInteger(component, output_int_refs, 5, output_int_values) == 0
+        assert lib.fmi2GetInteger(component, output_int_refs, 5, output_int_values) == 0
         assert list(output_int_values) == [7, 1, -1, 3, 9]
     finally:
-        lib.FlightGearBridge_fmi2Terminate(component)
-        lib.FlightGearBridge_fmi2FreeInstance(component)
+        lib.fmi2Terminate(component)
+        lib.fmi2FreeInstance(component)

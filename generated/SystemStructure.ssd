@@ -4,6 +4,36 @@
     <ssd:Elements>
       <ssd:Component name="ControlInterface" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_ControlInterface.fmu">
         <ssd:Connectors>
+          <ssd:Connector name="bridgeInput.stick_pitch_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="bridgeInput.stick_roll_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="bridgeInput.rudder_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="bridgeInput.throttle_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="bridgeInput.throttle_aux_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="bridgeInput.button_mask" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="bridgeInput.hat_x" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="bridgeInput.hat_y" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="bridgeInput.mode_switch" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="bridgeInput.reserved" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
           <ssd:Connector name="pilotCommand.stick_pitch_norm" kind="output">
             <ssc:Real />
           </ssd:Connector>
@@ -39,6 +69,112 @@
           </ssd:Connector>
           <ssd:Connector name="telemetry_rate_hz" kind="parameter">
             <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="useBridgeInput" kind="parameter">
+            <ssc:Boolean />
+          </ssd:Connector>
+        </ssd:Connectors>
+      </ssd:Component>
+      <ssd:Component name="FlightGearBridge" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_FlightGearBridge.fmu">
+        <ssd:Connectors>
+          <ssd:Connector name="statePosition.x_km" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="statePosition.y_km" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="statePosition.z_km" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="stateOrientation.roll_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="stateOrientation.pitch_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="stateOrientation.yaw_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="flightStatus.airspeed_mps" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="flightStatus.energy_state_norm" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="flightStatus.angle_of_attack_deg" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="flightStatus.climb_rate" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="flightStatus.health_code" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="missionStatus.waypoint_index" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="missionStatus.total_waypoints" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="missionStatus.distance_to_waypoint_km" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="missionStatus.arrived" kind="input">
+            <ssc:Boolean />
+          </ssd:Connector>
+          <ssd:Connector name="missionStatus.complete" kind="input">
+            <ssc:Boolean />
+          </ssd:Connector>
+          <ssd:Connector name="pilotCommand.stick_pitch_norm" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="pilotCommand.stick_roll_norm" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="pilotCommand.rudder_norm" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="pilotCommand.throttle_norm" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="pilotCommand.throttle_aux_norm" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="pilotCommand.button_mask" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="pilotCommand.hat_x" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="pilotCommand.hat_y" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="pilotCommand.mode_switch" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="pilotCommand.reserved" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="control_port" kind="parameter">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="reference_altitude_m" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="reference_latitude_deg" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="reference_longitude_deg" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="remote_host" kind="parameter">
+            <ssc:String />
+          </ssd:Connector>
+          <ssd:Connector name="telemetry_port" kind="parameter">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="transport" kind="parameter">
+            <ssc:String />
           </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
@@ -628,6 +764,16 @@
       </ssd:Component>
     </ssd:Elements>
     <ssd:Connections>
+      <ssd:Connection startElement="FlightGearBridge" startConnector="pilotCommand.stick_pitch_norm" endElement="ControlInterface" endConnector="bridgeInput.stick_pitch_norm" />
+      <ssd:Connection startElement="FlightGearBridge" startConnector="pilotCommand.stick_roll_norm" endElement="ControlInterface" endConnector="bridgeInput.stick_roll_norm" />
+      <ssd:Connection startElement="FlightGearBridge" startConnector="pilotCommand.rudder_norm" endElement="ControlInterface" endConnector="bridgeInput.rudder_norm" />
+      <ssd:Connection startElement="FlightGearBridge" startConnector="pilotCommand.throttle_norm" endElement="ControlInterface" endConnector="bridgeInput.throttle_norm" />
+      <ssd:Connection startElement="FlightGearBridge" startConnector="pilotCommand.throttle_aux_norm" endElement="ControlInterface" endConnector="bridgeInput.throttle_aux_norm" />
+      <ssd:Connection startElement="FlightGearBridge" startConnector="pilotCommand.button_mask" endElement="ControlInterface" endConnector="bridgeInput.button_mask" />
+      <ssd:Connection startElement="FlightGearBridge" startConnector="pilotCommand.hat_x" endElement="ControlInterface" endConnector="bridgeInput.hat_x" />
+      <ssd:Connection startElement="FlightGearBridge" startConnector="pilotCommand.hat_y" endElement="ControlInterface" endConnector="bridgeInput.hat_y" />
+      <ssd:Connection startElement="FlightGearBridge" startConnector="pilotCommand.mode_switch" endElement="ControlInterface" endConnector="bridgeInput.mode_switch" />
+      <ssd:Connection startElement="FlightGearBridge" startConnector="pilotCommand.reserved" endElement="ControlInterface" endConnector="bridgeInput.reserved" />
       <ssd:Connection startElement="ControlInterface" startConnector="pilotCommand.stick_pitch_norm" endElement="MissionComputer" endConnector="manualInput.stick_pitch_norm" />
       <ssd:Connection startElement="ControlInterface" startConnector="pilotCommand.stick_roll_norm" endElement="MissionComputer" endConnector="manualInput.stick_roll_norm" />
       <ssd:Connection startElement="ControlInterface" startConnector="pilotCommand.rudder_norm" endElement="MissionComputer" endConnector="manualInput.rudder_norm" />
@@ -688,6 +834,22 @@
       <ssd:Connection startElement="Environment" startConnector="flight_status.angle_of_attack_deg" endElement="AdaptiveWingSystem" endConnector="flight_speed.angle_of_attack_deg" />
       <ssd:Connection startElement="Environment" startConnector="flight_status.climb_rate" endElement="AdaptiveWingSystem" endConnector="flight_speed.climb_rate" />
       <ssd:Connection startElement="Environment" startConnector="flight_status.health_code" endElement="AdaptiveWingSystem" endConnector="flight_speed.health_code" />
+      <ssd:Connection startElement="Environment" startConnector="location.x_km" endElement="FlightGearBridge" endConnector="statePosition.x_km" />
+      <ssd:Connection startElement="Environment" startConnector="location.y_km" endElement="FlightGearBridge" endConnector="statePosition.y_km" />
+      <ssd:Connection startElement="Environment" startConnector="location.z_km" endElement="FlightGearBridge" endConnector="statePosition.z_km" />
+      <ssd:Connection startElement="Environment" startConnector="orientation.roll_deg" endElement="FlightGearBridge" endConnector="stateOrientation.roll_deg" />
+      <ssd:Connection startElement="Environment" startConnector="orientation.pitch_deg" endElement="FlightGearBridge" endConnector="stateOrientation.pitch_deg" />
+      <ssd:Connection startElement="Environment" startConnector="orientation.yaw_deg" endElement="FlightGearBridge" endConnector="stateOrientation.yaw_deg" />
+      <ssd:Connection startElement="Environment" startConnector="flight_status.airspeed_mps" endElement="FlightGearBridge" endConnector="flightStatus.airspeed_mps" />
+      <ssd:Connection startElement="Environment" startConnector="flight_status.energy_state_norm" endElement="FlightGearBridge" endConnector="flightStatus.energy_state_norm" />
+      <ssd:Connection startElement="Environment" startConnector="flight_status.angle_of_attack_deg" endElement="FlightGearBridge" endConnector="flightStatus.angle_of_attack_deg" />
+      <ssd:Connection startElement="Environment" startConnector="flight_status.climb_rate" endElement="FlightGearBridge" endConnector="flightStatus.climb_rate" />
+      <ssd:Connection startElement="Environment" startConnector="flight_status.health_code" endElement="FlightGearBridge" endConnector="flightStatus.health_code" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="missionStatus.waypoint_index" endElement="FlightGearBridge" endConnector="missionStatus.waypoint_index" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="missionStatus.total_waypoints" endElement="FlightGearBridge" endConnector="missionStatus.total_waypoints" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="missionStatus.distance_to_waypoint_km" endElement="FlightGearBridge" endConnector="missionStatus.distance_to_waypoint_km" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="missionStatus.arrived" endElement="FlightGearBridge" endConnector="missionStatus.arrived" />
+      <ssd:Connection startElement="AutopilotModule" startConnector="missionStatus.complete" endElement="FlightGearBridge" endConnector="missionStatus.complete" />
       <ssd:Connection startElement="Environment" startConnector="location.x_km" endElement="InputOutput" endConnector="locationXYZ.x_km" />
       <ssd:Connection startElement="Environment" startConnector="location.y_km" endElement="InputOutput" endConnector="locationXYZ.y_km" />
       <ssd:Connection startElement="Environment" startConnector="location.z_km" endElement="InputOutput" endConnector="locationXYZ.z_km" />

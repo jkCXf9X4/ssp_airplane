@@ -6,6 +6,7 @@
 
 #include <cerrno>
 #include <cmath>
+#include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <sstream>
@@ -178,28 +179,32 @@ std::string telemetry_packet(const ModelInstance* instance) {
   const double airspeed_kt = instance->flightStatus.airspeed_mps * 1.9438444924406;
   const double climb_rate_fps = instance->flightStatus.climb_rate * 3.28083989501312;
 
-  std::ostringstream stream;
-  stream.setf(std::ios::fixed);
-  stream.precision(6);
-  stream
-      << latitude_deg << ','
-      << longitude_deg << ','
-      << altitude_ft << ','
-      << instance->stateOrientation.roll_deg << ','
-      << instance->stateOrientation.pitch_deg << ','
-      << instance->stateOrientation.yaw_deg << ','
-      << airspeed_kt << ','
-      << instance->flightStatus.energy_state_norm << ','
-      << instance->flightStatus.angle_of_attack_deg << ','
-      << climb_rate_fps << ','
-      << instance->flightStatus.health_code << ','
-      << instance->missionStatus.waypoint_index << ','
-      << instance->missionStatus.total_waypoints << ','
-      << instance->missionStatus.distance_to_waypoint_km << ','
-      << instance->missionStatus.arrived << ','
-      << instance->missionStatus.complete
-      << '\n';
-  return stream.str();
+  char buffer[512];
+  const int written = std::snprintf(
+      buffer,
+      sizeof(buffer),
+      "%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%d,%d,%d,%.6f,%d,%d\n",
+      latitude_deg,
+      longitude_deg,
+      altitude_ft,
+      instance->stateOrientation.roll_deg,
+      instance->stateOrientation.pitch_deg,
+      instance->stateOrientation.yaw_deg,
+      airspeed_kt,
+      instance->flightStatus.energy_state_norm,
+      instance->flightStatus.angle_of_attack_deg,
+      climb_rate_fps,
+      instance->flightStatus.health_code,
+      instance->missionStatus.waypoint_index,
+      instance->missionStatus.total_waypoints,
+      instance->missionStatus.distance_to_waypoint_km,
+      instance->missionStatus.arrived ? 1 : 0,
+      instance->missionStatus.complete ? 1 : 0);
+  if (written <= 0) {
+    return {};
+  }
+  const size_t size = static_cast<size_t>(written) < sizeof(buffer) ? static_cast<size_t>(written) : sizeof(buffer) - 1;
+  return std::string(buffer, size);
 }
 
 void send_telemetry_packet(ModelInstance* instance) {

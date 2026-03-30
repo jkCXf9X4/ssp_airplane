@@ -21,6 +21,4 @@ target_include_directories(FlightGearBridge PRIVATE
   /home/eriro/pwa/2_work/ssp4sim/3rdParty/fmi4c/3rdparty/fmi
 )
 
-target_compile_definitions(FlightGearBridge PRIVATE FMI2_FUNCTION_PREFIX=FlightGearBridge_)
-
 target_compile_options(FlightGearBridge PRIVATE -Wall -Wextra -Wpedantic)
