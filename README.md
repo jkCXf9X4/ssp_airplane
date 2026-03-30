@@ -11,6 +11,9 @@ This repository tracks an SSP for an F-16 Fighting Falcon inspired single-seat m
 
   ```
 
+- Install Dependencies
+  * Open Modelica (https://openmodelica.org/download/download-linux/)
+
 - Build the SSP
   ```
   . venv/bin/activate
