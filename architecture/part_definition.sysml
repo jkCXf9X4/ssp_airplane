@@ -173,5 +173,4 @@ package Aircraft {
     in port flightStatus : FlightStatusPacket;
     in port missionStatus : MissionStatus;
   }
-
 }

@@ -14,6 +14,7 @@ if __package__ in {None, ""}:
 from scripts.common.modelica_specs import MODELICA_MODEL_SPECS
 from scripts.common.paths import ARCHITECTURE_DIR
 from scripts.utils.sysml_helpers import load_architecture
+from scripts.utils.sysmlv2_arch_parser import SysMLArchitecture
 
 DEFAULT_ARCH_DIR = ARCHITECTURE_DIR
 
@@ -34,7 +35,11 @@ def _collect_architecture_data(
 
     for part_name, part in architecture.parts.items():
         part_ports[part_name] = {
-            port.name: (port.direction, port.payload) for port in part.ports
+            port.name: (
+                port.direction,
+                getattr(port, "payload", None) or getattr(getattr(port, "payload_def", None), "name", None),
+            )
+            for port in part.ports
         }
 
     return members, part_ports

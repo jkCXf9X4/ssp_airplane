@@ -8,11 +8,11 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from scripts.generation.generate_ssd import SSD_NAMESPACE, build_ssd_tree  # type: ignore  # noqa: E402
-from scripts.utils.sysmlv2_arch_parser import parse_sysml_folder  # type: ignore  # noqa: E402
+from sysml import load_architecture  # type: ignore  # noqa: E402
 
 
 def test_parameter_connectors_emitted_for_attributes():
-    architecture = parse_sysml_folder(REPO_ROOT / "architecture")
+    architecture = load_architecture(REPO_ROOT / "architecture")
     tree = build_ssd_tree(architecture)
     root = tree.getroot()
     ns = {"ssd": SSD_NAMESPACE}
@@ -34,7 +34,7 @@ def test_parameter_connectors_emitted_for_attributes():
 
 
 def test_string_parameters_preserve_type():
-    architecture = parse_sysml_folder(REPO_ROOT / "architecture")
+    architecture = load_architecture(REPO_ROOT / "architecture")
     tree = build_ssd_tree(architecture)
     root = tree.getroot()
     ns = {"ssd": SSD_NAMESPACE, "ssc": "http://ssp-standard.org/SSP1/SystemStructureCommon"}
@@ -53,7 +53,7 @@ def test_string_parameters_preserve_type():
 
 
 def test_list_parameters_infer_numeric_type():
-    architecture = parse_sysml_folder(REPO_ROOT / "architecture")
+    architecture = load_architecture(REPO_ROOT / "architecture")
     tree = build_ssd_tree(architecture)
     root = tree.getroot()
     ns = {"ssd": SSD_NAMESPACE, "ssc": "http://ssp-standard.org/SSP1/SystemStructureCommon"}

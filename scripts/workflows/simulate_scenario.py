@@ -27,7 +27,7 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import BUILD_DIR
-from scripts.utils.map_geometry import (
+from scripts.common.map_geometry import (
     haversine_distance_km,
     local_path_distance_km,
     project_waypoints_to_local_km,

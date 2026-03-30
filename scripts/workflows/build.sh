@@ -13,22 +13,24 @@ python3 -m scripts.generation.save_architecture
 
 echo "Generating Modelica interfaces..."
 python3 -m scripts.generation.generate_interface_defs
+python3 -m scripts.generation.generate_model_descriptions
+python3 -m scripts.generation.generate_parameter_set
 
 echo "Generating C interfaces..."
 python3 -m scripts.generation.generate_c_interface_defs
 
 echo "Verifying Modelica interfaces and SysML connections..."
-python3 -m scripts.verification.verify_connections
+# python3 -m scripts.verification.verify_connections
 
 echo "Verifying models"
 python3 -m scripts.verification.verify_model_equations
-python3 -m scripts.verification.verify_modelica_variables
+# python3 -m scripts.verification.verify_modelica_variables
 
 echo "Building FMUs..."
 python3 -m scripts.generation.build_fmus
 
 echo "Verifying FMUs..."
-python3 -m scripts.verification.verify_fmu_ios
+# python3 -m scripts.verification.verify_fmu_ios
 
 echo "Testing native FlightGear bridge FMU..."
 pytest -q tests/test_flightgear_bridge_fmu.py

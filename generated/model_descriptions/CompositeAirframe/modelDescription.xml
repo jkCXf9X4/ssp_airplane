@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<fmiModelDescription fmiVersion="2.0" modelName="AircraftComposition.CompositeAirframe" guid="{d6f85c32-479b-58b1-8979-583d01eb3aaf}" description="F-16 aluminum/composite fuselage sized for high-supersonic operations with dorsal spine for avionics." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2026-03-30T15:52:49Z" variableNamingConvention="structured" numberOfEventIndicators="0">
+  <CoSimulation modelIdentifier="CompositeAirframe" />
+  <ModelVariables>
+    <ScalarVariable name="length_m" valueReference="0" causality="parameter" variability="fixed">
+      <Real start="15" />
+    </ScalarVariable>
+    <ScalarVariable name="fuselage_width_m" valueReference="1" causality="parameter" variability="fixed">
+      <Real start="3" />
+    </ScalarVariable>
+    <ScalarVariable name="wingspan_m" valueReference="2" causality="parameter" variability="fixed">
+      <Real start="10" />
+    </ScalarVariable>
+    <ScalarVariable name="empty_weight_kg" valueReference="3" causality="parameter" variability="fixed">
+      <Integer start="8573" />
+    </ScalarVariable>
+    <ScalarVariable name="payload_capacity_kg" valueReference="4" causality="parameter" variability="fixed">
+      <Integer start="7700" />
+    </ScalarVariable>
+    <ScalarVariable name="hardpoint_count" valueReference="5" causality="parameter" variability="fixed">
+      <Integer start="9" />
+    </ScalarVariable>
+  </ModelVariables>
+  <ModelStructure>
+    <Outputs />
+    <InitialUnknowns />
+  </ModelStructure>
+</fmiModelDescription>

@@ -53,17 +53,17 @@ def run_omc(omc: str, models: Iterable[str]) -> int:
     return 0
 
 
-def parse_args() -> argparse.Namespace:
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--omc", default="omc", help="Path to the omc executable.")
     parser.add_argument("--models", nargs="+", default=DEFAULT_MODELS, help="Fully qualified Modelica classes to check.")
-    return parser.parse_args()
+    return parser.parse_args(argv)
 
 
-def main() -> None:
-    args = parse_args()
-    run_omc(args.omc, args.models)
+def main(argv: list[str] | None = None) -> int:
+    args = parse_args(argv)
+    return run_omc(args.omc, args.models)
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

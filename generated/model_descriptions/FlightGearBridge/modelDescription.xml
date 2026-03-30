@@ -1,0 +1,131 @@
+<?xml version='1.0' encoding='utf-8'?>
+<fmiModelDescription fmiVersion="2.0" modelName="AircraftComposition.FlightGearBridge" guid="{8c00412f-1e46-5da8-b4b5-af8287ca4023}" description="Adapter component for visual/frontend coupling to FlightGear using generic socket communication." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2026-03-30T15:52:49Z" variableNamingConvention="structured" numberOfEventIndicators="0">
+  <CoSimulation modelIdentifier="FlightGearBridge" />
+  <ModelVariables>
+    <ScalarVariable name="transport" valueReference="0" causality="parameter" variability="fixed">
+      <String start="FlightGearGeneric" />
+    </ScalarVariable>
+    <ScalarVariable name="reference_latitude_deg" valueReference="1" causality="parameter" variability="fixed">
+      <Real start="0" />
+    </ScalarVariable>
+    <ScalarVariable name="reference_longitude_deg" valueReference="2" causality="parameter" variability="fixed">
+      <Real start="0" />
+    </ScalarVariable>
+    <ScalarVariable name="reference_altitude_m" valueReference="3" causality="parameter" variability="fixed">
+      <Real start="0" />
+    </ScalarVariable>
+    <ScalarVariable name="remote_host" valueReference="4" causality="parameter" variability="fixed">
+      <String start="127.0.0.1" />
+    </ScalarVariable>
+    <ScalarVariable name="telemetry_port" valueReference="5" causality="parameter" variability="fixed">
+      <Integer start="5501" />
+    </ScalarVariable>
+    <ScalarVariable name="control_port" valueReference="6" causality="parameter" variability="fixed">
+      <Integer start="5502" />
+    </ScalarVariable>
+    <ScalarVariable name="statePosition.x_km" valueReference="7" causality="input" description="Aircraft position from the simulated environment.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="statePosition.y_km" valueReference="8" causality="input" description="Aircraft position from the simulated environment.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="statePosition.z_km" valueReference="9" causality="input" description="Aircraft position from the simulated environment.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="stateOrientation.roll_deg" valueReference="10" causality="input" description="Aircraft attitude from the simulated environment.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="stateOrientation.pitch_deg" valueReference="11" causality="input" description="Aircraft attitude from the simulated environment.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="stateOrientation.yaw_deg" valueReference="12" causality="input" description="Aircraft attitude from the simulated environment.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="flightStatus.airspeed_mps" valueReference="13" causality="input" description="Flight status exported for overlays and diagnostics.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="flightStatus.energy_state_norm" valueReference="14" causality="input" description="Flight status exported for overlays and diagnostics.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="flightStatus.angle_of_attack_deg" valueReference="15" causality="input" description="Flight status exported for overlays and diagnostics.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="flightStatus.climb_rate" valueReference="16" causality="input" description="Flight status exported for overlays and diagnostics.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="flightStatus.health_code" valueReference="17" causality="input" description="Flight status exported for overlays and diagnostics.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="missionStatus.waypoint_index" valueReference="18" causality="input" description="Mission/autopilot status exported for overlays and diagnostics.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="missionStatus.total_waypoints" valueReference="19" causality="input" description="Mission/autopilot status exported for overlays and diagnostics.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="missionStatus.distance_to_waypoint_km" valueReference="20" causality="input" description="Mission/autopilot status exported for overlays and diagnostics.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="missionStatus.arrived" valueReference="21" causality="input" description="Mission/autopilot status exported for overlays and diagnostics.">
+      <Boolean />
+    </ScalarVariable>
+    <ScalarVariable name="missionStatus.complete" valueReference="22" causality="input" description="Mission/autopilot status exported for overlays and diagnostics.">
+      <Boolean />
+    </ScalarVariable>
+    <ScalarVariable name="pilotCommand.stick_pitch_norm" valueReference="23" causality="output" description="Pilot command returned from the interactive frontend into the vehicle control path.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="pilotCommand.stick_roll_norm" valueReference="24" causality="output" description="Pilot command returned from the interactive frontend into the vehicle control path.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="pilotCommand.rudder_norm" valueReference="25" causality="output" description="Pilot command returned from the interactive frontend into the vehicle control path.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="pilotCommand.throttle_norm" valueReference="26" causality="output" description="Pilot command returned from the interactive frontend into the vehicle control path.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="pilotCommand.throttle_aux_norm" valueReference="27" causality="output" description="Pilot command returned from the interactive frontend into the vehicle control path.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="pilotCommand.button_mask" valueReference="28" causality="output" description="Pilot command returned from the interactive frontend into the vehicle control path.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="pilotCommand.hat_x" valueReference="29" causality="output" description="Pilot command returned from the interactive frontend into the vehicle control path.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="pilotCommand.hat_y" valueReference="30" causality="output" description="Pilot command returned from the interactive frontend into the vehicle control path.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="pilotCommand.mode_switch" valueReference="31" causality="output" description="Pilot command returned from the interactive frontend into the vehicle control path.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="pilotCommand.reserved" valueReference="32" causality="output" description="Pilot command returned from the interactive frontend into the vehicle control path.">
+      <Integer />
+    </ScalarVariable>
+  </ModelVariables>
+  <ModelStructure>
+    <Outputs>
+      <Unknown index="24" />
+      <Unknown index="25" />
+      <Unknown index="26" />
+      <Unknown index="27" />
+      <Unknown index="28" />
+      <Unknown index="29" />
+      <Unknown index="30" />
+      <Unknown index="31" />
+      <Unknown index="32" />
+      <Unknown index="33" />
+    </Outputs>
+    <InitialUnknowns>
+      <Unknown index="24" />
+      <Unknown index="25" />
+      <Unknown index="26" />
+      <Unknown index="27" />
+      <Unknown index="28" />
+      <Unknown index="29" />
+      <Unknown index="30" />
+      <Unknown index="31" />
+      <Unknown index="32" />
+      <Unknown index="33" />
+    </InitialUnknowns>
+  </ModelStructure>
+</fmiModelDescription>

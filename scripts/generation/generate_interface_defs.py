@@ -1,71 +1,61 @@
 #!/usr/bin/env python3
 """Emit interface definitions for SysML data-def types as Modelica records."""
+
 from __future__ import annotations
 
 import argparse
 import sys
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, Optional
 
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, COMMON_MODEL_DIR, ensure_parent_dir
 from scripts.utils.sysml_helpers import load_architecture
-from scripts.utils.sysmlv2_arch_parser import SysMLArchitecture, SysMLPortDefinition
+from scripts.utils.sysmlv2_arch_parser import SysMLPortDefinition
 from scripts.utils.type_utils import modelica_connector_type
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_OUTPUT_PATH = COMMON_MODEL_DIR / "modelica" / "AircraftCommon" / "GeneratedInterfaces.mo"
 
 
-def _collect_data_defs(architecture: SysMLArchitecture) -> Dict[str, List[Tuple[str, str]]]:
-    defs: Dict[str, List[Tuple[str, str]]] = {}
-    for name, port_def in architecture.port_definitions.items():
-        defs[name] = _port_attributes(port_def)
-    return defs
-
-
-def _port_attributes(port_def: SysMLPortDefinition) -> List[Tuple[str, str]]:
-    attrs: List[Tuple[str, str]] = []
-    for attr in port_def.attributes.values():
-        attr_type = attr.type or "Real"
-        attrs.append((attr.name, attr_type))
-    return attrs
-
-
-def generate_modelica_package(defs: Dict[str, List[Tuple[str, str]]]) -> str:
+def generate_modelica_package(ports: Dict[str, SysMLPortDefinition]) -> str:
     lines = ["within AircraftCommon;", "package GeneratedInterfaces"]
-    for type_name, fields in sorted(defs.items()):
-        lines.append(f"  connector {type_name}")
-        if not fields:
-            lines.append(f"  end {type_name};")
+    for port_name, port in sorted(ports.items()):
+        if not port.attributes:
             continue
-        for field, field_type in fields:
-            mo_type = modelica_connector_type(field_type)
-            lines.append(f"    {mo_type} {field};")
-        lines.append(f"  end {type_name};")
-        lines.append("")
+
+        lines.append(f"  connector {port_name}")
+        for variable in port.attributes.values():
+            type_name = getattr(variable.type, "as_string", lambda: variable.type)()
+            mo_type = modelica_connector_type(type_name)
+            lines.append(f"    {mo_type} {variable.name};")
+        lines.append(f"  end {port_name};\n")
+
     lines.append("end GeneratedInterfaces;")
     return "\n".join(lines)
 
 
-def main() -> None:
+def main(argv: Optional[list[str]] = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--architecture", type=Path, default=DEFAULT_ARCH_PATH)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT_PATH)
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     architecture = load_architecture(args.architecture)
-    data_defs = _collect_data_defs(architecture)
-    if not data_defs:
+    port_definitions = architecture.port_definitions
+
+    if not port_definitions:
         raise SystemExit("No data definitions found; nothing to generate.")
 
     ensure_parent_dir(args.output)
-    content = generate_modelica_package(data_defs)
-    args.output.write_text(content)
+    content = generate_modelica_package(port_definitions)
+
+    args.output.write_text(content, encoding="utf-8")
     print(f"Wrote Modelica interfaces to {args.output}")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

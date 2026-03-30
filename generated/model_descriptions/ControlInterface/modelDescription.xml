@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='utf-8'?>
+<fmiModelDescription fmiVersion="2.0" modelName="AircraftComposition.ControlInterface" guid="{d6406895-156a-51a1-806b-bcfe76c88369}" description="F-16 HOTAS + side-stick interface for pilot inputs and trim switches." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2026-03-30T15:52:49Z" variableNamingConvention="structured" numberOfEventIndicators="0">
+  <CoSimulation modelIdentifier="ControlInterface" />
+  <ModelVariables>
+    <ScalarVariable name="input_scheme" valueReference="0" causality="parameter" variability="fixed">
+      <String start="HOTAS" />
+    </ScalarVariable>
+    <ScalarVariable name="telemetry_rate_hz" valueReference="1" causality="parameter" variability="fixed">
+      <Integer start="120" />
+    </ScalarVariable>
+    <ScalarVariable name="useBridgeInput" valueReference="2" causality="parameter" variability="fixed">
+      <Boolean start="false" />
+    </ScalarVariable>
+    <ScalarVariable name="bridgeInput.stick_pitch_norm" valueReference="3" causality="input" description="External pilot command provided by an interactive bridge/frontend adapter.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="bridgeInput.stick_roll_norm" valueReference="4" causality="input" description="External pilot command provided by an interactive bridge/frontend adapter.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="bridgeInput.rudder_norm" valueReference="5" causality="input" description="External pilot command provided by an interactive bridge/frontend adapter.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="bridgeInput.throttle_norm" valueReference="6" causality="input" description="External pilot command provided by an interactive bridge/frontend adapter.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="bridgeInput.throttle_aux_norm" valueReference="7" causality="input" description="External pilot command provided by an interactive bridge/frontend adapter.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="bridgeInput.button_mask" valueReference="8" causality="input" description="External pilot command provided by an interactive bridge/frontend adapter.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="bridgeInput.hat_x" valueReference="9" causality="input" description="External pilot command provided by an interactive bridge/frontend adapter.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="bridgeInput.hat_y" valueReference="10" causality="input" description="External pilot command provided by an interactive bridge/frontend adapter.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="bridgeInput.mode_switch" valueReference="11" causality="input" description="External pilot command provided by an interactive bridge/frontend adapter.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="bridgeInput.reserved" valueReference="12" causality="input" description="External pilot command provided by an interactive bridge/frontend adapter.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="pilotCommand.stick_pitch_norm" valueReference="13" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="pilotCommand.stick_roll_norm" valueReference="14" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="pilotCommand.rudder_norm" valueReference="15" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="pilotCommand.throttle_norm" valueReference="16" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="pilotCommand.throttle_aux_norm" valueReference="17" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="pilotCommand.button_mask" valueReference="18" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="pilotCommand.hat_x" valueReference="19" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="pilotCommand.hat_y" valueReference="20" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="pilotCommand.mode_switch" valueReference="21" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
+      <Integer />
+    </ScalarVariable>
+    <ScalarVariable name="pilotCommand.reserved" valueReference="22" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
+      <Integer />
+    </ScalarVariable>
+  </ModelVariables>
+  <ModelStructure>
+    <Outputs>
+      <Unknown index="14" />
+      <Unknown index="15" />
+      <Unknown index="16" />
+      <Unknown index="17" />
+      <Unknown index="18" />
+      <Unknown index="19" />
+      <Unknown index="20" />
+      <Unknown index="21" />
+      <Unknown index="22" />
+      <Unknown index="23" />
+    </Outputs>
+    <InitialUnknowns>
+      <Unknown index="14" />
+      <Unknown index="15" />
+      <Unknown index="16" />
+      <Unknown index="17" />
+      <Unknown index="18" />
+      <Unknown index="19" />
+      <Unknown index="20" />
+      <Unknown index="21" />
+      <Unknown index="22" />
+      <Unknown index="23" />
+    </InitialUnknowns>
+  </ModelStructure>
+</fmiModelDescription>

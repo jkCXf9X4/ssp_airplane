@@ -1,0 +1,188 @@
+<?xml version='1.0' encoding='utf-8'?>
+<ssv:ParameterSet xmlns:ssv="http://ssp-standard.org/SSP1/SystemStructureParameterValues" xmlns:ssc="http://ssp-standard.org/SSP1/SystemStructureCommon" version="1.0" name="default">
+  <ssv:Parameters>
+    <ssv:Parameter name="control_interface.input_scheme">
+      <ssv:String value="HOTAS"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="control_interface.telemetry_rate_hz">
+      <ssv:Integer value="120"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="control_interface.useBridgeInput">
+      <ssv:Boolean value="false"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="flightgear_bridge.transport">
+      <ssv:String value="FlightGearGeneric"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="flightgear_bridge.reference_latitude_deg">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="flightgear_bridge.reference_longitude_deg">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="flightgear_bridge.reference_altitude_m">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="flightgear_bridge.remote_host">
+      <ssv:String value="127.0.0.1"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="flightgear_bridge.telemetry_port">
+      <ssv:Integer value="5501"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="flightgear_bridge.control_port">
+      <ssv:Integer value="5502"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.comment">
+      <ssv:String value="uses waypoint tracking"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointCount">
+      <ssv:Integer value="10"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointProximity_km">
+      <ssv:Integer value="10"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointX_km[1]">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointX_km[2]">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointX_km[3]">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointX_km[4]">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointX_km[5]">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointX_km[6]">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointX_km[7]">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointX_km[8]">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointX_km[9]">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointX_km[10]">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointY_km[1]">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointY_km[2]">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointY_km[3]">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointY_km[4]">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointY_km[5]">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointY_km[6]">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointY_km[7]">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointY_km[8]">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointY_km[9]">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointY_km[10]">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointZ_km[1]">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointZ_km[2]">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointZ_km[3]">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointZ_km[4]">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointZ_km[5]">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointZ_km[6]">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointZ_km[7]">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointZ_km[8]">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointZ_km[9]">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointZ_km[10]">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="composite_airframe.length_m">
+      <ssv:Real value="15"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="composite_airframe.fuselage_width_m">
+      <ssv:Real value="3"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="composite_airframe.wingspan_m">
+      <ssv:Real value="10"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="composite_airframe.empty_weight_kg">
+      <ssv:Integer value="8573"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="composite_airframe.payload_capacity_kg">
+      <ssv:Integer value="7700"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="composite_airframe.hardpoint_count">
+      <ssv:Integer value="9"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="turbofan_propulsion.max_thrust_kn">
+      <ssv:Real value="129.7"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="turbofan_propulsion.dry_thrust_kn">
+      <ssv:Real value="79"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="turbofan_propulsion.specific_fuel_consumption">
+      <ssv:Real value="0.76"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="turbofan_propulsion.fuel_capacity_kg">
+      <ssv:Integer value="3160"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="turbofan_propulsion.generator_output_kw">
+      <ssv:Integer value="80"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="fuel_system.fuel_capacity_kg">
+      <ssv:Integer value="3160"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="fuel_system.reserve_fraction">
+      <ssv:Real value="0.08"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="adaptive_wing_system.reference_area_m2">
+      <ssv:Real value="28"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="adaptive_wing_system.span_m">
+      <ssv:Real value="10"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="adaptive_wing_system.aspect_ratio">
+      <ssv:Real value="3.6"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="adaptive_wing_system.control_authority_deg">
+      <ssv:Integer value="25"/>
+    </ssv:Parameter>
+    <ssv:Parameter name="adaptive_wing_system.load_factor_limit_g">
+      <ssv:Integer value="9"/>
+    </ssv:Parameter>
+  </ssv:Parameters>
+</ssv:ParameterSet>

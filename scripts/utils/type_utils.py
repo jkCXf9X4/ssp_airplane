@@ -21,27 +21,39 @@ PRIMITIVE_TYPE_MAP = {
 }
 
 
+def _type_key(type_name: Optional[object]) -> Optional[str]:
+    if not type_name:
+        return None
+    if hasattr(type_name, "as_string"):
+        type_name = type_name.as_string()
+    if not isinstance(type_name, str):
+        type_name = str(type_name)
+    return type_name.strip().lower()
+
+
 def normalize_primitive(type_name: Optional[str], default: str = "Real") -> str:
     """Return a canonical primitive name (Real/Integer/Boolean/String) for SysML types."""
-    if not type_name:
+    key = _type_key(type_name)
+    if not key:
         return default
-    key = type_name.strip().lower()
     return PRIMITIVE_TYPE_MAP.get(key, default)
 
 
 def optional_primitive(type_name: Optional[str]) -> Optional[str]:
     """Return the canonical primitive name or None if the type is unset/unknown."""
-    if not type_name:
+    key = _type_key(type_name)
+    if not key:
         return None
-    key = type_name.strip().lower()
     return PRIMITIVE_TYPE_MAP.get(key)
 
 
 def modelica_connector_type(type_name: Optional[str]) -> str:
     """Map SysML types to Modelica connector primitives, preserving custom names."""
-    if not type_name:
+    key = _type_key(type_name)
+    if not key:
         return "Real"
-    key = type_name.strip().lower()
+    if hasattr(type_name, "as_string"):
+        type_name = type_name.as_string()
     return PRIMITIVE_TYPE_MAP.get(key, type_name)
 
 

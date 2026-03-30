@@ -9,6 +9,8 @@ def parse_literal(value: Optional[str]) -> Optional[Any]:
     """Decode a SysML attribute string literal into a Python primitive/list."""
     if value is None:
         return None
+    if not isinstance(value, str):
+        return value
     text = value.strip()
     if not text:
         return None

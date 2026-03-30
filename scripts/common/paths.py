@@ -17,6 +17,20 @@ RESOURCES_DIR = REPO_ROOT / "resources"
 THIRD_PARTY_DIR = REPO_ROOT / "3rd_party"
 FMI_HEADERS_DIR = THIRD_PARTY_DIR / "fmi_headers"
 
+PACKAGE_NAME = "Aircraft"
+COMPOSITION_NAME = "AircraftComposition"
+
+DEFAULT_MODELS = [
+    "CompositeAirframe",
+    "TurbofanPropulsion",
+    "AdaptiveWingSystem",
+    "MissionComputer",
+    "AutopilotModule",
+    "InputOutput",
+    "FuelSystem",
+    "Environment",
+    "ControlInterface",
+]
 
 def ensure_directory(path: Path) -> Path:
     """Create the directory (or its parent) if missing and return it for chaining."""

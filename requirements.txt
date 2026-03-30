@@ -1,4 +1,5 @@
 pytest>=8.0.0
+git+https://github.com/pyssporg/pysysml2_cps.git
 https://github.com/jkCXf9X4/ssp4sim/releases/latest/download/pyssp4sim-0.0.0+lat-cp39-abi3-linux_x86_64.whl
 pyssp-standard
 matplotlib>=3.7

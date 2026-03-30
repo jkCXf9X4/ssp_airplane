@@ -7,24 +7,22 @@ from dataclasses import dataclass
 import shutil
 import subprocess
 import sys
-import xml.etree.ElementTree as ET
 import zipfile
 from pathlib import Path
 
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from scripts.common.paths import BUILD_DIR, FMI_HEADERS_DIR, FLIGHTGEAR_BRIDGE_MODEL_DIR, REPO_ROOT, ensure_directory, ensure_parent_dir
+from scripts.common.paths import BUILD_DIR, COMPOSITION_NAME, FMI_HEADERS_DIR, FLIGHTGEAR_BRIDGE_MODEL_DIR, GENERATED_DIR, REPO_ROOT, ensure_directory, ensure_parent_dir
 from scripts.generation.generate_c_interface_defs import common_header_name, generate_headers, part_header_name
-from scripts.utils.c_interface_export import output_indexes, part_variable_specs
-from scripts.utils.sysml_helpers import load_architecture
+from scripts.generation.generate_model_descriptions import generate_model_descriptions
 
 NATIVE_ROOT = FLIGHTGEAR_BRIDGE_MODEL_DIR / "native"
 DEFAULT_OUTPUT = BUILD_DIR / "fmus" / "Aircraft_FlightGearBridge.fmu"
 DEFAULT_BUILD_DIR = BUILD_DIR / "native" / "flightgear_bridge"
 MODEL_IDENTIFIER = "FlightGearBridge"
-MODEL_GUID = "{2d7d0b06-4525-4e59-b188-2a9b0b8cb5bb}"
 GENERATED_INTERFACE_DIR = REPO_ROOT / "generated" / "interfaces"
+GENERATED_MODEL_DESCRIPTION_DIR = GENERATED_DIR / "model_descriptions"
 GENERATED_COMMON_HEADER = GENERATED_INTERFACE_DIR / common_header_name("Aircraft")
 GENERATED_MODEL_HEADER = GENERATED_INTERFACE_DIR / part_header_name("Aircraft", MODEL_IDENTIFIER)
 FMI_HEADER_NAMES = ("fmi2TypesPlatform.h", "fmi2FunctionTypes.h", "fmi2Functions.h")
@@ -63,79 +61,13 @@ FLIGHTGEAR_BRIDGE_PROJECT = NativeFmuProject(
 )
 
 
-def _add_scalar(parent: ET.Element, *, name: str, value_reference: int, causality: str, fmi_type: str, variability: str | None = None, start: str | None = None) -> None:
-    attrib = {"name": name, "valueReference": str(value_reference), "causality": causality}
-    if variability:
-        attrib["variability"] = variability
-    scalar = ET.SubElement(parent, "ScalarVariable", attrib=attrib)
-    value_elem = ET.SubElement(scalar, fmi_type)
-    if start is not None:
-        value_elem.set("start", start)
-
-
-def _build_model_description(output_path: Path) -> None:
-    architecture = load_architecture(REPO_ROOT / "architecture")
-    part = architecture.parts[MODEL_IDENTIFIER]
-    specs = part_variable_specs(part)
-
-    root = ET.Element(
-        "fmiModelDescription",
-        attrib={
-            "fmiVersion": "2.0",
-            "modelName": "Aircraft.FlightGearBridge",
-            "guid": MODEL_GUID,
-            "description": "Native FlightGear generic-protocol bridge FMU",
-            "version": "1.0",
-            "generationTool": "test_flight_simulator native FMU tooling",
-            "generationDateAndTime": "2026-03-27T00:00:00Z",
-            "variableNamingConvention": "structured",
-            "numberOfEventIndicators": "0",
-        },
+def _generated_model_description_path() -> Path:
+    generate_model_descriptions(
+        REPO_ROOT / "architecture",
+        GENERATED_MODEL_DESCRIPTION_DIR,
+        COMPOSITION_NAME,
     )
-    co_sim = ET.SubElement(
-        root,
-        "CoSimulation",
-        attrib={
-            "modelIdentifier": MODEL_IDENTIFIER,
-            "needsExecutionTool": "false",
-            "canHandleVariableCommunicationStepSize": "true",
-            "canInterpolateInputs": "false",
-            "maxOutputDerivativeOrder": "0",
-            "canRunAsynchronuously": "false",
-            "canBeInstantiatedOnlyOncePerProcess": "false",
-            "canNotUseMemoryManagementFunctions": "true",
-            "canGetAndSetFMUstate": "false",
-            "canSerializeFMUstate": "false",
-            "providesDirectionalDerivative": "false",
-        },
-    )
-    source_files = ET.SubElement(co_sim, "SourceFiles")
-    for path in FLIGHTGEAR_BRIDGE_PROJECT.staged_files:
-        ET.SubElement(source_files, "File", attrib={"name": path.name})
-
-    model_variables = ET.SubElement(root, "ModelVariables")
-    for spec in specs:
-        _add_scalar(
-            model_variables,
-            name=spec.name,
-            value_reference=spec.value_reference,
-            causality=spec.causality,
-            fmi_type=spec.fmi_type,
-            variability=spec.variability,
-            start=spec.start_value,
-        )
-
-    model_structure = ET.SubElement(root, "ModelStructure")
-    outputs_elem = ET.SubElement(model_structure, "Outputs")
-    initial_unknowns = ET.SubElement(model_structure, "InitialUnknowns")
-    for idx in output_indexes(specs):
-        ET.SubElement(outputs_elem, "Unknown", attrib={"index": str(idx)})
-        ET.SubElement(initial_unknowns, "Unknown", attrib={"index": str(idx)})
-
-    tree = ET.ElementTree(root)
-    ET.indent(tree, space="  ", level=0)
-    ensure_parent_dir(output_path)
-    tree.write(output_path, encoding="utf-8", xml_declaration=True)
+    return GENERATED_MODEL_DESCRIPTION_DIR / MODEL_IDENTIFIER / "modelDescription.xml"
 
 
 def _build_native_library(project: NativeFmuProject, build_dir: Path) -> Path:
@@ -162,6 +94,7 @@ def build_flightgear_bridge_fmu(output_fmu: Path = DEFAULT_OUTPUT, build_dir: Pa
     source_dir = stage_dir / "sources"
 
     generate_headers(REPO_ROOT / "architecture", GENERATED_INTERFACE_DIR)
+    model_description_path = _generated_model_description_path()
 
     if build_dir.exists():
         shutil.rmtree(build_dir)
@@ -172,9 +105,9 @@ def build_flightgear_bridge_fmu(output_fmu: Path = DEFAULT_OUTPUT, build_dir: Pa
     built_lib = _build_native_library(FLIGHTGEAR_BRIDGE_PROJECT, build_dir)
 
     shutil.copy2(built_lib, binary_dir / f"{MODEL_IDENTIFIER}.so")
+    shutil.copy2(model_description_path, stage_dir / "modelDescription.xml")
     for path in FLIGHTGEAR_BRIDGE_PROJECT.staged_files:
         shutil.copy2(path, source_dir / path.name)
-    _build_model_description(stage_dir / "modelDescription.xml")
 
     ensure_parent_dir(output_fmu)
     with zipfile.ZipFile(output_fmu, "w", compression=zipfile.ZIP_DEFLATED) as archive:

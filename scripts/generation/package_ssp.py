@@ -16,16 +16,16 @@ DEFAULT_SSD = GENERATED_DIR / "SystemStructure.ssd"
 DEFAULT_FMU_DIR = BUILD_DIR / "fmus"
 DEFAULT_OUTPUT = BUILD_DIR / "ssp" / "aircraft.ssp"
 
-def parse_args() -> argparse.Namespace:
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--fmu-dir", type=Path, default=DEFAULT_FMU_DIR)
     parser.add_argument("--ssd", type=Path, default=DEFAULT_SSD)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
-    return parser.parse_args()
+    return parser.parse_args(argv)
 
 
-def main() -> None:
-    args = parse_args()
+def main(argv: list[str] | None = None) -> int:
+    args = parse_args(argv)
     if not args.ssd.exists():
         raise SystemExit(f"SSD file not found: {args.ssd}")
     if not args.fmu_dir.exists():
@@ -44,7 +44,8 @@ def main() -> None:
             print(f"Added {arcname}")
 
     print(f"Packaged SSP written to {args.output}")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
