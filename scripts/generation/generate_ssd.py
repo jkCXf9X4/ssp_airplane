@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import re
 import sys
 from pathlib import Path
 from typing import Optional
@@ -10,12 +11,45 @@ from typing import Optional
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from pyssp_sysml2.ssd import generate_ssd
+from pyssp_sysml2.ssd import generate_ssd as generate_upstream_ssd
 
 from scripts.common.paths import ARCHITECTURE_DIR, COMPOSITION_NAME, GENERATED_DIR
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_OUTPUT = GENERATED_DIR / "SystemStructure.ssd"
+FIXED_GENERATION_TIMESTAMP = "2000-01-01T00:00:00"
+
+
+def _normalize_ssd_xml(path: Path) -> None:
+    text = path.read_text(encoding="utf-8")
+    text = re.sub(
+        r'generationDateAndTime="[^"]+"',
+        f'generationDateAndTime="{FIXED_GENERATION_TIMESTAMP}"',
+        text,
+        count=1,
+    )
+    text = re.sub(
+        r'source="resources/(?!Aircraft_)([^"/]+)\.fmu"',
+        r'source="resources/Aircraft_\1.fmu"',
+        text,
+    )
+    path.write_text(text, encoding="utf-8")
+
+
+def generate_ssd(
+    architecture: Path,
+    output: Path,
+    composition: str,
+    type_check: bool = True,
+) -> Path:
+    written = generate_upstream_ssd(
+        architecture,
+        output,
+        composition,
+        type_check=type_check,
+    )
+    _normalize_ssd_xml(written)
+    return written
 
 
 def main(argv: Optional[list[str]] = None) -> int:

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<fmiModelDescription fmiVersion="2.0" modelName="AircraftComposition.TurbofanPropulsion" guid="{1f639734-c1c5-57fc-b040-8bd79b5542fa}" description="Pratt &amp; Whitney F100 / GE F110 class augmented turbofan powering the F-16." version="1.0" generationTool="pyssp_sysml2 tooling" generationDateAndTime="2000-00-00T00:00:00Z" variableNamingConvention="structured" numberOfEventIndicators="0">
+<fmiModelDescription fmiVersion="2.0" modelName="AircraftComposition.TurbofanPropulsion" guid="{1f639734-c1c5-57fc-b040-8bd79b5542fa}" description="Pratt &amp; Whitney F100 / GE F110 class augmented turbofan powering the F-16." version="1.0" generationTool="pyssp_sysml2 tooling" generationDateAndTime="2000-01-01T00:00:00" variableNamingConvention="structured" numberOfEventIndicators="0">
   <CoSimulation modelIdentifier="TurbofanPropulsion" />
   <ModelVariables>
     <ScalarVariable name="max_thrust_kn" valueReference="0" causality="parameter" variability="fixed">

@@ -60,6 +60,12 @@ The default workflow is:
 3. package the SSP
 4. run the reference simulation
 
+The architecture export stage is also available directly:
+
+```bash
+python3 -m scripts.generation.export_artifacts
+```
+
 Main outputs:
 
 - SSP archive: `build/ssp/aircraft.ssp`
@@ -72,6 +78,7 @@ Main outputs:
 
 | Task | Command |
 | --- | --- |
+| Export all architecture-derived artifacts | `python3 -m scripts.generation.export_artifacts` |
 | Export architecture snapshot | `python3 -m scripts.generation.save_architecture --output generated/arch_def.json` |
 | Generate Modelica interfaces | `python3 -m scripts.generation.generate_interface_defs` |
 | Generate model descriptions | `python3 -m scripts.generation.generate_model_descriptions` |

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<fmiModelDescription fmiVersion="2.0" modelName="AircraftComposition.InputOutput" guid="{7549accd-dbcb-5341-876a-b6ae72f10553}" description="Simulation sink for debugging and recording mission/autopilot telemetry." version="1.0" generationTool="pyssp_sysml2 tooling" generationDateAndTime="2000-00-00T00:00:00Z" variableNamingConvention="structured" numberOfEventIndicators="0">
+<fmiModelDescription fmiVersion="2.0" modelName="AircraftComposition.InputOutput" guid="{7549accd-dbcb-5341-876a-b6ae72f10553}" description="Simulation sink for debugging and recording mission/autopilot telemetry." version="1.0" generationTool="pyssp_sysml2 tooling" generationDateAndTime="2000-01-01T00:00:00" variableNamingConvention="structured" numberOfEventIndicators="0">
   <CoSimulation modelIdentifier="InputOutput" />
   <ModelVariables>
     <ScalarVariable name="locationXYZ.x_km" valueReference="0" causality="input" description="Local navigation frame expressed in kilometers (x=North, y=East, z=Up).">

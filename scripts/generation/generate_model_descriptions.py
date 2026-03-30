@@ -17,7 +17,7 @@ from scripts.common.paths import ARCHITECTURE_DIR, COMPOSITION_NAME, GENERATED_D
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_OUTPUT_DIR = GENERATED_DIR / "model_descriptions"
-FIXED_GENERATION_TIMESTAMP = "2000-00-00T00:00:00Z"
+FIXED_GENERATION_TIMESTAMP = "2000-01-01T00:00:00"
 
 
 def _normalize_generation_timestamp(paths: list[Path]) -> list[Path]:

@@ -1,1540 +1,3036 @@
 {
-  "package": "Aircraft",
-  "part_definitions": {
-    "AdaptiveWingSystem": "__ref__",
-    "AircraftComposition": {
-      "attributes": {},
-      "connections": [
-        {
-          "dst_component": "control_interface",
-          "dst_part_def": "__ref__",
-          "dst_port": "bridgeInput",
-          "dst_port_def": "__ref__",
-          "src_component": "flightgear_bridge",
-          "src_part_def": "__ref__",
-          "src_port": "pilotCommand",
-          "src_port_def": "__ref__"
-        },
-        {
-          "dst_component": "mission_computer",
-          "dst_part_def": "__ref__",
-          "dst_port": "manualInput",
-          "dst_port_def": "__ref__",
-          "src_component": "control_interface",
-          "src_part_def": "__ref__",
-          "src_port": "pilotCommand",
-          "src_port_def": "__ref__"
-        },
-        {
-          "dst_component": "mission_computer",
-          "dst_part_def": "__ref__",
-          "dst_port": "autopilotInput",
-          "dst_port_def": "__ref__",
-          "src_component": "autopilot_module",
-          "src_part_def": "__ref__",
-          "src_port": "autopilotCmd",
-          "src_port_def": "__ref__"
-        },
-        {
-          "dst_component": "environment",
-          "dst_part_def": "__ref__",
-          "dst_port": "thrust_in",
-          "dst_port_def": "__ref__",
-          "src_component": "turbofan_propulsion",
-          "src_part_def": "__ref__",
-          "src_port": "thrustOut",
-          "src_port_def": "__ref__"
-        },
-        {
-          "dst_component": "fuel_system",
-          "dst_part_def": "__ref__",
-          "dst_port": "fuel_consumption_rate",
-          "dst_port_def": "__ref__",
-          "src_component": "turbofan_propulsion",
-          "src_part_def": "__ref__",
-          "src_port": "fuel_consumption",
-          "src_port_def": "__ref__"
-        },
-        {
-          "dst_component": "turbofan_propulsion",
-          "dst_part_def": "__ref__",
-          "dst_port": "throttleCmd",
-          "dst_port_def": "__ref__",
-          "src_component": "mission_computer",
-          "src_part_def": "__ref__",
-          "src_port": "engineThrottle",
-          "src_port_def": "__ref__"
-        },
-        {
-          "dst_component": "adaptive_wing_system",
-          "dst_part_def": "__ref__",
-          "dst_port": "direction_command",
-          "dst_port_def": "__ref__",
-          "src_component": "mission_computer",
-          "src_part_def": "__ref__",
-          "src_port": "direction_command",
-          "src_port_def": "__ref__"
-        },
-        {
-          "dst_component": "environment",
-          "dst_part_def": "__ref__",
-          "dst_port": "direction_command",
-          "dst_port_def": "__ref__",
-          "src_component": "mission_computer",
-          "src_part_def": "__ref__",
-          "src_port": "direction_command",
-          "src_port_def": "__ref__"
-        },
-        {
-          "dst_component": "mission_computer",
-          "dst_part_def": "__ref__",
-          "dst_port": "fuelStatus",
-          "dst_port_def": "__ref__",
-          "src_component": "fuel_system",
-          "src_part_def": "__ref__",
-          "src_port": "fuelState",
-          "src_port_def": "__ref__"
-        },
-        {
-          "dst_component": "environment",
-          "dst_part_def": "__ref__",
-          "dst_port": "actuation_command",
-          "dst_port_def": "__ref__",
-          "src_component": "adaptive_wing_system",
-          "src_part_def": "__ref__",
-          "src_port": "actuation_command",
-          "src_port_def": "__ref__"
-        },
-        {
-          "dst_component": "environment",
-          "dst_part_def": "__ref__",
-          "dst_port": "lift",
-          "dst_port_def": "__ref__",
-          "src_component": "adaptive_wing_system",
-          "src_part_def": "__ref__",
-          "src_port": "liftInterface",
-          "src_port_def": "__ref__"
-        },
-        {
-          "dst_component": "autopilot_module",
-          "dst_part_def": "__ref__",
-          "dst_port": "currentOrientation",
-          "dst_port_def": "__ref__",
-          "src_component": "environment",
-          "src_part_def": "__ref__",
-          "src_port": "orientation",
-          "src_port_def": "__ref__"
-        },
-        {
-          "dst_component": "autopilot_module",
-          "dst_part_def": "__ref__",
-          "dst_port": "currentLocation",
-          "dst_port_def": "__ref__",
-          "src_component": "environment",
-          "src_part_def": "__ref__",
-          "src_port": "location",
-          "src_port_def": "__ref__"
-        },
-        {
-          "dst_component": "autopilot_module",
-          "dst_part_def": "__ref__",
-          "dst_port": "feedbackBus",
-          "dst_port_def": "__ref__",
-          "src_component": "environment",
-          "src_part_def": "__ref__",
-          "src_port": "flight_status",
-          "src_port_def": "__ref__"
-        },
-        {
-          "dst_component": "adaptive_wing_system",
-          "dst_part_def": "__ref__",
-          "dst_port": "flight_speed",
-          "dst_port_def": "__ref__",
-          "src_component": "environment",
-          "src_part_def": "__ref__",
-          "src_port": "flight_status",
-          "src_port_def": "__ref__"
-        },
-        {
-          "dst_component": "flightgear_bridge",
-          "dst_part_def": "__ref__",
-          "dst_port": "statePosition",
-          "dst_port_def": "__ref__",
-          "src_component": "environment",
-          "src_part_def": "__ref__",
-          "src_port": "location",
-          "src_port_def": "__ref__"
-        },
-        {
-          "dst_component": "flightgear_bridge",
-          "dst_part_def": "__ref__",
-          "dst_port": "stateOrientation",
-          "dst_port_def": "__ref__",
-          "src_component": "environment",
-          "src_part_def": "__ref__",
-          "src_port": "orientation",
-          "src_port_def": "__ref__"
-        },
-        {
-          "dst_component": "flightgear_bridge",
-          "dst_part_def": "__ref__",
-          "dst_port": "flightStatus",
-          "dst_port_def": "__ref__",
-          "src_component": "environment",
-          "src_part_def": "__ref__",
-          "src_port": "flight_status",
-          "src_port_def": "__ref__"
-        },
-        {
-          "dst_component": "flightgear_bridge",
-          "dst_part_def": "__ref__",
-          "dst_port": "missionStatus",
-          "dst_port_def": "__ref__",
-          "src_component": "autopilot_module",
-          "src_part_def": "__ref__",
-          "src_port": "missionStatus",
-          "src_port_def": "__ref__"
-        },
-        {
-          "dst_component": "input_output",
-          "dst_part_def": "__ref__",
-          "dst_port": "locationXYZ",
-          "dst_port_def": "__ref__",
-          "src_component": "environment",
-          "src_part_def": "__ref__",
-          "src_port": "location",
-          "src_port_def": "__ref__"
-        },
-        {
-          "dst_component": "input_output",
-          "dst_part_def": "__ref__",
-          "dst_port": "orientation",
-          "dst_port_def": "__ref__",
-          "src_component": "environment",
-          "src_part_def": "__ref__",
-          "src_port": "orientation",
-          "src_port_def": "__ref__"
-        },
-        {
-          "dst_component": "input_output",
-          "dst_part_def": "__ref__",
-          "dst_port": "autopilotCmd",
-          "dst_port_def": "__ref__",
-          "src_component": "autopilot_module",
-          "src_part_def": "__ref__",
-          "src_port": "autopilotCmd",
-          "src_port_def": "__ref__"
-        },
-        {
-          "dst_component": "input_output",
-          "dst_part_def": "__ref__",
-          "dst_port": "flightStatus",
-          "dst_port_def": "__ref__",
-          "src_component": "environment",
-          "src_part_def": "__ref__",
-          "src_port": "flight_status",
-          "src_port_def": "__ref__"
-        },
-        {
-          "dst_component": "input_output",
-          "dst_part_def": "__ref__",
-          "dst_port": "missionStatus",
-          "dst_port_def": "__ref__",
-          "src_component": "autopilot_module",
-          "src_part_def": "__ref__",
-          "src_port": "missionStatus",
-          "src_port_def": "__ref__"
-        }
-      ],
-      "doc": "Top-level composition containing all subsystem instances and signal routing.",
-      "name": "AircraftComposition",
-      "parts": {
-        "adaptive_wing_system": {
-          "doc": null,
-          "name": "adaptive_wing_system",
-          "part_def": {
-            "attributes": {
-              "aspect_ratio": {
-                "doc": null,
-                "name": "aspect_ratio",
-                "type": {
-                  "string_definition": null,
-                  "type": "Real"
-                },
-                "value": 3.6
-              },
-              "control_authority_deg": {
-                "doc": null,
-                "name": "control_authority_deg",
-                "type": {
-                  "string_definition": null,
-                  "type": "Integer"
-                },
-                "value": 25
-              },
-              "load_factor_limit_g": {
-                "doc": null,
-                "name": "load_factor_limit_g",
-                "type": {
-                  "string_definition": null,
-                  "type": "Integer"
-                },
-                "value": 9
-              },
-              "reference_area_m2": {
-                "doc": null,
-                "name": "reference_area_m2",
-                "type": {
-                  "string_definition": null,
-                  "type": "Real"
-                },
-                "value": 28.0
-              },
-              "span_m": {
-                "doc": null,
-                "name": "span_m",
-                "type": {
-                  "string_definition": null,
-                  "type": "Real"
-                },
-                "value": 10.0
-              }
+  "DEF_KINDS": [
+    "Part",
+    "Port",
+    "Requirement"
+  ],
+  "REF_KINDS": [],
+  "_defs": {
+    "NodeType.Part": {
+      "AdaptiveWingSystem": "__ref__",
+      "AircraftComposition": {
+        "DEF_KINDS": [
+          "Attribute",
+          "Part",
+          "Port",
+          "Requirement",
+          "Connection"
+        ],
+        "REF_KINDS": [
+          "Part",
+          "Port",
+          "Requirement"
+        ],
+        "_defs": {
+          "NodeType.Attribute": {},
+          "NodeType.Connection": {
+            "adaptive_wing_system.actuation_command->environment.actuation_command": {
+              "doc": null,
+              "dst_part": "environment",
+              "dst_part_node": "__ref__",
+              "dst_port": "actuation_command",
+              "dst_port_node": "__ref__",
+              "name": "adaptive_wing_system.actuation_command_to_environment.actuation_command",
+              "parent": null,
+              "source_file": null,
+              "src_part": "adaptive_wing_system",
+              "src_part_node": "__ref__",
+              "src_port": "actuation_command",
+              "src_port_node": "__ref__",
+              "type": "",
+              "value_type": "<class 'pycps_sysmlv2.definitions.connections.SysMLConnection'>"
             },
-            "connections": [],
-            "doc": "Leading-edge strake and cropped-delta wing sized to F-16 Block 50 geometry with 9g capability. This model includes the control system",
-            "name": "AdaptiveWingSystem",
-            "parts": {},
-            "ports": {
-              "actuation_command": {
-                "direction": "out",
-                "doc": "Actuation commands, sent to environment to track and calculate new position",
-                "name": "actuation_command",
-                "port_def": {
-                  "attributes": {
-                    "elevator_deg": {
-                      "doc": null,
-                      "name": "elevator_deg",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Real"
-                      },
-                      "value": null
-                    },
-                    "flaperon_deg": {
-                      "doc": null,
-                      "name": "flaperon_deg",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Real"
-                      },
-                      "value": null
-                    },
-                    "left_aileron_deg": {
-                      "doc": null,
-                      "name": "left_aileron_deg",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Real"
-                      },
-                      "value": null
-                    },
-                    "right_aileron_deg": {
-                      "doc": null,
-                      "name": "right_aileron_deg",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Real"
-                      },
-                      "value": null
-                    },
-                    "rudder_deg": {
-                      "doc": null,
-                      "name": "rudder_deg",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Real"
-                      },
-                      "value": null
-                    }
-                  },
-                  "doc": "Commanded surface deflections in degrees for co-simulation with aerodynamic models.",
-                  "name": "SurfaceActuationCommand"
-                },
-                "port_name": "SurfaceActuationCommand"
-              },
-              "direction_command": {
-                "direction": "in",
-                "doc": "Mission-computer command bus input. Desired change in speed vector",
-                "name": "direction_command",
-                "port_def": "__ref__",
-                "port_name": "OrientationEuler"
-              },
-              "flight_speed": {
-                "direction": "in",
-                "doc": null,
-                "name": "flight_speed",
-                "port_def": "__ref__",
-                "port_name": "FlightStatusPacket"
-              },
-              "liftInterface": {
-                "direction": "out",
-                "doc": "Tracking of lift, drag",
-                "name": "liftInterface",
-                "port_def": {
-                  "attributes": {
-                    "drag_kn": {
-                      "doc": null,
-                      "name": "drag_kn",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Real"
-                      },
-                      "value": null
-                    },
-                    "lift_kn": {
-                      "doc": null,
-                      "name": "lift_kn",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Real"
-                      },
-                      "value": null
-                    },
-                    "pitching_moment_knm": {
-                      "doc": null,
-                      "name": "pitching_moment_knm",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Real"
-                      },
-                      "value": null
-                    }
-                  },
-                  "doc": "Aerodynamic state summary exported from wing solver.",
-                  "name": "LiftState"
-                },
-                "port_name": "LiftState"
-              }
-            }
-          },
-          "part_name": "AdaptiveWingSystem"
-        },
-        "autopilot_module": {
-          "doc": null,
-          "name": "autopilot_module",
-          "part_def": {
-            "attributes": {
-              "comment": {
-                "doc": null,
-                "name": "comment",
-                "type": {
-                  "string_definition": null,
-                  "type": "String"
-                },
-                "value": "uses waypoint tracking"
-              },
-              "waypointCount": {
-                "doc": null,
-                "name": "waypointCount",
-                "type": {
-                  "string_definition": null,
-                  "type": "Integer"
-                },
-                "value": 10
-              },
-              "waypointProximity_km": {
-                "doc": null,
-                "name": "waypointProximity_km",
-                "type": {
-                  "string_definition": null,
-                  "type": "Integer"
-                },
-                "value": 10
-              },
-              "waypointX_km": {
-                "doc": null,
-                "name": "waypointX_km",
-                "type": {
-                  "string_definition": null,
-                  "type": [
-                    "Real"
-                  ]
-                },
-                "value": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ]
-              },
-              "waypointY_km": {
-                "doc": null,
-                "name": "waypointY_km",
-                "type": {
-                  "string_definition": null,
-                  "type": [
-                    "Real"
-                  ]
-                },
-                "value": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ]
-              },
-              "waypointZ_km": {
-                "doc": null,
-                "name": "waypointZ_km",
-                "type": {
-                  "string_definition": null,
-                  "type": [
-                    "Real"
-                  ]
-                },
-                "value": [
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0
-                ]
-              }
+            "adaptive_wing_system.liftInterface->environment.lift": {
+              "doc": null,
+              "dst_part": "environment",
+              "dst_part_node": "__ref__",
+              "dst_port": "lift",
+              "dst_port_node": "__ref__",
+              "name": "adaptive_wing_system.liftInterface_to_environment.lift",
+              "parent": null,
+              "source_file": null,
+              "src_part": "adaptive_wing_system",
+              "src_part_node": "__ref__",
+              "src_port": "liftInterface",
+              "src_port_node": "__ref__",
+              "type": "",
+              "value_type": "<class 'pycps_sysmlv2.definitions.connections.SysMLConnection'>"
             },
-            "connections": [],
-            "doc": "F-16 autopilot, takes in sensor data and translates it into a equivalent hotas command.",
-            "name": "AutopilotModule",
-            "parts": {},
-            "ports": {
-              "autopilotCmd": {
-                "direction": "out",
-                "doc": "HOTAS-equivalent command stream for mission computer blending.",
-                "name": "autopilotCmd",
-                "port_def": "__ref__",
-                "port_name": "PilotCommand"
-              },
-              "currentLocation": {
-                "direction": "in",
-                "doc": "Current local position from sensors",
-                "name": "currentLocation",
-                "port_def": "__ref__",
-                "port_name": "PositionXYZ"
-              },
-              "currentOrientation": {
-                "direction": "in",
-                "doc": "Current attitude from sensors.",
-                "name": "currentOrientation",
-                "port_def": "__ref__",
-                "port_name": "OrientationEuler"
-              },
-              "feedbackBus": {
-                "direction": "in",
-                "doc": "Mission-computer flight status back into autopilot.",
-                "name": "feedbackBus",
-                "port_def": "__ref__",
-                "port_name": "FlightStatusPacket"
-              },
-              "missionStatus": {
-                "direction": "out",
-                "doc": "Waypoint progression for logging and verification.",
-                "name": "missionStatus",
-                "port_def": "__ref__",
-                "port_name": "MissionStatus"
-              }
-            }
-          },
-          "part_name": "AutopilotModule"
-        },
-        "composite_airframe": {
-          "doc": null,
-          "name": "composite_airframe",
-          "part_def": {
-            "attributes": {
-              "empty_weight_kg": {
-                "doc": null,
-                "name": "empty_weight_kg",
-                "type": {
-                  "string_definition": null,
-                  "type": "Integer"
-                },
-                "value": 8573
-              },
-              "fuselage_width_m": {
-                "doc": null,
-                "name": "fuselage_width_m",
-                "type": {
-                  "string_definition": null,
-                  "type": "Real"
-                },
-                "value": 3.0
-              },
-              "hardpoint_count": {
-                "doc": null,
-                "name": "hardpoint_count",
-                "type": {
-                  "string_definition": null,
-                  "type": "Integer"
-                },
-                "value": 9
-              },
-              "length_m": {
-                "doc": null,
-                "name": "length_m",
-                "type": {
-                  "string_definition": null,
-                  "type": "Real"
-                },
-                "value": 15.0
-              },
-              "payload_capacity_kg": {
-                "doc": null,
-                "name": "payload_capacity_kg",
-                "type": {
-                  "string_definition": null,
-                  "type": "Integer"
-                },
-                "value": 7700
-              },
-              "wingspan_m": {
-                "doc": null,
-                "name": "wingspan_m",
-                "type": {
-                  "string_definition": null,
-                  "type": "Real"
-                },
-                "value": 10.0
-              }
+            "autopilot_module.autopilotCmd->input_output.autopilotCmd": {
+              "doc": null,
+              "dst_part": "input_output",
+              "dst_part_node": "__ref__",
+              "dst_port": "autopilotCmd",
+              "dst_port_node": "__ref__",
+              "name": "autopilot_module.autopilotCmd_to_input_output.autopilotCmd",
+              "parent": null,
+              "source_file": null,
+              "src_part": "autopilot_module",
+              "src_part_node": "__ref__",
+              "src_port": "autopilotCmd",
+              "src_port_node": "__ref__",
+              "type": "",
+              "value_type": "<class 'pycps_sysmlv2.definitions.connections.SysMLConnection'>"
             },
-            "connections": [],
-            "doc": "F-16 aluminum/composite fuselage sized for high-supersonic operations with dorsal spine for avionics.",
-            "name": "CompositeAirframe",
-            "parts": {},
-            "ports": {}
-          },
-          "part_name": "CompositeAirframe"
-        },
-        "control_interface": {
-          "doc": null,
-          "name": "control_interface",
-          "part_def": {
-            "attributes": {
-              "input_scheme": {
-                "doc": null,
-                "name": "input_scheme",
-                "type": {
-                  "string_definition": null,
-                  "type": "String"
-                },
-                "value": "HOTAS"
-              },
-              "telemetry_rate_hz": {
-                "doc": null,
-                "name": "telemetry_rate_hz",
-                "type": {
-                  "string_definition": null,
-                  "type": "Integer"
-                },
-                "value": 120
-              },
-              "useBridgeInput": {
-                "doc": null,
-                "name": "useBridgeInput",
-                "type": {
-                  "string_definition": null,
-                  "type": "Boolean"
-                },
-                "value": false
-              }
+            "autopilot_module.autopilotCmd->mission_computer.autopilotInput": {
+              "doc": null,
+              "dst_part": "mission_computer",
+              "dst_part_node": "__ref__",
+              "dst_port": "autopilotInput",
+              "dst_port_node": "__ref__",
+              "name": "autopilot_module.autopilotCmd_to_mission_computer.autopilotInput",
+              "parent": null,
+              "source_file": null,
+              "src_part": "autopilot_module",
+              "src_part_node": "__ref__",
+              "src_port": "autopilotCmd",
+              "src_port_node": "__ref__",
+              "type": "",
+              "value_type": "<class 'pycps_sysmlv2.definitions.connections.SysMLConnection'>"
             },
-            "connections": [],
-            "doc": "F-16 HOTAS + side-stick interface for pilot inputs and trim switches.",
-            "name": "ControlInterface",
-            "parts": {},
-            "ports": {
-              "bridgeInput": {
-                "direction": "in",
-                "doc": "External pilot command provided by an interactive bridge/frontend adapter.",
-                "name": "bridgeInput",
-                "port_def": {
-                  "attributes": {
-                    "button_mask": {
-                      "doc": null,
-                      "name": "button_mask",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Integer"
-                      },
-                      "value": null
-                    },
-                    "hat_x": {
-                      "doc": null,
-                      "name": "hat_x",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Integer"
-                      },
-                      "value": null
-                    },
-                    "hat_y": {
-                      "doc": null,
-                      "name": "hat_y",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Integer"
-                      },
-                      "value": null
-                    },
-                    "mode_switch": {
-                      "doc": null,
-                      "name": "mode_switch",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Integer"
-                      },
-                      "value": null
-                    },
-                    "reserved": {
-                      "doc": null,
-                      "name": "reserved",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Integer"
-                      },
-                      "value": null
-                    },
-                    "rudder_norm": {
-                      "doc": null,
-                      "name": "rudder_norm",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Real"
-                      },
-                      "value": null
-                    },
-                    "stick_pitch_norm": {
-                      "doc": null,
-                      "name": "stick_pitch_norm",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Real"
-                      },
-                      "value": null
-                    },
-                    "stick_roll_norm": {
-                      "doc": null,
-                      "name": "stick_roll_norm",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Real"
-                      },
-                      "value": null
-                    },
-                    "throttle_aux_norm": {
-                      "doc": null,
-                      "name": "throttle_aux_norm",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Real"
-                      },
-                      "value": null
-                    },
-                    "throttle_norm": {
-                      "doc": null,
-                      "name": "throttle_norm",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Real"
-                      },
-                      "value": null
-                    }
-                  },
-                  "doc": "HOTAS-style control payload shared across control surfaces and mission computer consumers.",
-                  "name": "PilotCommand"
-                },
-                "port_name": "PilotCommand"
-              },
-              "pilotCommand": {
-                "direction": "out",
-                "doc": "HOTAS-control bundle forwarded for mission computer sensor fusion.",
-                "name": "pilotCommand",
-                "port_def": "__ref__",
-                "port_name": "PilotCommand"
-              }
-            }
-          },
-          "part_name": "ControlInterface"
-        },
-        "environment": {
-          "doc": null,
-          "name": "environment",
-          "part_def": {
-            "attributes": {},
-            "connections": [],
-            "doc": "Tracking position and velocities of the aircraft and feeds the sensors",
-            "name": "Environment",
-            "parts": {},
-            "ports": {
-              "actuation_command": {
-                "direction": "in",
-                "doc": "Reads the actuation and thrust commands to calculate the position, rotation and velocities",
-                "name": "actuation_command",
-                "port_def": "__ref__",
-                "port_name": "SurfaceActuationCommand"
-              },
-              "direction_command": {
-                "direction": "in",
-                "doc": null,
-                "name": "direction_command",
-                "port_def": "__ref__",
-                "port_name": "OrientationEuler"
-              },
-              "flight_status": {
-                "direction": "out",
-                "doc": null,
-                "name": "flight_status",
-                "port_def": "__ref__",
-                "port_name": "FlightStatusPacket"
-              },
-              "lift": {
-                "direction": "in",
-                "doc": null,
-                "name": "lift",
-                "port_def": "__ref__",
-                "port_name": "LiftState"
-              },
-              "location": {
-                "direction": "out",
-                "doc": null,
-                "name": "location",
-                "port_def": "__ref__",
-                "port_name": "PositionXYZ"
-              },
-              "orientation": {
-                "direction": "out",
-                "doc": "Feedback for simulated sensors",
-                "name": "orientation",
-                "port_def": "__ref__",
-                "port_name": "OrientationEuler"
-              },
-              "thrust_in": {
-                "direction": "in",
-                "doc": null,
-                "name": "thrust_in",
-                "port_def": "__ref__",
-                "port_name": "ThrustState"
-              }
-            }
-          },
-          "part_name": "Environment"
-        },
-        "flightgear_bridge": {
-          "doc": null,
-          "name": "flightgear_bridge",
-          "part_def": {
-            "attributes": {
-              "control_port": {
-                "doc": null,
-                "name": "control_port",
-                "type": {
-                  "string_definition": null,
-                  "type": "Integer"
-                },
-                "value": 5502
-              },
-              "reference_altitude_m": {
-                "doc": null,
-                "name": "reference_altitude_m",
-                "type": {
-                  "string_definition": null,
-                  "type": "Real"
-                },
-                "value": 0.0
-              },
-              "reference_latitude_deg": {
-                "doc": null,
-                "name": "reference_latitude_deg",
-                "type": {
-                  "string_definition": null,
-                  "type": "Real"
-                },
-                "value": 0.0
-              },
-              "reference_longitude_deg": {
-                "doc": null,
-                "name": "reference_longitude_deg",
-                "type": {
-                  "string_definition": null,
-                  "type": "Real"
-                },
-                "value": 0.0
-              },
-              "remote_host": {
-                "doc": null,
-                "name": "remote_host",
-                "type": {
-                  "string_definition": null,
-                  "type": "String"
-                },
-                "value": "127.0.0.1"
-              },
-              "telemetry_port": {
-                "doc": null,
-                "name": "telemetry_port",
-                "type": {
-                  "string_definition": null,
-                  "type": "Integer"
-                },
-                "value": 5501
-              },
-              "transport": {
-                "doc": null,
-                "name": "transport",
-                "type": {
-                  "string_definition": null,
-                  "type": "String"
-                },
-                "value": "FlightGearGeneric"
-              }
+            "autopilot_module.missionStatus->flightgear_bridge.missionStatus": {
+              "doc": null,
+              "dst_part": "flightgear_bridge",
+              "dst_part_node": "__ref__",
+              "dst_port": "missionStatus",
+              "dst_port_node": "__ref__",
+              "name": "autopilot_module.missionStatus_to_flightgear_bridge.missionStatus",
+              "parent": null,
+              "source_file": null,
+              "src_part": "autopilot_module",
+              "src_part_node": "__ref__",
+              "src_port": "missionStatus",
+              "src_port_node": "__ref__",
+              "type": "",
+              "value_type": "<class 'pycps_sysmlv2.definitions.connections.SysMLConnection'>"
             },
-            "connections": [],
-            "doc": "Adapter component for visual/frontend coupling to FlightGear using generic socket communication.",
-            "name": "FlightGearBridge",
-            "parts": {},
-            "ports": {
-              "flightStatus": {
-                "direction": "in",
-                "doc": "Flight status exported for overlays and diagnostics.",
-                "name": "flightStatus",
-                "port_def": {
-                  "attributes": {
-                    "airspeed_mps": {
-                      "doc": null,
-                      "name": "airspeed_mps",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Real"
-                      },
-                      "value": null
-                    },
-                    "angle_of_attack_deg": {
-                      "doc": null,
-                      "name": "angle_of_attack_deg",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Real"
-                      },
-                      "value": null
-                    },
-                    "climb_rate": {
-                      "doc": null,
-                      "name": "climb_rate",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Real"
-                      },
-                      "value": null
-                    },
-                    "energy_state_norm": {
-                      "doc": null,
-                      "name": "energy_state_norm",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Real"
-                      },
-                      "value": null
-                    },
-                    "health_code": {
-                      "doc": null,
-                      "name": "health_code",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Integer"
-                      },
-                      "value": null
-                    }
-                  },
-                  "doc": "Mission computer status feedback consumed by autonomy and analysis models.",
-                  "name": "FlightStatusPacket"
-                },
-                "port_name": "FlightStatusPacket"
-              },
-              "missionStatus": {
-                "direction": "in",
-                "doc": "Mission/autopilot status exported for overlays and diagnostics.",
-                "name": "missionStatus",
-                "port_def": {
-                  "attributes": {
-                    "arrived": {
-                      "doc": null,
-                      "name": "arrived",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Boolean"
-                      },
-                      "value": null
-                    },
-                    "complete": {
-                      "doc": null,
-                      "name": "complete",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Boolean"
-                      },
-                      "value": null
-                    },
-                    "distance_to_waypoint_km": {
-                      "doc": null,
-                      "name": "distance_to_waypoint_km",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Real"
-                      },
-                      "value": null
-                    },
-                    "total_waypoints": {
-                      "doc": null,
-                      "name": "total_waypoints",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Integer"
-                      },
-                      "value": null
-                    },
-                    "waypoint_index": {
-                      "doc": null,
-                      "name": "waypoint_index",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Integer"
-                      },
-                      "value": null
-                    }
-                  },
-                  "doc": "Waypoint-tracking status produced by the autopilot for logging and requirement evaluation.",
-                  "name": "MissionStatus"
-                },
-                "port_name": "MissionStatus"
-              },
-              "pilotCommand": {
-                "direction": "out",
-                "doc": "Pilot command returned from the interactive frontend into the vehicle control path.",
-                "name": "pilotCommand",
-                "port_def": "__ref__",
-                "port_name": "PilotCommand"
-              },
-              "stateOrientation": {
-                "direction": "in",
-                "doc": "Aircraft attitude from the simulated environment.",
-                "name": "stateOrientation",
-                "port_def": {
-                  "attributes": {
-                    "pitch_deg": {
-                      "doc": null,
-                      "name": "pitch_deg",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Real"
-                      },
-                      "value": null
-                    },
-                    "roll_deg": {
-                      "doc": null,
-                      "name": "roll_deg",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Real"
-                      },
-                      "value": null
-                    },
-                    "yaw_deg": {
-                      "doc": null,
-                      "name": "yaw_deg",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Real"
-                      },
-                      "value": null
-                    }
-                  },
-                  "doc": "Air vehicle orientation expressed as Euler angles in degrees.",
-                  "name": "OrientationEuler"
-                },
-                "port_name": "OrientationEuler"
-              },
-              "statePosition": {
-                "direction": "in",
-                "doc": "Aircraft position from the simulated environment.",
-                "name": "statePosition",
-                "port_def": {
-                  "attributes": {
-                    "x_km": {
-                      "doc": null,
-                      "name": "x_km",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Real"
-                      },
-                      "value": null
-                    },
-                    "y_km": {
-                      "doc": null,
-                      "name": "y_km",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Real"
-                      },
-                      "value": null
-                    },
-                    "z_km": {
-                      "doc": null,
-                      "name": "z_km",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Real"
-                      },
-                      "value": null
-                    }
-                  },
-                  "doc": "Local navigation frame expressed in kilometers (x=North, y=East, z=Up).",
-                  "name": "PositionXYZ"
-                },
-                "port_name": "PositionXYZ"
-              }
-            }
-          },
-          "part_name": "FlightGearBridge"
-        },
-        "fuel_system": {
-          "doc": null,
-          "name": "fuel_system",
-          "part_def": {
-            "attributes": {
-              "fuel_capacity_kg": {
-                "doc": null,
-                "name": "fuel_capacity_kg",
-                "type": {
-                  "string_definition": null,
-                  "type": "Integer"
-                },
-                "value": 3160
-              },
-              "reserve_fraction": {
-                "doc": null,
-                "name": "reserve_fraction",
-                "type": {
-                  "string_definition": null,
-                  "type": "Real"
-                },
-                "value": 0.08
-              }
+            "autopilot_module.missionStatus->input_output.missionStatus": {
+              "doc": null,
+              "dst_part": "input_output",
+              "dst_part_node": "__ref__",
+              "dst_port": "missionStatus",
+              "dst_port_node": "__ref__",
+              "name": "autopilot_module.missionStatus_to_input_output.missionStatus",
+              "parent": null,
+              "source_file": null,
+              "src_part": "autopilot_module",
+              "src_part_node": "__ref__",
+              "src_port": "missionStatus",
+              "src_port_node": "__ref__",
+              "type": "",
+              "value_type": "<class 'pycps_sysmlv2.definitions.connections.SysMLConnection'>"
             },
-            "connections": [],
-            "doc": "Internal + conformal fuel storage management with transfer pumps feeding engine feed tanks.",
-            "name": "FuelSystem",
-            "parts": {},
-            "ports": {
-              "fuelState": {
-                "direction": "out",
-                "doc": "Telemetry describing remaining fuel mass/normalized level.",
-                "name": "fuelState",
-                "port_def": "__ref__",
-                "port_name": "FuelLevelState"
-              },
-              "fuel_consumption_rate": {
-                "direction": "in",
-                "doc": "Propulsion-requested fuel mass flow entering storage manager.",
-                "name": "fuel_consumption_rate",
-                "port_def": "__ref__",
-                "port_name": "FuelConsumptionRate"
-              }
-            }
-          },
-          "part_name": "FuelSystem"
-        },
-        "input_output": {
-          "doc": null,
-          "name": "input_output",
-          "part_def": {
-            "attributes": {},
-            "connections": [],
-            "doc": "Simulation sink for debugging and recording mission/autopilot telemetry.",
-            "name": "InputOutput",
-            "parts": {},
-            "ports": {
-              "autopilotCmd": {
-                "direction": "in",
-                "doc": null,
-                "name": "autopilotCmd",
-                "port_def": "__ref__",
-                "port_name": "PilotCommand"
-              },
-              "flightStatus": {
-                "direction": "in",
-                "doc": null,
-                "name": "flightStatus",
-                "port_def": "__ref__",
-                "port_name": "FlightStatusPacket"
-              },
-              "locationXYZ": {
-                "direction": "in",
-                "doc": null,
-                "name": "locationXYZ",
-                "port_def": "__ref__",
-                "port_name": "PositionXYZ"
-              },
-              "missionStatus": {
-                "direction": "in",
-                "doc": null,
-                "name": "missionStatus",
-                "port_def": "__ref__",
-                "port_name": "MissionStatus"
-              },
-              "orientation": {
-                "direction": "in",
-                "doc": null,
-                "name": "orientation",
-                "port_def": "__ref__",
-                "port_name": "OrientationEuler"
-              }
-            }
-          },
-          "part_name": "InputOutput"
-        },
-        "mission_computer": {
-          "doc": null,
-          "name": "mission_computer",
-          "part_def": {
-            "attributes": {},
-            "connections": [],
-            "doc": "F-16C/D mission computer blending pilot HOTAS inputs with fly-by-wire control laws and stores management.",
-            "name": "MissionComputer",
-            "parts": {},
-            "ports": {
-              "autopilotInput": {
-                "direction": "in",
-                "doc": "Autopilot command bundle using same HOTAS signal structure.",
-                "name": "autopilotInput",
-                "port_def": "__ref__",
-                "port_name": "PilotCommand"
-              },
-              "direction_command": {
-                "direction": "out",
-                "doc": "Command how to alter the current velocity vector, pith, yaw, roll",
-                "name": "direction_command",
-                "port_def": "__ref__",
-                "port_name": "OrientationEuler"
-              },
-              "engineThrottle": {
-                "direction": "out",
-                "doc": "Structured throttle/fuel enable command to propulsion.",
-                "name": "engineThrottle",
-                "port_def": "__ref__",
-                "port_name": "ThrottleCommand"
-              },
-              "fuelStatus": {
-                "direction": "in",
-                "doc": "Fuel telemetry used for command blending and power limiting.",
-                "name": "fuelStatus",
-                "port_def": {
-                  "attributes": {
-                    "fuel_level_norm": {
-                      "doc": null,
-                      "name": "fuel_level_norm",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Real"
-                      },
-                      "value": null
-                    },
-                    "fuel_remaining_kg": {
-                      "doc": null,
-                      "name": "fuel_remaining_kg",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Real"
-                      },
-                      "value": null
-                    },
-                    "fuel_starved": {
-                      "doc": null,
-                      "name": "fuel_starved",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Boolean"
-                      },
-                      "value": null
-                    }
-                  },
-                  "doc": "Remaining fuel mass and normalized level for availability tracking.",
-                  "name": "FuelLevelState"
-                },
-                "port_name": "FuelLevelState"
-              },
-              "manualInput": {
-                "direction": "in",
-                "doc": "Manual HOTAS command bundle from cockpit controls.",
-                "name": "manualInput",
-                "port_def": "__ref__",
-                "port_name": "PilotCommand"
-              }
-            }
-          },
-          "part_name": "MissionComputer"
-        },
-        "turbofan_propulsion": {
-          "doc": null,
-          "name": "turbofan_propulsion",
-          "part_def": {
-            "attributes": {
-              "dry_thrust_kn": {
-                "doc": null,
-                "name": "dry_thrust_kn",
-                "type": {
-                  "string_definition": null,
-                  "type": "Real"
-                },
-                "value": 79.0
-              },
-              "fuel_capacity_kg": {
-                "doc": null,
-                "name": "fuel_capacity_kg",
-                "type": {
-                  "string_definition": null,
-                  "type": "Integer"
-                },
-                "value": 3160
-              },
-              "generator_output_kw": {
-                "doc": null,
-                "name": "generator_output_kw",
-                "type": {
-                  "string_definition": null,
-                  "type": "Integer"
-                },
-                "value": 80
-              },
-              "max_thrust_kn": {
-                "doc": null,
-                "name": "max_thrust_kn",
-                "type": {
-                  "string_definition": null,
-                  "type": "Real"
-                },
-                "value": 129.7
-              },
-              "specific_fuel_consumption": {
-                "doc": null,
-                "name": "specific_fuel_consumption",
-                "type": {
-                  "string_definition": null,
-                  "type": "Real"
-                },
-                "value": 0.76
-              }
+            "control_interface.pilotCommand->mission_computer.manualInput": {
+              "doc": null,
+              "dst_part": "mission_computer",
+              "dst_part_node": "__ref__",
+              "dst_port": "manualInput",
+              "dst_port_node": "__ref__",
+              "name": "control_interface.pilotCommand_to_mission_computer.manualInput",
+              "parent": null,
+              "source_file": null,
+              "src_part": "control_interface",
+              "src_part_node": "__ref__",
+              "src_port": "pilotCommand",
+              "src_port_node": "__ref__",
+              "type": "",
+              "value_type": "<class 'pycps_sysmlv2.definitions.connections.SysMLConnection'>"
             },
-            "connections": [],
-            "doc": "Pratt & Whitney F100 / GE F110 class augmented turbofan powering the F-16.",
-            "name": "TurbofanPropulsion",
-            "parts": {},
-            "ports": {
-              "fuel_consumption": {
-                "direction": "out",
-                "doc": "Mass flow telemetry",
-                "name": "fuel_consumption",
-                "port_def": {
-                  "attributes": {
-                    "mass_flow_kgps": {
-                      "doc": null,
-                      "name": "mass_flow_kgps",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Real"
-                      },
-                      "value": null
-                    }
-                  },
-                  "doc": "Mass flow request or telemetry for turbofan fuel usage (kg/s).",
-                  "name": "FuelConsumptionRate"
-                },
-                "port_name": "FuelConsumptionRate"
-              },
-              "throttleCmd": {
-                "direction": "in",
-                "doc": "Mission computer throttle + afterburner command input.",
-                "name": "throttleCmd",
-                "port_def": {
-                  "attributes": {
-                    "afterburner_enable": {
-                      "doc": null,
-                      "name": "afterburner_enable",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Boolean"
-                      },
-                      "value": null
-                    },
-                    "fuel_enable": {
-                      "doc": null,
-                      "name": "fuel_enable",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Boolean"
-                      },
-                      "value": null
-                    },
-                    "throttle_norm": {
-                      "doc": null,
-                      "name": "throttle_norm",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Real"
-                      },
-                      "value": null
-                    }
-                  },
-                  "doc": "Engine throttle and fuel-enable bit for turbofan co-simulation.",
-                  "name": "ThrottleCommand"
-                },
-                "port_name": "ThrottleCommand"
-              },
-              "thrustOut": {
-                "direction": "out",
-                "doc": "Propulsion thrust telemetry exported to airframe.",
-                "name": "thrustOut",
-                "port_def": {
-                  "attributes": {
-                    "exhaust_velocity_mps": {
-                      "doc": null,
-                      "name": "exhaust_velocity_mps",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Real"
-                      },
-                      "value": null
-                    },
-                    "mass_flow_kgps": {
-                      "doc": null,
-                      "name": "mass_flow_kgps",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Real"
-                      },
-                      "value": null
-                    },
-                    "thrust_kn": {
-                      "doc": null,
-                      "name": "thrust_kn",
-                      "type": {
-                        "string_definition": null,
-                        "type": "Real"
-                      },
-                      "value": null
-                    }
-                  },
-                  "doc": "Propulsion output shared with performance models.",
-                  "name": "ThrustState"
-                },
-                "port_name": "ThrustState"
-              }
+            "environment.flight_status->adaptive_wing_system.flight_speed": {
+              "doc": null,
+              "dst_part": "adaptive_wing_system",
+              "dst_part_node": "__ref__",
+              "dst_port": "flight_speed",
+              "dst_port_node": "__ref__",
+              "name": "environment.flight_status_to_adaptive_wing_system.flight_speed",
+              "parent": null,
+              "source_file": null,
+              "src_part": "environment",
+              "src_part_node": "__ref__",
+              "src_port": "flight_status",
+              "src_port_node": "__ref__",
+              "type": "",
+              "value_type": "<class 'pycps_sysmlv2.definitions.connections.SysMLConnection'>"
+            },
+            "environment.flight_status->autopilot_module.feedbackBus": {
+              "doc": null,
+              "dst_part": "autopilot_module",
+              "dst_part_node": "__ref__",
+              "dst_port": "feedbackBus",
+              "dst_port_node": "__ref__",
+              "name": "environment.flight_status_to_autopilot_module.feedbackBus",
+              "parent": null,
+              "source_file": null,
+              "src_part": "environment",
+              "src_part_node": "__ref__",
+              "src_port": "flight_status",
+              "src_port_node": "__ref__",
+              "type": "",
+              "value_type": "<class 'pycps_sysmlv2.definitions.connections.SysMLConnection'>"
+            },
+            "environment.flight_status->flightgear_bridge.flightStatus": {
+              "doc": null,
+              "dst_part": "flightgear_bridge",
+              "dst_part_node": "__ref__",
+              "dst_port": "flightStatus",
+              "dst_port_node": "__ref__",
+              "name": "environment.flight_status_to_flightgear_bridge.flightStatus",
+              "parent": null,
+              "source_file": null,
+              "src_part": "environment",
+              "src_part_node": "__ref__",
+              "src_port": "flight_status",
+              "src_port_node": "__ref__",
+              "type": "",
+              "value_type": "<class 'pycps_sysmlv2.definitions.connections.SysMLConnection'>"
+            },
+            "environment.flight_status->input_output.flightStatus": {
+              "doc": null,
+              "dst_part": "input_output",
+              "dst_part_node": "__ref__",
+              "dst_port": "flightStatus",
+              "dst_port_node": "__ref__",
+              "name": "environment.flight_status_to_input_output.flightStatus",
+              "parent": null,
+              "source_file": null,
+              "src_part": "environment",
+              "src_part_node": "__ref__",
+              "src_port": "flight_status",
+              "src_port_node": "__ref__",
+              "type": "",
+              "value_type": "<class 'pycps_sysmlv2.definitions.connections.SysMLConnection'>"
+            },
+            "environment.location->autopilot_module.currentLocation": {
+              "doc": null,
+              "dst_part": "autopilot_module",
+              "dst_part_node": "__ref__",
+              "dst_port": "currentLocation",
+              "dst_port_node": "__ref__",
+              "name": "environment.location_to_autopilot_module.currentLocation",
+              "parent": null,
+              "source_file": null,
+              "src_part": "environment",
+              "src_part_node": "__ref__",
+              "src_port": "location",
+              "src_port_node": "__ref__",
+              "type": "",
+              "value_type": "<class 'pycps_sysmlv2.definitions.connections.SysMLConnection'>"
+            },
+            "environment.location->flightgear_bridge.statePosition": {
+              "doc": null,
+              "dst_part": "flightgear_bridge",
+              "dst_part_node": "__ref__",
+              "dst_port": "statePosition",
+              "dst_port_node": "__ref__",
+              "name": "environment.location_to_flightgear_bridge.statePosition",
+              "parent": null,
+              "source_file": null,
+              "src_part": "environment",
+              "src_part_node": "__ref__",
+              "src_port": "location",
+              "src_port_node": "__ref__",
+              "type": "",
+              "value_type": "<class 'pycps_sysmlv2.definitions.connections.SysMLConnection'>"
+            },
+            "environment.location->input_output.locationXYZ": {
+              "doc": null,
+              "dst_part": "input_output",
+              "dst_part_node": "__ref__",
+              "dst_port": "locationXYZ",
+              "dst_port_node": "__ref__",
+              "name": "environment.location_to_input_output.locationXYZ",
+              "parent": null,
+              "source_file": null,
+              "src_part": "environment",
+              "src_part_node": "__ref__",
+              "src_port": "location",
+              "src_port_node": "__ref__",
+              "type": "",
+              "value_type": "<class 'pycps_sysmlv2.definitions.connections.SysMLConnection'>"
+            },
+            "environment.orientation->autopilot_module.currentOrientation": {
+              "doc": null,
+              "dst_part": "autopilot_module",
+              "dst_part_node": "__ref__",
+              "dst_port": "currentOrientation",
+              "dst_port_node": "__ref__",
+              "name": "environment.orientation_to_autopilot_module.currentOrientation",
+              "parent": null,
+              "source_file": null,
+              "src_part": "environment",
+              "src_part_node": "__ref__",
+              "src_port": "orientation",
+              "src_port_node": "__ref__",
+              "type": "",
+              "value_type": "<class 'pycps_sysmlv2.definitions.connections.SysMLConnection'>"
+            },
+            "environment.orientation->flightgear_bridge.stateOrientation": {
+              "doc": null,
+              "dst_part": "flightgear_bridge",
+              "dst_part_node": "__ref__",
+              "dst_port": "stateOrientation",
+              "dst_port_node": "__ref__",
+              "name": "environment.orientation_to_flightgear_bridge.stateOrientation",
+              "parent": null,
+              "source_file": null,
+              "src_part": "environment",
+              "src_part_node": "__ref__",
+              "src_port": "orientation",
+              "src_port_node": "__ref__",
+              "type": "",
+              "value_type": "<class 'pycps_sysmlv2.definitions.connections.SysMLConnection'>"
+            },
+            "environment.orientation->input_output.orientation": {
+              "doc": null,
+              "dst_part": "input_output",
+              "dst_part_node": "__ref__",
+              "dst_port": "orientation",
+              "dst_port_node": "__ref__",
+              "name": "environment.orientation_to_input_output.orientation",
+              "parent": null,
+              "source_file": null,
+              "src_part": "environment",
+              "src_part_node": "__ref__",
+              "src_port": "orientation",
+              "src_port_node": "__ref__",
+              "type": "",
+              "value_type": "<class 'pycps_sysmlv2.definitions.connections.SysMLConnection'>"
+            },
+            "flightgear_bridge.pilotCommand->control_interface.bridgeInput": {
+              "doc": null,
+              "dst_part": "control_interface",
+              "dst_part_node": "__ref__",
+              "dst_port": "bridgeInput",
+              "dst_port_node": "__ref__",
+              "name": "flightgear_bridge.pilotCommand_to_control_interface.bridgeInput",
+              "parent": null,
+              "source_file": null,
+              "src_part": "flightgear_bridge",
+              "src_part_node": "__ref__",
+              "src_port": "pilotCommand",
+              "src_port_node": "__ref__",
+              "type": "",
+              "value_type": "<class 'pycps_sysmlv2.definitions.connections.SysMLConnection'>"
+            },
+            "fuel_system.fuelState->mission_computer.fuelStatus": {
+              "doc": null,
+              "dst_part": "mission_computer",
+              "dst_part_node": "__ref__",
+              "dst_port": "fuelStatus",
+              "dst_port_node": "__ref__",
+              "name": "fuel_system.fuelState_to_mission_computer.fuelStatus",
+              "parent": null,
+              "source_file": null,
+              "src_part": "fuel_system",
+              "src_part_node": "__ref__",
+              "src_port": "fuelState",
+              "src_port_node": "__ref__",
+              "type": "",
+              "value_type": "<class 'pycps_sysmlv2.definitions.connections.SysMLConnection'>"
+            },
+            "mission_computer.direction_command->adaptive_wing_system.direction_command": {
+              "doc": null,
+              "dst_part": "adaptive_wing_system",
+              "dst_part_node": "__ref__",
+              "dst_port": "direction_command",
+              "dst_port_node": "__ref__",
+              "name": "mission_computer.direction_command_to_adaptive_wing_system.direction_command",
+              "parent": null,
+              "source_file": null,
+              "src_part": "mission_computer",
+              "src_part_node": "__ref__",
+              "src_port": "direction_command",
+              "src_port_node": "__ref__",
+              "type": "",
+              "value_type": "<class 'pycps_sysmlv2.definitions.connections.SysMLConnection'>"
+            },
+            "mission_computer.direction_command->environment.direction_command": {
+              "doc": null,
+              "dst_part": "environment",
+              "dst_part_node": "__ref__",
+              "dst_port": "direction_command",
+              "dst_port_node": "__ref__",
+              "name": "mission_computer.direction_command_to_environment.direction_command",
+              "parent": null,
+              "source_file": null,
+              "src_part": "mission_computer",
+              "src_part_node": "__ref__",
+              "src_port": "direction_command",
+              "src_port_node": "__ref__",
+              "type": "",
+              "value_type": "<class 'pycps_sysmlv2.definitions.connections.SysMLConnection'>"
+            },
+            "mission_computer.engineThrottle->turbofan_propulsion.throttleCmd": {
+              "doc": null,
+              "dst_part": "turbofan_propulsion",
+              "dst_part_node": "__ref__",
+              "dst_port": "throttleCmd",
+              "dst_port_node": "__ref__",
+              "name": "mission_computer.engineThrottle_to_turbofan_propulsion.throttleCmd",
+              "parent": null,
+              "source_file": null,
+              "src_part": "mission_computer",
+              "src_part_node": "__ref__",
+              "src_port": "engineThrottle",
+              "src_port_node": "__ref__",
+              "type": "",
+              "value_type": "<class 'pycps_sysmlv2.definitions.connections.SysMLConnection'>"
+            },
+            "turbofan_propulsion.fuel_consumption->fuel_system.fuel_consumption_rate": {
+              "doc": null,
+              "dst_part": "fuel_system",
+              "dst_part_node": "__ref__",
+              "dst_port": "fuel_consumption_rate",
+              "dst_port_node": "__ref__",
+              "name": "turbofan_propulsion.fuel_consumption_to_fuel_system.fuel_consumption_rate",
+              "parent": null,
+              "source_file": null,
+              "src_part": "turbofan_propulsion",
+              "src_part_node": "__ref__",
+              "src_port": "fuel_consumption",
+              "src_port_node": "__ref__",
+              "type": "",
+              "value_type": "<class 'pycps_sysmlv2.definitions.connections.SysMLConnection'>"
+            },
+            "turbofan_propulsion.thrustOut->environment.thrust_in": {
+              "doc": null,
+              "dst_part": "environment",
+              "dst_part_node": "__ref__",
+              "dst_port": "thrust_in",
+              "dst_port_node": "__ref__",
+              "name": "turbofan_propulsion.thrustOut_to_environment.thrust_in",
+              "parent": null,
+              "source_file": null,
+              "src_part": "turbofan_propulsion",
+              "src_part_node": "__ref__",
+              "src_port": "thrustOut",
+              "src_port_node": "__ref__",
+              "type": "",
+              "value_type": "<class 'pycps_sysmlv2.definitions.connections.SysMLConnection'>"
             }
           },
-          "part_name": "TurbofanPropulsion"
-        }
+          "NodeType.Part": {},
+          "NodeType.Port": {},
+          "NodeType.Requirement": {}
+        },
+        "_redefine_defs": {
+          "NodeType.Attribute": {},
+          "NodeType.Connection": {},
+          "NodeType.Part": {},
+          "NodeType.Port": {},
+          "NodeType.Requirement": {}
+        },
+        "_redefine_refs": {
+          "NodeType.Part": {},
+          "NodeType.Port": {},
+          "NodeType.Requirement": {}
+        },
+        "_refs": {
+          "NodeType.Part": {
+            "adaptive_wing_system": {
+              "doc": null,
+              "name": "adaptive_wing_system",
+              "parent": null,
+              "ref_node": {
+                "DEF_KINDS": [
+                  "Attribute",
+                  "Part",
+                  "Port",
+                  "Requirement",
+                  "Connection"
+                ],
+                "REF_KINDS": [
+                  "Part",
+                  "Port",
+                  "Requirement"
+                ],
+                "_defs": {
+                  "NodeType.Attribute": {
+                    "aspect_ratio": {
+                      "doc": null,
+                      "name": "aspect_ratio",
+                      "parent": null,
+                      "source_file": null,
+                      "type": "__ref__",
+                      "value": 3.6,
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    },
+                    "control_authority_deg": {
+                      "doc": null,
+                      "name": "control_authority_deg",
+                      "parent": null,
+                      "source_file": null,
+                      "type": "__ref__",
+                      "value": 25,
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    },
+                    "load_factor_limit_g": {
+                      "doc": null,
+                      "name": "load_factor_limit_g",
+                      "parent": null,
+                      "source_file": null,
+                      "type": "__ref__",
+                      "value": 9,
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    },
+                    "reference_area_m2": {
+                      "doc": null,
+                      "name": "reference_area_m2",
+                      "parent": null,
+                      "source_file": null,
+                      "type": "__ref__",
+                      "value": 28.0,
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    },
+                    "span_m": {
+                      "doc": null,
+                      "name": "span_m",
+                      "parent": null,
+                      "source_file": null,
+                      "type": "__ref__",
+                      "value": 10.0,
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    }
+                  },
+                  "NodeType.Connection": {},
+                  "NodeType.Part": {},
+                  "NodeType.Port": {},
+                  "NodeType.Requirement": {}
+                },
+                "_redefine_defs": {
+                  "NodeType.Attribute": {},
+                  "NodeType.Connection": {},
+                  "NodeType.Part": {},
+                  "NodeType.Port": {},
+                  "NodeType.Requirement": {}
+                },
+                "_redefine_refs": {
+                  "NodeType.Part": {},
+                  "NodeType.Port": {},
+                  "NodeType.Requirement": {}
+                },
+                "_refs": {
+                  "NodeType.Part": {},
+                  "NodeType.Port": {
+                    "actuation_command": {
+                      "direction": "out",
+                      "doc": "Actuation commands, sent to environment to track and calculate new position",
+                      "name": "actuation_command",
+                      "parent": null,
+                      "ref_node": {
+                        "DEF_KINDS": [
+                          "Attribute",
+                          "Requirement"
+                        ],
+                        "REF_KINDS": [
+                          "Requirement"
+                        ],
+                        "_defs": {
+                          "NodeType.Attribute": {
+                            "elevator_deg": {
+                              "doc": null,
+                              "name": "elevator_deg",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "flaperon_deg": {
+                              "doc": null,
+                              "name": "flaperon_deg",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "left_aileron_deg": {
+                              "doc": null,
+                              "name": "left_aileron_deg",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "right_aileron_deg": {
+                              "doc": null,
+                              "name": "right_aileron_deg",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "rudder_deg": {
+                              "doc": null,
+                              "name": "rudder_deg",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            }
+                          },
+                          "NodeType.Requirement": {}
+                        },
+                        "_redefine_defs": {
+                          "NodeType.Attribute": {},
+                          "NodeType.Requirement": {}
+                        },
+                        "_redefine_refs": {
+                          "NodeType.Requirement": {}
+                        },
+                        "_refs": {
+                          "NodeType.Requirement": {}
+                        },
+                        "_remove_defs": {
+                          "NodeType.Attribute": [],
+                          "NodeType.Requirement": []
+                        },
+                        "_remove_refs": {
+                          "NodeType.Requirement": []
+                        },
+                        "doc": "Commanded surface deflections in degrees for co-simulation with aerodynamic models.",
+                        "name": "SurfaceActuationCommand",
+                        "parent": null,
+                        "source_file": "port_definitions.sysml",
+                        "specializes": null,
+                        "specializes_obj": null,
+                        "type": "",
+                        "value_type": "<class 'pycps_sysmlv2.definitions.port_definition.SysMLPortDefinition'>"
+                      },
+                      "source_file": null,
+                      "type": "SurfaceActuationCommand",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    },
+                    "direction_command": {
+                      "direction": "in",
+                      "doc": "Mission-computer command bus input. Desired change in speed vector",
+                      "name": "direction_command",
+                      "parent": null,
+                      "ref_node": "__ref__",
+                      "source_file": null,
+                      "type": "OrientationEuler",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    },
+                    "flight_speed": {
+                      "direction": "in",
+                      "doc": null,
+                      "name": "flight_speed",
+                      "parent": null,
+                      "ref_node": "__ref__",
+                      "source_file": null,
+                      "type": "FlightStatusPacket",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    },
+                    "liftInterface": {
+                      "direction": "out",
+                      "doc": "Tracking of lift, drag",
+                      "name": "liftInterface",
+                      "parent": null,
+                      "ref_node": {
+                        "DEF_KINDS": [
+                          "Attribute",
+                          "Requirement"
+                        ],
+                        "REF_KINDS": [
+                          "Requirement"
+                        ],
+                        "_defs": {
+                          "NodeType.Attribute": {
+                            "drag_kn": {
+                              "doc": null,
+                              "name": "drag_kn",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "lift_kn": {
+                              "doc": null,
+                              "name": "lift_kn",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "pitching_moment_knm": {
+                              "doc": null,
+                              "name": "pitching_moment_knm",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            }
+                          },
+                          "NodeType.Requirement": {}
+                        },
+                        "_redefine_defs": {
+                          "NodeType.Attribute": {},
+                          "NodeType.Requirement": {}
+                        },
+                        "_redefine_refs": {
+                          "NodeType.Requirement": {}
+                        },
+                        "_refs": {
+                          "NodeType.Requirement": {}
+                        },
+                        "_remove_defs": {
+                          "NodeType.Attribute": [],
+                          "NodeType.Requirement": []
+                        },
+                        "_remove_refs": {
+                          "NodeType.Requirement": []
+                        },
+                        "doc": "Aerodynamic state summary exported from wing solver.",
+                        "name": "LiftState",
+                        "parent": null,
+                        "source_file": "port_definitions.sysml",
+                        "specializes": null,
+                        "specializes_obj": null,
+                        "type": "",
+                        "value_type": "<class 'pycps_sysmlv2.definitions.port_definition.SysMLPortDefinition'>"
+                      },
+                      "source_file": null,
+                      "type": "LiftState",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    }
+                  },
+                  "NodeType.Requirement": {}
+                },
+                "_remove_defs": {
+                  "NodeType.Attribute": [],
+                  "NodeType.Connection": [],
+                  "NodeType.Part": [],
+                  "NodeType.Port": [],
+                  "NodeType.Requirement": []
+                },
+                "_remove_refs": {
+                  "NodeType.Part": [],
+                  "NodeType.Port": [],
+                  "NodeType.Requirement": []
+                },
+                "doc": "Leading-edge strake and cropped-delta wing sized to F-16 Block 50 geometry with 9g capability. This model includes the control system",
+                "name": "AdaptiveWingSystem",
+                "parent": null,
+                "source_file": "part_definition.sysml",
+                "specializes": null,
+                "specializes_obj": null,
+                "type": "",
+                "value_type": "<class 'pycps_sysmlv2.definitions.part_definition.SysMLPartDefinition'>"
+              },
+              "source_file": null,
+              "type": "AdaptiveWingSystem",
+              "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPartReference'>"
+            },
+            "autopilot_module": {
+              "doc": null,
+              "name": "autopilot_module",
+              "parent": null,
+              "ref_node": {
+                "DEF_KINDS": [
+                  "Attribute",
+                  "Part",
+                  "Port",
+                  "Requirement",
+                  "Connection"
+                ],
+                "REF_KINDS": [
+                  "Part",
+                  "Port",
+                  "Requirement"
+                ],
+                "_defs": {
+                  "NodeType.Attribute": {
+                    "comment": {
+                      "doc": null,
+                      "name": "comment",
+                      "parent": null,
+                      "source_file": null,
+                      "type": "__ref__",
+                      "value": "uses waypoint tracking",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    },
+                    "waypointCount": {
+                      "doc": null,
+                      "name": "waypointCount",
+                      "parent": null,
+                      "source_file": null,
+                      "type": "__ref__",
+                      "value": 10,
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    },
+                    "waypointProximity_km": {
+                      "doc": null,
+                      "name": "waypointProximity_km",
+                      "parent": null,
+                      "source_file": null,
+                      "type": "__ref__",
+                      "value": 10,
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    },
+                    "waypointX_km": {
+                      "doc": null,
+                      "name": "waypointX_km",
+                      "parent": null,
+                      "source_file": null,
+                      "type": {
+                        "doc": null,
+                        "name": "",
+                        "parent": null,
+                        "source_file": null,
+                        "string_definition": null,
+                        "type": [
+                          "Real"
+                        ],
+                        "value_type": "<class 'pycps_sysmlv2.definitions.types.SysMLType'>"
+                      },
+                      "value": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                      ],
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    },
+                    "waypointY_km": {
+                      "doc": null,
+                      "name": "waypointY_km",
+                      "parent": null,
+                      "source_file": null,
+                      "type": "__ref__",
+                      "value": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                      ],
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    },
+                    "waypointZ_km": {
+                      "doc": null,
+                      "name": "waypointZ_km",
+                      "parent": null,
+                      "source_file": null,
+                      "type": "__ref__",
+                      "value": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                      ],
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    }
+                  },
+                  "NodeType.Connection": {},
+                  "NodeType.Part": {},
+                  "NodeType.Port": {},
+                  "NodeType.Requirement": {}
+                },
+                "_redefine_defs": {
+                  "NodeType.Attribute": {},
+                  "NodeType.Connection": {},
+                  "NodeType.Part": {},
+                  "NodeType.Port": {},
+                  "NodeType.Requirement": {}
+                },
+                "_redefine_refs": {
+                  "NodeType.Part": {},
+                  "NodeType.Port": {},
+                  "NodeType.Requirement": {}
+                },
+                "_refs": {
+                  "NodeType.Part": {},
+                  "NodeType.Port": {
+                    "autopilotCmd": {
+                      "direction": "out",
+                      "doc": "HOTAS-equivalent command stream for mission computer blending.",
+                      "name": "autopilotCmd",
+                      "parent": null,
+                      "ref_node": "__ref__",
+                      "source_file": null,
+                      "type": "PilotCommand",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    },
+                    "currentLocation": {
+                      "direction": "in",
+                      "doc": "Current local position from sensors",
+                      "name": "currentLocation",
+                      "parent": null,
+                      "ref_node": "__ref__",
+                      "source_file": null,
+                      "type": "PositionXYZ",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    },
+                    "currentOrientation": {
+                      "direction": "in",
+                      "doc": "Current attitude from sensors.",
+                      "name": "currentOrientation",
+                      "parent": null,
+                      "ref_node": "__ref__",
+                      "source_file": null,
+                      "type": "OrientationEuler",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    },
+                    "feedbackBus": {
+                      "direction": "in",
+                      "doc": "Mission-computer flight status back into autopilot.",
+                      "name": "feedbackBus",
+                      "parent": null,
+                      "ref_node": "__ref__",
+                      "source_file": null,
+                      "type": "FlightStatusPacket",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    },
+                    "missionStatus": {
+                      "direction": "out",
+                      "doc": "Waypoint progression for logging and verification.",
+                      "name": "missionStatus",
+                      "parent": null,
+                      "ref_node": "__ref__",
+                      "source_file": null,
+                      "type": "MissionStatus",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    }
+                  },
+                  "NodeType.Requirement": {}
+                },
+                "_remove_defs": {
+                  "NodeType.Attribute": [],
+                  "NodeType.Connection": [],
+                  "NodeType.Part": [],
+                  "NodeType.Port": [],
+                  "NodeType.Requirement": []
+                },
+                "_remove_refs": {
+                  "NodeType.Part": [],
+                  "NodeType.Port": [],
+                  "NodeType.Requirement": []
+                },
+                "doc": "F-16 autopilot, takes in sensor data and translates it into a equivalent hotas command.",
+                "name": "AutopilotModule",
+                "parent": null,
+                "source_file": "part_definition.sysml",
+                "specializes": null,
+                "specializes_obj": null,
+                "type": "",
+                "value_type": "<class 'pycps_sysmlv2.definitions.part_definition.SysMLPartDefinition'>"
+              },
+              "source_file": null,
+              "type": "AutopilotModule",
+              "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPartReference'>"
+            },
+            "composite_airframe": {
+              "doc": null,
+              "name": "composite_airframe",
+              "parent": null,
+              "ref_node": {
+                "DEF_KINDS": [
+                  "Attribute",
+                  "Part",
+                  "Port",
+                  "Requirement",
+                  "Connection"
+                ],
+                "REF_KINDS": [
+                  "Part",
+                  "Port",
+                  "Requirement"
+                ],
+                "_defs": {
+                  "NodeType.Attribute": {
+                    "empty_weight_kg": {
+                      "doc": null,
+                      "name": "empty_weight_kg",
+                      "parent": null,
+                      "source_file": null,
+                      "type": "__ref__",
+                      "value": 8573,
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    },
+                    "fuselage_width_m": {
+                      "doc": null,
+                      "name": "fuselage_width_m",
+                      "parent": null,
+                      "source_file": null,
+                      "type": "__ref__",
+                      "value": 3.0,
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    },
+                    "hardpoint_count": {
+                      "doc": null,
+                      "name": "hardpoint_count",
+                      "parent": null,
+                      "source_file": null,
+                      "type": "__ref__",
+                      "value": 9,
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    },
+                    "length_m": {
+                      "doc": null,
+                      "name": "length_m",
+                      "parent": null,
+                      "source_file": null,
+                      "type": "__ref__",
+                      "value": 15.0,
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    },
+                    "payload_capacity_kg": {
+                      "doc": null,
+                      "name": "payload_capacity_kg",
+                      "parent": null,
+                      "source_file": null,
+                      "type": "__ref__",
+                      "value": 7700,
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    },
+                    "wingspan_m": {
+                      "doc": null,
+                      "name": "wingspan_m",
+                      "parent": null,
+                      "source_file": null,
+                      "type": "__ref__",
+                      "value": 10.0,
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    }
+                  },
+                  "NodeType.Connection": {},
+                  "NodeType.Part": {},
+                  "NodeType.Port": {},
+                  "NodeType.Requirement": {}
+                },
+                "_redefine_defs": {
+                  "NodeType.Attribute": {},
+                  "NodeType.Connection": {},
+                  "NodeType.Part": {},
+                  "NodeType.Port": {},
+                  "NodeType.Requirement": {}
+                },
+                "_redefine_refs": {
+                  "NodeType.Part": {},
+                  "NodeType.Port": {},
+                  "NodeType.Requirement": {}
+                },
+                "_refs": {
+                  "NodeType.Part": {},
+                  "NodeType.Port": {},
+                  "NodeType.Requirement": {}
+                },
+                "_remove_defs": {
+                  "NodeType.Attribute": [],
+                  "NodeType.Connection": [],
+                  "NodeType.Part": [],
+                  "NodeType.Port": [],
+                  "NodeType.Requirement": []
+                },
+                "_remove_refs": {
+                  "NodeType.Part": [],
+                  "NodeType.Port": [],
+                  "NodeType.Requirement": []
+                },
+                "doc": "F-16 aluminum/composite fuselage sized for high-supersonic operations with dorsal spine for avionics.",
+                "name": "CompositeAirframe",
+                "parent": null,
+                "source_file": "part_definition.sysml",
+                "specializes": null,
+                "specializes_obj": null,
+                "type": "",
+                "value_type": "<class 'pycps_sysmlv2.definitions.part_definition.SysMLPartDefinition'>"
+              },
+              "source_file": null,
+              "type": "CompositeAirframe",
+              "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPartReference'>"
+            },
+            "control_interface": {
+              "doc": null,
+              "name": "control_interface",
+              "parent": null,
+              "ref_node": {
+                "DEF_KINDS": [
+                  "Attribute",
+                  "Part",
+                  "Port",
+                  "Requirement",
+                  "Connection"
+                ],
+                "REF_KINDS": [
+                  "Part",
+                  "Port",
+                  "Requirement"
+                ],
+                "_defs": {
+                  "NodeType.Attribute": {
+                    "input_scheme": {
+                      "doc": null,
+                      "name": "input_scheme",
+                      "parent": null,
+                      "source_file": null,
+                      "type": {
+                        "doc": null,
+                        "name": "",
+                        "parent": null,
+                        "source_file": null,
+                        "string_definition": null,
+                        "type": "String",
+                        "value_type": "<class 'pycps_sysmlv2.definitions.types.SysMLType'>"
+                      },
+                      "value": "HOTAS",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    },
+                    "telemetry_rate_hz": {
+                      "doc": null,
+                      "name": "telemetry_rate_hz",
+                      "parent": null,
+                      "source_file": null,
+                      "type": "__ref__",
+                      "value": 120,
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    },
+                    "useBridgeInput": {
+                      "doc": null,
+                      "name": "useBridgeInput",
+                      "parent": null,
+                      "source_file": null,
+                      "type": {
+                        "doc": null,
+                        "name": "",
+                        "parent": null,
+                        "source_file": null,
+                        "string_definition": null,
+                        "type": "Boolean",
+                        "value_type": "<class 'pycps_sysmlv2.definitions.types.SysMLType'>"
+                      },
+                      "value": false,
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    }
+                  },
+                  "NodeType.Connection": {},
+                  "NodeType.Part": {},
+                  "NodeType.Port": {},
+                  "NodeType.Requirement": {}
+                },
+                "_redefine_defs": {
+                  "NodeType.Attribute": {},
+                  "NodeType.Connection": {},
+                  "NodeType.Part": {},
+                  "NodeType.Port": {},
+                  "NodeType.Requirement": {}
+                },
+                "_redefine_refs": {
+                  "NodeType.Part": {},
+                  "NodeType.Port": {},
+                  "NodeType.Requirement": {}
+                },
+                "_refs": {
+                  "NodeType.Part": {},
+                  "NodeType.Port": {
+                    "bridgeInput": {
+                      "direction": "in",
+                      "doc": "External pilot command provided by an interactive bridge/frontend adapter.",
+                      "name": "bridgeInput",
+                      "parent": null,
+                      "ref_node": {
+                        "DEF_KINDS": [
+                          "Attribute",
+                          "Requirement"
+                        ],
+                        "REF_KINDS": [
+                          "Requirement"
+                        ],
+                        "_defs": {
+                          "NodeType.Attribute": {
+                            "button_mask": {
+                              "doc": null,
+                              "name": "button_mask",
+                              "parent": null,
+                              "source_file": null,
+                              "type": {
+                                "doc": null,
+                                "name": "",
+                                "parent": null,
+                                "source_file": null,
+                                "string_definition": null,
+                                "type": "Integer",
+                                "value_type": "<class 'pycps_sysmlv2.definitions.types.SysMLType'>"
+                              },
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "hat_x": {
+                              "doc": null,
+                              "name": "hat_x",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "hat_y": {
+                              "doc": null,
+                              "name": "hat_y",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "mode_switch": {
+                              "doc": null,
+                              "name": "mode_switch",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "reserved": {
+                              "doc": null,
+                              "name": "reserved",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "rudder_norm": {
+                              "doc": null,
+                              "name": "rudder_norm",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "stick_pitch_norm": {
+                              "doc": null,
+                              "name": "stick_pitch_norm",
+                              "parent": null,
+                              "source_file": null,
+                              "type": {
+                                "doc": null,
+                                "name": "",
+                                "parent": null,
+                                "source_file": null,
+                                "string_definition": null,
+                                "type": "Real",
+                                "value_type": "<class 'pycps_sysmlv2.definitions.types.SysMLType'>"
+                              },
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "stick_roll_norm": {
+                              "doc": null,
+                              "name": "stick_roll_norm",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "throttle_aux_norm": {
+                              "doc": null,
+                              "name": "throttle_aux_norm",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "throttle_norm": {
+                              "doc": null,
+                              "name": "throttle_norm",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            }
+                          },
+                          "NodeType.Requirement": {}
+                        },
+                        "_redefine_defs": {
+                          "NodeType.Attribute": {},
+                          "NodeType.Requirement": {}
+                        },
+                        "_redefine_refs": {
+                          "NodeType.Requirement": {}
+                        },
+                        "_refs": {
+                          "NodeType.Requirement": {}
+                        },
+                        "_remove_defs": {
+                          "NodeType.Attribute": [],
+                          "NodeType.Requirement": []
+                        },
+                        "_remove_refs": {
+                          "NodeType.Requirement": []
+                        },
+                        "doc": "HOTAS-style control payload shared across control surfaces and mission computer consumers.",
+                        "name": "PilotCommand",
+                        "parent": null,
+                        "source_file": "port_definitions.sysml",
+                        "specializes": null,
+                        "specializes_obj": null,
+                        "type": "",
+                        "value_type": "<class 'pycps_sysmlv2.definitions.port_definition.SysMLPortDefinition'>"
+                      },
+                      "source_file": null,
+                      "type": "PilotCommand",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    },
+                    "pilotCommand": {
+                      "direction": "out",
+                      "doc": "HOTAS-control bundle forwarded for mission computer sensor fusion.",
+                      "name": "pilotCommand",
+                      "parent": null,
+                      "ref_node": "__ref__",
+                      "source_file": null,
+                      "type": "PilotCommand",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    }
+                  },
+                  "NodeType.Requirement": {}
+                },
+                "_remove_defs": {
+                  "NodeType.Attribute": [],
+                  "NodeType.Connection": [],
+                  "NodeType.Part": [],
+                  "NodeType.Port": [],
+                  "NodeType.Requirement": []
+                },
+                "_remove_refs": {
+                  "NodeType.Part": [],
+                  "NodeType.Port": [],
+                  "NodeType.Requirement": []
+                },
+                "doc": "F-16 HOTAS + side-stick interface for pilot inputs and trim switches.",
+                "name": "ControlInterface",
+                "parent": null,
+                "source_file": "part_definition.sysml",
+                "specializes": null,
+                "specializes_obj": null,
+                "type": "",
+                "value_type": "<class 'pycps_sysmlv2.definitions.part_definition.SysMLPartDefinition'>"
+              },
+              "source_file": null,
+              "type": "ControlInterface",
+              "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPartReference'>"
+            },
+            "environment": {
+              "doc": null,
+              "name": "environment",
+              "parent": null,
+              "ref_node": {
+                "DEF_KINDS": [
+                  "Attribute",
+                  "Part",
+                  "Port",
+                  "Requirement",
+                  "Connection"
+                ],
+                "REF_KINDS": [
+                  "Part",
+                  "Port",
+                  "Requirement"
+                ],
+                "_defs": {
+                  "NodeType.Attribute": {},
+                  "NodeType.Connection": {},
+                  "NodeType.Part": {},
+                  "NodeType.Port": {},
+                  "NodeType.Requirement": {}
+                },
+                "_redefine_defs": {
+                  "NodeType.Attribute": {},
+                  "NodeType.Connection": {},
+                  "NodeType.Part": {},
+                  "NodeType.Port": {},
+                  "NodeType.Requirement": {}
+                },
+                "_redefine_refs": {
+                  "NodeType.Part": {},
+                  "NodeType.Port": {},
+                  "NodeType.Requirement": {}
+                },
+                "_refs": {
+                  "NodeType.Part": {},
+                  "NodeType.Port": {
+                    "actuation_command": {
+                      "direction": "in",
+                      "doc": "Reads the actuation and thrust commands to calculate the position, rotation and velocities",
+                      "name": "actuation_command",
+                      "parent": null,
+                      "ref_node": "__ref__",
+                      "source_file": null,
+                      "type": "SurfaceActuationCommand",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    },
+                    "direction_command": {
+                      "direction": "in",
+                      "doc": null,
+                      "name": "direction_command",
+                      "parent": null,
+                      "ref_node": "__ref__",
+                      "source_file": null,
+                      "type": "OrientationEuler",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    },
+                    "flight_status": {
+                      "direction": "out",
+                      "doc": null,
+                      "name": "flight_status",
+                      "parent": null,
+                      "ref_node": "__ref__",
+                      "source_file": null,
+                      "type": "FlightStatusPacket",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    },
+                    "lift": {
+                      "direction": "in",
+                      "doc": null,
+                      "name": "lift",
+                      "parent": null,
+                      "ref_node": "__ref__",
+                      "source_file": null,
+                      "type": "LiftState",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    },
+                    "location": {
+                      "direction": "out",
+                      "doc": null,
+                      "name": "location",
+                      "parent": null,
+                      "ref_node": "__ref__",
+                      "source_file": null,
+                      "type": "PositionXYZ",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    },
+                    "orientation": {
+                      "direction": "out",
+                      "doc": "Feedback for simulated sensors",
+                      "name": "orientation",
+                      "parent": null,
+                      "ref_node": "__ref__",
+                      "source_file": null,
+                      "type": "OrientationEuler",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    },
+                    "thrust_in": {
+                      "direction": "in",
+                      "doc": null,
+                      "name": "thrust_in",
+                      "parent": null,
+                      "ref_node": "__ref__",
+                      "source_file": null,
+                      "type": "ThrustState",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    }
+                  },
+                  "NodeType.Requirement": {}
+                },
+                "_remove_defs": {
+                  "NodeType.Attribute": [],
+                  "NodeType.Connection": [],
+                  "NodeType.Part": [],
+                  "NodeType.Port": [],
+                  "NodeType.Requirement": []
+                },
+                "_remove_refs": {
+                  "NodeType.Part": [],
+                  "NodeType.Port": [],
+                  "NodeType.Requirement": []
+                },
+                "doc": "Tracking position and velocities of the aircraft and feeds the sensors",
+                "name": "Environment",
+                "parent": null,
+                "source_file": "part_definition.sysml",
+                "specializes": null,
+                "specializes_obj": null,
+                "type": "",
+                "value_type": "<class 'pycps_sysmlv2.definitions.part_definition.SysMLPartDefinition'>"
+              },
+              "source_file": null,
+              "type": "Environment",
+              "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPartReference'>"
+            },
+            "flightgear_bridge": {
+              "doc": null,
+              "name": "flightgear_bridge",
+              "parent": null,
+              "ref_node": {
+                "DEF_KINDS": [
+                  "Attribute",
+                  "Part",
+                  "Port",
+                  "Requirement",
+                  "Connection"
+                ],
+                "REF_KINDS": [
+                  "Part",
+                  "Port",
+                  "Requirement"
+                ],
+                "_defs": {
+                  "NodeType.Attribute": {
+                    "control_port": {
+                      "doc": null,
+                      "name": "control_port",
+                      "parent": null,
+                      "source_file": null,
+                      "type": "__ref__",
+                      "value": 5502,
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    },
+                    "reference_altitude_m": {
+                      "doc": null,
+                      "name": "reference_altitude_m",
+                      "parent": null,
+                      "source_file": null,
+                      "type": "__ref__",
+                      "value": 0.0,
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    },
+                    "reference_latitude_deg": {
+                      "doc": null,
+                      "name": "reference_latitude_deg",
+                      "parent": null,
+                      "source_file": null,
+                      "type": "__ref__",
+                      "value": 0.0,
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    },
+                    "reference_longitude_deg": {
+                      "doc": null,
+                      "name": "reference_longitude_deg",
+                      "parent": null,
+                      "source_file": null,
+                      "type": "__ref__",
+                      "value": 0.0,
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    },
+                    "remote_host": {
+                      "doc": null,
+                      "name": "remote_host",
+                      "parent": null,
+                      "source_file": null,
+                      "type": "__ref__",
+                      "value": "127.0.0.1",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    },
+                    "telemetry_port": {
+                      "doc": null,
+                      "name": "telemetry_port",
+                      "parent": null,
+                      "source_file": null,
+                      "type": "__ref__",
+                      "value": 5501,
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    },
+                    "transport": {
+                      "doc": null,
+                      "name": "transport",
+                      "parent": null,
+                      "source_file": null,
+                      "type": "__ref__",
+                      "value": "FlightGearGeneric",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    }
+                  },
+                  "NodeType.Connection": {},
+                  "NodeType.Part": {},
+                  "NodeType.Port": {},
+                  "NodeType.Requirement": {}
+                },
+                "_redefine_defs": {
+                  "NodeType.Attribute": {},
+                  "NodeType.Connection": {},
+                  "NodeType.Part": {},
+                  "NodeType.Port": {},
+                  "NodeType.Requirement": {}
+                },
+                "_redefine_refs": {
+                  "NodeType.Part": {},
+                  "NodeType.Port": {},
+                  "NodeType.Requirement": {}
+                },
+                "_refs": {
+                  "NodeType.Part": {},
+                  "NodeType.Port": {
+                    "flightStatus": {
+                      "direction": "in",
+                      "doc": "Flight status exported for overlays and diagnostics.",
+                      "name": "flightStatus",
+                      "parent": null,
+                      "ref_node": {
+                        "DEF_KINDS": [
+                          "Attribute",
+                          "Requirement"
+                        ],
+                        "REF_KINDS": [
+                          "Requirement"
+                        ],
+                        "_defs": {
+                          "NodeType.Attribute": {
+                            "airspeed_mps": {
+                              "doc": null,
+                              "name": "airspeed_mps",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "angle_of_attack_deg": {
+                              "doc": null,
+                              "name": "angle_of_attack_deg",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "climb_rate": {
+                              "doc": null,
+                              "name": "climb_rate",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "energy_state_norm": {
+                              "doc": null,
+                              "name": "energy_state_norm",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "health_code": {
+                              "doc": null,
+                              "name": "health_code",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            }
+                          },
+                          "NodeType.Requirement": {}
+                        },
+                        "_redefine_defs": {
+                          "NodeType.Attribute": {},
+                          "NodeType.Requirement": {}
+                        },
+                        "_redefine_refs": {
+                          "NodeType.Requirement": {}
+                        },
+                        "_refs": {
+                          "NodeType.Requirement": {}
+                        },
+                        "_remove_defs": {
+                          "NodeType.Attribute": [],
+                          "NodeType.Requirement": []
+                        },
+                        "_remove_refs": {
+                          "NodeType.Requirement": []
+                        },
+                        "doc": "Mission computer status feedback consumed by autonomy and analysis models.",
+                        "name": "FlightStatusPacket",
+                        "parent": null,
+                        "source_file": "port_definitions.sysml",
+                        "specializes": null,
+                        "specializes_obj": null,
+                        "type": "",
+                        "value_type": "<class 'pycps_sysmlv2.definitions.port_definition.SysMLPortDefinition'>"
+                      },
+                      "source_file": null,
+                      "type": "FlightStatusPacket",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    },
+                    "missionStatus": {
+                      "direction": "in",
+                      "doc": "Mission/autopilot status exported for overlays and diagnostics.",
+                      "name": "missionStatus",
+                      "parent": null,
+                      "ref_node": {
+                        "DEF_KINDS": [
+                          "Attribute",
+                          "Requirement"
+                        ],
+                        "REF_KINDS": [
+                          "Requirement"
+                        ],
+                        "_defs": {
+                          "NodeType.Attribute": {
+                            "arrived": {
+                              "doc": null,
+                              "name": "arrived",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "complete": {
+                              "doc": null,
+                              "name": "complete",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "distance_to_waypoint_km": {
+                              "doc": null,
+                              "name": "distance_to_waypoint_km",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "total_waypoints": {
+                              "doc": null,
+                              "name": "total_waypoints",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "waypoint_index": {
+                              "doc": null,
+                              "name": "waypoint_index",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            }
+                          },
+                          "NodeType.Requirement": {}
+                        },
+                        "_redefine_defs": {
+                          "NodeType.Attribute": {},
+                          "NodeType.Requirement": {}
+                        },
+                        "_redefine_refs": {
+                          "NodeType.Requirement": {}
+                        },
+                        "_refs": {
+                          "NodeType.Requirement": {}
+                        },
+                        "_remove_defs": {
+                          "NodeType.Attribute": [],
+                          "NodeType.Requirement": []
+                        },
+                        "_remove_refs": {
+                          "NodeType.Requirement": []
+                        },
+                        "doc": "Waypoint-tracking status produced by the autopilot for logging and requirement evaluation.",
+                        "name": "MissionStatus",
+                        "parent": null,
+                        "source_file": "port_definitions.sysml",
+                        "specializes": null,
+                        "specializes_obj": null,
+                        "type": "",
+                        "value_type": "<class 'pycps_sysmlv2.definitions.port_definition.SysMLPortDefinition'>"
+                      },
+                      "source_file": null,
+                      "type": "MissionStatus",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    },
+                    "pilotCommand": {
+                      "direction": "out",
+                      "doc": "Pilot command returned from the interactive frontend into the vehicle control path.",
+                      "name": "pilotCommand",
+                      "parent": null,
+                      "ref_node": "__ref__",
+                      "source_file": null,
+                      "type": "PilotCommand",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    },
+                    "stateOrientation": {
+                      "direction": "in",
+                      "doc": "Aircraft attitude from the simulated environment.",
+                      "name": "stateOrientation",
+                      "parent": null,
+                      "ref_node": {
+                        "DEF_KINDS": [
+                          "Attribute",
+                          "Requirement"
+                        ],
+                        "REF_KINDS": [
+                          "Requirement"
+                        ],
+                        "_defs": {
+                          "NodeType.Attribute": {
+                            "pitch_deg": {
+                              "doc": null,
+                              "name": "pitch_deg",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "roll_deg": {
+                              "doc": null,
+                              "name": "roll_deg",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "yaw_deg": {
+                              "doc": null,
+                              "name": "yaw_deg",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            }
+                          },
+                          "NodeType.Requirement": {}
+                        },
+                        "_redefine_defs": {
+                          "NodeType.Attribute": {},
+                          "NodeType.Requirement": {}
+                        },
+                        "_redefine_refs": {
+                          "NodeType.Requirement": {}
+                        },
+                        "_refs": {
+                          "NodeType.Requirement": {}
+                        },
+                        "_remove_defs": {
+                          "NodeType.Attribute": [],
+                          "NodeType.Requirement": []
+                        },
+                        "_remove_refs": {
+                          "NodeType.Requirement": []
+                        },
+                        "doc": "Air vehicle orientation expressed as Euler angles in degrees.",
+                        "name": "OrientationEuler",
+                        "parent": null,
+                        "source_file": "port_definitions.sysml",
+                        "specializes": null,
+                        "specializes_obj": null,
+                        "type": "",
+                        "value_type": "<class 'pycps_sysmlv2.definitions.port_definition.SysMLPortDefinition'>"
+                      },
+                      "source_file": null,
+                      "type": "OrientationEuler",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    },
+                    "statePosition": {
+                      "direction": "in",
+                      "doc": "Aircraft position from the simulated environment.",
+                      "name": "statePosition",
+                      "parent": null,
+                      "ref_node": {
+                        "DEF_KINDS": [
+                          "Attribute",
+                          "Requirement"
+                        ],
+                        "REF_KINDS": [
+                          "Requirement"
+                        ],
+                        "_defs": {
+                          "NodeType.Attribute": {
+                            "x_km": {
+                              "doc": null,
+                              "name": "x_km",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "y_km": {
+                              "doc": null,
+                              "name": "y_km",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "z_km": {
+                              "doc": null,
+                              "name": "z_km",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            }
+                          },
+                          "NodeType.Requirement": {}
+                        },
+                        "_redefine_defs": {
+                          "NodeType.Attribute": {},
+                          "NodeType.Requirement": {}
+                        },
+                        "_redefine_refs": {
+                          "NodeType.Requirement": {}
+                        },
+                        "_refs": {
+                          "NodeType.Requirement": {}
+                        },
+                        "_remove_defs": {
+                          "NodeType.Attribute": [],
+                          "NodeType.Requirement": []
+                        },
+                        "_remove_refs": {
+                          "NodeType.Requirement": []
+                        },
+                        "doc": "Local navigation frame expressed in kilometers (x=North, y=East, z=Up).",
+                        "name": "PositionXYZ",
+                        "parent": null,
+                        "source_file": "port_definitions.sysml",
+                        "specializes": null,
+                        "specializes_obj": null,
+                        "type": "",
+                        "value_type": "<class 'pycps_sysmlv2.definitions.port_definition.SysMLPortDefinition'>"
+                      },
+                      "source_file": null,
+                      "type": "PositionXYZ",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    }
+                  },
+                  "NodeType.Requirement": {}
+                },
+                "_remove_defs": {
+                  "NodeType.Attribute": [],
+                  "NodeType.Connection": [],
+                  "NodeType.Part": [],
+                  "NodeType.Port": [],
+                  "NodeType.Requirement": []
+                },
+                "_remove_refs": {
+                  "NodeType.Part": [],
+                  "NodeType.Port": [],
+                  "NodeType.Requirement": []
+                },
+                "doc": "Adapter component for visual/frontend coupling to FlightGear using generic socket communication.",
+                "name": "FlightGearBridge",
+                "parent": null,
+                "source_file": "part_definition.sysml",
+                "specializes": null,
+                "specializes_obj": null,
+                "type": "",
+                "value_type": "<class 'pycps_sysmlv2.definitions.part_definition.SysMLPartDefinition'>"
+              },
+              "source_file": null,
+              "type": "FlightGearBridge",
+              "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPartReference'>"
+            },
+            "fuel_system": {
+              "doc": null,
+              "name": "fuel_system",
+              "parent": null,
+              "ref_node": {
+                "DEF_KINDS": [
+                  "Attribute",
+                  "Part",
+                  "Port",
+                  "Requirement",
+                  "Connection"
+                ],
+                "REF_KINDS": [
+                  "Part",
+                  "Port",
+                  "Requirement"
+                ],
+                "_defs": {
+                  "NodeType.Attribute": {
+                    "fuel_capacity_kg": "__ref__",
+                    "reserve_fraction": {
+                      "doc": null,
+                      "name": "reserve_fraction",
+                      "parent": null,
+                      "source_file": null,
+                      "type": "__ref__",
+                      "value": 0.08,
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    }
+                  },
+                  "NodeType.Connection": {},
+                  "NodeType.Part": {},
+                  "NodeType.Port": {},
+                  "NodeType.Requirement": {}
+                },
+                "_redefine_defs": {
+                  "NodeType.Attribute": {},
+                  "NodeType.Connection": {},
+                  "NodeType.Part": {},
+                  "NodeType.Port": {},
+                  "NodeType.Requirement": {}
+                },
+                "_redefine_refs": {
+                  "NodeType.Part": {},
+                  "NodeType.Port": {},
+                  "NodeType.Requirement": {}
+                },
+                "_refs": {
+                  "NodeType.Part": {},
+                  "NodeType.Port": {
+                    "fuelState": {
+                      "direction": "out",
+                      "doc": "Telemetry describing remaining fuel mass/normalized level.",
+                      "name": "fuelState",
+                      "parent": null,
+                      "ref_node": "__ref__",
+                      "source_file": null,
+                      "type": "FuelLevelState",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    },
+                    "fuel_consumption_rate": {
+                      "direction": "in",
+                      "doc": "Propulsion-requested fuel mass flow entering storage manager.",
+                      "name": "fuel_consumption_rate",
+                      "parent": null,
+                      "ref_node": "__ref__",
+                      "source_file": null,
+                      "type": "FuelConsumptionRate",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    }
+                  },
+                  "NodeType.Requirement": {}
+                },
+                "_remove_defs": {
+                  "NodeType.Attribute": [],
+                  "NodeType.Connection": [],
+                  "NodeType.Part": [],
+                  "NodeType.Port": [],
+                  "NodeType.Requirement": []
+                },
+                "_remove_refs": {
+                  "NodeType.Part": [],
+                  "NodeType.Port": [],
+                  "NodeType.Requirement": []
+                },
+                "doc": "Internal + conformal fuel storage management with transfer pumps feeding engine feed tanks.",
+                "name": "FuelSystem",
+                "parent": null,
+                "source_file": "part_definition.sysml",
+                "specializes": null,
+                "specializes_obj": null,
+                "type": "",
+                "value_type": "<class 'pycps_sysmlv2.definitions.part_definition.SysMLPartDefinition'>"
+              },
+              "source_file": null,
+              "type": "FuelSystem",
+              "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPartReference'>"
+            },
+            "input_output": {
+              "doc": null,
+              "name": "input_output",
+              "parent": null,
+              "ref_node": {
+                "DEF_KINDS": [
+                  "Attribute",
+                  "Part",
+                  "Port",
+                  "Requirement",
+                  "Connection"
+                ],
+                "REF_KINDS": [
+                  "Part",
+                  "Port",
+                  "Requirement"
+                ],
+                "_defs": {
+                  "NodeType.Attribute": {},
+                  "NodeType.Connection": {},
+                  "NodeType.Part": {},
+                  "NodeType.Port": {},
+                  "NodeType.Requirement": {}
+                },
+                "_redefine_defs": {
+                  "NodeType.Attribute": {},
+                  "NodeType.Connection": {},
+                  "NodeType.Part": {},
+                  "NodeType.Port": {},
+                  "NodeType.Requirement": {}
+                },
+                "_redefine_refs": {
+                  "NodeType.Part": {},
+                  "NodeType.Port": {},
+                  "NodeType.Requirement": {}
+                },
+                "_refs": {
+                  "NodeType.Part": {},
+                  "NodeType.Port": {
+                    "autopilotCmd": {
+                      "direction": "in",
+                      "doc": null,
+                      "name": "autopilotCmd",
+                      "parent": null,
+                      "ref_node": "__ref__",
+                      "source_file": null,
+                      "type": "PilotCommand",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    },
+                    "flightStatus": {
+                      "direction": "in",
+                      "doc": null,
+                      "name": "flightStatus",
+                      "parent": null,
+                      "ref_node": "__ref__",
+                      "source_file": null,
+                      "type": "FlightStatusPacket",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    },
+                    "locationXYZ": {
+                      "direction": "in",
+                      "doc": null,
+                      "name": "locationXYZ",
+                      "parent": null,
+                      "ref_node": "__ref__",
+                      "source_file": null,
+                      "type": "PositionXYZ",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    },
+                    "missionStatus": {
+                      "direction": "in",
+                      "doc": null,
+                      "name": "missionStatus",
+                      "parent": null,
+                      "ref_node": "__ref__",
+                      "source_file": null,
+                      "type": "MissionStatus",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    },
+                    "orientation": {
+                      "direction": "in",
+                      "doc": null,
+                      "name": "orientation",
+                      "parent": null,
+                      "ref_node": "__ref__",
+                      "source_file": null,
+                      "type": "OrientationEuler",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    }
+                  },
+                  "NodeType.Requirement": {}
+                },
+                "_remove_defs": {
+                  "NodeType.Attribute": [],
+                  "NodeType.Connection": [],
+                  "NodeType.Part": [],
+                  "NodeType.Port": [],
+                  "NodeType.Requirement": []
+                },
+                "_remove_refs": {
+                  "NodeType.Part": [],
+                  "NodeType.Port": [],
+                  "NodeType.Requirement": []
+                },
+                "doc": "Simulation sink for debugging and recording mission/autopilot telemetry.",
+                "name": "InputOutput",
+                "parent": null,
+                "source_file": "part_definition.sysml",
+                "specializes": null,
+                "specializes_obj": null,
+                "type": "",
+                "value_type": "<class 'pycps_sysmlv2.definitions.part_definition.SysMLPartDefinition'>"
+              },
+              "source_file": null,
+              "type": "InputOutput",
+              "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPartReference'>"
+            },
+            "mission_computer": {
+              "doc": null,
+              "name": "mission_computer",
+              "parent": null,
+              "ref_node": {
+                "DEF_KINDS": [
+                  "Attribute",
+                  "Part",
+                  "Port",
+                  "Requirement",
+                  "Connection"
+                ],
+                "REF_KINDS": [
+                  "Part",
+                  "Port",
+                  "Requirement"
+                ],
+                "_defs": {
+                  "NodeType.Attribute": {},
+                  "NodeType.Connection": {},
+                  "NodeType.Part": {},
+                  "NodeType.Port": {},
+                  "NodeType.Requirement": {}
+                },
+                "_redefine_defs": {
+                  "NodeType.Attribute": {},
+                  "NodeType.Connection": {},
+                  "NodeType.Part": {},
+                  "NodeType.Port": {},
+                  "NodeType.Requirement": {}
+                },
+                "_redefine_refs": {
+                  "NodeType.Part": {},
+                  "NodeType.Port": {},
+                  "NodeType.Requirement": {}
+                },
+                "_refs": {
+                  "NodeType.Part": {},
+                  "NodeType.Port": {
+                    "autopilotInput": {
+                      "direction": "in",
+                      "doc": "Autopilot command bundle using same HOTAS signal structure.",
+                      "name": "autopilotInput",
+                      "parent": null,
+                      "ref_node": "__ref__",
+                      "source_file": null,
+                      "type": "PilotCommand",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    },
+                    "direction_command": {
+                      "direction": "out",
+                      "doc": "Command how to alter the current velocity vector, pith, yaw, roll",
+                      "name": "direction_command",
+                      "parent": null,
+                      "ref_node": "__ref__",
+                      "source_file": null,
+                      "type": "OrientationEuler",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    },
+                    "engineThrottle": {
+                      "direction": "out",
+                      "doc": "Structured throttle/fuel enable command to propulsion.",
+                      "name": "engineThrottle",
+                      "parent": null,
+                      "ref_node": "__ref__",
+                      "source_file": null,
+                      "type": "ThrottleCommand",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    },
+                    "fuelStatus": {
+                      "direction": "in",
+                      "doc": "Fuel telemetry used for command blending and power limiting.",
+                      "name": "fuelStatus",
+                      "parent": null,
+                      "ref_node": {
+                        "DEF_KINDS": [
+                          "Attribute",
+                          "Requirement"
+                        ],
+                        "REF_KINDS": [
+                          "Requirement"
+                        ],
+                        "_defs": {
+                          "NodeType.Attribute": {
+                            "fuel_level_norm": {
+                              "doc": null,
+                              "name": "fuel_level_norm",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "fuel_remaining_kg": {
+                              "doc": null,
+                              "name": "fuel_remaining_kg",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "fuel_starved": {
+                              "doc": null,
+                              "name": "fuel_starved",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            }
+                          },
+                          "NodeType.Requirement": {}
+                        },
+                        "_redefine_defs": {
+                          "NodeType.Attribute": {},
+                          "NodeType.Requirement": {}
+                        },
+                        "_redefine_refs": {
+                          "NodeType.Requirement": {}
+                        },
+                        "_refs": {
+                          "NodeType.Requirement": {}
+                        },
+                        "_remove_defs": {
+                          "NodeType.Attribute": [],
+                          "NodeType.Requirement": []
+                        },
+                        "_remove_refs": {
+                          "NodeType.Requirement": []
+                        },
+                        "doc": "Remaining fuel mass and normalized level for availability tracking.",
+                        "name": "FuelLevelState",
+                        "parent": null,
+                        "source_file": "port_definitions.sysml",
+                        "specializes": null,
+                        "specializes_obj": null,
+                        "type": "",
+                        "value_type": "<class 'pycps_sysmlv2.definitions.port_definition.SysMLPortDefinition'>"
+                      },
+                      "source_file": null,
+                      "type": "FuelLevelState",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    },
+                    "manualInput": {
+                      "direction": "in",
+                      "doc": "Manual HOTAS command bundle from cockpit controls.",
+                      "name": "manualInput",
+                      "parent": null,
+                      "ref_node": "__ref__",
+                      "source_file": null,
+                      "type": "PilotCommand",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    }
+                  },
+                  "NodeType.Requirement": {}
+                },
+                "_remove_defs": {
+                  "NodeType.Attribute": [],
+                  "NodeType.Connection": [],
+                  "NodeType.Part": [],
+                  "NodeType.Port": [],
+                  "NodeType.Requirement": []
+                },
+                "_remove_refs": {
+                  "NodeType.Part": [],
+                  "NodeType.Port": [],
+                  "NodeType.Requirement": []
+                },
+                "doc": "F-16C/D mission computer blending pilot HOTAS inputs with fly-by-wire control laws and stores management.",
+                "name": "MissionComputer",
+                "parent": null,
+                "source_file": "part_definition.sysml",
+                "specializes": null,
+                "specializes_obj": null,
+                "type": "",
+                "value_type": "<class 'pycps_sysmlv2.definitions.part_definition.SysMLPartDefinition'>"
+              },
+              "source_file": null,
+              "type": "MissionComputer",
+              "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPartReference'>"
+            },
+            "turbofan_propulsion": {
+              "doc": null,
+              "name": "turbofan_propulsion",
+              "parent": null,
+              "ref_node": {
+                "DEF_KINDS": [
+                  "Attribute",
+                  "Part",
+                  "Port",
+                  "Requirement",
+                  "Connection"
+                ],
+                "REF_KINDS": [
+                  "Part",
+                  "Port",
+                  "Requirement"
+                ],
+                "_defs": {
+                  "NodeType.Attribute": {
+                    "dry_thrust_kn": {
+                      "doc": null,
+                      "name": "dry_thrust_kn",
+                      "parent": null,
+                      "source_file": null,
+                      "type": "__ref__",
+                      "value": 79.0,
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    },
+                    "fuel_capacity_kg": {
+                      "doc": null,
+                      "name": "fuel_capacity_kg",
+                      "parent": null,
+                      "source_file": null,
+                      "type": "__ref__",
+                      "value": 3160,
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    },
+                    "generator_output_kw": {
+                      "doc": null,
+                      "name": "generator_output_kw",
+                      "parent": null,
+                      "source_file": null,
+                      "type": "__ref__",
+                      "value": 80,
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    },
+                    "max_thrust_kn": {
+                      "doc": null,
+                      "name": "max_thrust_kn",
+                      "parent": null,
+                      "source_file": null,
+                      "type": "__ref__",
+                      "value": 129.7,
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    },
+                    "specific_fuel_consumption": {
+                      "doc": null,
+                      "name": "specific_fuel_consumption",
+                      "parent": null,
+                      "source_file": null,
+                      "type": "__ref__",
+                      "value": 0.76,
+                      "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                    }
+                  },
+                  "NodeType.Connection": {},
+                  "NodeType.Part": {},
+                  "NodeType.Port": {},
+                  "NodeType.Requirement": {}
+                },
+                "_redefine_defs": {
+                  "NodeType.Attribute": {},
+                  "NodeType.Connection": {},
+                  "NodeType.Part": {},
+                  "NodeType.Port": {},
+                  "NodeType.Requirement": {}
+                },
+                "_redefine_refs": {
+                  "NodeType.Part": {},
+                  "NodeType.Port": {},
+                  "NodeType.Requirement": {}
+                },
+                "_refs": {
+                  "NodeType.Part": {},
+                  "NodeType.Port": {
+                    "fuel_consumption": {
+                      "direction": "out",
+                      "doc": "Mass flow telemetry",
+                      "name": "fuel_consumption",
+                      "parent": null,
+                      "ref_node": {
+                        "DEF_KINDS": [
+                          "Attribute",
+                          "Requirement"
+                        ],
+                        "REF_KINDS": [
+                          "Requirement"
+                        ],
+                        "_defs": {
+                          "NodeType.Attribute": {
+                            "mass_flow_kgps": "__ref__"
+                          },
+                          "NodeType.Requirement": {}
+                        },
+                        "_redefine_defs": {
+                          "NodeType.Attribute": {},
+                          "NodeType.Requirement": {}
+                        },
+                        "_redefine_refs": {
+                          "NodeType.Requirement": {}
+                        },
+                        "_refs": {
+                          "NodeType.Requirement": {}
+                        },
+                        "_remove_defs": {
+                          "NodeType.Attribute": [],
+                          "NodeType.Requirement": []
+                        },
+                        "_remove_refs": {
+                          "NodeType.Requirement": []
+                        },
+                        "doc": "Mass flow request or telemetry for turbofan fuel usage (kg/s).",
+                        "name": "FuelConsumptionRate",
+                        "parent": null,
+                        "source_file": "port_definitions.sysml",
+                        "specializes": null,
+                        "specializes_obj": null,
+                        "type": "",
+                        "value_type": "<class 'pycps_sysmlv2.definitions.port_definition.SysMLPortDefinition'>"
+                      },
+                      "source_file": null,
+                      "type": "FuelConsumptionRate",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    },
+                    "throttleCmd": {
+                      "direction": "in",
+                      "doc": "Mission computer throttle + afterburner command input.",
+                      "name": "throttleCmd",
+                      "parent": null,
+                      "ref_node": {
+                        "DEF_KINDS": [
+                          "Attribute",
+                          "Requirement"
+                        ],
+                        "REF_KINDS": [
+                          "Requirement"
+                        ],
+                        "_defs": {
+                          "NodeType.Attribute": {
+                            "afterburner_enable": {
+                              "doc": null,
+                              "name": "afterburner_enable",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "fuel_enable": {
+                              "doc": null,
+                              "name": "fuel_enable",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "throttle_norm": "__ref__"
+                          },
+                          "NodeType.Requirement": {}
+                        },
+                        "_redefine_defs": {
+                          "NodeType.Attribute": {},
+                          "NodeType.Requirement": {}
+                        },
+                        "_redefine_refs": {
+                          "NodeType.Requirement": {}
+                        },
+                        "_refs": {
+                          "NodeType.Requirement": {}
+                        },
+                        "_remove_defs": {
+                          "NodeType.Attribute": [],
+                          "NodeType.Requirement": []
+                        },
+                        "_remove_refs": {
+                          "NodeType.Requirement": []
+                        },
+                        "doc": "Engine throttle and fuel-enable bit for turbofan co-simulation.",
+                        "name": "ThrottleCommand",
+                        "parent": null,
+                        "source_file": "port_definitions.sysml",
+                        "specializes": null,
+                        "specializes_obj": null,
+                        "type": "",
+                        "value_type": "<class 'pycps_sysmlv2.definitions.port_definition.SysMLPortDefinition'>"
+                      },
+                      "source_file": null,
+                      "type": "ThrottleCommand",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    },
+                    "thrustOut": {
+                      "direction": "out",
+                      "doc": "Propulsion thrust telemetry exported to airframe.",
+                      "name": "thrustOut",
+                      "parent": null,
+                      "ref_node": {
+                        "DEF_KINDS": [
+                          "Attribute",
+                          "Requirement"
+                        ],
+                        "REF_KINDS": [
+                          "Requirement"
+                        ],
+                        "_defs": {
+                          "NodeType.Attribute": {
+                            "exhaust_velocity_mps": {
+                              "doc": null,
+                              "name": "exhaust_velocity_mps",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "mass_flow_kgps": {
+                              "doc": null,
+                              "name": "mass_flow_kgps",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            },
+                            "thrust_kn": {
+                              "doc": null,
+                              "name": "thrust_kn",
+                              "parent": null,
+                              "source_file": null,
+                              "type": "__ref__",
+                              "value": null,
+                              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+                            }
+                          },
+                          "NodeType.Requirement": {}
+                        },
+                        "_redefine_defs": {
+                          "NodeType.Attribute": {},
+                          "NodeType.Requirement": {}
+                        },
+                        "_redefine_refs": {
+                          "NodeType.Requirement": {}
+                        },
+                        "_refs": {
+                          "NodeType.Requirement": {}
+                        },
+                        "_remove_defs": {
+                          "NodeType.Attribute": [],
+                          "NodeType.Requirement": []
+                        },
+                        "_remove_refs": {
+                          "NodeType.Requirement": []
+                        },
+                        "doc": "Propulsion output shared with performance models.",
+                        "name": "ThrustState",
+                        "parent": null,
+                        "source_file": "port_definitions.sysml",
+                        "specializes": null,
+                        "specializes_obj": null,
+                        "type": "",
+                        "value_type": "<class 'pycps_sysmlv2.definitions.port_definition.SysMLPortDefinition'>"
+                      },
+                      "source_file": null,
+                      "type": "ThrustState",
+                      "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPortReference'>"
+                    }
+                  },
+                  "NodeType.Requirement": {}
+                },
+                "_remove_defs": {
+                  "NodeType.Attribute": [],
+                  "NodeType.Connection": [],
+                  "NodeType.Part": [],
+                  "NodeType.Port": [],
+                  "NodeType.Requirement": []
+                },
+                "_remove_refs": {
+                  "NodeType.Part": [],
+                  "NodeType.Port": [],
+                  "NodeType.Requirement": []
+                },
+                "doc": "Pratt & Whitney F100 / GE F110 class augmented turbofan powering the F-16.",
+                "name": "TurbofanPropulsion",
+                "parent": null,
+                "source_file": "part_definition.sysml",
+                "specializes": null,
+                "specializes_obj": null,
+                "type": "",
+                "value_type": "<class 'pycps_sysmlv2.definitions.part_definition.SysMLPartDefinition'>"
+              },
+              "source_file": null,
+              "type": "TurbofanPropulsion",
+              "value_type": "<class 'pycps_sysmlv2.definitions.references.SysMLPartReference'>"
+            }
+          },
+          "NodeType.Port": {},
+          "NodeType.Requirement": {}
+        },
+        "_remove_defs": {
+          "NodeType.Attribute": [],
+          "NodeType.Connection": [],
+          "NodeType.Part": [],
+          "NodeType.Port": [],
+          "NodeType.Requirement": []
+        },
+        "_remove_refs": {
+          "NodeType.Part": [],
+          "NodeType.Port": [],
+          "NodeType.Requirement": []
+        },
+        "doc": "Top-level composition containing all subsystem instances and signal routing.",
+        "name": "AircraftComposition",
+        "parent": null,
+        "source_file": "aircraft.sysml",
+        "specializes": null,
+        "specializes_obj": null,
+        "type": "",
+        "value_type": "<class 'pycps_sysmlv2.definitions.part_definition.SysMLPartDefinition'>"
       },
-      "ports": {}
+      "AutopilotModule": "__ref__",
+      "CompositeAirframe": "__ref__",
+      "ControlInterface": "__ref__",
+      "Environment": "__ref__",
+      "FlightGearBridge": "__ref__",
+      "FuelSystem": "__ref__",
+      "InputOutput": "__ref__",
+      "MissionComputer": "__ref__",
+      "TurbofanPropulsion": "__ref__"
     },
-    "AutopilotModule": "__ref__",
-    "CompositeAirframe": "__ref__",
-    "ControlInterface": "__ref__",
-    "Environment": "__ref__",
-    "FlightGearBridge": "__ref__",
-    "FuelSystem": "__ref__",
-    "InputOutput": "__ref__",
-    "MissionComputer": "__ref__",
-    "TurbofanPropulsion": "__ref__"
-  },
-  "port_definitions": {
-    "FlightStatusPacket": "__ref__",
-    "FuelConsumptionRate": "__ref__",
-    "FuelLevelState": "__ref__",
-    "LiftState": "__ref__",
-    "MissionStatus": "__ref__",
-    "OrientationEuler": "__ref__",
-    "PilotCommand": "__ref__",
-    "PositionXYZ": "__ref__",
-    "SurfaceActuationCommand": "__ref__",
-    "ThrottleCommand": "__ref__",
-    "ThrustState": "__ref__"
-  },
-  "requirements": [
-    {
-      "identifier": "Requirement_REQ_Profile",
-      "text": "Match F-16 Fighting Falcon geometry: \u224815 m length, 10 m wingspan, single-seat cockpit."
+    "NodeType.Port": {
+      "FlightStatusPacket": "__ref__",
+      "FuelConsumptionRate": "__ref__",
+      "FuelLevelState": "__ref__",
+      "LiftState": "__ref__",
+      "MissionStatus": "__ref__",
+      "OrientationEuler": "__ref__",
+      "PilotCommand": "__ref__",
+      "PositionXYZ": "__ref__",
+      "SurfaceActuationCommand": "__ref__",
+      "ThrottleCommand": "__ref__",
+      "ThrustState": "__ref__"
     },
-    {
-      "identifier": "Requirement_REQ_Performance",
-      "text": "Provide Mach 2 dash capability with sustained 9 g maneuver envelope."
-    },
-    {
-      "identifier": "Requirement_REQ_Propulsion",
-      "text": "Integrate an F100/F110 class augmented turbofan with afterburner throttle control."
-    },
-    {
-      "identifier": "Requirement_REQ_Fuel",
-      "text": "Carry at least 3,100 kg of internal fuel with 8% reserve margin for recovery."
-    },
-    {
-      "identifier": "Requirement_REQ_Control",
-      "text": "Provide full HOTAS pilot controls, digital fly-by-wire channels, and autopilot hold modes."
-    },
-    {
-      "identifier": "Requirement_REQ_Mission",
-      "text": "Support multirole loadouts across nine hardpoints with mission computer stores management."
-    },
-    {
-      "identifier": "Requirement_REQ_FlyByWire",
-      "text": "It should be an unstable aircraft, the control loop should compensate for this."
-    },
-    {
-      "identifier": "Requirement_REQ_Waypoints_1",
-      "text": "It should support loading a number of waypoints that it should fy to in order"
-    },
-    {
-      "identifier": "Requirement_REQ_Simulation_1",
-      "text": "The system should be packaged and simulated as a SSP (system structure and parameterization) artifact"
-    },
-    {
-      "identifier": "Requirement_REQ_Simulation_2",
-      "text": "All models should be packaged as FMUs"
-    },
-    {
-      "identifier": "location_orientation",
-      "text": "Location is described in a local x/y/z grid in kilometers (x=North, y=East, z=Up) Absolute orientation is described in euler angles, North = 360\u00b0 / 000\u00b0, East = 090\u00b0, South = 180\u00b0, West = 270 changes in orientation are described in +/- x for euler angles, pitch, yaw, roll, based upon absolute orientation"
-    },
-    {
-      "identifier": "waypoint_solutions",
-      "text": "The waypoints should be injected into the simulation by utilizing SSP parameter set"
-    },
-    {
-      "identifier": "visualization_and_io_solution",
-      "text": "The recommended interactive solution keeps ssp4sim as the simulation master and connects the packaged aircraft SSP to FlightGear through a dedicated bridge/adapter component. FlightGear is used as the visual frontend and pilot I/O frontend. Generic socket communication is preferred for the first implementation because it keeps the exchanged signals explicit and easier to debug than a larger native protocol mapping. The first timing solution should use the existing ssp4sim realtime execution option. A future Python API doStep(t) method and external package synchronization support are planned, but should not be introduced in the initial integration."
+    "NodeType.Requirement": {
+      "Requirement_REQ_Control": {
+        "DEF_KINDS": [
+          "Attribute"
+        ],
+        "REF_KINDS": [],
+        "_defs": {
+          "NodeType.Attribute": {
+            "text": {
+              "doc": null,
+              "name": "text",
+              "parent": null,
+              "source_file": null,
+              "type": "__ref__",
+              "value": "Provide full HOTAS pilot controls, digital fly-by-wire channels, and autopilot hold modes.",
+              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+            }
+          }
+        },
+        "_redefine_defs": {},
+        "_redefine_refs": {},
+        "_refs": {},
+        "_remove_defs": {},
+        "_remove_refs": {},
+        "doc": null,
+        "name": "Requirement_REQ_Control",
+        "parent": null,
+        "source_file": "requirements.sysml",
+        "specializes": null,
+        "specializes_obj": null,
+        "type": "",
+        "value_type": "<class 'pycps_sysmlv2.definitions.requirement_definition.SysMLRequirementDefinition'>"
+      },
+      "Requirement_REQ_FlyByWire": {
+        "DEF_KINDS": [
+          "Attribute"
+        ],
+        "REF_KINDS": [],
+        "_defs": {
+          "NodeType.Attribute": {
+            "text": {
+              "doc": null,
+              "name": "text",
+              "parent": null,
+              "source_file": null,
+              "type": "__ref__",
+              "value": "It should be an unstable aircraft, the control loop should compensate for this.",
+              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+            }
+          }
+        },
+        "_redefine_defs": {},
+        "_redefine_refs": {},
+        "_refs": {},
+        "_remove_defs": {},
+        "_remove_refs": {},
+        "doc": null,
+        "name": "Requirement_REQ_FlyByWire",
+        "parent": null,
+        "source_file": "requirements.sysml",
+        "specializes": null,
+        "specializes_obj": null,
+        "type": "",
+        "value_type": "<class 'pycps_sysmlv2.definitions.requirement_definition.SysMLRequirementDefinition'>"
+      },
+      "Requirement_REQ_Fuel": {
+        "DEF_KINDS": [
+          "Attribute"
+        ],
+        "REF_KINDS": [],
+        "_defs": {
+          "NodeType.Attribute": {
+            "text": {
+              "doc": null,
+              "name": "text",
+              "parent": null,
+              "source_file": null,
+              "type": "__ref__",
+              "value": "Carry at least 3,100 kg of internal fuel with 8% reserve margin for recovery.",
+              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+            }
+          }
+        },
+        "_redefine_defs": {},
+        "_redefine_refs": {},
+        "_refs": {},
+        "_remove_defs": {},
+        "_remove_refs": {},
+        "doc": null,
+        "name": "Requirement_REQ_Fuel",
+        "parent": null,
+        "source_file": "requirements.sysml",
+        "specializes": null,
+        "specializes_obj": null,
+        "type": "",
+        "value_type": "<class 'pycps_sysmlv2.definitions.requirement_definition.SysMLRequirementDefinition'>"
+      },
+      "Requirement_REQ_Mission": {
+        "DEF_KINDS": [
+          "Attribute"
+        ],
+        "REF_KINDS": [],
+        "_defs": {
+          "NodeType.Attribute": {
+            "text": {
+              "doc": null,
+              "name": "text",
+              "parent": null,
+              "source_file": null,
+              "type": "__ref__",
+              "value": "Support multirole loadouts across nine hardpoints with mission computer stores management.",
+              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+            }
+          }
+        },
+        "_redefine_defs": {},
+        "_redefine_refs": {},
+        "_refs": {},
+        "_remove_defs": {},
+        "_remove_refs": {},
+        "doc": null,
+        "name": "Requirement_REQ_Mission",
+        "parent": null,
+        "source_file": "requirements.sysml",
+        "specializes": null,
+        "specializes_obj": null,
+        "type": "",
+        "value_type": "<class 'pycps_sysmlv2.definitions.requirement_definition.SysMLRequirementDefinition'>"
+      },
+      "Requirement_REQ_Performance": {
+        "DEF_KINDS": [
+          "Attribute"
+        ],
+        "REF_KINDS": [],
+        "_defs": {
+          "NodeType.Attribute": {
+            "text": {
+              "doc": null,
+              "name": "text",
+              "parent": null,
+              "source_file": null,
+              "type": "__ref__",
+              "value": "Provide Mach 2 dash capability with sustained 9 g maneuver envelope.",
+              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+            }
+          }
+        },
+        "_redefine_defs": {},
+        "_redefine_refs": {},
+        "_refs": {},
+        "_remove_defs": {},
+        "_remove_refs": {},
+        "doc": null,
+        "name": "Requirement_REQ_Performance",
+        "parent": null,
+        "source_file": "requirements.sysml",
+        "specializes": null,
+        "specializes_obj": null,
+        "type": "",
+        "value_type": "<class 'pycps_sysmlv2.definitions.requirement_definition.SysMLRequirementDefinition'>"
+      },
+      "Requirement_REQ_Profile": {
+        "DEF_KINDS": [
+          "Attribute"
+        ],
+        "REF_KINDS": [],
+        "_defs": {
+          "NodeType.Attribute": {
+            "text": {
+              "doc": null,
+              "name": "text",
+              "parent": null,
+              "source_file": null,
+              "type": "__ref__",
+              "value": "Match F-16 Fighting Falcon geometry: \u224815 m length, 10 m wingspan, single-seat cockpit.",
+              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+            }
+          }
+        },
+        "_redefine_defs": {},
+        "_redefine_refs": {},
+        "_refs": {},
+        "_remove_defs": {},
+        "_remove_refs": {},
+        "doc": null,
+        "name": "Requirement_REQ_Profile",
+        "parent": null,
+        "source_file": "requirements.sysml",
+        "specializes": null,
+        "specializes_obj": null,
+        "type": "",
+        "value_type": "<class 'pycps_sysmlv2.definitions.requirement_definition.SysMLRequirementDefinition'>"
+      },
+      "Requirement_REQ_Propulsion": {
+        "DEF_KINDS": [
+          "Attribute"
+        ],
+        "REF_KINDS": [],
+        "_defs": {
+          "NodeType.Attribute": {
+            "text": {
+              "doc": null,
+              "name": "text",
+              "parent": null,
+              "source_file": null,
+              "type": "__ref__",
+              "value": "Integrate an F100/F110 class augmented turbofan with afterburner throttle control.",
+              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+            }
+          }
+        },
+        "_redefine_defs": {},
+        "_redefine_refs": {},
+        "_refs": {},
+        "_remove_defs": {},
+        "_remove_refs": {},
+        "doc": null,
+        "name": "Requirement_REQ_Propulsion",
+        "parent": null,
+        "source_file": "requirements.sysml",
+        "specializes": null,
+        "specializes_obj": null,
+        "type": "",
+        "value_type": "<class 'pycps_sysmlv2.definitions.requirement_definition.SysMLRequirementDefinition'>"
+      },
+      "Requirement_REQ_Simulation_1": {
+        "DEF_KINDS": [
+          "Attribute"
+        ],
+        "REF_KINDS": [],
+        "_defs": {
+          "NodeType.Attribute": {
+            "text": {
+              "doc": null,
+              "name": "text",
+              "parent": null,
+              "source_file": null,
+              "type": "__ref__",
+              "value": "The system should be packaged and simulated as a SSP (system structure and parameterization) artifact",
+              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+            }
+          }
+        },
+        "_redefine_defs": {},
+        "_redefine_refs": {},
+        "_refs": {},
+        "_remove_defs": {},
+        "_remove_refs": {},
+        "doc": null,
+        "name": "Requirement_REQ_Simulation_1",
+        "parent": null,
+        "source_file": "simulation.sysml",
+        "specializes": null,
+        "specializes_obj": null,
+        "type": "",
+        "value_type": "<class 'pycps_sysmlv2.definitions.requirement_definition.SysMLRequirementDefinition'>"
+      },
+      "Requirement_REQ_Simulation_2": {
+        "DEF_KINDS": [
+          "Attribute"
+        ],
+        "REF_KINDS": [],
+        "_defs": {
+          "NodeType.Attribute": {
+            "text": {
+              "doc": null,
+              "name": "text",
+              "parent": null,
+              "source_file": null,
+              "type": "__ref__",
+              "value": "All models should be packaged as FMUs",
+              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+            }
+          }
+        },
+        "_redefine_defs": {},
+        "_redefine_refs": {},
+        "_refs": {},
+        "_remove_defs": {},
+        "_remove_refs": {},
+        "doc": null,
+        "name": "Requirement_REQ_Simulation_2",
+        "parent": null,
+        "source_file": "simulation.sysml",
+        "specializes": null,
+        "specializes_obj": null,
+        "type": "",
+        "value_type": "<class 'pycps_sysmlv2.definitions.requirement_definition.SysMLRequirementDefinition'>"
+      },
+      "Requirement_REQ_Waypoints_1": {
+        "DEF_KINDS": [
+          "Attribute"
+        ],
+        "REF_KINDS": [],
+        "_defs": {
+          "NodeType.Attribute": {
+            "text": {
+              "doc": null,
+              "name": "text",
+              "parent": null,
+              "source_file": null,
+              "type": "__ref__",
+              "value": "It should support loading a number of waypoints that it should fy to in order",
+              "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
+            }
+          }
+        },
+        "_redefine_defs": {},
+        "_redefine_refs": {},
+        "_refs": {},
+        "_remove_defs": {},
+        "_remove_refs": {},
+        "doc": null,
+        "name": "Requirement_REQ_Waypoints_1",
+        "parent": null,
+        "source_file": "requirements.sysml",
+        "specializes": null,
+        "specializes_obj": null,
+        "type": "",
+        "value_type": "<class 'pycps_sysmlv2.definitions.requirement_definition.SysMLRequirementDefinition'>"
+      }
     }
-  ]
+  },
+  "_refs": {},
+  "doc": null,
+  "name": "Aircraft",
+  "package": "Aircraft",
+  "parent": null,
+  "source_file": null,
+  "type": "",
+  "value_type": "<class 'pycps_sysmlv2.definitions.architecture.SysMLPackage'>"
 }
