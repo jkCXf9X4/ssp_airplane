@@ -6,34 +6,6 @@
 
 /* Generated from architecture package Aircraft. Do not edit manually. */
 
-typedef enum Aircraft_ScalarType {
-  AIRCRAFT_SCALAR_REAL = 0,
-  AIRCRAFT_SCALAR_INTEGER = 1,
-  AIRCRAFT_SCALAR_BOOLEAN = 2,
-  AIRCRAFT_SCALAR_STRING = 3,
-} Aircraft_ScalarType;
-
-typedef struct Aircraft_FieldBinding {
-  int value_reference;
-  Aircraft_ScalarType scalar_type;
-  size_t offset;
-  bool writable;
-} Aircraft_FieldBinding;
-
-#ifdef __cplusplus
-#include <string>
-
-typedef const std::string& (*Aircraft_StringFieldGetter)(const void* instance);
-typedef std::string& (*Aircraft_StringFieldGetterMut)(void* instance);
-
-typedef struct Aircraft_StringFieldBinding {
-  int value_reference;
-  Aircraft_StringFieldGetter get;
-  Aircraft_StringFieldGetterMut get_mut;
-  bool writable;
-} Aircraft_StringFieldBinding;
-#endif  /* __cplusplus */
-
 typedef struct Aircraft_PilotCommand {
   double stick_pitch_norm;
   double stick_roll_norm;
@@ -110,3 +82,21 @@ typedef struct Aircraft_MissionStatus {
   bool arrived;
   bool complete;
 } Aircraft_MissionStatus;
+
+#ifdef __cplusplus
+#include <string>
+
+enum Aircraft_DataType {
+  AIRCRAFT_DATA_NONE = 0,
+  AIRCRAFT_DATA_REAL = 1,
+  AIRCRAFT_DATA_INTEGER = 2,
+  AIRCRAFT_DATA_BOOLEAN = 3,
+  AIRCRAFT_DATA_STRING = 4,
+};
+
+struct Aircraft_VrMapping {
+  void* data = nullptr;
+  Aircraft_DataType type = AIRCRAFT_DATA_NONE;
+  bool writable = false;
+};
+#endif  /* __cplusplus */

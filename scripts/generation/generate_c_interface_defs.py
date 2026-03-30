@@ -12,7 +12,6 @@ if __package__ in {None, ""}:
 from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR, ensure_directory
 from scripts.utils.c_interface_export import (
     architecture_part_specs,
-    binding_offset_expression,
     part_instance_fields,
     port_struct_fields,
     sanitize_c_identifier,
@@ -31,6 +30,14 @@ def part_header_name(package: str, part_name: str) -> str:
     return f"{package}_{part_name}.h"
 
 
+def _cpp_type_tag(package: str, fmi_type: str) -> str:
+    return f"{package.upper()}_DATA_{fmi_type.upper()}"
+
+
+def _member_access(path: str) -> str:
+    return ".".join(path.split("."))
+
+
 def _common_header_lines(package: str, architecture) -> list[str]:
     lines = [
         "#pragma once",
@@ -41,34 +48,6 @@ def _common_header_lines(package: str, architecture) -> list[str]:
         "",
         f"/* Generated from architecture package {package}. Do not edit manually. */",
         "",
-        f"typedef enum {package}_ScalarType {{",
-        f"  {package.upper()}_SCALAR_REAL = 0,",
-        f"  {package.upper()}_SCALAR_INTEGER = 1,",
-        f"  {package.upper()}_SCALAR_BOOLEAN = 2,",
-        f"  {package.upper()}_SCALAR_STRING = 3,",
-        f"}} {package}_ScalarType;",
-        "",
-        f"typedef struct {package}_FieldBinding {{",
-        "  int value_reference;",
-        f"  {package}_ScalarType scalar_type;",
-        "  size_t offset;",
-        "  bool writable;",
-        f"}} {package}_FieldBinding;",
-        "",
-        "#ifdef __cplusplus",
-        "#include <string>",
-        "",
-        f"typedef const std::string& (*{package}_StringFieldGetter)(const void* instance);",
-        f"typedef std::string& (*{package}_StringFieldGetterMut)(void* instance);",
-        "",
-        f"typedef struct {package}_StringFieldBinding {{",
-        "  int value_reference;",
-        f"  {package}_StringFieldGetter get;",
-        f"  {package}_StringFieldGetterMut get_mut;",
-        "  bool writable;",
-        f"}} {package}_StringFieldBinding;",
-        "#endif  /* __cplusplus */",
-        "",
     ]
 
     for port_name, port_def in architecture.port_definitions.items():
@@ -78,10 +57,33 @@ def _common_header_lines(package: str, architecture) -> list[str]:
         lines.append(f"}} {package}_{port_name};")
         lines.append("")
 
+    lines.extend(
+        [
+            "#ifdef __cplusplus",
+            "#include <string>",
+            "",
+            f"enum {package}_DataType {{",
+            f"  {package.upper()}_DATA_NONE = 0,",
+            f"  {package.upper()}_DATA_REAL = 1,",
+            f"  {package.upper()}_DATA_INTEGER = 2,",
+            f"  {package.upper()}_DATA_BOOLEAN = 3,",
+            f"  {package.upper()}_DATA_STRING = 4,",
+            f"}};",
+            "",
+            f"struct {package}_VrMapping {{",
+            "  void* data = nullptr;",
+            f"  {package}_DataType type = {package.upper()}_DATA_NONE;",
+            "  bool writable = false;",
+            "};",
+            "#endif  /* __cplusplus */",
+            "",
+        ]
+    )
     return lines
 
 
 def _part_header_lines(package: str, part_name: str, part, specs: list) -> list[str]:
+    vr_count = len(specs)
     lines = [
         "#pragma once",
         "",
@@ -101,79 +103,33 @@ def _part_header_lines(package: str, part_name: str, part, specs: list) -> list[
             "",
             "#ifdef __cplusplus",
             "",
+            f"inline constexpr size_t {package}_{part_name}_VrCount = {vr_count};",
+            "",
             f"struct {package}_{part_name}_Instance {{",
+            f"  {package}_VrMapping vr_map[{vr_count}] = {{}};",
         ]
     )
     for field_type, field_name, default_value in part_instance_fields(package, part):
         lines.append(f"  {field_type} {field_name} = {default_value};")
     lines.extend(["};", ""])
 
-    string_specs = [spec for spec in specs if spec.fmi_type == "String"]
-    pod_specs = [spec for spec in specs if spec.fmi_type != "String"]
-
-    for spec in string_specs:
-        accessor_name = f"{package}_{part_name}_{sanitize_c_identifier(spec.name)}"
+    lines.append(
+        f"inline void {package}_{part_name}_initialize_vr_map({package}_{part_name}_Instance* instance) {{"
+    )
+    lines.append(f"  for (size_t i = 0; i < {package}_{part_name}_VrCount; ++i) {{")
+    lines.append(f"    instance->vr_map[i] = {{nullptr, {package.upper()}_DATA_NONE, false}};")
+    lines.append("  }")
+    for spec in specs:
+        writable = "false" if spec.causality == "output" else "true"
         lines.append(
-            f"inline const std::string& {accessor_name}_get(const void* instance) {{ "
-            f"return static_cast<const {package}_{part_name}_Instance*>(instance)->{spec.field_path}; }}"
+            f"  instance->vr_map[{package.upper()}_{part_name.upper()}_VR_{sanitize_c_identifier(spec.name)}] = "
+            + "{"
+            + f"&instance->{_member_access(spec.field_path)}, "
+            + f"{_cpp_type_tag(package, spec.fmi_type)}, "
+            + f"{writable}"
+            + "};"
         )
-        lines.append(
-            f"inline std::string& {accessor_name}_get_mut(void* instance) {{ "
-            f"return static_cast<{package}_{part_name}_Instance*>(instance)->{spec.field_path}; }}"
-        )
-    if string_specs:
-        lines.append("")
-
-    if pod_specs:
-        lines.append(f"inline constexpr {package}_FieldBinding {package}_{part_name}_Bindings[] = {{")
-        for spec in pod_specs:
-            writable = "false" if spec.causality == "output" else "true"
-            lines.append(
-                "  "
-                + "{"
-                + f"{package.upper()}_{part_name.upper()}_VR_{sanitize_c_identifier(spec.name)}, "
-                + f"{package.upper()}_SCALAR_{spec.fmi_type.upper()}, "
-                + f"{binding_offset_expression(package, part, spec)}, "
-                + f"{writable}"
-                + "},"
-            )
-        lines.append("};")
-        lines.append(
-            f"inline constexpr size_t {package}_{part_name}_BindingCount = "
-            f"sizeof({package}_{part_name}_Bindings) / sizeof({package}_{part_name}_Bindings[0]);"
-        )
-    else:
-        lines.append(f"inline constexpr const {package}_FieldBinding* {package}_{part_name}_Bindings = nullptr;")
-        lines.append(f"inline constexpr size_t {package}_{part_name}_BindingCount = 0;")
-    lines.append("")
-
-    if string_specs:
-        lines.append(
-            f"inline constexpr {package}_StringFieldBinding {package}_{part_name}_StringBindings[] = {{"
-        )
-        for spec in string_specs:
-            accessor_name = f"{package}_{part_name}_{sanitize_c_identifier(spec.name)}"
-            writable = "false" if spec.causality == "output" else "true"
-            lines.append(
-                "  "
-                + "{"
-                + f"{package.upper()}_{part_name.upper()}_VR_{sanitize_c_identifier(spec.name)}, "
-                + f"&{accessor_name}_get, "
-                + f"&{accessor_name}_get_mut, "
-                + f"{writable}"
-                + "},"
-            )
-        lines.append("};")
-        lines.append(
-            f"inline constexpr size_t {package}_{part_name}_StringBindingCount = "
-            f"sizeof({package}_{part_name}_StringBindings) / sizeof({package}_{part_name}_StringBindings[0]);"
-        )
-    else:
-        lines.append(
-            f"inline constexpr const {package}_StringFieldBinding* {package}_{part_name}_StringBindings = nullptr;"
-        )
-        lines.append(f"inline constexpr size_t {package}_{part_name}_StringBindingCount = 0;")
-    lines.extend(["", "#endif  /* __cplusplus */"])
+    lines.extend(["}", "", "#endif  /* __cplusplus */"])
     return lines
 
 

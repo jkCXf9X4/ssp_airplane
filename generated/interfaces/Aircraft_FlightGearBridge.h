@@ -42,8 +42,10 @@ typedef enum Aircraft_FlightGearBridge_ValueReference {
 
 #ifdef __cplusplus
 
+inline constexpr size_t Aircraft_FlightGearBridge_VrCount = 33;
+
 struct Aircraft_FlightGearBridge_Instance {
-  void* vr_map[33];
+  Aircraft_VrMapping vr_map[33] = {};
   std::string transport = "FlightGearGeneric";
   double reference_latitude_deg = 0.0;
   double reference_longitude_deg = 0.0;
@@ -58,50 +60,43 @@ struct Aircraft_FlightGearBridge_Instance {
   Aircraft_PilotCommand pilotCommand = {};
 };
 
-inline const std::string& Aircraft_FlightGearBridge_TRANSPORT_get(const void* instance) { return static_cast<const Aircraft_FlightGearBridge_Instance*>(instance)->transport; }
-inline std::string& Aircraft_FlightGearBridge_TRANSPORT_get_mut(void* instance) { return static_cast<Aircraft_FlightGearBridge_Instance*>(instance)->transport; }
-inline const std::string& Aircraft_FlightGearBridge_REMOTE_HOST_get(const void* instance) { return static_cast<const Aircraft_FlightGearBridge_Instance*>(instance)->remote_host; }
-inline std::string& Aircraft_FlightGearBridge_REMOTE_HOST_get_mut(void* instance) { return static_cast<Aircraft_FlightGearBridge_Instance*>(instance)->remote_host; }
-
-inline constexpr Aircraft_FieldBinding Aircraft_FlightGearBridge_Bindings[] = {
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_REFERENCE_LATITUDE_DEG, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_FlightGearBridge_Instance, reference_latitude_deg), true},
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_REFERENCE_LONGITUDE_DEG, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_FlightGearBridge_Instance, reference_longitude_deg), true},
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_REFERENCE_ALTITUDE_M, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_FlightGearBridge_Instance, reference_altitude_m), true},
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_TELEMETRY_PORT, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_FlightGearBridge_Instance, telemetry_port), true},
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_CONTROL_PORT, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_FlightGearBridge_Instance, control_port), true},
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_STATEPOSITION_X_KM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_FlightGearBridge_Instance, statePosition) + offsetof(Aircraft_PositionXYZ, x_km), true},
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_STATEPOSITION_Y_KM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_FlightGearBridge_Instance, statePosition) + offsetof(Aircraft_PositionXYZ, y_km), true},
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_STATEPOSITION_Z_KM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_FlightGearBridge_Instance, statePosition) + offsetof(Aircraft_PositionXYZ, z_km), true},
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_STATEORIENTATION_ROLL_DEG, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_FlightGearBridge_Instance, stateOrientation) + offsetof(Aircraft_OrientationEuler, roll_deg), true},
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_STATEORIENTATION_PITCH_DEG, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_FlightGearBridge_Instance, stateOrientation) + offsetof(Aircraft_OrientationEuler, pitch_deg), true},
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_STATEORIENTATION_YAW_DEG, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_FlightGearBridge_Instance, stateOrientation) + offsetof(Aircraft_OrientationEuler, yaw_deg), true},
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_FLIGHTSTATUS_AIRSPEED_MPS, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_FlightGearBridge_Instance, flightStatus) + offsetof(Aircraft_FlightStatusPacket, airspeed_mps), true},
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_FLIGHTSTATUS_ENERGY_STATE_NORM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_FlightGearBridge_Instance, flightStatus) + offsetof(Aircraft_FlightStatusPacket, energy_state_norm), true},
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_FLIGHTSTATUS_ANGLE_OF_ATTACK_DEG, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_FlightGearBridge_Instance, flightStatus) + offsetof(Aircraft_FlightStatusPacket, angle_of_attack_deg), true},
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_FLIGHTSTATUS_CLIMB_RATE, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_FlightGearBridge_Instance, flightStatus) + offsetof(Aircraft_FlightStatusPacket, climb_rate), true},
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_FLIGHTSTATUS_HEALTH_CODE, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_FlightGearBridge_Instance, flightStatus) + offsetof(Aircraft_FlightStatusPacket, health_code), true},
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_MISSIONSTATUS_WAYPOINT_INDEX, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_FlightGearBridge_Instance, missionStatus) + offsetof(Aircraft_MissionStatus, waypoint_index), true},
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_MISSIONSTATUS_TOTAL_WAYPOINTS, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_FlightGearBridge_Instance, missionStatus) + offsetof(Aircraft_MissionStatus, total_waypoints), true},
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_MISSIONSTATUS_DISTANCE_TO_WAYPOINT_KM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_FlightGearBridge_Instance, missionStatus) + offsetof(Aircraft_MissionStatus, distance_to_waypoint_km), true},
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_MISSIONSTATUS_ARRIVED, AIRCRAFT_SCALAR_BOOLEAN, offsetof(Aircraft_FlightGearBridge_Instance, missionStatus) + offsetof(Aircraft_MissionStatus, arrived), true},
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_MISSIONSTATUS_COMPLETE, AIRCRAFT_SCALAR_BOOLEAN, offsetof(Aircraft_FlightGearBridge_Instance, missionStatus) + offsetof(Aircraft_MissionStatus, complete), true},
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_STICK_PITCH_NORM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_FlightGearBridge_Instance, pilotCommand) + offsetof(Aircraft_PilotCommand, stick_pitch_norm), false},
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_STICK_ROLL_NORM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_FlightGearBridge_Instance, pilotCommand) + offsetof(Aircraft_PilotCommand, stick_roll_norm), false},
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_RUDDER_NORM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_FlightGearBridge_Instance, pilotCommand) + offsetof(Aircraft_PilotCommand, rudder_norm), false},
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_THROTTLE_NORM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_FlightGearBridge_Instance, pilotCommand) + offsetof(Aircraft_PilotCommand, throttle_norm), false},
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_THROTTLE_AUX_NORM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_FlightGearBridge_Instance, pilotCommand) + offsetof(Aircraft_PilotCommand, throttle_aux_norm), false},
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_BUTTON_MASK, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_FlightGearBridge_Instance, pilotCommand) + offsetof(Aircraft_PilotCommand, button_mask), false},
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_HAT_X, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_FlightGearBridge_Instance, pilotCommand) + offsetof(Aircraft_PilotCommand, hat_x), false},
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_HAT_Y, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_FlightGearBridge_Instance, pilotCommand) + offsetof(Aircraft_PilotCommand, hat_y), false},
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_MODE_SWITCH, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_FlightGearBridge_Instance, pilotCommand) + offsetof(Aircraft_PilotCommand, mode_switch), false},
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_RESERVED, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_FlightGearBridge_Instance, pilotCommand) + offsetof(Aircraft_PilotCommand, reserved), false},
-};
-inline constexpr size_t Aircraft_FlightGearBridge_BindingCount = sizeof(Aircraft_FlightGearBridge_Bindings) / sizeof(Aircraft_FlightGearBridge_Bindings[0]);
-
-inline constexpr Aircraft_StringFieldBinding Aircraft_FlightGearBridge_StringBindings[] = {
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_TRANSPORT, &Aircraft_FlightGearBridge_TRANSPORT_get, &Aircraft_FlightGearBridge_TRANSPORT_get_mut, true},
-  {AIRCRAFT_FLIGHTGEARBRIDGE_VR_REMOTE_HOST, &Aircraft_FlightGearBridge_REMOTE_HOST_get, &Aircraft_FlightGearBridge_REMOTE_HOST_get_mut, true},
-};
-inline constexpr size_t Aircraft_FlightGearBridge_StringBindingCount = sizeof(Aircraft_FlightGearBridge_StringBindings) / sizeof(Aircraft_FlightGearBridge_StringBindings[0]);
+inline void Aircraft_FlightGearBridge_initialize_vr_map(Aircraft_FlightGearBridge_Instance* instance) {
+  for (size_t i = 0; i < Aircraft_FlightGearBridge_VrCount; ++i) {
+    instance->vr_map[i] = {nullptr, AIRCRAFT_DATA_NONE, false};
+  }
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_TRANSPORT] = {&instance->transport, AIRCRAFT_DATA_STRING, true};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_REFERENCE_LATITUDE_DEG] = {&instance->reference_latitude_deg, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_REFERENCE_LONGITUDE_DEG] = {&instance->reference_longitude_deg, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_REFERENCE_ALTITUDE_M] = {&instance->reference_altitude_m, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_REMOTE_HOST] = {&instance->remote_host, AIRCRAFT_DATA_STRING, true};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_TELEMETRY_PORT] = {&instance->telemetry_port, AIRCRAFT_DATA_INTEGER, true};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_CONTROL_PORT] = {&instance->control_port, AIRCRAFT_DATA_INTEGER, true};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_STATEPOSITION_X_KM] = {&instance->statePosition.x_km, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_STATEPOSITION_Y_KM] = {&instance->statePosition.y_km, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_STATEPOSITION_Z_KM] = {&instance->statePosition.z_km, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_STATEORIENTATION_ROLL_DEG] = {&instance->stateOrientation.roll_deg, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_STATEORIENTATION_PITCH_DEG] = {&instance->stateOrientation.pitch_deg, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_STATEORIENTATION_YAW_DEG] = {&instance->stateOrientation.yaw_deg, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_FLIGHTSTATUS_AIRSPEED_MPS] = {&instance->flightStatus.airspeed_mps, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_FLIGHTSTATUS_ENERGY_STATE_NORM] = {&instance->flightStatus.energy_state_norm, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_FLIGHTSTATUS_ANGLE_OF_ATTACK_DEG] = {&instance->flightStatus.angle_of_attack_deg, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_FLIGHTSTATUS_CLIMB_RATE] = {&instance->flightStatus.climb_rate, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_FLIGHTSTATUS_HEALTH_CODE] = {&instance->flightStatus.health_code, AIRCRAFT_DATA_INTEGER, true};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_MISSIONSTATUS_WAYPOINT_INDEX] = {&instance->missionStatus.waypoint_index, AIRCRAFT_DATA_INTEGER, true};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_MISSIONSTATUS_TOTAL_WAYPOINTS] = {&instance->missionStatus.total_waypoints, AIRCRAFT_DATA_INTEGER, true};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_MISSIONSTATUS_DISTANCE_TO_WAYPOINT_KM] = {&instance->missionStatus.distance_to_waypoint_km, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_MISSIONSTATUS_ARRIVED] = {&instance->missionStatus.arrived, AIRCRAFT_DATA_BOOLEAN, true};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_MISSIONSTATUS_COMPLETE] = {&instance->missionStatus.complete, AIRCRAFT_DATA_BOOLEAN, true};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_STICK_PITCH_NORM] = {&instance->pilotCommand.stick_pitch_norm, AIRCRAFT_DATA_REAL, false};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_STICK_ROLL_NORM] = {&instance->pilotCommand.stick_roll_norm, AIRCRAFT_DATA_REAL, false};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_RUDDER_NORM] = {&instance->pilotCommand.rudder_norm, AIRCRAFT_DATA_REAL, false};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_THROTTLE_NORM] = {&instance->pilotCommand.throttle_norm, AIRCRAFT_DATA_REAL, false};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_THROTTLE_AUX_NORM] = {&instance->pilotCommand.throttle_aux_norm, AIRCRAFT_DATA_REAL, false};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_BUTTON_MASK] = {&instance->pilotCommand.button_mask, AIRCRAFT_DATA_INTEGER, false};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_HAT_X] = {&instance->pilotCommand.hat_x, AIRCRAFT_DATA_INTEGER, false};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_HAT_Y] = {&instance->pilotCommand.hat_y, AIRCRAFT_DATA_INTEGER, false};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_MODE_SWITCH] = {&instance->pilotCommand.mode_switch, AIRCRAFT_DATA_INTEGER, false};
+  instance->vr_map[AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_RESERVED] = {&instance->pilotCommand.reserved, AIRCRAFT_DATA_INTEGER, false};
+}
 
 #endif  /* __cplusplus */

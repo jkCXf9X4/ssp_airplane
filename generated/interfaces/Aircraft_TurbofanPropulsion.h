@@ -21,7 +21,10 @@ typedef enum Aircraft_TurbofanPropulsion_ValueReference {
 
 #ifdef __cplusplus
 
+inline constexpr size_t Aircraft_TurbofanPropulsion_VrCount = 12;
+
 struct Aircraft_TurbofanPropulsion_Instance {
+  Aircraft_VrMapping vr_map[12] = {};
   double max_thrust_kn = 129.7;
   double dry_thrust_kn = 79.0;
   double specific_fuel_consumption = 0.76;
@@ -32,23 +35,22 @@ struct Aircraft_TurbofanPropulsion_Instance {
   Aircraft_FuelConsumptionRate fuel_consumption = {};
 };
 
-inline constexpr Aircraft_FieldBinding Aircraft_TurbofanPropulsion_Bindings[] = {
-  {AIRCRAFT_TURBOFANPROPULSION_VR_MAX_THRUST_KN, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_TurbofanPropulsion_Instance, max_thrust_kn), true},
-  {AIRCRAFT_TURBOFANPROPULSION_VR_DRY_THRUST_KN, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_TurbofanPropulsion_Instance, dry_thrust_kn), true},
-  {AIRCRAFT_TURBOFANPROPULSION_VR_SPECIFIC_FUEL_CONSUMPTION, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_TurbofanPropulsion_Instance, specific_fuel_consumption), true},
-  {AIRCRAFT_TURBOFANPROPULSION_VR_FUEL_CAPACITY_KG, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_TurbofanPropulsion_Instance, fuel_capacity_kg), true},
-  {AIRCRAFT_TURBOFANPROPULSION_VR_GENERATOR_OUTPUT_KW, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_TurbofanPropulsion_Instance, generator_output_kw), true},
-  {AIRCRAFT_TURBOFANPROPULSION_VR_THROTTLECMD_THROTTLE_NORM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_TurbofanPropulsion_Instance, throttleCmd) + offsetof(Aircraft_ThrottleCommand, throttle_norm), true},
-  {AIRCRAFT_TURBOFANPROPULSION_VR_THROTTLECMD_FUEL_ENABLE, AIRCRAFT_SCALAR_BOOLEAN, offsetof(Aircraft_TurbofanPropulsion_Instance, throttleCmd) + offsetof(Aircraft_ThrottleCommand, fuel_enable), true},
-  {AIRCRAFT_TURBOFANPROPULSION_VR_THROTTLECMD_AFTERBURNER_ENABLE, AIRCRAFT_SCALAR_BOOLEAN, offsetof(Aircraft_TurbofanPropulsion_Instance, throttleCmd) + offsetof(Aircraft_ThrottleCommand, afterburner_enable), true},
-  {AIRCRAFT_TURBOFANPROPULSION_VR_THRUSTOUT_THRUST_KN, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_TurbofanPropulsion_Instance, thrustOut) + offsetof(Aircraft_ThrustState, thrust_kn), false},
-  {AIRCRAFT_TURBOFANPROPULSION_VR_THRUSTOUT_MASS_FLOW_KGPS, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_TurbofanPropulsion_Instance, thrustOut) + offsetof(Aircraft_ThrustState, mass_flow_kgps), false},
-  {AIRCRAFT_TURBOFANPROPULSION_VR_THRUSTOUT_EXHAUST_VELOCITY_MPS, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_TurbofanPropulsion_Instance, thrustOut) + offsetof(Aircraft_ThrustState, exhaust_velocity_mps), false},
-  {AIRCRAFT_TURBOFANPROPULSION_VR_FUEL_CONSUMPTION_MASS_FLOW_KGPS, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_TurbofanPropulsion_Instance, fuel_consumption) + offsetof(Aircraft_FuelConsumptionRate, mass_flow_kgps), false},
-};
-inline constexpr size_t Aircraft_TurbofanPropulsion_BindingCount = sizeof(Aircraft_TurbofanPropulsion_Bindings) / sizeof(Aircraft_TurbofanPropulsion_Bindings[0]);
-
-inline constexpr const Aircraft_StringFieldBinding* Aircraft_TurbofanPropulsion_StringBindings = nullptr;
-inline constexpr size_t Aircraft_TurbofanPropulsion_StringBindingCount = 0;
+inline void Aircraft_TurbofanPropulsion_initialize_vr_map(Aircraft_TurbofanPropulsion_Instance* instance) {
+  for (size_t i = 0; i < Aircraft_TurbofanPropulsion_VrCount; ++i) {
+    instance->vr_map[i] = {nullptr, AIRCRAFT_DATA_NONE, false};
+  }
+  instance->vr_map[AIRCRAFT_TURBOFANPROPULSION_VR_MAX_THRUST_KN] = {&instance->max_thrust_kn, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_TURBOFANPROPULSION_VR_DRY_THRUST_KN] = {&instance->dry_thrust_kn, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_TURBOFANPROPULSION_VR_SPECIFIC_FUEL_CONSUMPTION] = {&instance->specific_fuel_consumption, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_TURBOFANPROPULSION_VR_FUEL_CAPACITY_KG] = {&instance->fuel_capacity_kg, AIRCRAFT_DATA_INTEGER, true};
+  instance->vr_map[AIRCRAFT_TURBOFANPROPULSION_VR_GENERATOR_OUTPUT_KW] = {&instance->generator_output_kw, AIRCRAFT_DATA_INTEGER, true};
+  instance->vr_map[AIRCRAFT_TURBOFANPROPULSION_VR_THROTTLECMD_THROTTLE_NORM] = {&instance->throttleCmd.throttle_norm, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_TURBOFANPROPULSION_VR_THROTTLECMD_FUEL_ENABLE] = {&instance->throttleCmd.fuel_enable, AIRCRAFT_DATA_BOOLEAN, true};
+  instance->vr_map[AIRCRAFT_TURBOFANPROPULSION_VR_THROTTLECMD_AFTERBURNER_ENABLE] = {&instance->throttleCmd.afterburner_enable, AIRCRAFT_DATA_BOOLEAN, true};
+  instance->vr_map[AIRCRAFT_TURBOFANPROPULSION_VR_THRUSTOUT_THRUST_KN] = {&instance->thrustOut.thrust_kn, AIRCRAFT_DATA_REAL, false};
+  instance->vr_map[AIRCRAFT_TURBOFANPROPULSION_VR_THRUSTOUT_MASS_FLOW_KGPS] = {&instance->thrustOut.mass_flow_kgps, AIRCRAFT_DATA_REAL, false};
+  instance->vr_map[AIRCRAFT_TURBOFANPROPULSION_VR_THRUSTOUT_EXHAUST_VELOCITY_MPS] = {&instance->thrustOut.exhaust_velocity_mps, AIRCRAFT_DATA_REAL, false};
+  instance->vr_map[AIRCRAFT_TURBOFANPROPULSION_VR_FUEL_CONSUMPTION_MASS_FLOW_KGPS] = {&instance->fuel_consumption.mass_flow_kgps, AIRCRAFT_DATA_REAL, false};
+}
 
 #endif  /* __cplusplus */

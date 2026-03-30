@@ -38,7 +38,10 @@ typedef enum Aircraft_MissionComputer_ValueReference {
 
 #ifdef __cplusplus
 
+inline constexpr size_t Aircraft_MissionComputer_VrCount = 29;
+
 struct Aircraft_MissionComputer_Instance {
+  Aircraft_VrMapping vr_map[29] = {};
   Aircraft_PilotCommand manualInput = {};
   Aircraft_PilotCommand autopilotInput = {};
   Aircraft_FuelLevelState fuelStatus = {};
@@ -46,40 +49,39 @@ struct Aircraft_MissionComputer_Instance {
   Aircraft_OrientationEuler direction_command = {};
 };
 
-inline constexpr Aircraft_FieldBinding Aircraft_MissionComputer_Bindings[] = {
-  {AIRCRAFT_MISSIONCOMPUTER_VR_MANUALINPUT_STICK_PITCH_NORM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_MissionComputer_Instance, manualInput) + offsetof(Aircraft_PilotCommand, stick_pitch_norm), true},
-  {AIRCRAFT_MISSIONCOMPUTER_VR_MANUALINPUT_STICK_ROLL_NORM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_MissionComputer_Instance, manualInput) + offsetof(Aircraft_PilotCommand, stick_roll_norm), true},
-  {AIRCRAFT_MISSIONCOMPUTER_VR_MANUALINPUT_RUDDER_NORM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_MissionComputer_Instance, manualInput) + offsetof(Aircraft_PilotCommand, rudder_norm), true},
-  {AIRCRAFT_MISSIONCOMPUTER_VR_MANUALINPUT_THROTTLE_NORM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_MissionComputer_Instance, manualInput) + offsetof(Aircraft_PilotCommand, throttle_norm), true},
-  {AIRCRAFT_MISSIONCOMPUTER_VR_MANUALINPUT_THROTTLE_AUX_NORM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_MissionComputer_Instance, manualInput) + offsetof(Aircraft_PilotCommand, throttle_aux_norm), true},
-  {AIRCRAFT_MISSIONCOMPUTER_VR_MANUALINPUT_BUTTON_MASK, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_MissionComputer_Instance, manualInput) + offsetof(Aircraft_PilotCommand, button_mask), true},
-  {AIRCRAFT_MISSIONCOMPUTER_VR_MANUALINPUT_HAT_X, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_MissionComputer_Instance, manualInput) + offsetof(Aircraft_PilotCommand, hat_x), true},
-  {AIRCRAFT_MISSIONCOMPUTER_VR_MANUALINPUT_HAT_Y, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_MissionComputer_Instance, manualInput) + offsetof(Aircraft_PilotCommand, hat_y), true},
-  {AIRCRAFT_MISSIONCOMPUTER_VR_MANUALINPUT_MODE_SWITCH, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_MissionComputer_Instance, manualInput) + offsetof(Aircraft_PilotCommand, mode_switch), true},
-  {AIRCRAFT_MISSIONCOMPUTER_VR_MANUALINPUT_RESERVED, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_MissionComputer_Instance, manualInput) + offsetof(Aircraft_PilotCommand, reserved), true},
-  {AIRCRAFT_MISSIONCOMPUTER_VR_AUTOPILOTINPUT_STICK_PITCH_NORM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_MissionComputer_Instance, autopilotInput) + offsetof(Aircraft_PilotCommand, stick_pitch_norm), true},
-  {AIRCRAFT_MISSIONCOMPUTER_VR_AUTOPILOTINPUT_STICK_ROLL_NORM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_MissionComputer_Instance, autopilotInput) + offsetof(Aircraft_PilotCommand, stick_roll_norm), true},
-  {AIRCRAFT_MISSIONCOMPUTER_VR_AUTOPILOTINPUT_RUDDER_NORM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_MissionComputer_Instance, autopilotInput) + offsetof(Aircraft_PilotCommand, rudder_norm), true},
-  {AIRCRAFT_MISSIONCOMPUTER_VR_AUTOPILOTINPUT_THROTTLE_NORM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_MissionComputer_Instance, autopilotInput) + offsetof(Aircraft_PilotCommand, throttle_norm), true},
-  {AIRCRAFT_MISSIONCOMPUTER_VR_AUTOPILOTINPUT_THROTTLE_AUX_NORM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_MissionComputer_Instance, autopilotInput) + offsetof(Aircraft_PilotCommand, throttle_aux_norm), true},
-  {AIRCRAFT_MISSIONCOMPUTER_VR_AUTOPILOTINPUT_BUTTON_MASK, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_MissionComputer_Instance, autopilotInput) + offsetof(Aircraft_PilotCommand, button_mask), true},
-  {AIRCRAFT_MISSIONCOMPUTER_VR_AUTOPILOTINPUT_HAT_X, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_MissionComputer_Instance, autopilotInput) + offsetof(Aircraft_PilotCommand, hat_x), true},
-  {AIRCRAFT_MISSIONCOMPUTER_VR_AUTOPILOTINPUT_HAT_Y, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_MissionComputer_Instance, autopilotInput) + offsetof(Aircraft_PilotCommand, hat_y), true},
-  {AIRCRAFT_MISSIONCOMPUTER_VR_AUTOPILOTINPUT_MODE_SWITCH, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_MissionComputer_Instance, autopilotInput) + offsetof(Aircraft_PilotCommand, mode_switch), true},
-  {AIRCRAFT_MISSIONCOMPUTER_VR_AUTOPILOTINPUT_RESERVED, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_MissionComputer_Instance, autopilotInput) + offsetof(Aircraft_PilotCommand, reserved), true},
-  {AIRCRAFT_MISSIONCOMPUTER_VR_FUELSTATUS_FUEL_REMAINING_KG, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_MissionComputer_Instance, fuelStatus) + offsetof(Aircraft_FuelLevelState, fuel_remaining_kg), true},
-  {AIRCRAFT_MISSIONCOMPUTER_VR_FUELSTATUS_FUEL_LEVEL_NORM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_MissionComputer_Instance, fuelStatus) + offsetof(Aircraft_FuelLevelState, fuel_level_norm), true},
-  {AIRCRAFT_MISSIONCOMPUTER_VR_FUELSTATUS_FUEL_STARVED, AIRCRAFT_SCALAR_BOOLEAN, offsetof(Aircraft_MissionComputer_Instance, fuelStatus) + offsetof(Aircraft_FuelLevelState, fuel_starved), true},
-  {AIRCRAFT_MISSIONCOMPUTER_VR_ENGINETHROTTLE_THROTTLE_NORM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_MissionComputer_Instance, engineThrottle) + offsetof(Aircraft_ThrottleCommand, throttle_norm), false},
-  {AIRCRAFT_MISSIONCOMPUTER_VR_ENGINETHROTTLE_FUEL_ENABLE, AIRCRAFT_SCALAR_BOOLEAN, offsetof(Aircraft_MissionComputer_Instance, engineThrottle) + offsetof(Aircraft_ThrottleCommand, fuel_enable), false},
-  {AIRCRAFT_MISSIONCOMPUTER_VR_ENGINETHROTTLE_AFTERBURNER_ENABLE, AIRCRAFT_SCALAR_BOOLEAN, offsetof(Aircraft_MissionComputer_Instance, engineThrottle) + offsetof(Aircraft_ThrottleCommand, afterburner_enable), false},
-  {AIRCRAFT_MISSIONCOMPUTER_VR_DIRECTION_COMMAND_ROLL_DEG, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_MissionComputer_Instance, direction_command) + offsetof(Aircraft_OrientationEuler, roll_deg), false},
-  {AIRCRAFT_MISSIONCOMPUTER_VR_DIRECTION_COMMAND_PITCH_DEG, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_MissionComputer_Instance, direction_command) + offsetof(Aircraft_OrientationEuler, pitch_deg), false},
-  {AIRCRAFT_MISSIONCOMPUTER_VR_DIRECTION_COMMAND_YAW_DEG, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_MissionComputer_Instance, direction_command) + offsetof(Aircraft_OrientationEuler, yaw_deg), false},
-};
-inline constexpr size_t Aircraft_MissionComputer_BindingCount = sizeof(Aircraft_MissionComputer_Bindings) / sizeof(Aircraft_MissionComputer_Bindings[0]);
-
-inline constexpr const Aircraft_StringFieldBinding* Aircraft_MissionComputer_StringBindings = nullptr;
-inline constexpr size_t Aircraft_MissionComputer_StringBindingCount = 0;
+inline void Aircraft_MissionComputer_initialize_vr_map(Aircraft_MissionComputer_Instance* instance) {
+  for (size_t i = 0; i < Aircraft_MissionComputer_VrCount; ++i) {
+    instance->vr_map[i] = {nullptr, AIRCRAFT_DATA_NONE, false};
+  }
+  instance->vr_map[AIRCRAFT_MISSIONCOMPUTER_VR_MANUALINPUT_STICK_PITCH_NORM] = {&instance->manualInput.stick_pitch_norm, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_MISSIONCOMPUTER_VR_MANUALINPUT_STICK_ROLL_NORM] = {&instance->manualInput.stick_roll_norm, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_MISSIONCOMPUTER_VR_MANUALINPUT_RUDDER_NORM] = {&instance->manualInput.rudder_norm, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_MISSIONCOMPUTER_VR_MANUALINPUT_THROTTLE_NORM] = {&instance->manualInput.throttle_norm, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_MISSIONCOMPUTER_VR_MANUALINPUT_THROTTLE_AUX_NORM] = {&instance->manualInput.throttle_aux_norm, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_MISSIONCOMPUTER_VR_MANUALINPUT_BUTTON_MASK] = {&instance->manualInput.button_mask, AIRCRAFT_DATA_INTEGER, true};
+  instance->vr_map[AIRCRAFT_MISSIONCOMPUTER_VR_MANUALINPUT_HAT_X] = {&instance->manualInput.hat_x, AIRCRAFT_DATA_INTEGER, true};
+  instance->vr_map[AIRCRAFT_MISSIONCOMPUTER_VR_MANUALINPUT_HAT_Y] = {&instance->manualInput.hat_y, AIRCRAFT_DATA_INTEGER, true};
+  instance->vr_map[AIRCRAFT_MISSIONCOMPUTER_VR_MANUALINPUT_MODE_SWITCH] = {&instance->manualInput.mode_switch, AIRCRAFT_DATA_INTEGER, true};
+  instance->vr_map[AIRCRAFT_MISSIONCOMPUTER_VR_MANUALINPUT_RESERVED] = {&instance->manualInput.reserved, AIRCRAFT_DATA_INTEGER, true};
+  instance->vr_map[AIRCRAFT_MISSIONCOMPUTER_VR_AUTOPILOTINPUT_STICK_PITCH_NORM] = {&instance->autopilotInput.stick_pitch_norm, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_MISSIONCOMPUTER_VR_AUTOPILOTINPUT_STICK_ROLL_NORM] = {&instance->autopilotInput.stick_roll_norm, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_MISSIONCOMPUTER_VR_AUTOPILOTINPUT_RUDDER_NORM] = {&instance->autopilotInput.rudder_norm, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_MISSIONCOMPUTER_VR_AUTOPILOTINPUT_THROTTLE_NORM] = {&instance->autopilotInput.throttle_norm, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_MISSIONCOMPUTER_VR_AUTOPILOTINPUT_THROTTLE_AUX_NORM] = {&instance->autopilotInput.throttle_aux_norm, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_MISSIONCOMPUTER_VR_AUTOPILOTINPUT_BUTTON_MASK] = {&instance->autopilotInput.button_mask, AIRCRAFT_DATA_INTEGER, true};
+  instance->vr_map[AIRCRAFT_MISSIONCOMPUTER_VR_AUTOPILOTINPUT_HAT_X] = {&instance->autopilotInput.hat_x, AIRCRAFT_DATA_INTEGER, true};
+  instance->vr_map[AIRCRAFT_MISSIONCOMPUTER_VR_AUTOPILOTINPUT_HAT_Y] = {&instance->autopilotInput.hat_y, AIRCRAFT_DATA_INTEGER, true};
+  instance->vr_map[AIRCRAFT_MISSIONCOMPUTER_VR_AUTOPILOTINPUT_MODE_SWITCH] = {&instance->autopilotInput.mode_switch, AIRCRAFT_DATA_INTEGER, true};
+  instance->vr_map[AIRCRAFT_MISSIONCOMPUTER_VR_AUTOPILOTINPUT_RESERVED] = {&instance->autopilotInput.reserved, AIRCRAFT_DATA_INTEGER, true};
+  instance->vr_map[AIRCRAFT_MISSIONCOMPUTER_VR_FUELSTATUS_FUEL_REMAINING_KG] = {&instance->fuelStatus.fuel_remaining_kg, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_MISSIONCOMPUTER_VR_FUELSTATUS_FUEL_LEVEL_NORM] = {&instance->fuelStatus.fuel_level_norm, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_MISSIONCOMPUTER_VR_FUELSTATUS_FUEL_STARVED] = {&instance->fuelStatus.fuel_starved, AIRCRAFT_DATA_BOOLEAN, true};
+  instance->vr_map[AIRCRAFT_MISSIONCOMPUTER_VR_ENGINETHROTTLE_THROTTLE_NORM] = {&instance->engineThrottle.throttle_norm, AIRCRAFT_DATA_REAL, false};
+  instance->vr_map[AIRCRAFT_MISSIONCOMPUTER_VR_ENGINETHROTTLE_FUEL_ENABLE] = {&instance->engineThrottle.fuel_enable, AIRCRAFT_DATA_BOOLEAN, false};
+  instance->vr_map[AIRCRAFT_MISSIONCOMPUTER_VR_ENGINETHROTTLE_AFTERBURNER_ENABLE] = {&instance->engineThrottle.afterburner_enable, AIRCRAFT_DATA_BOOLEAN, false};
+  instance->vr_map[AIRCRAFT_MISSIONCOMPUTER_VR_DIRECTION_COMMAND_ROLL_DEG] = {&instance->direction_command.roll_deg, AIRCRAFT_DATA_REAL, false};
+  instance->vr_map[AIRCRAFT_MISSIONCOMPUTER_VR_DIRECTION_COMMAND_PITCH_DEG] = {&instance->direction_command.pitch_deg, AIRCRAFT_DATA_REAL, false};
+  instance->vr_map[AIRCRAFT_MISSIONCOMPUTER_VR_DIRECTION_COMMAND_YAW_DEG] = {&instance->direction_command.yaw_deg, AIRCRAFT_DATA_REAL, false};
+}
 
 #endif  /* __cplusplus */

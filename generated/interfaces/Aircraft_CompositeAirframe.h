@@ -15,7 +15,10 @@ typedef enum Aircraft_CompositeAirframe_ValueReference {
 
 #ifdef __cplusplus
 
+inline constexpr size_t Aircraft_CompositeAirframe_VrCount = 6;
+
 struct Aircraft_CompositeAirframe_Instance {
+  Aircraft_VrMapping vr_map[6] = {};
   double length_m = 15.0;
   double fuselage_width_m = 3.0;
   double wingspan_m = 10.0;
@@ -24,17 +27,16 @@ struct Aircraft_CompositeAirframe_Instance {
   int hardpoint_count = 9;
 };
 
-inline constexpr Aircraft_FieldBinding Aircraft_CompositeAirframe_Bindings[] = {
-  {AIRCRAFT_COMPOSITEAIRFRAME_VR_LENGTH_M, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_CompositeAirframe_Instance, length_m), true},
-  {AIRCRAFT_COMPOSITEAIRFRAME_VR_FUSELAGE_WIDTH_M, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_CompositeAirframe_Instance, fuselage_width_m), true},
-  {AIRCRAFT_COMPOSITEAIRFRAME_VR_WINGSPAN_M, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_CompositeAirframe_Instance, wingspan_m), true},
-  {AIRCRAFT_COMPOSITEAIRFRAME_VR_EMPTY_WEIGHT_KG, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_CompositeAirframe_Instance, empty_weight_kg), true},
-  {AIRCRAFT_COMPOSITEAIRFRAME_VR_PAYLOAD_CAPACITY_KG, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_CompositeAirframe_Instance, payload_capacity_kg), true},
-  {AIRCRAFT_COMPOSITEAIRFRAME_VR_HARDPOINT_COUNT, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_CompositeAirframe_Instance, hardpoint_count), true},
-};
-inline constexpr size_t Aircraft_CompositeAirframe_BindingCount = sizeof(Aircraft_CompositeAirframe_Bindings) / sizeof(Aircraft_CompositeAirframe_Bindings[0]);
-
-inline constexpr const Aircraft_StringFieldBinding* Aircraft_CompositeAirframe_StringBindings = nullptr;
-inline constexpr size_t Aircraft_CompositeAirframe_StringBindingCount = 0;
+inline void Aircraft_CompositeAirframe_initialize_vr_map(Aircraft_CompositeAirframe_Instance* instance) {
+  for (size_t i = 0; i < Aircraft_CompositeAirframe_VrCount; ++i) {
+    instance->vr_map[i] = {nullptr, AIRCRAFT_DATA_NONE, false};
+  }
+  instance->vr_map[AIRCRAFT_COMPOSITEAIRFRAME_VR_LENGTH_M] = {&instance->length_m, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_COMPOSITEAIRFRAME_VR_FUSELAGE_WIDTH_M] = {&instance->fuselage_width_m, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_COMPOSITEAIRFRAME_VR_WINGSPAN_M] = {&instance->wingspan_m, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_COMPOSITEAIRFRAME_VR_EMPTY_WEIGHT_KG] = {&instance->empty_weight_kg, AIRCRAFT_DATA_INTEGER, true};
+  instance->vr_map[AIRCRAFT_COMPOSITEAIRFRAME_VR_PAYLOAD_CAPACITY_KG] = {&instance->payload_capacity_kg, AIRCRAFT_DATA_INTEGER, true};
+  instance->vr_map[AIRCRAFT_COMPOSITEAIRFRAME_VR_HARDPOINT_COUNT] = {&instance->hardpoint_count, AIRCRAFT_DATA_INTEGER, true};
+}
 
 #endif  /* __cplusplus */

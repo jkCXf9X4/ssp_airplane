@@ -32,7 +32,10 @@ typedef enum Aircraft_ControlInterface_ValueReference {
 
 #ifdef __cplusplus
 
+inline constexpr size_t Aircraft_ControlInterface_VrCount = 23;
+
 struct Aircraft_ControlInterface_Instance {
+  Aircraft_VrMapping vr_map[23] = {};
   std::string input_scheme = "HOTAS";
   int telemetry_rate_hz = 120;
   bool useBridgeInput = false;
@@ -40,38 +43,33 @@ struct Aircraft_ControlInterface_Instance {
   Aircraft_PilotCommand pilotCommand = {};
 };
 
-inline const std::string& Aircraft_ControlInterface_INPUT_SCHEME_get(const void* instance) { return static_cast<const Aircraft_ControlInterface_Instance*>(instance)->input_scheme; }
-inline std::string& Aircraft_ControlInterface_INPUT_SCHEME_get_mut(void* instance) { return static_cast<Aircraft_ControlInterface_Instance*>(instance)->input_scheme; }
-
-inline constexpr Aircraft_FieldBinding Aircraft_ControlInterface_Bindings[] = {
-  {AIRCRAFT_CONTROLINTERFACE_VR_TELEMETRY_RATE_HZ, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_ControlInterface_Instance, telemetry_rate_hz), true},
-  {AIRCRAFT_CONTROLINTERFACE_VR_USEBRIDGEINPUT, AIRCRAFT_SCALAR_BOOLEAN, offsetof(Aircraft_ControlInterface_Instance, useBridgeInput), true},
-  {AIRCRAFT_CONTROLINTERFACE_VR_BRIDGEINPUT_STICK_PITCH_NORM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_ControlInterface_Instance, bridgeInput) + offsetof(Aircraft_PilotCommand, stick_pitch_norm), true},
-  {AIRCRAFT_CONTROLINTERFACE_VR_BRIDGEINPUT_STICK_ROLL_NORM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_ControlInterface_Instance, bridgeInput) + offsetof(Aircraft_PilotCommand, stick_roll_norm), true},
-  {AIRCRAFT_CONTROLINTERFACE_VR_BRIDGEINPUT_RUDDER_NORM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_ControlInterface_Instance, bridgeInput) + offsetof(Aircraft_PilotCommand, rudder_norm), true},
-  {AIRCRAFT_CONTROLINTERFACE_VR_BRIDGEINPUT_THROTTLE_NORM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_ControlInterface_Instance, bridgeInput) + offsetof(Aircraft_PilotCommand, throttle_norm), true},
-  {AIRCRAFT_CONTROLINTERFACE_VR_BRIDGEINPUT_THROTTLE_AUX_NORM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_ControlInterface_Instance, bridgeInput) + offsetof(Aircraft_PilotCommand, throttle_aux_norm), true},
-  {AIRCRAFT_CONTROLINTERFACE_VR_BRIDGEINPUT_BUTTON_MASK, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_ControlInterface_Instance, bridgeInput) + offsetof(Aircraft_PilotCommand, button_mask), true},
-  {AIRCRAFT_CONTROLINTERFACE_VR_BRIDGEINPUT_HAT_X, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_ControlInterface_Instance, bridgeInput) + offsetof(Aircraft_PilotCommand, hat_x), true},
-  {AIRCRAFT_CONTROLINTERFACE_VR_BRIDGEINPUT_HAT_Y, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_ControlInterface_Instance, bridgeInput) + offsetof(Aircraft_PilotCommand, hat_y), true},
-  {AIRCRAFT_CONTROLINTERFACE_VR_BRIDGEINPUT_MODE_SWITCH, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_ControlInterface_Instance, bridgeInput) + offsetof(Aircraft_PilotCommand, mode_switch), true},
-  {AIRCRAFT_CONTROLINTERFACE_VR_BRIDGEINPUT_RESERVED, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_ControlInterface_Instance, bridgeInput) + offsetof(Aircraft_PilotCommand, reserved), true},
-  {AIRCRAFT_CONTROLINTERFACE_VR_PILOTCOMMAND_STICK_PITCH_NORM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_ControlInterface_Instance, pilotCommand) + offsetof(Aircraft_PilotCommand, stick_pitch_norm), false},
-  {AIRCRAFT_CONTROLINTERFACE_VR_PILOTCOMMAND_STICK_ROLL_NORM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_ControlInterface_Instance, pilotCommand) + offsetof(Aircraft_PilotCommand, stick_roll_norm), false},
-  {AIRCRAFT_CONTROLINTERFACE_VR_PILOTCOMMAND_RUDDER_NORM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_ControlInterface_Instance, pilotCommand) + offsetof(Aircraft_PilotCommand, rudder_norm), false},
-  {AIRCRAFT_CONTROLINTERFACE_VR_PILOTCOMMAND_THROTTLE_NORM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_ControlInterface_Instance, pilotCommand) + offsetof(Aircraft_PilotCommand, throttle_norm), false},
-  {AIRCRAFT_CONTROLINTERFACE_VR_PILOTCOMMAND_THROTTLE_AUX_NORM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_ControlInterface_Instance, pilotCommand) + offsetof(Aircraft_PilotCommand, throttle_aux_norm), false},
-  {AIRCRAFT_CONTROLINTERFACE_VR_PILOTCOMMAND_BUTTON_MASK, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_ControlInterface_Instance, pilotCommand) + offsetof(Aircraft_PilotCommand, button_mask), false},
-  {AIRCRAFT_CONTROLINTERFACE_VR_PILOTCOMMAND_HAT_X, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_ControlInterface_Instance, pilotCommand) + offsetof(Aircraft_PilotCommand, hat_x), false},
-  {AIRCRAFT_CONTROLINTERFACE_VR_PILOTCOMMAND_HAT_Y, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_ControlInterface_Instance, pilotCommand) + offsetof(Aircraft_PilotCommand, hat_y), false},
-  {AIRCRAFT_CONTROLINTERFACE_VR_PILOTCOMMAND_MODE_SWITCH, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_ControlInterface_Instance, pilotCommand) + offsetof(Aircraft_PilotCommand, mode_switch), false},
-  {AIRCRAFT_CONTROLINTERFACE_VR_PILOTCOMMAND_RESERVED, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_ControlInterface_Instance, pilotCommand) + offsetof(Aircraft_PilotCommand, reserved), false},
-};
-inline constexpr size_t Aircraft_ControlInterface_BindingCount = sizeof(Aircraft_ControlInterface_Bindings) / sizeof(Aircraft_ControlInterface_Bindings[0]);
-
-inline constexpr Aircraft_StringFieldBinding Aircraft_ControlInterface_StringBindings[] = {
-  {AIRCRAFT_CONTROLINTERFACE_VR_INPUT_SCHEME, &Aircraft_ControlInterface_INPUT_SCHEME_get, &Aircraft_ControlInterface_INPUT_SCHEME_get_mut, true},
-};
-inline constexpr size_t Aircraft_ControlInterface_StringBindingCount = sizeof(Aircraft_ControlInterface_StringBindings) / sizeof(Aircraft_ControlInterface_StringBindings[0]);
+inline void Aircraft_ControlInterface_initialize_vr_map(Aircraft_ControlInterface_Instance* instance) {
+  for (size_t i = 0; i < Aircraft_ControlInterface_VrCount; ++i) {
+    instance->vr_map[i] = {nullptr, AIRCRAFT_DATA_NONE, false};
+  }
+  instance->vr_map[AIRCRAFT_CONTROLINTERFACE_VR_INPUT_SCHEME] = {&instance->input_scheme, AIRCRAFT_DATA_STRING, true};
+  instance->vr_map[AIRCRAFT_CONTROLINTERFACE_VR_TELEMETRY_RATE_HZ] = {&instance->telemetry_rate_hz, AIRCRAFT_DATA_INTEGER, true};
+  instance->vr_map[AIRCRAFT_CONTROLINTERFACE_VR_USEBRIDGEINPUT] = {&instance->useBridgeInput, AIRCRAFT_DATA_BOOLEAN, true};
+  instance->vr_map[AIRCRAFT_CONTROLINTERFACE_VR_BRIDGEINPUT_STICK_PITCH_NORM] = {&instance->bridgeInput.stick_pitch_norm, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_CONTROLINTERFACE_VR_BRIDGEINPUT_STICK_ROLL_NORM] = {&instance->bridgeInput.stick_roll_norm, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_CONTROLINTERFACE_VR_BRIDGEINPUT_RUDDER_NORM] = {&instance->bridgeInput.rudder_norm, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_CONTROLINTERFACE_VR_BRIDGEINPUT_THROTTLE_NORM] = {&instance->bridgeInput.throttle_norm, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_CONTROLINTERFACE_VR_BRIDGEINPUT_THROTTLE_AUX_NORM] = {&instance->bridgeInput.throttle_aux_norm, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_CONTROLINTERFACE_VR_BRIDGEINPUT_BUTTON_MASK] = {&instance->bridgeInput.button_mask, AIRCRAFT_DATA_INTEGER, true};
+  instance->vr_map[AIRCRAFT_CONTROLINTERFACE_VR_BRIDGEINPUT_HAT_X] = {&instance->bridgeInput.hat_x, AIRCRAFT_DATA_INTEGER, true};
+  instance->vr_map[AIRCRAFT_CONTROLINTERFACE_VR_BRIDGEINPUT_HAT_Y] = {&instance->bridgeInput.hat_y, AIRCRAFT_DATA_INTEGER, true};
+  instance->vr_map[AIRCRAFT_CONTROLINTERFACE_VR_BRIDGEINPUT_MODE_SWITCH] = {&instance->bridgeInput.mode_switch, AIRCRAFT_DATA_INTEGER, true};
+  instance->vr_map[AIRCRAFT_CONTROLINTERFACE_VR_BRIDGEINPUT_RESERVED] = {&instance->bridgeInput.reserved, AIRCRAFT_DATA_INTEGER, true};
+  instance->vr_map[AIRCRAFT_CONTROLINTERFACE_VR_PILOTCOMMAND_STICK_PITCH_NORM] = {&instance->pilotCommand.stick_pitch_norm, AIRCRAFT_DATA_REAL, false};
+  instance->vr_map[AIRCRAFT_CONTROLINTERFACE_VR_PILOTCOMMAND_STICK_ROLL_NORM] = {&instance->pilotCommand.stick_roll_norm, AIRCRAFT_DATA_REAL, false};
+  instance->vr_map[AIRCRAFT_CONTROLINTERFACE_VR_PILOTCOMMAND_RUDDER_NORM] = {&instance->pilotCommand.rudder_norm, AIRCRAFT_DATA_REAL, false};
+  instance->vr_map[AIRCRAFT_CONTROLINTERFACE_VR_PILOTCOMMAND_THROTTLE_NORM] = {&instance->pilotCommand.throttle_norm, AIRCRAFT_DATA_REAL, false};
+  instance->vr_map[AIRCRAFT_CONTROLINTERFACE_VR_PILOTCOMMAND_THROTTLE_AUX_NORM] = {&instance->pilotCommand.throttle_aux_norm, AIRCRAFT_DATA_REAL, false};
+  instance->vr_map[AIRCRAFT_CONTROLINTERFACE_VR_PILOTCOMMAND_BUTTON_MASK] = {&instance->pilotCommand.button_mask, AIRCRAFT_DATA_INTEGER, false};
+  instance->vr_map[AIRCRAFT_CONTROLINTERFACE_VR_PILOTCOMMAND_HAT_X] = {&instance->pilotCommand.hat_x, AIRCRAFT_DATA_INTEGER, false};
+  instance->vr_map[AIRCRAFT_CONTROLINTERFACE_VR_PILOTCOMMAND_HAT_Y] = {&instance->pilotCommand.hat_y, AIRCRAFT_DATA_INTEGER, false};
+  instance->vr_map[AIRCRAFT_CONTROLINTERFACE_VR_PILOTCOMMAND_MODE_SWITCH] = {&instance->pilotCommand.mode_switch, AIRCRAFT_DATA_INTEGER, false};
+  instance->vr_map[AIRCRAFT_CONTROLINTERFACE_VR_PILOTCOMMAND_RESERVED] = {&instance->pilotCommand.reserved, AIRCRAFT_DATA_INTEGER, false};
+}
 
 #endif  /* __cplusplus */

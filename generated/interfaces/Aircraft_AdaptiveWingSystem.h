@@ -30,7 +30,10 @@ typedef enum Aircraft_AdaptiveWingSystem_ValueReference {
 
 #ifdef __cplusplus
 
+inline constexpr size_t Aircraft_AdaptiveWingSystem_VrCount = 21;
+
 struct Aircraft_AdaptiveWingSystem_Instance {
+  Aircraft_VrMapping vr_map[21] = {};
   double reference_area_m2 = 28.0;
   double span_m = 10.0;
   double aspect_ratio = 3.6;
@@ -42,32 +45,31 @@ struct Aircraft_AdaptiveWingSystem_Instance {
   Aircraft_LiftState liftInterface = {};
 };
 
-inline constexpr Aircraft_FieldBinding Aircraft_AdaptiveWingSystem_Bindings[] = {
-  {AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_REFERENCE_AREA_M2, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_AdaptiveWingSystem_Instance, reference_area_m2), true},
-  {AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_SPAN_M, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_AdaptiveWingSystem_Instance, span_m), true},
-  {AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_ASPECT_RATIO, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_AdaptiveWingSystem_Instance, aspect_ratio), true},
-  {AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_CONTROL_AUTHORITY_DEG, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_AdaptiveWingSystem_Instance, control_authority_deg), true},
-  {AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_LOAD_FACTOR_LIMIT_G, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_AdaptiveWingSystem_Instance, load_factor_limit_g), true},
-  {AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_DIRECTION_COMMAND_ROLL_DEG, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_AdaptiveWingSystem_Instance, direction_command) + offsetof(Aircraft_OrientationEuler, roll_deg), true},
-  {AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_DIRECTION_COMMAND_PITCH_DEG, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_AdaptiveWingSystem_Instance, direction_command) + offsetof(Aircraft_OrientationEuler, pitch_deg), true},
-  {AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_DIRECTION_COMMAND_YAW_DEG, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_AdaptiveWingSystem_Instance, direction_command) + offsetof(Aircraft_OrientationEuler, yaw_deg), true},
-  {AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_FLIGHT_SPEED_AIRSPEED_MPS, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_AdaptiveWingSystem_Instance, flight_speed) + offsetof(Aircraft_FlightStatusPacket, airspeed_mps), true},
-  {AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_FLIGHT_SPEED_ENERGY_STATE_NORM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_AdaptiveWingSystem_Instance, flight_speed) + offsetof(Aircraft_FlightStatusPacket, energy_state_norm), true},
-  {AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_FLIGHT_SPEED_ANGLE_OF_ATTACK_DEG, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_AdaptiveWingSystem_Instance, flight_speed) + offsetof(Aircraft_FlightStatusPacket, angle_of_attack_deg), true},
-  {AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_FLIGHT_SPEED_CLIMB_RATE, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_AdaptiveWingSystem_Instance, flight_speed) + offsetof(Aircraft_FlightStatusPacket, climb_rate), true},
-  {AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_FLIGHT_SPEED_HEALTH_CODE, AIRCRAFT_SCALAR_INTEGER, offsetof(Aircraft_AdaptiveWingSystem_Instance, flight_speed) + offsetof(Aircraft_FlightStatusPacket, health_code), true},
-  {AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_ACTUATION_COMMAND_LEFT_AILERON_DEG, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_AdaptiveWingSystem_Instance, actuation_command) + offsetof(Aircraft_SurfaceActuationCommand, left_aileron_deg), false},
-  {AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_ACTUATION_COMMAND_RIGHT_AILERON_DEG, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_AdaptiveWingSystem_Instance, actuation_command) + offsetof(Aircraft_SurfaceActuationCommand, right_aileron_deg), false},
-  {AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_ACTUATION_COMMAND_ELEVATOR_DEG, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_AdaptiveWingSystem_Instance, actuation_command) + offsetof(Aircraft_SurfaceActuationCommand, elevator_deg), false},
-  {AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_ACTUATION_COMMAND_RUDDER_DEG, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_AdaptiveWingSystem_Instance, actuation_command) + offsetof(Aircraft_SurfaceActuationCommand, rudder_deg), false},
-  {AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_ACTUATION_COMMAND_FLAPERON_DEG, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_AdaptiveWingSystem_Instance, actuation_command) + offsetof(Aircraft_SurfaceActuationCommand, flaperon_deg), false},
-  {AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_LIFTINTERFACE_LIFT_KN, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_AdaptiveWingSystem_Instance, liftInterface) + offsetof(Aircraft_LiftState, lift_kn), false},
-  {AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_LIFTINTERFACE_DRAG_KN, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_AdaptiveWingSystem_Instance, liftInterface) + offsetof(Aircraft_LiftState, drag_kn), false},
-  {AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_LIFTINTERFACE_PITCHING_MOMENT_KNM, AIRCRAFT_SCALAR_REAL, offsetof(Aircraft_AdaptiveWingSystem_Instance, liftInterface) + offsetof(Aircraft_LiftState, pitching_moment_knm), false},
-};
-inline constexpr size_t Aircraft_AdaptiveWingSystem_BindingCount = sizeof(Aircraft_AdaptiveWingSystem_Bindings) / sizeof(Aircraft_AdaptiveWingSystem_Bindings[0]);
-
-inline constexpr const Aircraft_StringFieldBinding* Aircraft_AdaptiveWingSystem_StringBindings = nullptr;
-inline constexpr size_t Aircraft_AdaptiveWingSystem_StringBindingCount = 0;
+inline void Aircraft_AdaptiveWingSystem_initialize_vr_map(Aircraft_AdaptiveWingSystem_Instance* instance) {
+  for (size_t i = 0; i < Aircraft_AdaptiveWingSystem_VrCount; ++i) {
+    instance->vr_map[i] = {nullptr, AIRCRAFT_DATA_NONE, false};
+  }
+  instance->vr_map[AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_REFERENCE_AREA_M2] = {&instance->reference_area_m2, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_SPAN_M] = {&instance->span_m, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_ASPECT_RATIO] = {&instance->aspect_ratio, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_CONTROL_AUTHORITY_DEG] = {&instance->control_authority_deg, AIRCRAFT_DATA_INTEGER, true};
+  instance->vr_map[AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_LOAD_FACTOR_LIMIT_G] = {&instance->load_factor_limit_g, AIRCRAFT_DATA_INTEGER, true};
+  instance->vr_map[AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_DIRECTION_COMMAND_ROLL_DEG] = {&instance->direction_command.roll_deg, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_DIRECTION_COMMAND_PITCH_DEG] = {&instance->direction_command.pitch_deg, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_DIRECTION_COMMAND_YAW_DEG] = {&instance->direction_command.yaw_deg, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_FLIGHT_SPEED_AIRSPEED_MPS] = {&instance->flight_speed.airspeed_mps, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_FLIGHT_SPEED_ENERGY_STATE_NORM] = {&instance->flight_speed.energy_state_norm, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_FLIGHT_SPEED_ANGLE_OF_ATTACK_DEG] = {&instance->flight_speed.angle_of_attack_deg, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_FLIGHT_SPEED_CLIMB_RATE] = {&instance->flight_speed.climb_rate, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_FLIGHT_SPEED_HEALTH_CODE] = {&instance->flight_speed.health_code, AIRCRAFT_DATA_INTEGER, true};
+  instance->vr_map[AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_ACTUATION_COMMAND_LEFT_AILERON_DEG] = {&instance->actuation_command.left_aileron_deg, AIRCRAFT_DATA_REAL, false};
+  instance->vr_map[AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_ACTUATION_COMMAND_RIGHT_AILERON_DEG] = {&instance->actuation_command.right_aileron_deg, AIRCRAFT_DATA_REAL, false};
+  instance->vr_map[AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_ACTUATION_COMMAND_ELEVATOR_DEG] = {&instance->actuation_command.elevator_deg, AIRCRAFT_DATA_REAL, false};
+  instance->vr_map[AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_ACTUATION_COMMAND_RUDDER_DEG] = {&instance->actuation_command.rudder_deg, AIRCRAFT_DATA_REAL, false};
+  instance->vr_map[AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_ACTUATION_COMMAND_FLAPERON_DEG] = {&instance->actuation_command.flaperon_deg, AIRCRAFT_DATA_REAL, false};
+  instance->vr_map[AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_LIFTINTERFACE_LIFT_KN] = {&instance->liftInterface.lift_kn, AIRCRAFT_DATA_REAL, false};
+  instance->vr_map[AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_LIFTINTERFACE_DRAG_KN] = {&instance->liftInterface.drag_kn, AIRCRAFT_DATA_REAL, false};
+  instance->vr_map[AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_LIFTINTERFACE_PITCHING_MOMENT_KNM] = {&instance->liftInterface.pitching_moment_knm, AIRCRAFT_DATA_REAL, false};
+}
 
 #endif  /* __cplusplus */
