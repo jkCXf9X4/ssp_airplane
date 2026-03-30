@@ -1,1 +1,1 @@
-"""Compatibility helpers for legacy utility imports."""
+"""Utility helpers shared across repository scripts."""

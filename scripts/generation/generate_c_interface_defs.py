@@ -6,17 +6,18 @@ import argparse
 import sys
 from pathlib import Path
 
+from pycps_sysmlv2 import NodeType, SysMLParser
+
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from scripts.common.paths import ARCHITECTURE_DIR, GENERATED_DIR, ensure_directory
-from scripts.utils.c_interface_export import (
+from scripts.common.c_interface_export import (
     architecture_part_specs,
     part_instance_fields,
     port_struct_fields,
     sanitize_c_identifier,
 )
-from scripts.utils.sysml_helpers import load_architecture
+from scripts.common.paths import ARCHITECTURE_DIR, COMPOSITION_NAME, GENERATED_DIR, ensure_directory
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_OUTPUT_DIR = GENERATED_DIR / "interfaces"
@@ -134,7 +135,7 @@ def _part_header_lines(package: str, part_name: str, part, specs: list) -> list[
 
 
 def generate_headers(source: Path, output_dir: Path) -> list[Path]:
-    architecture = load_architecture(source)
+    architecture = SysMLParser(source).parse()
     part_specs = architecture_part_specs(architecture)
 
     ensure_directory(output_dir)
@@ -144,8 +145,8 @@ def generate_headers(source: Path, output_dir: Path) -> list[Path]:
     common_path.write_text("\n".join(_common_header_lines(architecture.package, architecture)))
     written.append(common_path)
 
-    for part_name, part in architecture.parts.items():
-        if part_name == architecture.package:
+    for part_name, part in architecture.part_definitions.items():
+        if part_name == COMPOSITION_NAME:
             continue
         path = output_dir / part_header_name(architecture.package, part_name)
         path.write_text("\n".join(_part_header_lines(architecture.package, part_name, part, part_specs[part_name])))

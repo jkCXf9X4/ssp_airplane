@@ -8,13 +8,13 @@ import sys
 from pathlib import Path
 from typing import Dict, List, Set, Tuple
 
+from pycps_sysmlv2 import NodeType, SysMLParser
+
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.modelica_specs import MODELICA_MODEL_SPECS
-from scripts.common.paths import ARCHITECTURE_DIR
-from scripts.utils.sysml_helpers import load_architecture
-from scripts.utils.sysmlv2_arch_parser import SysMLArchitecture
+from scripts.common.paths import ARCHITECTURE_DIR, COMPOSITION_NAME
 
 DEFAULT_ARCH_DIR = ARCHITECTURE_DIR
 
@@ -25,21 +25,20 @@ INTERFACE_DECL_RE = re.compile(
 
 
 def _collect_architecture_data(
-    architecture: SysMLArchitecture,
+    architecture,
 ) -> Tuple[Dict[str, Set[str]], Dict[str, Dict[str, Tuple[str, str]]]]:
     members: Dict[str, Set[str]] = {}
     part_ports: Dict[str, Dict[str, Tuple[str, str]]] = {}
 
     for name, definition in architecture.port_definitions.items():
-        members[name] = set(definition.attributes.keys())
+        members[name] = set(definition.defs(NodeType.Attribute).keys())
 
-    for part_name, part in architecture.parts.items():
+    for part_name, part in architecture.part_definitions.items():
+        if part_name == COMPOSITION_NAME:
+            continue
         part_ports[part_name] = {
-            port.name: (
-                port.direction,
-                getattr(port, "payload", None) or getattr(getattr(port, "payload_def", None), "name", None),
-            )
-            for port in part.ports
+            port.name: (port.direction, port.type)
+            for port in part.refs(NodeType.Port).values()
         }
 
     return members, part_ports
@@ -105,7 +104,7 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
-    architecture = load_architecture(args.architecture)
+    architecture = SysMLParser(args.architecture).parse()
     members, part_ports = _collect_architecture_data(architecture)
 
     overall_issues: List[str] = []

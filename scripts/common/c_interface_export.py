@@ -4,8 +4,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Dict, Iterable, List, Optional
 
+from pycps_sysmlv2 import NodeType, SysMLPartDefinition, SysMLPortDefinition
+
+from scripts.common.paths import COMPOSITION_NAME
 from scripts.common.sysml_values import parse_literal
-from scripts.utils.sysmlv2_arch_parser import SysMLArchitecture, SysMLPartDefinition, SysMLPortDefinition
 from scripts.utils.type_utils import infer_primitive, normalize_primitive
 
 
@@ -54,8 +56,8 @@ def sanitize_c_identifier(name: str) -> str:
 
 def port_struct_fields(port_def: SysMLPortDefinition) -> List[tuple[str, str]]:
     fields: List[tuple[str, str]] = []
-    for attr in port_def.attributes.values():
-        fields.append((attr.name, c_primitive(attr.type or "Real")))
+    for attr in port_def.defs(NodeType.Attribute).values():
+        fields.append((attr.name, c_primitive(attr.type.as_string() or "Real")))
     return fields
 
 
@@ -77,7 +79,7 @@ def part_variable_specs(part: SysMLPartDefinition) -> List[VariableSpec]:
     specs: List[VariableSpec] = []
     value_reference = 0
 
-    for attr in part.attributes.values():
+    for attr in part.defs(NodeType.Attribute).values():
         literal = parse_literal(attr.value)
         primitive = infer_primitive(attr.type, literal)
         start_value = None
@@ -94,26 +96,26 @@ def part_variable_specs(part: SysMLPartDefinition) -> List[VariableSpec]:
                 causality="parameter",
                 variability="fixed",
                 start_value=start_value,
-                c_member_type=c_primitive(attr.type or primitive),
-                cpp_member_type=cpp_member_type(attr.type or primitive),
+                c_member_type=c_primitive(attr.type.as_string() or primitive),
+                cpp_member_type=cpp_member_type(attr.type.as_string() or primitive),
                 field_path=attr.name,
             )
         )
         value_reference += 1
 
-    for port in part.ports:
-        payload = port.payload_def
+    for port in part.refs(NodeType.Port).values():
+        payload = port.ref_node
         if payload is None:
             continue
-        for attr in payload.attributes.values():
+        for attr in payload.defs(NodeType.Attribute).values():
             specs.append(
                 VariableSpec(
                     name=f"{port.name}.{attr.name}",
                     value_reference=value_reference,
                     fmi_type=normalize_primitive(attr.type),
                     causality="input" if port.direction == "in" else "output",
-                    c_member_type=c_primitive(attr.type or "Real"),
-                    cpp_member_type=cpp_member_type(attr.type or "Real"),
+                    c_member_type=c_primitive(attr.type.as_string() or "Real"),
+                    cpp_member_type=cpp_member_type(attr.type.as_string() or "Real"),
                     field_path=f"{port.name}.{attr.name}",
                 )
             )
@@ -122,8 +124,12 @@ def part_variable_specs(part: SysMLPartDefinition) -> List[VariableSpec]:
     return specs
 
 
-def architecture_part_specs(architecture: SysMLArchitecture) -> Dict[str, List[VariableSpec]]:
-    return {name: part_variable_specs(part) for name, part in architecture.parts.items()}
+def architecture_part_specs(architecture) -> Dict[str, List[VariableSpec]]:
+    return {
+        name: part_variable_specs(part)
+        for name, part in architecture.part_definitions.items()
+        if name != COMPOSITION_NAME
+    }
 
 
 def output_indexes(specs: Iterable[VariableSpec]) -> List[int]:
@@ -136,20 +142,20 @@ def output_indexes(specs: Iterable[VariableSpec]) -> List[int]:
 
 def part_instance_fields(package: str, part: SysMLPartDefinition) -> List[tuple[str, str, str]]:
     fields: List[tuple[str, str, str]] = []
-    for attr in part.attributes.values():
+    for attr in part.defs(NodeType.Attribute).values():
         literal = parse_literal(attr.value)
         primitive = infer_primitive(attr.type, literal)
         fields.append(
             (
-                cpp_member_type(attr.type or primitive),
+                cpp_member_type(attr.type.as_string() or primitive),
                 attr.name,
-                format_cpp_default(attr.type or primitive, literal),
+                format_cpp_default(attr.type.as_string() or primitive, literal),
             )
         )
-    for port in part.ports:
-        if port.payload_def is None:
+    for port in part.refs(NodeType.Port).values():
+        if port.ref_node is None:
             continue
-        fields.append((f"{package}_{port.payload_def.name}", port.name, "{}"))
+        fields.append((f"{package}_{port.ref_node.name}", port.name, "{}"))
     return fields
 
 
@@ -159,9 +165,9 @@ def binding_offset_expression(package: str, part: SysMLPartDefinition, spec: Var
         return f"offsetof({instance_name}, {spec.field_path})"
     head, tail = spec.field_path.split(".", 1)
     payload_name = next(
-        port.payload_def.name
-        for port in part.ports
-        if port.name == head and port.payload_def is not None
+        port.ref_node.name
+        for port in part.refs(NodeType.Port).values()
+        if port.name == head and port.ref_node is not None
     )
     return (
         f"offsetof({instance_name}, {head}) + "
