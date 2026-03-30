@@ -11,13 +11,12 @@ rm -rf ./build
 echo "Exporting architecture"
 python3 -m scripts.generation.save_architecture
 
-echo "Generating Modelica interfaces..."
+echo "Exporting architecture-derived artifacts..."
 python3 -m scripts.generation.generate_interface_defs
+python3 -m scripts.generation.generate_c_interface_defs
 python3 -m scripts.generation.generate_model_descriptions
 python3 -m scripts.generation.generate_parameter_set
-
-echo "Generating C interfaces..."
-python3 -m scripts.generation.generate_c_interface_defs
+python3 -m scripts.generation.generate_ssd
 
 echo "Verifying Modelica interfaces and SysML connections..."
 # python3 -m scripts.verification.verify_connections
@@ -35,16 +34,13 @@ echo "Verifying FMUs..."
 echo "Testing native FlightGear bridge FMU..."
 pytest -q tests/test_flightgear_bridge_fmu.py
 
-echo "Regenerating SSD..."
-python3 -m scripts.generation.generate_ssd
-
 echo "Validating SSD schema..."
 python3 -m scripts.verification.verify_ssd_xml_compliance
 
 echo "Packaging SSP..."
 python3 -m scripts.generation.package_ssp
 
-echo "Build pipeline completed successfully."
+echo "Packaging and simulation pipeline completed successfully."
 
-echo "Simulate scenario!"
+echo "Running reference simulation..."
 python3 -m scripts.workflows.simulate_scenario --scenario resources/scenarios/test_scenario.json

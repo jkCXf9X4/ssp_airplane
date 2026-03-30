@@ -6,7 +6,7 @@ The repository combines:
 
 - SysML architecture sources in `architecture/`
 - standalone Modelica FMU packages in `models/`
-- native bridge code in `models/flightgear_bridge/native/`
+- native FMU implementations in `models/*/native/`
 - Python generation, verification, and workflow tooling in `scripts/`
 
 ## Prerequisites
@@ -46,12 +46,19 @@ python -m pip install -r requirements_local.txt
 
 ## Quickstart
 
-Build the generated artifacts, FMUs, SSP archive, and run the reference scenario:
+Run the full architecture-first workflow:
 
 ```bash
 . venv/bin/activate
 ./scripts/workflows/build.sh
 ```
+
+The default workflow is:
+
+1. export all architecture-derived artifacts
+2. build all Modelica and native FMUs
+3. package the SSP
+4. run the reference simulation
 
 Main outputs:
 
@@ -71,7 +78,7 @@ Main outputs:
 | Generate SSD | `python3 -m scripts.generation.generate_ssd --output generated/SystemStructure.ssd` |
 | Generate parameter set | `python3 -m scripts.generation.generate_parameter_set --output generated/parameters.ssv` |
 | Build FMUs | `python3 -m scripts.generation.build_fmus --omc-path omc` |
-| Build native bridge FMU only | `python3 -m scripts.generation.build_native_fmus --output build/fmus/Aircraft_FlightGearBridge.fmu` |
+| Build native FMUs discovered from the architecture | `python3 -m scripts.generation.build_native_fmus --output-dir build/fmus` |
 | Package SSP | `python3 -m scripts.generation.package_ssp --fmu-dir build/fmus --ssd generated/SystemStructure.ssd --output build/ssp/aircraft.ssp` |
 | Run scenario | `python3 -m scripts.workflows.simulate_scenario --scenario resources/scenarios/test_scenario.json` |
 | Validate SSD XML | `python3 -m scripts.verification.verify_ssd_xml_compliance --ssd generated/SystemStructure.ssd` |
@@ -80,6 +87,6 @@ Main outputs:
 ## Notes
 
 - Use the virtual environment for all helper modules.
-- `scripts.generation.build_fmus` builds the standalone Modelica FMUs and the native `Aircraft_FlightGearBridge.fmu`.
-- `scripts.generation.build_native_fmus` now stages `modelDescription.xml` from `scripts.generation.generate_model_descriptions` so the native bridge stays aligned with the shared SysML-driven generation flow.
+- `scripts.generation.build_fmus` builds the standalone Modelica FMUs and any native FMUs discovered from the architecture/model layout.
+- `scripts.generation.build_native_fmus` derives native build targets from `architecture/` plus `models/<snake_case_part>/native/`, stages the generated headers/model descriptions automatically, and packages each discovered native FMU without hard-coded source file lists.
 - The FlightGear bridge uses the repo-local FMI 2.0 headers in `3rd_party/fmi_headers/`.

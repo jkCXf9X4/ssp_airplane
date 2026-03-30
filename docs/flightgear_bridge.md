@@ -152,10 +152,21 @@ This solution is aligned with the current airplane package structure and the fir
 - `models/mission_computer/modelica/MissionComputerFMU/MissionComputer.mo`
 - `models/environment/modelica/EnvironmentFMU/Environment.mo`
 - `models/input_output/modelica/InputOutputFMU/InputOutput.mo`
-- `architecture/system_connections.sysml`
+- `architecture/aircraft.sysml`
 - `scripts/workflows/simulate_scenario.py`
 
 These files already define the manual-input path, autopilot path, environment state, telemetry taps, and SSP workflow needed by the bridge design.
+
+## Build workflow alignment
+
+The repository workflow is architecture-first:
+
+1. export all generated artifacts from `architecture/`
+2. build all Modelica and native FMUs
+3. package the SSP
+4. run the simulation workflow
+
+`scripts.generation.build_native_fmus` now follows that same contract. Native FMUs are discovered from the architecture composition plus `models/<snake_case_part>/native/`, and their staged `modelDescription.xml` files come from the shared SysML-driven generator instead of native-script-local metadata.
 
 ## Implementation notes
 

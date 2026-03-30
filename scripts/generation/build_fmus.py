@@ -14,7 +14,7 @@ if __package__ in {None, ""}:
 from scripts.common.modelica_specs import DEFAULT_MODELICA_MODELS, spec_by_model_name
 from scripts.common.paths import BUILD_DIR, ensure_directory
 from scripts.generation.build_modelica_fmu import build_modelica_fmu
-from scripts.generation.build_native_fmus import build_flightgear_bridge_fmu
+from scripts.generation.build_native_fmus import build_native_fmus
 DEFAULT_MODELS = DEFAULT_MODELICA_MODELS
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -63,8 +63,8 @@ def main(argv: list[str] | None = None) -> int:
         build_modelica_fmu(spec.package_files, spec.model_name, target_path, args.omc_path, work_dir)
         print(f"  -> {target_path}")
 
-    native_fmu = build_flightgear_bridge_fmu(output_dir / "Aircraft_FlightGearBridge.fmu")
-    print(f"  -> {native_fmu}")
+    for native_fmu in build_native_fmus(output_dir=output_dir):
+        print(f"  -> {native_fmu}")
 
     print("FMU build process finished.")
     return 0
