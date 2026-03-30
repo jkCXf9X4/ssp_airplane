@@ -300,6 +300,13 @@ def summarize_result_file(
     mach_series = _numeric_series(
         rows, "StructuralLoadsAndPerformanceMonitor.performanceStatus.mach_estimate"
     ) or _numeric_series(rows, "AirDataAndInertialSuite.airDataOut.mach_number")
+    if not mach_series:
+        airspeed_series = (
+            _numeric_series(rows, "Environment.flight_speed.airspeed_mps")
+            or _numeric_series(rows, "AutopilotModule.feedbackBus.airspeed_mps")
+            or _numeric_series(rows, "FlightGearBridge.flightStatus.airspeed_mps")
+        )
+        mach_series = [airspeed / 340.29 for airspeed in airspeed_series]
     g_series = _numeric_series(
         rows, "StructuralLoadsAndPerformanceMonitor.performanceStatus.load_factor_g"
     )
@@ -307,16 +314,25 @@ def summarize_result_file(
         rows,
         "StructuralLoadsAndPerformanceMonitor.performanceStatus.structural_margin_norm",
     )
-    fuel_remaining = _numeric_series(
-        rows, "TurbofanPropulsion.fuelStatus.fuel_remaining_kg"
+    fuel_remaining = (
+        _numeric_series(rows, "TurbofanPropulsion.fuelStatus.fuel_remaining_kg")
+        or _numeric_series(rows, "FuelSystem.fuelState.fuel_remaining_kg")
+        or _numeric_series(rows, "MissionComputer.fuelStatus.fuel_remaining_kg")
     )
-    fuel_level_norm = _numeric_series(
-        rows, "TurbofanPropulsion.fuelStatus.fuel_level_norm"
+    fuel_level_norm = (
+        _numeric_series(rows, "TurbofanPropulsion.fuelStatus.fuel_level_norm")
+        or _numeric_series(rows, "FuelSystem.fuelState.fuel_level_norm")
+        or _numeric_series(rows, "MissionComputer.fuelStatus.fuel_level_norm")
     )
-    fuel_starved = _numeric_series(rows, "TurbofanPropulsion.fuelStatus.fuel_starved")
+    fuel_starved = (
+        _numeric_series(rows, "TurbofanPropulsion.fuelStatus.fuel_starved")
+        or _numeric_series(rows, "FuelSystem.fuelState.fuel_starved")
+        or _numeric_series(rows, "MissionComputer.fuelStatus.fuel_starved")
+    )
     stores_masks = _numeric_series(
         rows, "StoresManagementSystem.storesTelemetry.store_present_mask", cast=int
     )
+    hardpoint_count = _numeric_series(rows, "CompositeAirframe.hardpoint_count", cast=int)
     autopilot_limits = _numeric_series(
         rows, "StructuralLoadsAndPerformanceMonitor.performanceStatus.autopilot_limit_code", cast=int
     ) or _numeric_series(
@@ -326,14 +342,23 @@ def summarize_result_file(
         rows, "AutopilotModule.feedbackBus.energy_state_norm"
     )
     thrust_kn = _numeric_series(rows, "TurbofanPropulsion.thrustOut.thrust_kn")
-    mass_flow = _numeric_series(rows, "TurbofanPropulsion.thrustOut.mass_flow_kgps") or _numeric_series(
-        rows, "TurbofanPropulsion.fuelFlow.mass_flow_kgps"
+    mass_flow = (
+        _numeric_series(rows, "TurbofanPropulsion.thrustOut.mass_flow_kgps")
+        or _numeric_series(rows, "TurbofanPropulsion.fuelFlow.mass_flow_kgps")
+        or _numeric_series(rows, "TurbofanPropulsion.fuel_consumption.mass_flow_kgps")
+        or _numeric_series(rows, "FuelSystem.fuel_consumption_rate.mass_flow_kgps")
     )
     control_surface_excursions: List[float] = []
     for key in (
         "AdaptiveWingSystem.controlSurfaces.elevator_deg",
         "AdaptiveWingSystem.controlSurfaces.flaperon_deg",
         "FlyByWireController.commandBus.elevator_deg",
+        "AdaptiveWingSystem.actuation_command.elevator_deg",
+        "AdaptiveWingSystem.actuation_command.flaperon_deg",
+        "AdaptiveWingSystem.actuation_command.left_aileron_deg",
+        "AdaptiveWingSystem.actuation_command.right_aileron_deg",
+        "AdaptiveWingSystem.actuation_command.rudder_deg",
+        "Environment.actuation_command.elevator_deg",
     ):
         series = _numeric_series(rows, key)
         control_surface_excursions.append(max(series) - min(series) if series else 0.0)
@@ -341,6 +366,8 @@ def summarize_result_file(
     stores_available = 0
     if stores_masks:
         stores_available = max(int(mask).bit_count() for mask in stores_masks)
+    elif hardpoint_count:
+        stores_available = max(hardpoint_count)
 
     fuel_initial_candidates = [v for v in fuel_remaining if v > 0]
     fuel_initial = (

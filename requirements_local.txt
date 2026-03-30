@@ -1,5 +1,4 @@
 pytest>=8.0.0
--e ./3rd_party/pycps_sysml
 -e ./3rd_party/pyssp_standard
 -e ./3rd_party/pyssp_sysml2
 https://github.com/jkCXf9X4/ssp4sim/releases/latest/download/pyssp4sim-0.0.0+lat-cp39-abi3-linux_x86_64.whl

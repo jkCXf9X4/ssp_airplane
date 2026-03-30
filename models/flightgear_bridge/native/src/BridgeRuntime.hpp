@@ -9,7 +9,7 @@
 
 namespace fgbridge {
 
-constexpr const char* kGuid = "{2d7d0b06-4525-4e59-b188-2a9b0b8cb5bb}";
+constexpr const char* kGuid = "{74c5781a-27ff-58c7-8a3b-16e408ea44fe}";
 constexpr const char* kTypesPlatform = fmi2TypesPlatform;
 constexpr const char* kVersion = fmi2Version;
 
