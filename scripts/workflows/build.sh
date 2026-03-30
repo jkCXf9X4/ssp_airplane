@@ -30,6 +30,9 @@ python3 -m scripts.generation.build_fmus
 echo "Verifying FMUs..."
 python3 -m scripts.verification.verify_fmu_ios
 
+echo "Testing native FlightGear bridge FMU..."
+pytest -q tests/test_flightgear_bridge_fmu.py
+
 echo "Regenerating SSD..."
 python3 -m scripts.generation.generate_ssd
 
@@ -38,9 +41,6 @@ python3 -m scripts.verification.verify_ssd_xml_compliance
 
 echo "Packaging SSP..."
 python3 -m scripts.generation.package_ssp
-
-echo "Running pytest scenarios..."
-# pytest -q
 
 echo "Build pipeline completed successfully."
 

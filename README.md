@@ -41,9 +41,11 @@ Common entry points:
 | --- | --- | --- |
 | Merge SysML sections into JSON | `python3 -m scripts.generation.save_architecture --output generated/arch_def.json` | Creates a single architecture snapshot for downstream tooling. |
 | Generate SSD and parameter set | `python3 -m scripts.generation.generate_ssd` / `python3 -m scripts.generation.generate_parameter_set` | Produces SSP-compliant descriptions with parameter connectors. |
-| Build FMUs via OpenModelica | `python3 -m scripts.generation.build_fmus --omc omc` | Exports each Modelica component into `build/fmus`. |
+| Build FMUs | `python3 -m scripts.generation.build_fmus --omc-path omc` | Exports the Modelica subsystem FMUs and also builds the native C++ `Aircraft_FlightGearBridge.fmu` into `build/fmus`. |
+| Build native bridge FMU only | `python3 -m scripts.generation.build_native_fmus --output build/fmus/Aircraft_FlightGearBridge.fmu --build-dir build/native/flightgear_bridge` | Rebuilds only the C++ `FlightGearBridge` FMU when iterating on the socket bridge. |
 | Package SSP archive | `python3 -m scripts.generation.package_ssp --fmu-dir build/fmus --ssd generated/SystemStructure.ssd` | Bundles FMUs and SSD into `build/ssp/aircraft.ssp`. |
 | Simulate a scenario | `python3 -m scripts.workflows.simulate_scenario --scenario build/scenarios/test_scenario.json` | Runs ssp4sim (or reuses results) and emits summaries/plots. |
+| Verify native bridge socket exchange | `pytest -q tests/test_flightgear_bridge_fmu.py` | Builds the native bridge FMU in a temp dir and checks UDP telemetry/control exchange through the FMI 2 API. |
 | Verify architecture and FMUs | `python3 -m scripts.verification.verify_connections`, `python3 -m scripts.verification.verify_fmu_ios`, etc. | Guards against connector, FMU, and SSD regressions. |
 
 
@@ -75,7 +77,7 @@ all sub-systems are to be exported into into Functional mockup units, FMUs. Pack
 
 ## Models
 
-All subsystem FMUs are generated from the `models/Aircraft` Modelica package using the OpenModelica compiler (`omc`).
+Most subsystem FMUs are generated from the `models/Aircraft` Modelica package using the OpenModelica compiler (`omc`). The `FlightGearBridge` FMU is built separately as a native C++ FMI 2.0 co-simulation FMU from `native/flightgear_bridge/`.
 
 ## The SSD
 
@@ -83,7 +85,7 @@ The ssd is build by a script that parses the architecture and creates a system s
 
 ## SSP 
 
-FMUs and SSD are packaged into a zip file, renamed *.ssp
+FMUs and SSD are packaged into a zip file, renamed `*.ssp`. The packaged archive therefore contains both the OpenModelica-exported subsystem FMUs and the native `Aircraft_FlightGearBridge.fmu`.
 
 
 # Simulation 
@@ -97,11 +99,21 @@ Utilize ssp4sim as simulation engine, via python
 3. Run `python3 -m scripts.workflows.simulate_scenario --scenario build/scenarios/demo.json` to execute ssp4sim or post-process existing results (`--reuse-results`) and optional custom `--ssp` or `--stop-time`.
 4. Execute `pytest` to run the scenario-based unit tests and validate requirement coverage (range, fuel exhaustion).
 
+The default build workflow in `scripts/workflows/build.sh` now:
+
+- regenerates architecture exports and generated interfaces
+- verifies the SysML/Modelica definitions
+- runs `scripts.generation.build_fmus`, which also builds the native C++ `FlightGearBridge` FMU
+- runs `pytest -q tests/test_flightgear_bridge_fmu.py`
+- regenerates the SSD and packages `build/ssp/aircraft.ssp`
+- executes a sample scenario run
+
 ## Interactive visualization direction
 
 The recommended path for live visualization and manual steering is to keep `ssp4sim` as the simulation master and use `FlightGear` as the frontend over a dedicated bridge component using FlightGear `generic` communication. This preserves the current SSP/FMU workflow and adds a pilot/visualization layer without replacing the simulation engine.
 
 - See `docs/flightgear_bridge.md` for the architecture and integration rationale.
+- The current bridge implementation is the native C++ FMU `Aircraft_FlightGearBridge.fmu`, which exports standard `fmi2*` symbols for direct import by `ssp4sim`/`pyssp4sim`.
 
 ## Autopilot waypoint tracking
 
