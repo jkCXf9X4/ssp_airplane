@@ -28,6 +28,12 @@ This repository tracks an SSP for an F-16 Fighting Falcon inspired single-seat m
   . venv/bin/activate
   ./scripts/workflows/build.sh
   ```
+- Build the first CMake-managed standalone FMUs
+  ```
+  cmake -S . -B build/cmake
+  cmake --build build/cmake --target control_interface_fmu
+  cmake --build build/cmake --target flightgear_bridge_fmu
+  ```
 
 - Always use the virtual environment when running helper modules to avoid missing `pyssp4sim` (`python3 -m scripts.<module>` or `source venv/bin/activate` first).
 - The native `FlightGearBridge` FMU now uses the repo-local FMI 2.0 headers in `3rd_party/fmi_headers/`; no external FMI SDK path is required.
@@ -54,7 +60,8 @@ Common entry points:
 | Merge SysML sections into JSON | `python3 -m scripts.generation.save_architecture --output generated/arch_def.json` | Creates a single architecture snapshot for downstream tooling. |
 | Generate SSD and parameter set | `python3 -m scripts.generation.generate_ssd` / `python3 -m scripts.generation.generate_parameter_set` | Produces SSP-compliant descriptions with parameter connectors. |
 | Build FMUs | `python3 -m scripts.generation.build_fmus --omc-path omc` | Exports the Modelica subsystem FMUs and also builds the native C++ `Aircraft_FlightGearBridge.fmu` into `build/fmus`. |
-| Build native bridge FMU only | `python3 -m scripts.generation.build_native_fmus --output build/fmus/Aircraft_FlightGearBridge.fmu --build-dir build/native/flightgear_bridge` | Rebuilds only the C++ `FlightGearBridge` FMU when iterating on the socket bridge. |
+| Build native bridge FMU only | `python3 -m scripts.generation.build_native_fmus --output build/fmus/Aircraft_FlightGearBridge.fmu --build-dir build/native/flightgear_bridge` | Rebuilds only the C++ `FlightGearBridge` FMU when iterating on `models/flightgear_bridge/native/`. |
+| Build standalone control interface FMU | `cmake --build build/cmake --target control_interface_fmu` | Builds the migrated standalone Modelica FMU from `models/control_interface/modelica/`. |
 | Package SSP archive | `python3 -m scripts.generation.package_ssp --fmu-dir build/fmus --ssd generated/SystemStructure.ssd` | Bundles FMUs and SSD into `build/ssp/aircraft.ssp`. |
 | Simulate a scenario | `python3 -m scripts.workflows.simulate_scenario --scenario build/scenarios/test_scenario.json` | Runs ssp4sim (or reuses results) and emits summaries/plots. |
 | Verify native bridge socket exchange | `pytest -q tests/test_flightgear_bridge_fmu.py` | Builds the native bridge FMU in a temp dir and checks UDP telemetry/control exchange through the FMI 2 API. |
@@ -89,7 +96,7 @@ all sub-systems are to be exported into into Functional mockup units, FMUs. Pack
 
 ## Models
 
-Most subsystem FMUs are generated from the `models/Aircraft` Modelica package using the OpenModelica compiler (`omc`). The `FlightGearBridge` FMU is built separately as a native C++ FMI 2.0 co-simulation FMU from `native/flightgear_bridge/`.
+Model sources now live under per-model folders in `models/`, with shared connectors under `models/common/`. Modelica FMUs can be built through the CMake targets, and the native `FlightGearBridge` FMU is built from `models/flightgear_bridge/native/`.
 
 ## The SSD
 
@@ -155,7 +162,7 @@ The recommended path for live visualization and manual steering is to keep `ssp4
 # File disposition
 
 architecture/ - the system architecture 
-models/ - all models are located here
+models/ - model sources, with legacy package roots plus per-model standalone folders
 scripts/ - Python package containing `generation/`, `verification/`, `workflows/`, and shared `utils/`
 
 

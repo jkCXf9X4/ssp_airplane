@@ -10,13 +10,13 @@ from typing import Dict, List, Tuple
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from scripts.common.paths import ARCHITECTURE_DIR, MODELS_DIR, ensure_parent_dir
+from scripts.common.paths import ARCHITECTURE_DIR, COMMON_MODEL_DIR, ensure_parent_dir
 from scripts.utils.sysml_helpers import load_architecture
 from scripts.utils.sysmlv2_arch_parser import SysMLArchitecture, SysMLPortDefinition
 from scripts.utils.type_utils import modelica_connector_type
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
-DEFAULT_OUTPUT_PATH = MODELS_DIR / "Aircraft" / "GeneratedInterfaces.mo"
+DEFAULT_OUTPUT_PATH = COMMON_MODEL_DIR / "modelica" / "AircraftCommon" / "GeneratedInterfaces.mo"
 
 
 def _collect_data_defs(architecture: SysMLArchitecture) -> Dict[str, List[Tuple[str, str]]]:
@@ -35,7 +35,7 @@ def _port_attributes(port_def: SysMLPortDefinition) -> List[Tuple[str, str]]:
 
 
 def generate_modelica_package(defs: Dict[str, List[Tuple[str, str]]]) -> str:
-    lines = ["within Aircraft;", "package GeneratedInterfaces"]
+    lines = ["within AircraftCommon;", "package GeneratedInterfaces"]
     for type_name, fields in sorted(defs.items()):
         lines.append(f"  connector {type_name}")
         if not fields:

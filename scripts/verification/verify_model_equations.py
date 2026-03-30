@@ -12,22 +12,23 @@ from typing import Iterable
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from scripts.common.paths import MODELS_DIR, REPO_ROOT
+from scripts.common.modelica_specs import DEFAULT_MODELICA_MODELS, spec_by_model_name
+from scripts.common.paths import REPO_ROOT
 
-PACKAGE_FILE = MODELS_DIR / "Aircraft" / "package.mo"
-DEFAULT_MODELS = [
-    "Aircraft.CompositeAirframe",
-    "Aircraft.TurbofanPropulsion",
-    "Aircraft.AdaptiveWingSystem",
-    "Aircraft.MissionComputer",
-    "Aircraft.AutopilotModule",
-    "Aircraft.FuelSystem",
-    "Aircraft.ControlInterface",
-]
+DEFAULT_MODELS = DEFAULT_MODELICA_MODELS
 
 
 def build_script(models: Iterable[str]) -> str:
-    lines = [f'loadFile("{PACKAGE_FILE.as_posix()}");', "getErrorString();"]
+    lines: list[str] = ['installPackage(Modelica, "4.0.0", exactMatch=false);']
+    loaded_packages: set[str] = set()
+    for model in models:
+        spec = spec_by_model_name(model)
+        for package_file in spec.package_files:
+            package_path = package_file.as_posix()
+            if package_path not in loaded_packages:
+                lines.append(f'loadFile("{package_path}");')
+                loaded_packages.add(package_path)
+    lines.append("getErrorString();")
     for model in models:
         lines.append(f'print(\"Checking {model}\\n\");')
         lines.append(f"result := checkModel({model});")

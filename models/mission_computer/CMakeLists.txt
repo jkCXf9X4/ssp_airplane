@@ -1,0 +1,8 @@
+add_modelica_fmu(
+  TARGET mission_computer_fmu
+  MODEL MissionComputerFMU.MissionComputer
+  OUTPUT_NAME Aircraft_MissionComputer
+  PACKAGE_FILES
+    "${PROJECT_SOURCE_DIR}/models/common/modelica/AircraftCommon/package.mo"
+    "${PROJECT_SOURCE_DIR}/models/mission_computer/modelica/MissionComputerFMU/package.mo"
+)

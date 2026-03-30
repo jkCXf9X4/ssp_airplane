@@ -14,12 +14,12 @@ from pathlib import Path
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from scripts.common.paths import BUILD_DIR, FMI_HEADERS_DIR, REPO_ROOT, ensure_directory, ensure_parent_dir
+from scripts.common.paths import BUILD_DIR, FMI_HEADERS_DIR, FLIGHTGEAR_BRIDGE_MODEL_DIR, REPO_ROOT, ensure_directory, ensure_parent_dir
 from scripts.generation.generate_c_interface_defs import common_header_name, generate_headers, part_header_name
 from scripts.utils.c_interface_export import output_indexes, part_variable_specs
 from scripts.utils.sysml_helpers import load_architecture
 
-NATIVE_ROOT = REPO_ROOT / "native" / "flightgear_bridge"
+NATIVE_ROOT = FLIGHTGEAR_BRIDGE_MODEL_DIR / "native"
 DEFAULT_OUTPUT = BUILD_DIR / "fmus" / "Aircraft_FlightGearBridge.fmu"
 DEFAULT_BUILD_DIR = BUILD_DIR / "native" / "flightgear_bridge"
 MODEL_IDENTIFIER = "FlightGearBridge"

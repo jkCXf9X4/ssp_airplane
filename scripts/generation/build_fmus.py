@@ -5,82 +5,17 @@ from __future__ import annotations
 import argparse
 import os
 import shutil
-import subprocess
 import sys
-import tempfile
 from pathlib import Path
-import re
 
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from scripts.common.paths import BUILD_DIR, MODELS_DIR, REPO_ROOT, ensure_directory
+from scripts.common.modelica_specs import DEFAULT_MODELICA_MODELS, spec_by_model_name
+from scripts.common.paths import BUILD_DIR, ensure_directory
+from scripts.generation.build_modelica_fmu import build_modelica_fmu
 from scripts.generation.build_native_fmus import build_flightgear_bridge_fmu
-DEFAULT_MODELS = [
-    "Aircraft.CompositeAirframe",
-    "Aircraft.TurbofanPropulsion",
-    "Aircraft.AdaptiveWingSystem",
-    "Aircraft.MissionComputer",
-    "Aircraft.AutopilotModule",
-    "Aircraft.InputOutput",
-    "Aircraft.FuelSystem",
-    "Aircraft.Environment",
-    "Aircraft.ControlInterface",
-]
-
-
-def build_mos_script(model_name: str, output_dir: Path) -> str:
-    package_path = MODELS_DIR / "Aircraft" / "package.mo"
-    tmp_dir = BUILD_DIR / "tmp"
-    ensure_directory(tmp_dir)
-    return f"""
-installPackage(Modelica, \"4.0.0\", exactMatch=false);
-loadFile("{package_path.as_posix()}");
-cd("./build/tmp/");
-setCommandLineOptions("--fmiFlags=s:cvode");
-setCommandLineOptions("--fmuRuntimeDepends=all");
-filename := OpenModelica.Scripting.buildModelFMU({model_name}, version="2.0", fmuType="cs", platforms={{"static"}});
-filename;
-getErrorString();
-"""
-
-
-def run_omc(omc_path: str, mos_content: str, dry_run: bool = False) -> str:
-    if dry_run:
-        print("[dry-run] Would invoke omc with script:\n" + mos_content)
-        return ""
-
-    with tempfile.NamedTemporaryFile("w", suffix=".mos", delete=False) as handle:
-        handle.write(mos_content)
-        mos_file = Path(handle.name)
-
-    try:
-        proc = subprocess.run(
-            [omc_path, str(mos_file)],
-            check=True,
-            cwd=REPO_ROOT,
-            capture_output=True,
-            text=True,
-        )
-    except FileNotFoundError as exc:
-        raise SystemExit(
-            "omc executable not found. Install OpenModelica or pass --omc-path"
-        ) from exc
-    except subprocess.CalledProcessError as exc:
-        raise SystemExit(exc.stderr or exc.stdout) from exc
-    finally:
-        mos_file.unlink(missing_ok=True)
-
-    if proc.stderr:
-        print(proc.stderr.strip())
-    return proc.stdout
-
-
-def extract_fmu_path(output: str) -> Path | None:
-    matches = re.findall(r"\"([^\"]+\.fmu)\"", output)
-    if not matches:
-        return None
-    return Path(matches[-1])
+DEFAULT_MODELS = DEFAULT_MODELICA_MODELS
 
 
 def parse_args() -> argparse.Namespace:
@@ -119,21 +54,14 @@ def main() -> None:
     ensure_directory(output_dir)
 
     for model in args.models:
-        mos_script = build_mos_script(model, output_dir)
         print(f"Exporting {model} -> {output_dir}")
-        stdout = run_omc(args.omc_path, mos_script, dry_run=args.dry_run)
+        spec = spec_by_model_name(model)
         if args.dry_run:
+            print(f"[dry-run] Would build {model} from {[path.as_posix() for path in spec.package_files]}")
             continue
-        built_path = extract_fmu_path(stdout)
-        if not built_path:
-            raise SystemExit(f"Could not locate FMU emitted for {model}. omc output: {stdout}")
-        target_name = model.replace(".", "_") + ".fmu"
-        target_path = output_dir / target_name
-        try:
-            target_path.unlink(missing_ok=True)
-            shutil.move(str(built_path), target_path)
-        except FileNotFoundError as exc:
-            raise SystemExit(f"FMU file {built_path} missing after omc run for {model}") from exc
+        target_path = output_dir / f"{spec.output_name}.fmu"
+        work_dir = BUILD_DIR / "tmp" / spec.folder_name
+        build_modelica_fmu(spec.package_files, spec.model_name, target_path, args.omc_path, work_dir)
         print(f"  -> {target_path}")
 
     native_fmu = build_flightgear_bridge_fmu(output_dir / "Aircraft_FlightGearBridge.fmu")

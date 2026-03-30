@@ -11,11 +11,11 @@ from typing import Dict, List, Set, Tuple
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from scripts.common.paths import ARCHITECTURE_DIR, MODELS_DIR
+from scripts.common.modelica_specs import MODELICA_MODEL_SPECS
+from scripts.common.paths import ARCHITECTURE_DIR
 from scripts.utils.sysml_helpers import load_architecture
 
 DEFAULT_ARCH_DIR = ARCHITECTURE_DIR
-DEFAULT_MODELS_DIR = MODELS_DIR / "Aircraft"
 
 INTERFACE_DECL_RE = re.compile(
     r"\b(?P<direction>input|output)\s+GI\.(?P<record>\w+)\s+(?P<var>\w+)",
@@ -95,12 +95,6 @@ def parse_args() -> argparse.Namespace:
         default=DEFAULT_ARCH_DIR,
         help="Path to the SysML architecture directory or file.",
     )
-    parser.add_argument(
-        "--models-dir",
-        type=Path,
-        default=DEFAULT_MODELS_DIR,
-        help="Directory containing Modelica models to check.",
-    )
     return parser.parse_args()
 
 
@@ -109,12 +103,11 @@ def main() -> int:
     architecture = load_architecture(args.architecture)
     members, part_ports = _collect_architecture_data(architecture)
 
-    if not args.models_dir.exists():
-        print(f"Model directory not found: {args.models_dir}", file=sys.stderr)
-        return 1
-
     overall_issues: List[str] = []
-    for mo_file in sorted(args.models_dir.glob("*.mo")):
+    for mo_file in (spec.model_file for spec in MODELICA_MODEL_SPECS):
+        if not mo_file.exists():
+            print(f"Model file not found: {mo_file}", file=sys.stderr)
+            return 1
         overall_issues.extend(_scan_file(mo_file, members, part_ports))
 
     if overall_issues:

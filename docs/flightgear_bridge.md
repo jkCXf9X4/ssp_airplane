@@ -146,12 +146,12 @@ Therefore the bridge must choose a reference origin and perform:
 
 ## Traceability to current models
 
-This solution is aligned with the current airplane package structure:
+This solution is aligned with the current airplane package structure and the first standalone migration step:
 
-- `models/Aircraft/ControlInterface.mo`
-- `models/Aircraft/MissionComputer.mo`
-- `models/Aircraft/Environment.mo`
-- `models/Aircraft/InputOutput.mo`
+- `models/control_interface/modelica/ControlInterfaceFMU/ControlInterface.mo`
+- `models/mission_computer/modelica/MissionComputerFMU/MissionComputer.mo`
+- `models/environment/modelica/EnvironmentFMU/Environment.mo`
+- `models/input_output/modelica/InputOutputFMU/InputOutput.mo`
 - `architecture/system_connections.sysml`
 - `scripts/workflows/simulate_scenario.py`
 
