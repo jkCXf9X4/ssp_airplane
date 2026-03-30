@@ -14,7 +14,7 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import BUILD_DIR, REPO_ROOT, ensure_directory, ensure_parent_dir
-from scripts.generation.generate_c_interface_defs import generate_header
+from scripts.generation.generate_c_interface_defs import common_header_name, generate_headers, part_header_name
 from scripts.utils.c_interface_export import output_indexes, part_variable_specs
 from scripts.utils.sysml_helpers import load_architecture
 
@@ -23,7 +23,9 @@ DEFAULT_OUTPUT = BUILD_DIR / "fmus" / "Aircraft_FlightGearBridge.fmu"
 DEFAULT_BUILD_DIR = BUILD_DIR / "native" / "flightgear_bridge"
 MODEL_IDENTIFIER = "FlightGearBridge"
 MODEL_GUID = "{2d7d0b06-4525-4e59-b188-2a9b0b8cb5bb}"
-GENERATED_HEADER = REPO_ROOT / "generated" / "architecture_interface.h"
+GENERATED_INTERFACE_DIR = REPO_ROOT / "generated" / "interfaces"
+GENERATED_COMMON_HEADER = GENERATED_INTERFACE_DIR / common_header_name("Aircraft")
+GENERATED_MODEL_HEADER = GENERATED_INTERFACE_DIR / part_header_name("Aircraft", MODEL_IDENTIFIER)
 
 
 def _add_scalar(parent: ET.Element, *, name: str, value_reference: int, causality: str, fmi_type: str, variability: str | None = None, start: str | None = None) -> None:
@@ -76,7 +78,8 @@ def _build_model_description(output_path: Path) -> None:
     ET.SubElement(source_files, "File", attrib={"name": "FlightGearBridge.cpp"})
     ET.SubElement(source_files, "File", attrib={"name": "BridgeRuntime.cpp"})
     ET.SubElement(source_files, "File", attrib={"name": "BridgeRuntime.hpp"})
-    ET.SubElement(source_files, "File", attrib={"name": "architecture_interface.h"})
+    ET.SubElement(source_files, "File", attrib={"name": GENERATED_COMMON_HEADER.name})
+    ET.SubElement(source_files, "File", attrib={"name": GENERATED_MODEL_HEADER.name})
 
     model_variables = ET.SubElement(root, "ModelVariables")
     for spec in specs:
@@ -108,7 +111,7 @@ def build_flightgear_bridge_fmu(output_fmu: Path = DEFAULT_OUTPUT, build_dir: Pa
     binary_dir = stage_dir / "binaries" / "linux64"
     source_dir = stage_dir / "sources"
 
-    generate_header(REPO_ROOT / "architecture", GENERATED_HEADER)
+    generate_headers(REPO_ROOT / "architecture", GENERATED_INTERFACE_DIR)
 
     if build_dir.exists():
         shutil.rmtree(build_dir)
@@ -135,7 +138,8 @@ def build_flightgear_bridge_fmu(output_fmu: Path = DEFAULT_OUTPUT, build_dir: Pa
     shutil.copy2(NATIVE_ROOT / "src" / "FlightGearBridge.cpp", source_dir / "FlightGearBridge.cpp")
     shutil.copy2(NATIVE_ROOT / "src" / "BridgeRuntime.cpp", source_dir / "BridgeRuntime.cpp")
     shutil.copy2(NATIVE_ROOT / "src" / "BridgeRuntime.hpp", source_dir / "BridgeRuntime.hpp")
-    shutil.copy2(GENERATED_HEADER, source_dir / "architecture_interface.h")
+    shutil.copy2(GENERATED_COMMON_HEADER, source_dir / GENERATED_COMMON_HEADER.name)
+    shutil.copy2(GENERATED_MODEL_HEADER, source_dir / GENERATED_MODEL_HEADER.name)
     _build_model_description(stage_dir / "modelDescription.xml")
 
     ensure_parent_dir(output_fmu)

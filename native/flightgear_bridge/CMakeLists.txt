@@ -17,7 +17,7 @@ set_target_properties(FlightGearBridge PROPERTIES
 
 target_include_directories(FlightGearBridge PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/src
-  ${CMAKE_CURRENT_SOURCE_DIR}/../../generated
+  ${CMAKE_CURRENT_SOURCE_DIR}/../../generated/interfaces
   /home/eriro/pwa/2_work/ssp4sim/3rdParty/fmi4c/3rdparty/fmi
 )
 

@@ -5,7 +5,7 @@
 #include <string>
 
 #include "fmi2Functions.h"
-#include "architecture_interface.h"
+#include "Aircraft_FlightGearBridge.h"
 
 namespace fgbridge {
 
