@@ -13,10 +13,9 @@ from pathlib import Path
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from pyssp_sysml2.fmi import generate_model_descriptions
-
 from scripts.common.paths import BUILD_DIR, COMPOSITION_NAME, FMI_HEADERS_DIR, FLIGHTGEAR_BRIDGE_MODEL_DIR, GENERATED_DIR, REPO_ROOT, ensure_directory, ensure_parent_dir
 from scripts.generation.generate_c_interface_defs import common_header_name, generate_headers, part_header_name
+from scripts.generation.generate_model_descriptions import generate_model_descriptions
 
 NATIVE_ROOT = FLIGHTGEAR_BRIDGE_MODEL_DIR / "native"
 DEFAULT_OUTPUT = BUILD_DIR / "fmus" / "Aircraft_FlightGearBridge.fmu"

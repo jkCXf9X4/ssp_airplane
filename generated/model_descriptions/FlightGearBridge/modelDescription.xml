@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<fmiModelDescription fmiVersion="2.0" modelName="AircraftComposition.FlightGearBridge" guid="{74c5781a-27ff-58c7-8a3b-16e408ea44fe}" description="Adapter component for visual/frontend coupling to FlightGear using generic socket communication." version="1.0" generationTool="pyssp_sysml2 tooling" generationDateAndTime="2026-03-30T16:12:50Z" variableNamingConvention="structured" numberOfEventIndicators="0">
+<fmiModelDescription fmiVersion="2.0" modelName="AircraftComposition.FlightGearBridge" guid="{74c5781a-27ff-58c7-8a3b-16e408ea44fe}" description="Adapter component for visual/frontend coupling to FlightGear using generic socket communication." version="1.0" generationTool="pyssp_sysml2 tooling" generationDateAndTime="2000-00-00T00:00:00Z" variableNamingConvention="structured" numberOfEventIndicators="0">
   <CoSimulation modelIdentifier="FlightGearBridge" />
   <ModelVariables>
     <ScalarVariable name="transport" valueReference="0" causality="parameter" variability="fixed">
