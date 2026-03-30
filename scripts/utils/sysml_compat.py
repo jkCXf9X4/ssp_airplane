@@ -2,7 +2,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from dataclasses import replace
+
+from pycps_sysmlv2 import NodeType
 
 
 @dataclass(frozen=True)
@@ -17,6 +18,14 @@ class LegacyPortDefinition:
     attributes: dict
 
 
+@dataclass(frozen=True)
+class LegacyConnection:
+    src_component: str
+    src_port: str
+    dst_component: str
+    dst_port: str
+
+
 def architecture_port_definitions(architecture):
     port_definitions = getattr(architecture, "port_definitions", {})
     translated = {}
@@ -26,9 +35,9 @@ def architecture_port_definitions(architecture):
             attributes={
                 attr_name: LegacyAttribute(
                     name=attr_name,
-                    type=getattr(attr.type, "as_string", lambda: attr.type)(),
+                    type=attr.type.as_string(),
                 )
-                for attr_name, attr in port_def.attributes.items()
+                for attr_name, attr in port_def.defs(NodeType.Attribute).items()
             },
         )
     return translated
@@ -37,18 +46,16 @@ def architecture_port_definitions(architecture):
 def architecture_connections(architecture):
     connections = getattr(architecture, "connections", [])
     references = getattr(architecture, "part_references", {})
-    if not references:
-        return connections
-
     translated = []
     for connection in connections:
-        src_ref = references.get(connection.src_component)
-        dst_ref = references.get(connection.dst_component)
+        src_ref = references.get(connection.src_part)
+        dst_ref = references.get(connection.dst_part)
         translated.append(
-            replace(
-                connection,
-                src_component=getattr(src_ref, "part_name", connection.src_component),
-                dst_component=getattr(dst_ref, "part_name", connection.dst_component),
+            LegacyConnection(
+                src_component=getattr(getattr(src_ref, "ref_node", None), "name", connection.src_part),
+                src_port=connection.src_port,
+                dst_component=getattr(getattr(dst_ref, "ref_node", None), "name", connection.dst_part),
+                dst_port=connection.dst_port,
             )
         )
     return translated

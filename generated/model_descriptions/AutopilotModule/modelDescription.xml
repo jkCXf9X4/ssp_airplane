@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<fmiModelDescription fmiVersion="2.0" modelName="AircraftComposition.AutopilotModule" guid="{e6a57c5c-a2b1-51f3-a52c-162c35146943}" description="F-16 autopilot, takes in sensor data and translates it into a equivalent hotas command." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2026-03-30T15:52:49Z" variableNamingConvention="structured" numberOfEventIndicators="0">
+<fmiModelDescription fmiVersion="2.0" modelName="AircraftComposition.AutopilotModule" guid="{4f4f78f4-565e-5e59-acf0-365690fb6d3e}" description="F-16 autopilot, takes in sensor data and translates it into a equivalent hotas command." version="1.0" generationTool="pyssp_sysml2 tooling" generationDateAndTime="2026-03-30T16:12:50Z" variableNamingConvention="structured" numberOfEventIndicators="0">
   <CoSimulation modelIdentifier="AutopilotModule" />
   <ModelVariables>
     <ScalarVariable name="comment" valueReference="0" causality="parameter" variability="fixed">

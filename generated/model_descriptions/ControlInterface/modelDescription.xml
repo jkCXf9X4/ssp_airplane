@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<fmiModelDescription fmiVersion="2.0" modelName="AircraftComposition.ControlInterface" guid="{d6406895-156a-51a1-806b-bcfe76c88369}" description="F-16 HOTAS + side-stick interface for pilot inputs and trim switches." version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2026-03-30T15:52:49Z" variableNamingConvention="structured" numberOfEventIndicators="0">
+<fmiModelDescription fmiVersion="2.0" modelName="AircraftComposition.ControlInterface" guid="{ebd8909c-193d-5580-9696-5ef31ddc4bc0}" description="F-16 HOTAS + side-stick interface for pilot inputs and trim switches." version="1.0" generationTool="pyssp_sysml2 tooling" generationDateAndTime="2026-03-30T16:12:50Z" variableNamingConvention="structured" numberOfEventIndicators="0">
   <CoSimulation modelIdentifier="ControlInterface" />
   <ModelVariables>
     <ScalarVariable name="input_scheme" valueReference="0" causality="parameter" variability="fixed">

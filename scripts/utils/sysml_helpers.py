@@ -5,6 +5,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, Optional
 
+from pycps_sysmlv2 import NodeType, SysMLParser
+
 from scripts.common.paths import COMPOSITION_NAME
 
 
@@ -36,31 +38,45 @@ class LegacyPartDefinition:
     doc: str | None = None
 
 
+@dataclass(frozen=True)
+class LegacyPortDefinition:
+    name: str
+    attributes: dict
+    doc: str | None = None
+
+
+def _legacy_port_definition(port_def):
+    if port_def is None:
+        return None
+    return LegacyPortDefinition(
+        name=port_def.name,
+        attributes=port_def.defs(NodeType.Attribute),
+        doc=getattr(port_def, "doc", None),
+    )
+
+
 def _legacy_part(part_def) -> LegacyPartDefinition:
     ports = [
         LegacyPortReference(
             name=port.name,
             direction=port.direction,
-            payload=port.port_name,
-            payload_def=port.port_def,
+            payload=port.type,
+            payload_def=_legacy_port_definition(port.ref_node),
             doc=getattr(port, "doc", None),
         )
-        for port in part_def.ports.values()
+        for port in part_def.refs(NodeType.Port).values()
     ]
     return LegacyPartDefinition(
         name=part_def.name,
-        attributes=part_def.attributes,
+        attributes=part_def.defs(NodeType.Attribute),
         ports=ports,
         doc=getattr(part_def, "doc", None),
     )
 
 
 def _legacy_view(path: Path):
-    from pycps_sysmlv2 import load_architecture as _load_architecture
-    from pycps_sysmlv2 import load_system
-
-    architecture = _load_architecture(path)
-    system = load_system(path, COMPOSITION_NAME)
+    architecture = SysMLParser(path).parse()
+    system = architecture.get_def(NodeType.Part, COMPOSITION_NAME)
 
     parts = {
         name: _legacy_part(part_def)
@@ -73,24 +89,18 @@ def _legacy_view(path: Path):
         part_definitions=architecture.part_definitions,
         port_definitions=architecture.port_definitions,
         parts=parts,
-        part_references=dict(system.parts),
-        connections=list(system.connections),
-        requirements=getattr(architecture, "requirements", {}),
+        part_references=dict(system.refs(NodeType.Part)),
+        connections=list(system.defs(NodeType.Connection).values()),
+        requirements=getattr(architecture, "requirement_definitions", {}),
     )
 
 
-def load_architecture(source: Path):
+def load_architecture(source: Path | str):
     """Load a SysML architecture from either a directory or a file within it."""
-    path = source
+    path = Path(source)
     if path.is_file():
         path = path.parent
-
-    try:
-        return _legacy_view(path)
-    except ModuleNotFoundError:
-        from sysml import load_architecture as _load_architecture  # type: ignore
-
-    return _load_architecture(path)
+    return _legacy_view(path)
 
 
 def component_modelica_map(

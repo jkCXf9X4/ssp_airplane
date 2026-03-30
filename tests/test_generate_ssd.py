@@ -3,25 +3,28 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+from pyssp_standard.ssd import SSD
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from scripts.generation.generate_ssd import SSD_NAMESPACE, build_ssd_tree  # type: ignore  # noqa: E402
-from sysml import load_architecture  # type: ignore  # noqa: E402
+from scripts.generation.generate_ssd import generate_ssd  # type: ignore  # noqa: E402
 
 
-def test_parameter_connectors_emitted_for_attributes():
-    architecture = load_architecture(REPO_ROOT / "architecture")
-    tree = build_ssd_tree(architecture)
-    root = tree.getroot()
-    ns = {"ssd": SSD_NAMESPACE}
+def _read_components(output_path: Path):
+    with SSD(output_path, mode="r") as ssd:
+        assert ssd.system is not None
+        return {component.name: component for component in ssd.system.elements}
 
-    propulsion = root.find(".//ssd:Component[@name='TurbofanPropulsion']", ns)
-    assert propulsion is not None
 
-    param_connectors = propulsion.findall("ssd:Connectors/ssd:Connector[@kind='parameter']", ns)
-    names = {elem.get("name") for elem in param_connectors}
+def test_parameter_connectors_emitted_for_attributes(tmp_path: Path):
+    output = tmp_path / "SystemStructure.ssd"
+    generate_ssd(REPO_ROOT / "architecture", output, "AircraftComposition")
+    components = _read_components(output)
+
+    propulsion = components["turbofan_propulsion"]
+    names = {connector.name for connector in propulsion.connectors if connector.kind == "parameter"}
 
     expected = {
         "max_thrust_kn",
@@ -33,40 +36,33 @@ def test_parameter_connectors_emitted_for_attributes():
     assert expected.issubset(names)
 
 
-def test_string_parameters_preserve_type():
-    architecture = load_architecture(REPO_ROOT / "architecture")
-    tree = build_ssd_tree(architecture)
-    root = tree.getroot()
-    ns = {"ssd": SSD_NAMESPACE, "ssc": "http://ssp-standard.org/SSP1/SystemStructureCommon"}
+def test_string_parameters_preserve_type(tmp_path: Path):
+    output = tmp_path / "SystemStructure.ssd"
+    generate_ssd(REPO_ROOT / "architecture", output, "AircraftComposition")
+    components = _read_components(output)
 
-    control = root.find(".//ssd:Component[@name='ControlInterface']", ns)
-    assert control is not None
-    connectors = control.findall("ssd:Connectors/ssd:Connector", ns)
+    control = components["control_interface"]
     string_params = [
-        conn
-        for conn in connectors
-        if conn.get("name") == "input_scheme"
-        and conn.get("kind") == "parameter"
-        and conn.find("ssc:String", ns) is not None
+        connector
+        for connector in control.connectors
+        if connector.name == "input_scheme"
+        and connector.kind == "parameter"
+        and connector.type_.__class__.__name__ == "TypeString"
     ]
-    assert string_params, "ControlInterface.input_scheme should be exposed as a String parameter connector"
+    assert string_params
 
 
-def test_list_parameters_infer_numeric_type():
-    architecture = load_architecture(REPO_ROOT / "architecture")
-    tree = build_ssd_tree(architecture)
-    root = tree.getroot()
-    ns = {"ssd": SSD_NAMESPACE, "ssc": "http://ssp-standard.org/SSP1/SystemStructureCommon"}
+def test_list_parameters_infer_numeric_type(tmp_path: Path):
+    output = tmp_path / "SystemStructure.ssd"
+    generate_ssd(REPO_ROOT / "architecture", output, "AircraftComposition")
+    components = _read_components(output)
 
-    autopilot = root.find(".//ssd:Component[@name='AutopilotModule']", ns)
-    assert autopilot is not None
-
-    connectors = autopilot.findall("ssd:Connectors/ssd:Connector[@kind='parameter']", ns)
+    autopilot = components["autopilot_module"]
     real_arrays = {
-        conn.get("name")
-        for conn in connectors
-        if conn.find("ssc:Real", ns) is not None
+        connector.name
+        for connector in autopilot.connectors
+        if connector.kind == "parameter" and connector.type_.__class__.__name__ == "TypeReal"
     }
-    expected = {f"waypoint{axis}_km[{idx}]" for axis in ("X", "Y", "Z") for idx in range(1, 11)}
+    expected = {f"waypoint{axis}_km[{idx}]" for axis in ("X", "Y", "Z") for idx in range(10)}
     missing = expected - real_arrays
     assert not missing, f"Waypoint vector parameters should be exposed as Real connectors, missing: {sorted(missing)}"

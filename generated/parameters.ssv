@@ -40,6 +40,9 @@
     <ssv:Parameter name="autopilot_module.waypointProximity_km">
       <ssv:Integer value="10"/>
     </ssv:Parameter>
+    <ssv:Parameter name="autopilot_module.waypointX_km[0]">
+      <ssv:Real value="0"/>
+    </ssv:Parameter>
     <ssv:Parameter name="autopilot_module.waypointX_km[1]">
       <ssv:Real value="0"/>
     </ssv:Parameter>
@@ -67,7 +70,7 @@
     <ssv:Parameter name="autopilot_module.waypointX_km[9]">
       <ssv:Real value="0"/>
     </ssv:Parameter>
-    <ssv:Parameter name="autopilot_module.waypointX_km[10]">
+    <ssv:Parameter name="autopilot_module.waypointY_km[0]">
       <ssv:Real value="0"/>
     </ssv:Parameter>
     <ssv:Parameter name="autopilot_module.waypointY_km[1]">
@@ -97,7 +100,7 @@
     <ssv:Parameter name="autopilot_module.waypointY_km[9]">
       <ssv:Real value="0"/>
     </ssv:Parameter>
-    <ssv:Parameter name="autopilot_module.waypointY_km[10]">
+    <ssv:Parameter name="autopilot_module.waypointZ_km[0]">
       <ssv:Real value="0"/>
     </ssv:Parameter>
     <ssv:Parameter name="autopilot_module.waypointZ_km[1]">
@@ -125,9 +128,6 @@
       <ssv:Real value="0"/>
     </ssv:Parameter>
     <ssv:Parameter name="autopilot_module.waypointZ_km[9]">
-      <ssv:Real value="0"/>
-    </ssv:Parameter>
-    <ssv:Parameter name="autopilot_module.waypointZ_km[10]">
       <ssv:Real value="0"/>
     </ssv:Parameter>
     <ssv:Parameter name="composite_airframe.length_m">

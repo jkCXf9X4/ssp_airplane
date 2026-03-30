@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<fmiModelDescription fmiVersion="2.0" modelName="AircraftComposition.AdaptiveWingSystem" guid="{9adfb17a-c114-57d7-8cd9-8bd353911809}" description="Leading-edge strake and cropped-delta wing sized to F-16 Block 50 geometry with 9g capability. This model includes the control system" version="1.0" generationTool="ssp_airplane tooling" generationDateAndTime="2026-03-30T15:52:49Z" variableNamingConvention="structured" numberOfEventIndicators="0">
+<fmiModelDescription fmiVersion="2.0" modelName="AircraftComposition.AdaptiveWingSystem" guid="{bedf6a84-f9aa-5d78-9810-1c48009105fe}" description="Leading-edge strake and cropped-delta wing sized to F-16 Block 50 geometry with 9g capability. This model includes the control system" version="1.0" generationTool="pyssp_sysml2 tooling" generationDateAndTime="2026-03-30T16:12:50Z" variableNamingConvention="structured" numberOfEventIndicators="0">
   <CoSimulation modelIdentifier="AdaptiveWingSystem" />
   <ModelVariables>
     <ScalarVariable name="reference_area_m2" valueReference="0" causality="parameter" variability="fixed">
