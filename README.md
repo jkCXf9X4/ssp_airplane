@@ -4,24 +4,33 @@ This repository tracks an SSP for an F-16 Fighting Falcon inspired single-seat m
 
 # Getting started
 
-- Ensure Python 3.11+ and ssp4sim runtime are available. The Python API for ssp4sim is installed via the editable dependency in `requirements.txt` (points to `../ssp4sim/build/public/python_api` by default).
-- Create a virtual environment and install deps:
+- Ensure these tools are installed before building:
+  - Python 3.11+
+  - `cmake`
+  - a C++17 compiler (`g++` or `clang++`)
+  - `make` or `ninja`
+  - OpenModelica (`omc`)
+- On Debian/Ubuntu, the common native prerequisites are:
   ```
-  python3.11 -m venv venv &&. venv/bin/activate &&  pip install -r requirements.txt
-
+  sudo apt-get update
+  sudo apt-get install -y python3.11 python3.11-venv cmake build-essential openmodelica
   ```
-
-- Install Dependencies
-  * Open Modelica (https://openmodelica.org/download/download-linux/)
+- Install the Python dependencies. `requirements.txt` pulls in the published `pyssp4sim` wheel:
+  ```
+  python3.11 -m venv venv
+  . venv/bin/activate
+  python -m pip install --upgrade pip
+  python -m pip install -r requirements.txt
+  ```
 
 - Build the SSP
   ```
   . venv/bin/activate
   ./scripts/workflows/build.sh
-
   ```
 
 - Always use the virtual environment when running helper modules to avoid missing `pyssp4sim` (`python3 -m scripts.<module>` or `source venv/bin/activate` first).
+- The native `FlightGearBridge` FMU now uses the repo-local FMI 2.0 headers in `3rd_party/fmi_headers/`; no external FMI SDK path is required.
 - Prebuilt SSPs live in `build/ssp/`; the default is `build/ssp/aircraft.ssp`.
 - Curated mission scenarios live in `resources/scenarios/` (see `docs/use_cases.md` for requirement linkage).
 - Regenerate the SSD with parameter connectors plus a fresh default parameter set via:
@@ -158,4 +167,4 @@ scripts/ - Python package containing `generation/`, `verification/`, `workflows/
 
 # Development
 
-The tracking of tasks for this project is defined in the file todo.md
+The tracking of tasks for this project is defined in `TODO.md`.

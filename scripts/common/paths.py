@@ -9,6 +9,8 @@ GENERATED_DIR = REPO_ROOT / "generated"
 BUILD_DIR = REPO_ROOT / "build"
 MODELS_DIR = REPO_ROOT / "models"
 RESOURCES_DIR = REPO_ROOT / "resources"
+THIRD_PARTY_DIR = REPO_ROOT / "3rd_party"
+FMI_HEADERS_DIR = THIRD_PARTY_DIR / "fmi_headers"
 
 
 def ensure_directory(path: Path) -> Path:

@@ -15,10 +15,12 @@ set_target_properties(FlightGearBridge PROPERTIES
   OUTPUT_NAME "FlightGearBridge"
 )
 
+set(AIRPLANE_REPO_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../..")
+
 target_include_directories(FlightGearBridge PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/src
-  ${CMAKE_CURRENT_SOURCE_DIR}/../../generated/interfaces
-  /home/eriro/pwa/2_work/ssp4sim/3rdParty/fmi4c/3rdparty/fmi
+  ${AIRPLANE_REPO_ROOT}/generated/interfaces
+  ${AIRPLANE_REPO_ROOT}/3rd_party/fmi_headers
 )
 
 target_compile_options(FlightGearBridge PRIVATE -Wall -Wextra -Wpedantic)
