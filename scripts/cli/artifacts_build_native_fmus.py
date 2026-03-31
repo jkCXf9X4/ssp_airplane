@@ -5,9 +5,9 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from scripts.lib.artifacts.build.native import build_native_libraries
-from scripts.lib.artifacts.build.native_project import DEFAULT_BUILD_ROOT
-from scripts.lib.paths import ARCHITECTURE_DIR, COMPOSITION_NAME
+from scripts.lib.paths import ARCHITECTURE_DIR, BUILD_DIR, COMPOSITION_NAME
+
+DEFAULT_BUILD_ROOT = BUILD_DIR / "native"
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -25,6 +25,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
+    from scripts.lib.artifacts.build.native import build_native_libraries
+
     written = build_native_libraries(
         architecture_path=args.architecture,
         composition=args.composition,

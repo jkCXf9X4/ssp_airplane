@@ -5,11 +5,10 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from scripts.lib.artifacts.sysml_export.architecture_snapshot import (
-    DEFAULT_ARCH_DIR,
-    DEFAULT_OUTPUT,
-    save_architecture,
-)
+from scripts.lib.paths import ARCHITECTURE_DIR, GENERATED_DIR
+
+DEFAULT_ARCH_DIR = ARCHITECTURE_DIR
+DEFAULT_OUTPUT = GENERATED_DIR / "arch_def.json"
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -31,6 +30,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
+    from scripts.lib.artifacts.sysml_export.architecture_snapshot import save_architecture
+
     output = save_architecture(source=args.source, output=args.output)
     print(f"Architecture saved to {output}")
     return 0

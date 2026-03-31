@@ -5,7 +5,11 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from scripts.lib.artifacts.package.ssp import DEFAULT_FMU_DIR, DEFAULT_OUTPUT, DEFAULT_SSD, package_ssp
+from scripts.lib.paths import BUILD_DIR, GENERATED_DIR
+
+DEFAULT_SSD = GENERATED_DIR / "SystemStructure.ssd"
+DEFAULT_FMU_DIR = BUILD_DIR / "fmus"
+DEFAULT_OUTPUT = BUILD_DIR / "ssp" / "aircraft.ssp"
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -18,6 +22,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
+    from scripts.lib.artifacts.package.ssp import package_ssp
+
     output = package_ssp(fmu_dir=args.fmu_dir, ssd=args.ssd, output=args.output)
     print(f"Packaged SSP written to {output}")
     return 0

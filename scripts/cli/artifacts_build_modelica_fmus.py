@@ -6,7 +6,6 @@ import argparse
 import os
 from pathlib import Path
 
-from scripts.lib.artifacts.build.modelica import build_modelica_fmu, build_modelica_fmus
 from scripts.lib.paths import BUILD_DIR
 
 
@@ -25,6 +24,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
+    from scripts.lib.artifacts.build.modelica import build_modelica_fmu, build_modelica_fmus
+
     if args.package_file or args.model or args.output:
         if not (args.package_file and args.model and args.output):
             raise SystemExit("--package-file, --model, and --output must be provided together")

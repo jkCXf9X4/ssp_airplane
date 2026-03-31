@@ -5,7 +5,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from scripts.lib.verify.modelica_variables import DEFAULT_ARCH_DIR, verify_modelica_variables
+from scripts.lib.paths import ARCHITECTURE_DIR
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -13,7 +13,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--architecture",
         type=Path,
-        default=DEFAULT_ARCH_DIR,
+        default=ARCHITECTURE_DIR,
         help="Path to the SysML architecture directory or file.",
     )
     return parser.parse_args(argv)
@@ -21,6 +21,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
+    from scripts.lib.verify.modelica_variables import verify_modelica_variables
+
     return verify_modelica_variables(args.architecture)
 
 

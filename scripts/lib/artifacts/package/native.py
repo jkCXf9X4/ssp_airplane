@@ -6,7 +6,7 @@ import shutil
 import zipfile
 
 from scripts.lib.paths import ARCHITECTURE_DIR, COMPOSITION_NAME, FMI_HEADERS_DIR, ensure_directory, ensure_parent_dir
-from scripts.lib.artifacts.build.native_project import (
+from scripts.lib.artifacts.build.native_discovery import (
     DEFAULT_BUILD_ROOT,
     DEFAULT_OUTPUT_DIR,
     GENERATED_INTERFACE_DIR,

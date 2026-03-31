@@ -5,7 +5,7 @@ from pathlib import Path
 import subprocess
 
 from scripts.lib.paths import REPO_ROOT
-from scripts.lib.artifacts.build.native_project import NativeFmuProject
+from scripts.lib.artifacts.build.native_discovery import NativeFmuProject
 
 
 def build_native_library(project: NativeFmuProject, build_dir: Path) -> Path:

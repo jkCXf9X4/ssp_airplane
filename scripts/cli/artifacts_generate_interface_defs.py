@@ -5,22 +5,22 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from scripts.lib.artifacts.sysml_export.modelica_headers import (
-    DEFAULT_ARCH_PATH,
-    DEFAULT_OUTPUT_PATH,
-    write_modelica_interfaces,
-)
+from scripts.lib.paths import ARCHITECTURE_DIR, COMMON_MODEL_DIR
+
+DEFAULT_OUTPUT_PATH = COMMON_MODEL_DIR / "modelica" / "AircraftCommon" / "GeneratedInterfaces.mo"
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Generate Modelica interface definitions.")
-    parser.add_argument("--architecture", type=Path, default=DEFAULT_ARCH_PATH)
+    parser.add_argument("--architecture", type=Path, default=ARCHITECTURE_DIR)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT_PATH)
     return parser.parse_args(argv)
 
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
+    from scripts.lib.artifacts.sysml_export.modelica_headers import write_modelica_interfaces
+
     output = write_modelica_interfaces(architecture_path=args.architecture, output=args.output)
     print(f"Wrote Modelica interfaces to {output}")
     return 0
