@@ -18,7 +18,7 @@ The curated scenarios in `resources/scenarios/` connect mission intent to requir
 
 ## How scenarios are used
 
-- `scripts.workflows.simulate_scenario` reads the scenario JSON and produces result artifacts in `build/results/`.
+- `scripts.scenarios.simulate_scenario` reads the scenario JSON and produces result artifacts in `build/results/`.
 - Tests reuse the curated scenarios and canned reference data to catch regressions without always running a full simulation.
 
 ## Next Doc

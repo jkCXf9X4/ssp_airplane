@@ -10,8 +10,8 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from scripts.plot_results import plot_flight_path, plot_flight_path_3d, plot_fuel_altitude_time  # type: ignore  # noqa: E402
-from scripts.workflows.simulate_scenario import (  # type: ignore  # noqa: E402
+from scripts.analyze.plot_results import plot_flight_path, plot_flight_path_3d, plot_fuel_altitude_time  # type: ignore  # noqa: E402
+from scripts.scenarios.simulate_scenario import (  # type: ignore  # noqa: E402
     evaluate_requirements,
     project_waypoints_to_local_km,
     scenario_to_string,

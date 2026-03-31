@@ -15,9 +15,9 @@ from pyssp_sysml2.ssd import generate_ssd
 from pyssp_sysml2.ssv import generate_parameter_set
 
 from scripts.common.paths import ARCHITECTURE_DIR, COMPOSITION_NAME, GENERATED_DIR, COMMON_MODEL_DIR, ensure_parent_dir
-from scripts.generation.generate_c_interface_defs import generate_headers
-from scripts.generation.generate_interface_defs import generate_modelica_package
-from scripts.generation.normalize_generated_metadata import (
+from scripts.artifacts.generate_c_interface_defs import generate_headers
+from scripts.artifacts.generate_interface_defs import generate_modelica_package
+from scripts.artifacts.normalize_generated_metadata import (
     normalize_model_description_timestamps,
     normalize_ssd_xml,
 )

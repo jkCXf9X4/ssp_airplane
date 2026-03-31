@@ -27,7 +27,7 @@ python -m pip install -r requirements.txt
 ### First command to run
 
 ```bash
-python3 -m scripts.workflows.simulate_scenario \
+python3 -m scripts.scenarios.simulate_scenario \
   --scenario resources/scenarios/test_scenario.json \
   --reuse-results
 ```
@@ -43,7 +43,7 @@ After the command completes, inspect:
 If you want a quick plot:
 
 ```bash
-python3 -m scripts.plot_results \
+python3 -m scripts.analyze.plot_results \
   --results-csv build/results/test_scenario_results.csv \
   --scenario resources/scenarios/test_scenario.json \
   --plot-path
@@ -79,7 +79,7 @@ python -m pip install -r requirements_local.txt
 ### First full build
 
 ```bash
-./scripts/workflows/build.sh
+./scripts/workflows/rebuild_from_source.sh
 ```
 
 That workflow:

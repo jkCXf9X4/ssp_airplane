@@ -9,8 +9,8 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from scripts.generation.generate_scenario import generate_scenario  # type: ignore  # noqa: E402
-from scripts.workflows.simulate_scenario import simulate_scenario  # type: ignore  # noqa: E402
+from scripts.scenarios.generate_scenario import generate_scenario  # type: ignore  # noqa: E402
+from scripts.scenarios.simulate_scenario import simulate_scenario  # type: ignore  # noqa: E402
 
 USE_CASE_DIR = REPO_ROOT / "resources" / "scenarios"
 
