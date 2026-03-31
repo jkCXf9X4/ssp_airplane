@@ -5,23 +5,25 @@ import shutil
 import subprocess
 from pathlib import Path
 
-from scripts.lib.paths import ARCHITECTURE_DIR, COMPOSITION_NAME, REPO_ROOT, ensure_directory
-from scripts.lib.artifacts.build.native_discovery import (
-    DEFAULT_BUILD_ROOT,
+from scripts.lib.paths import (
+    ARCHITECTURE_DIR,
+    COMPOSITION_NAME,
+    DEFAULT_NATIVE_BUILD_ROOT,
     GENERATED_INTERFACE_DIR,
     GENERATED_MODEL_DESCRIPTION_DIR,
     NativeFmuProject,
+    REPO_ROOT,
+    discover_native_projects,
+    ensure_directory,
 )
 
 
 def _discover_projects(
     architecture_path: Path = ARCHITECTURE_DIR,
     composition: str = COMPOSITION_NAME,
-    build_root: Path = DEFAULT_BUILD_ROOT,
+    build_root: Path = DEFAULT_NATIVE_BUILD_ROOT,
     models: list[str] | None = None,
 ) -> list[NativeFmuProject]:
-    from scripts.lib.artifacts.build.native_discovery import discover_native_projects
-
     projects = discover_native_projects(architecture_path, composition, build_root)
     if models:
         wanted = set(models)
@@ -73,7 +75,7 @@ def build_native_library_for_project(
 
 def build_native_libraries(
     architecture_path: Path = ARCHITECTURE_DIR,
-    build_root: Path = DEFAULT_BUILD_ROOT,
+    build_root: Path = DEFAULT_NATIVE_BUILD_ROOT,
     composition: str = COMPOSITION_NAME,
     models: list[str] | None = None,
 ) -> list[Path]:

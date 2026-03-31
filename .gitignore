@@ -52,3 +52,7 @@ third_party/
 tmp_results/
 
 __pycache__/
+
+CMakeFiles/
+
+CMakeCache.txt

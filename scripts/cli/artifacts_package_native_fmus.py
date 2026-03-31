@@ -5,18 +5,15 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from scripts.lib.paths import ARCHITECTURE_DIR, BUILD_DIR, COMPOSITION_NAME
-
-DEFAULT_BUILD_ROOT = BUILD_DIR / "native"
-DEFAULT_OUTPUT_DIR = BUILD_DIR / "fmus"
+from scripts.lib.paths import ARCHITECTURE_DIR, COMPOSITION_NAME, DEFAULT_FMU_OUTPUT_DIR, DEFAULT_NATIVE_BUILD_ROOT
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Package built native shared libraries into FMUs.")
     parser.add_argument("--architecture", type=Path, default=ARCHITECTURE_DIR)
     parser.add_argument("--composition", default=COMPOSITION_NAME)
-    parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
-    parser.add_argument("--build-root", type=Path, default=DEFAULT_BUILD_ROOT)
+    parser.add_argument("--output-dir", type=Path, default=DEFAULT_FMU_OUTPUT_DIR)
+    parser.add_argument("--build-root", type=Path, default=DEFAULT_NATIVE_BUILD_ROOT)
     parser.add_argument(
         "--models",
         nargs="+",

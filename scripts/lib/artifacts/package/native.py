@@ -5,13 +5,18 @@ from pathlib import Path
 import shutil
 import zipfile
 
-from scripts.lib.paths import ARCHITECTURE_DIR, COMPOSITION_NAME, FMI_HEADERS_DIR, ensure_directory, ensure_parent_dir
-from scripts.lib.artifacts.build.native_discovery import (
-    DEFAULT_BUILD_ROOT,
-    DEFAULT_OUTPUT_DIR,
+from scripts.lib.paths import (
+    ARCHITECTURE_DIR,
+    COMPOSITION_NAME,
+    DEFAULT_FMU_OUTPUT_DIR,
+    DEFAULT_NATIVE_BUILD_ROOT,
+    FMI_HEADERS_DIR,
     GENERATED_INTERFACE_DIR,
     GENERATED_MODEL_DESCRIPTION_DIR,
     NativeFmuProject,
+    discover_native_projects,
+    ensure_directory,
+    ensure_parent_dir,
 )
 
 FMI_HEADER_NAMES = ("fmi2TypesPlatform.h", "fmi2FunctionTypes.h", "fmi2Functions.h")
@@ -68,11 +73,9 @@ def package_native_fmu(
 def _discover_projects(
     architecture_path: Path = ARCHITECTURE_DIR,
     composition: str = COMPOSITION_NAME,
-    build_root: Path = DEFAULT_BUILD_ROOT,
+    build_root: Path = DEFAULT_NATIVE_BUILD_ROOT,
     models: list[str] | None = None,
 ) -> list[NativeFmuProject]:
-    from scripts.lib.artifacts.build.native_discovery import discover_native_projects
-
     projects = discover_native_projects(architecture_path, composition, build_root)
     if models:
         wanted = set(models)
@@ -103,7 +106,7 @@ def package_native_fmu_for_project(
     build_dir: Path | None = None,
 ) -> Path:
     build_dir = build_dir or project.build_dir
-    output_fmu = output_fmu or (DEFAULT_OUTPUT_DIR / project.output_name)
+    output_fmu = output_fmu or (DEFAULT_FMU_OUTPUT_DIR / project.output_name)
     built_library = find_built_library(project, build_dir)
     return package_native_fmu(project, built_library, output_fmu, build_dir)
 
@@ -111,8 +114,8 @@ def package_native_fmu_for_project(
 def package_native_fmus(
     architecture_path: Path = ARCHITECTURE_DIR,
     composition: str = COMPOSITION_NAME,
-    output_dir: Path = DEFAULT_OUTPUT_DIR,
-    build_root: Path = DEFAULT_BUILD_ROOT,
+    output_dir: Path = DEFAULT_FMU_OUTPUT_DIR,
+    build_root: Path = DEFAULT_NATIVE_BUILD_ROOT,
     models: list[str] | None = None,
 ) -> list[Path]:
     from scripts.lib.artifacts.sysml_export.c_headers import generate_headers
