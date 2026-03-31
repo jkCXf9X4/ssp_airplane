@@ -12,7 +12,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from scripts.lib.artifacts.build.native import build_flightgear_bridge_fmu  # type: ignore  # noqa: E402
+
 
 
 class CallbackFunctions(ctypes.Structure):
@@ -114,10 +114,8 @@ def _load_library(path: Path) -> ctypes.CDLL:
 def test_native_flightgear_bridge_fmu_exchanges_udp_packets(tmp_path: Path):
     telemetry_port = _free_udp_port()
     control_port = _free_udp_port()
-    fmu_path = build_flightgear_bridge_fmu(
-        output_fmu=tmp_path / "FlightGearBridge.fmu",
-        build_dir=tmp_path / "native_build",
-    )
+    # TODO: use cli to build flightgear bridge
+    fmu_path = 
 
     extract_dir = tmp_path / "extracted"
     library_path, model_description = _extract_fmu(fmu_path, extract_dir)

@@ -66,23 +66,3 @@ def build_native_libraries(
     for project in projects:
         written.append(build_native_library_for_project(project, build_dir=project.build_dir))
     return written
-
-
-def build_flightgear_bridge_fmu(
-    output_fmu: Path,
-    build_dir: Path = DEFAULT_BUILD_ROOT / "flightgear_bridge",
-) -> Path:
-    from scripts.lib.artifacts.package import native as native_package
-
-    project = NativeFmuProject(
-        instance_name="flightgear_bridge",
-        model_identifier="FlightGearBridge",
-        source_root=FLIGHTGEAR_BRIDGE_MODEL_DIR / "native",
-        build_dir=build_dir,
-    )
-    build_native_library_for_project(project, build_dir=build_dir)
-    return native_package.package_native_fmu_for_project(
-        project,
-        output_fmu=output_fmu,
-        build_dir=build_dir,
-    )
