@@ -4,7 +4,7 @@ from __future__ import annotations
 import shutil
 from pathlib import Path
 
-from scripts.lib.paths import ARCHITECTURE_DIR, COMPOSITION_NAME, FLIGHTGEAR_BRIDGE_MODEL_DIR, ensure_directory
+from scripts.lib.paths import ARCHITECTURE_DIR, COMPOSITION_NAME, ensure_directory
 from scripts.lib.artifacts.build.native_build import build_native_library
 from scripts.lib.artifacts.build.native_discovery import (
     DEFAULT_BUILD_ROOT,

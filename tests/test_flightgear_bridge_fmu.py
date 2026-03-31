@@ -12,6 +12,35 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from scripts.cli.artifacts_build_native_fmus import main as build_native_fmus_main  # type: ignore  # noqa: E402
+from scripts.cli.artifacts_package_native_fmus import main as package_native_fmus_main  # type: ignore  # noqa: E402
+
+
+def _build_flightgear_bridge_fmu(tmp_path: Path) -> Path:
+    build_root = tmp_path / "native"
+    output_dir = tmp_path / "fmus"
+
+    assert build_native_fmus_main(
+        [
+            "--build-root",
+            str(build_root),
+            "--models",
+            "FlightGearBridge",
+        ]
+    ) == 0
+    assert package_native_fmus_main(
+        [
+            "--build-root",
+            str(build_root),
+            "--output-dir",
+            str(output_dir),
+            "--models",
+            "FlightGearBridge",
+        ]
+    ) == 0
+
+    return output_dir / "FlightGearBridge.fmu"
+
 
 
 
@@ -114,8 +143,8 @@ def _load_library(path: Path) -> ctypes.CDLL:
 def test_native_flightgear_bridge_fmu_exchanges_udp_packets(tmp_path: Path):
     telemetry_port = _free_udp_port()
     control_port = _free_udp_port()
-    # TODO: use cli to build flightgear bridge
-    fmu_path = 
+    fmu_path = _build_flightgear_bridge_fmu(tmp_path)
+    assert fmu_path.exists()
 
     extract_dir = tmp_path / "extracted"
     library_path, model_description = _extract_fmu(fmu_path, extract_dir)
