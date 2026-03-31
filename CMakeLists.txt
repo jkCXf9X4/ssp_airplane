@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.16)
 
 project(ssp_airplane LANGUAGES CXX)
 
-find_package(Python3 REQUIRED COMPONENTS Interpreter)
 find_program(OMC_EXECUTABLE omc)
 
 if(NOT OMC_EXECUTABLE)
@@ -23,9 +22,9 @@ add_subdirectory(models/input_output)
 add_subdirectory(models/mission_computer)
 add_subdirectory(models/turbofan_propulsion)
 
-add_custom_target(build_fmus
+add_custom_target(build_fmus ALL
   DEPENDS
-    flightgear_bridge_fmu
+    FlightGearBridge
     adaptive_wing_system_fmu
     autopilot_module_fmu
     composite_airframe_fmu

@@ -3,7 +3,7 @@
 This repository supports two distinct workflows:
 
 - `reuse existing results`: inspect scenarios, generate summaries, and plot outputs without rebuilding FMUs
-- `rebuild from source`: regenerate artifacts, rebuild FMUs, package the SSP, and run the reference simulation
+- `build from source`: compile the checked-in Modelica and native sources into FMUs from the repository root
 
 Choose one path and ignore the other until you need it.
 
@@ -49,9 +49,9 @@ python3 -m scripts.cli.analyze_plot \
   --plot-path
 ```
 
-## Path 2: Rebuild From Source
+## Path 2: Build From Source
 
-Use this path when you need the full architecture-first workflow.
+Use this path when you need to rebuild FMUs from the checked-in sources.
 
 ### Additional prerequisites
 
@@ -63,39 +63,27 @@ Typical Debian or Ubuntu setup:
 
 ```bash
 sudo apt-get update
-sudo apt-get install -y python3.11 python3.11-venv cmake build-essential openmodelica
-```
-
-### Setup
-
-```bash
-git submodule update --init --recursive
-python3.11 -m venv venv
-. venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install -r requirements_local.txt
+sudo apt-get install -y cmake build-essential openmodelica
 ```
 
 ### First full build
 
 ```bash
-python3 -m scripts.workflows.rebuild_from_source
+cmake .
+cmake --build .
 ```
 
-That workflow:
+This builds the default `build_fmus` target, which:
 
-1. exports architecture-derived artifacts
-2. verifies generated and model consistency
-3. builds Modelica and native FMUs
-4. packages the SSP
-5. runs the reference simulation
+1. exports each Modelica package to an FMU under `fmus/`
+2. builds the native `FlightGearBridge` shared library
 
-The script deletes and recreates `build/`.
+Native FMU packaging remains on the Python tooling path. This path uses the checked-in `generated/` metadata for the native library build. If you change architecture-derived interfaces or model descriptions, regenerate those artifacts before rebuilding.
 
 ## Which path should I use?
 
 - Use `reuse existing results` if you are reading, testing, plotting, or learning the model layout.
-- Use `rebuild from source` if you are changing architecture, FMUs, native code, or packaging.
+- Use `build from source` if you are changing FMUs, native code, or packaging.
 
 ## Next Docs
 

@@ -7,14 +7,15 @@ This page is reference material. If you are new to the repository, start with `g
 | Task | Command |
 | --- | --- |
 | Minimal setup for reuse and plotting | `python3.11 -m venv venv && . venv/bin/activate && python -m pip install --upgrade pip && python -m pip install -r requirements.txt` |
-| Full developer setup with vendored modules | `git submodule update --init --recursive && python3.11 -m venv venv && . venv/bin/activate && python -m pip install --upgrade pip && python -m pip install -r requirements_local.txt` |
+| Source build prerequisites | `sudo apt-get update && sudo apt-get install -y cmake build-essential openmodelica` |
 
 ## Common workflows
 
 | Task | Command |
 | --- | --- |
 | Reuse existing results | `python3 -m scripts.cli.scenarios_simulate --scenario resources/scenarios/test_scenario.json --reuse-results` |
-| Run the full architecture-first workflow | `python3 -m scripts.workflows.rebuild_from_source` |
+| Configure source builds at the repo root | `cmake .` |
+| Build all FMUs from the repo root | `cmake --build .` |
 | Plot a path overlay | `python3 -m scripts.cli.analyze_plot --results-csv build/results/test_scenario_results.csv --scenario resources/scenarios/test_scenario.json --plot-path` |
 | Run tests | `pytest` |
 
@@ -22,15 +23,9 @@ This page is reference material. If you are new to the repository, start with `g
 
 | Task | Command |
 | --- | --- |
-| Export all architecture-derived artifacts | `python3 -m scripts.cli.artifacts_export` |
-| Export architecture snapshot | `python3 -m scripts.cli.artifacts_save_architecture --output generated/arch_def.json` |
-| Generate Modelica interfaces | `python3 -m scripts.cli.artifacts_generate_interface_defs` |
-| Generate model descriptions with upstream tooling | `python3 -m pyssp_sysml2.cli generate fmi --architecture architecture --composition AircraftComposition --output-dir generated/model_descriptions` |
-| Generate SSD with upstream tooling | `python3 -m pyssp_sysml2.cli generate ssd --architecture architecture --composition AircraftComposition --output generated/SystemStructure.ssd` |
-| Generate parameter set with upstream tooling | `python3 -m pyssp_sysml2.cli generate ssv --architecture architecture --composition AircraftComposition --output generated/parameters.ssv` |
-| Build Modelica FMUs | `python3 -m scripts.cli.artifacts_build_modelica_fmus --omc-path omc` |
-| Build native shared libraries only | `python3 -m scripts.cli.artifacts_build_native_fmus --build-root build/native` |
-| Package native FMUs | `python3 -m scripts.cli.artifacts_package_native_fmus --output-dir build/fmus --build-root build/native` |
+| Build Modelica FMUs | `cmake --build . --target adaptive_wing_system_fmu autopilot_module_fmu composite_airframe_fmu control_interface_fmu environment_fmu fuel_system_fmu input_output_fmu mission_computer_fmu turbofan_propulsion_fmu` |
+| Build the native shared library only | `cmake --build . --target FlightGearBridge` |
+| Package the native FMU | `python3 -m scripts.cli.artifacts_package_native_fmus --output-dir build/fmus --build-root build/native` |
 | Package SSP | `python3 -m scripts.cli.artifacts_package_ssp --fmu-dir build/fmus --ssd generated/SystemStructure.ssd --output build/ssp/aircraft.ssp` |
 
 ## Verification

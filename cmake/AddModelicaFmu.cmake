@@ -10,36 +10,51 @@ function(add_modelica_fmu)
     message(FATAL_ERROR "add_modelica_fmu requires TARGET, MODEL, OUTPUT_NAME, and PACKAGE_FILES")
   endif()
 
-  if(NOT Python3_EXECUTABLE)
-    message(FATAL_ERROR "Python3 is required before calling add_modelica_fmu")
-  endif()
   if(NOT OMC_EXECUTABLE)
     message(FATAL_ERROR "OMC_EXECUTABLE is required before calling add_modelica_fmu")
   endif()
 
+  string(REGEX REPLACE "^.*\\." "" model_class "${AMF_MODEL}")
   set(output_fmu "${CMAKE_BINARY_DIR}/fmus/${AMF_OUTPUT_NAME}.fmu")
   set(work_dir "${CMAKE_BINARY_DIR}/tmp/${AMF_TARGET}")
-  set(package_args "")
+  set(mos_file "${CMAKE_BINARY_DIR}/tmp/${AMF_TARGET}.mos")
+  set(load_lines "")
+  set(package_deps "")
+
   foreach(package_file IN LISTS AMF_PACKAGE_FILES)
-    list(APPEND package_args "--package-file" "${package_file}")
+    string(APPEND load_lines "loadFile(\"${package_file}\");\n")
+    get_filename_component(package_dir "${package_file}" DIRECTORY)
+    file(GLOB_RECURSE package_dir_files CONFIGURE_DEPENDS
+      "${package_dir}/*.mo"
+      "${package_dir}/*.mos"
+      "${package_dir}/package.order"
+    )
+    list(APPEND package_deps ${package_dir_files})
   endforeach()
+  list(REMOVE_DUPLICATES package_deps)
+
+  file(GENERATE OUTPUT "${mos_file}" CONTENT
+"installPackage(Modelica, \"4.0.0\", exactMatch=false);
+${load_lines}cd(\"${work_dir}\");
+setCommandLineOptions(\"--fmiFlags=s:cvode\");
+setCommandLineOptions(\"--fmuRuntimeDepends=all\");
+filename := OpenModelica.Scripting.buildModelFMU(${AMF_MODEL}, version=\"2.0\", fmuType=\"cs\", platforms={\"static\"});
+filename;
+getErrorString();
+")
 
   add_custom_command(
     OUTPUT "${output_fmu}"
     COMMAND "${CMAKE_COMMAND}" -E make_directory "${CMAKE_BINARY_DIR}/fmus"
     COMMAND "${CMAKE_COMMAND}" -E make_directory "${work_dir}"
-    COMMAND "${Python3_EXECUTABLE}" -m scripts.generation.build_modelica_fmu
-            "--omc-path" "${OMC_EXECUTABLE}"
-            "--model" "${AMF_MODEL}"
-            "--output" "${output_fmu}"
-            "--work-dir" "${work_dir}"
-            ${package_args}
+    COMMAND "${OMC_EXECUTABLE}" "${mos_file}"
+    COMMAND "${CMAKE_COMMAND}" -E rm -f "${output_fmu}"
+    COMMAND "${CMAKE_COMMAND}" -E rename "${work_dir}/${model_class}.fmu" "${output_fmu}"
     DEPENDS
-            "${PROJECT_SOURCE_DIR}/scripts/generation/build_modelica_fmu.py"
-            ${AMF_PACKAGE_FILES}
+            "${mos_file}"
+            ${package_deps}
             ${AMF_DEPENDS}
     WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
-    COMMAND_EXPAND_LISTS
     VERBATIM
   )
 
