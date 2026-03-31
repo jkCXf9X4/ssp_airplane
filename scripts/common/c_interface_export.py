@@ -8,7 +8,7 @@ from pycps_sysmlv2 import NodeType, SysMLPartDefinition, SysMLPortDefinition
 
 from scripts.common.paths import COMPOSITION_NAME
 from scripts.common.sysml_values import parse_literal
-from scripts.utils.type_utils import infer_primitive, normalize_primitive
+from scripts.common.type_utils import infer_primitive, normalize_primitive
 
 
 @dataclass(frozen=True)
