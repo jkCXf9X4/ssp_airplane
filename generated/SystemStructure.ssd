@@ -2,7 +2,7 @@
 <ssd:SystemStructureDescription xmlns:ssd="http://ssp-standard.org/SSP1/SystemStructureDescription" xmlns:ssc="http://ssp-standard.org/SSP1/SystemStructureCommon" version="1.0" name="AircraftComposition" generationTool="pyssp_standard" generationDateAndTime="2000-01-01T00:00:00">
   <ssd:System name="AircraftComposition">
     <ssd:Elements>
-      <ssd:Component name="control_interface" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_ControlInterface.fmu">
+      <ssd:Component name="control_interface" type="application/x-fmu-sharedlibrary" source="resources/ControlInterface.fmu">
         <ssd:Connectors>
           <ssd:Connector name="bridgeInput.stick_pitch_norm" kind="input">
             <ssc:Real/>
@@ -75,7 +75,7 @@
           </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
-      <ssd:Component name="flightgear_bridge" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_FlightGearBridge.fmu">
+      <ssd:Component name="flightgear_bridge" type="application/x-fmu-sharedlibrary" source="resources/FlightGearBridge.fmu">
         <ssd:Connectors>
           <ssd:Connector name="statePosition.x_km" kind="input">
             <ssc:Real/>
@@ -178,7 +178,7 @@
           </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
-      <ssd:Component name="autopilot_module" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_AutopilotModule.fmu">
+      <ssd:Component name="autopilot_module" type="application/x-fmu-sharedlibrary" source="resources/AutopilotModule.fmu">
         <ssd:Connectors>
           <ssd:Connector name="feedbackBus.airspeed_mps" kind="input">
             <ssc:Real/>
@@ -359,7 +359,7 @@
           </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
-      <ssd:Component name="composite_airframe" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_CompositeAirframe.fmu">
+      <ssd:Component name="composite_airframe" type="application/x-fmu-sharedlibrary" source="resources/CompositeAirframe.fmu">
         <ssd:Connectors>
           <ssd:Connector name="length_m" kind="parameter">
             <ssc:Real/>
@@ -381,7 +381,7 @@
           </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
-      <ssd:Component name="turbofan_propulsion" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_TurbofanPropulsion.fmu">
+      <ssd:Component name="turbofan_propulsion" type="application/x-fmu-sharedlibrary" source="resources/TurbofanPropulsion.fmu">
         <ssd:Connectors>
           <ssd:Connector name="throttleCmd.throttle_norm" kind="input">
             <ssc:Real/>
@@ -421,7 +421,7 @@
           </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
-      <ssd:Component name="mission_computer" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_MissionComputer.fmu">
+      <ssd:Component name="mission_computer" type="application/x-fmu-sharedlibrary" source="resources/MissionComputer.fmu">
         <ssd:Connectors>
           <ssd:Connector name="manualInput.stick_pitch_norm" kind="input">
             <ssc:Real/>
@@ -512,7 +512,7 @@
           </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
-      <ssd:Component name="fuel_system" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_FuelSystem.fmu">
+      <ssd:Component name="fuel_system" type="application/x-fmu-sharedlibrary" source="resources/FuelSystem.fmu">
         <ssd:Connectors>
           <ssd:Connector name="fuel_consumption_rate.mass_flow_kgps" kind="input">
             <ssc:Real/>
@@ -534,7 +534,7 @@
           </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
-      <ssd:Component name="adaptive_wing_system" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_AdaptiveWingSystem.fmu">
+      <ssd:Component name="adaptive_wing_system" type="application/x-fmu-sharedlibrary" source="resources/AdaptiveWingSystem.fmu">
         <ssd:Connectors>
           <ssd:Connector name="direction_command.roll_deg" kind="input">
             <ssc:Real/>
@@ -601,7 +601,7 @@
           </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
-      <ssd:Component name="environment" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_Environment.fmu">
+      <ssd:Component name="environment" type="application/x-fmu-sharedlibrary" source="resources/Environment.fmu">
         <ssd:Connectors>
           <ssd:Connector name="actuation_command.left_aileron_deg" kind="input">
             <ssc:Real/>
@@ -680,7 +680,7 @@
           </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
-      <ssd:Component name="input_output" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_InputOutput.fmu">
+      <ssd:Component name="input_output" type="application/x-fmu-sharedlibrary" source="resources/InputOutput.fmu">
         <ssd:Connectors>
           <ssd:Connector name="locationXYZ.x_km" kind="input">
             <ssc:Real/>

@@ -27,10 +27,5 @@ def normalize_ssd_xml(path: Path) -> Path:
         text,
         count=1,
     )
-    text = re.sub(
-        r'source="resources/(?!Aircraft_)([^"/]+)\.fmu"',
-        r'source="resources/Aircraft_\1.fmu"',
-        text,
-    )
     path.write_text(text, encoding="utf-8")
     return path

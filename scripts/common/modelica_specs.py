@@ -34,15 +34,15 @@ class ModelicaModelSpec:
 COMMON_PACKAGE_FILE = COMMON_MODEL_DIR / "modelica" / "AircraftCommon" / "package.mo"
 
 MODELICA_MODEL_SPECS = [
-    ModelicaModelSpec("adaptive_wing_system", "AdaptiveWingSystemFMU", "AdaptiveWingSystem", "Aircraft_AdaptiveWingSystem"),
-    ModelicaModelSpec("autopilot_module", "AutopilotModuleFMU", "AutopilotModule", "Aircraft_AutopilotModule"),
-    ModelicaModelSpec("composite_airframe", "CompositeAirframeFMU", "CompositeAirframe", "Aircraft_CompositeAirframe"),
-    ModelicaModelSpec("control_interface", "ControlInterfaceFMU", "ControlInterface", "Aircraft_ControlInterface"),
-    ModelicaModelSpec("environment", "EnvironmentFMU", "Environment", "Aircraft_Environment"),
-    ModelicaModelSpec("fuel_system", "FuelSystemFMU", "FuelSystem", "Aircraft_FuelSystem"),
-    ModelicaModelSpec("input_output", "InputOutputFMU", "InputOutput", "Aircraft_InputOutput"),
-    ModelicaModelSpec("mission_computer", "MissionComputerFMU", "MissionComputer", "Aircraft_MissionComputer"),
-    ModelicaModelSpec("turbofan_propulsion", "TurbofanPropulsionFMU", "TurbofanPropulsion", "Aircraft_TurbofanPropulsion"),
+    ModelicaModelSpec("adaptive_wing_system", "AdaptiveWingSystemFMU", "AdaptiveWingSystem", "AdaptiveWingSystem"),
+    ModelicaModelSpec("autopilot_module", "AutopilotModuleFMU", "AutopilotModule", "AutopilotModule"),
+    ModelicaModelSpec("composite_airframe", "CompositeAirframeFMU", "CompositeAirframe", "CompositeAirframe"),
+    ModelicaModelSpec("control_interface", "ControlInterfaceFMU", "ControlInterface", "ControlInterface"),
+    ModelicaModelSpec("environment", "EnvironmentFMU", "Environment", "Environment"),
+    ModelicaModelSpec("fuel_system", "FuelSystemFMU", "FuelSystem", "FuelSystem"),
+    ModelicaModelSpec("input_output", "InputOutputFMU", "InputOutput", "InputOutput"),
+    ModelicaModelSpec("mission_computer", "MissionComputerFMU", "MissionComputer", "MissionComputer"),
+    ModelicaModelSpec("turbofan_propulsion", "TurbofanPropulsionFMU", "TurbofanPropulsion", "TurbofanPropulsion"),
 ]
 
 DEFAULT_MODELICA_MODELS = [spec.model_name for spec in MODELICA_MODEL_SPECS]

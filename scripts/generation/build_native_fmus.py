@@ -37,7 +37,7 @@ class NativeFmuProject:
 
     @property
     def output_name(self) -> str:
-        return f"Aircraft_{self.model_identifier}.fmu"
+        return f"{self.model_identifier}.fmu"
 
     @property
     def generated_model_header(self) -> Path:
@@ -218,7 +218,7 @@ def build_native_fmus(
 
 
 def build_flightgear_bridge_fmu(
-    output_fmu: Path = DEFAULT_OUTPUT_DIR / "Aircraft_FlightGearBridge.fmu",
+    output_fmu: Path = DEFAULT_OUTPUT_DIR / "FlightGearBridge.fmu",
     build_dir: Path = DEFAULT_BUILD_ROOT / "flightgear_bridge",
 ) -> Path:
     for project in discover_native_projects(build_root=DEFAULT_BUILD_ROOT):

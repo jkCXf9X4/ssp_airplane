@@ -115,7 +115,7 @@ def test_native_flightgear_bridge_fmu_exchanges_udp_packets(tmp_path: Path):
     telemetry_port = _free_udp_port()
     control_port = _free_udp_port()
     fmu_path = build_flightgear_bridge_fmu(
-        output_fmu=tmp_path / "Aircraft_FlightGearBridge.fmu",
+        output_fmu=tmp_path / "FlightGearBridge.fmu",
         build_dir=tmp_path / "native_build",
     )
 

@@ -1,4 +1,4 @@
-set(output_fmu "${CMAKE_BINARY_DIR}/fmus/Aircraft_FlightGearBridge.fmu")
+set(output_fmu "${CMAKE_BINARY_DIR}/fmus/FlightGearBridge.fmu")
 set(native_build_dir "${CMAKE_BINARY_DIR}/native/flightgear_bridge")
 
 add_custom_command(

@@ -2,14 +2,14 @@
 <ssd:SystemStructureDescription xmlns:ssc="http://ssp-standard.org/SSP1/SystemStructureCommon" xmlns:ssd="http://ssp-standard.org/SSP1/SystemStructureDescription" name="Aircraft" version="1.0">
   <ssd:System name="root">
     <ssd:Elements>
-      <ssd:Component name="ControlInterface" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_ControlInterface.fmu">
+      <ssd:Component name="ControlInterface" type="application/x-fmu-sharedlibrary" source="resources/ControlInterface.fmu">
         <ssd:Connectors>
           <ssd:Connector name="pilotCommand" kind="output">
             <ssc:Terminal />
           </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
-      <ssd:Component name="AutopilotModule" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_AutopilotModule.fmu">
+      <ssd:Component name="AutopilotModule" type="application/x-fmu-sharedlibrary" source="resources/AutopilotModule.fmu">
         <ssd:Connectors>
           <ssd:Connector name="feedbackBus" kind="input">
             <ssc:Terminal />
@@ -28,8 +28,8 @@
           </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
-      <ssd:Component name="CompositeAirframe" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_CompositeAirframe.fmu" />
-      <ssd:Component name="TurbofanPropulsion" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_TurbofanPropulsion.fmu">
+      <ssd:Component name="CompositeAirframe" type="application/x-fmu-sharedlibrary" source="resources/CompositeAirframe.fmu" />
+      <ssd:Component name="TurbofanPropulsion" type="application/x-fmu-sharedlibrary" source="resources/TurbofanPropulsion.fmu">
         <ssd:Connectors>
           <ssd:Connector name="throttleCmd" kind="input">
             <ssc:Terminal />
@@ -42,7 +42,7 @@
           </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
-      <ssd:Component name="MissionComputer" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_MissionComputer.fmu">
+      <ssd:Component name="MissionComputer" type="application/x-fmu-sharedlibrary" source="resources/MissionComputer.fmu">
         <ssd:Connectors>
           <ssd:Connector name="manualInput" kind="input">
             <ssc:Terminal />
@@ -61,7 +61,7 @@
           </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
-      <ssd:Component name="FuelSystem" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_FuelSystem.fmu">
+      <ssd:Component name="FuelSystem" type="application/x-fmu-sharedlibrary" source="resources/FuelSystem.fmu">
         <ssd:Connectors>
           <ssd:Connector name="fuel_consumption_rate" kind="input">
             <ssc:Terminal />
@@ -71,7 +71,7 @@
           </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
-      <ssd:Component name="AdaptiveWingSystem" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_AdaptiveWingSystem.fmu">
+      <ssd:Component name="AdaptiveWingSystem" type="application/x-fmu-sharedlibrary" source="resources/AdaptiveWingSystem.fmu">
         <ssd:Connectors>
           <ssd:Connector name="direction_command" kind="input">
             <ssc:Terminal />
@@ -87,7 +87,7 @@
           </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
-      <ssd:Component name="Environment" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_Environment.fmu">
+      <ssd:Component name="Environment" type="application/x-fmu-sharedlibrary" source="resources/Environment.fmu">
         <ssd:Connectors>
           <ssd:Connector name="actuation_command" kind="input">
             <ssc:Terminal />
@@ -112,7 +112,7 @@
           </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
-      <ssd:Component name="InputOutput" type="application/x-fmu-sharedlibrary" source="resources/Aircraft_InputOutput.fmu">
+      <ssd:Component name="InputOutput" type="application/x-fmu-sharedlibrary" source="resources/InputOutput.fmu">
         <ssd:Connectors>
           <ssd:Connector name="locationXYZ" kind="input">
             <ssc:Terminal />
