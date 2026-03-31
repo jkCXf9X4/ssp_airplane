@@ -2,6 +2,10 @@
 
 Use this page as the main router for repository documentation.
 
+## Documentation Guideline
+
+Keep pages short, focused, and audience-specific.
+
 ## New to the repository
 
 - `getting_started.md`: installation paths, first commands, and what success looks like
