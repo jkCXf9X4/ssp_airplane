@@ -15,10 +15,11 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from pycps_sysmlv2 import NodeType, SysMLParser
+from pyssp_sysml2.fmi import generate_model_descriptions
 
 from scripts.common.paths import ARCHITECTURE_DIR, BUILD_DIR, COMPOSITION_NAME, FMI_HEADERS_DIR, GENERATED_DIR, MODELS_DIR, REPO_ROOT, ensure_directory, ensure_parent_dir
 from scripts.generation.generate_c_interface_defs import common_header_name, generate_headers, part_header_name
-from scripts.generation.generate_model_descriptions import generate_model_descriptions
+from scripts.generation.normalize_generated_metadata import normalize_model_description_timestamps
 
 DEFAULT_OUTPUT_DIR = BUILD_DIR / "fmus"
 DEFAULT_BUILD_ROOT = BUILD_DIR / "native"
@@ -91,6 +92,7 @@ def _generated_model_description_paths(
         output_dir,
         composition,
     )
+    normalize_model_description_timestamps(written)
     return {path.parent.name: path for path in written}
 
 

@@ -25,9 +25,9 @@ This page is reference material. If you are new to the repository, start with `g
 | Export all architecture-derived artifacts | `python3 -m scripts.generation.export_artifacts` |
 | Export architecture snapshot | `python3 -m scripts.generation.save_architecture --output generated/arch_def.json` |
 | Generate Modelica interfaces | `python3 -m scripts.generation.generate_interface_defs` |
-| Generate model descriptions | `python3 -m scripts.generation.generate_model_descriptions` |
-| Generate SSD | `python3 -m scripts.generation.generate_ssd --output generated/SystemStructure.ssd` |
-| Generate parameter set | `python3 -m scripts.generation.generate_parameter_set --output generated/parameters.ssv` |
+| Generate model descriptions with upstream tooling | `python3 -m pyssp_sysml2.cli generate fmi --architecture architecture --composition AircraftComposition --output-dir generated/model_descriptions` |
+| Generate SSD with upstream tooling | `python3 -m pyssp_sysml2.cli generate ssd --architecture architecture --composition AircraftComposition --output generated/SystemStructure.ssd` |
+| Generate parameter set with upstream tooling | `python3 -m pyssp_sysml2.cli generate ssv --architecture architecture --composition AircraftComposition --output generated/parameters.ssv` |
 | Build FMUs | `python3 -m scripts.generation.build_fmus --omc-path omc` |
 | Build native FMUs only | `python3 -m scripts.generation.build_native_fmus --output-dir build/fmus` |
 | Package SSP | `python3 -m scripts.generation.package_ssp --fmu-dir build/fmus --ssd generated/SystemStructure.ssd --output build/ssp/aircraft.ssp` |

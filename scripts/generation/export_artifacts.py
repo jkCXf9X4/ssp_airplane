@@ -10,13 +10,17 @@ from pycps_sysmlv2 import SysMLParser, json_dumps
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
+from pyssp_sysml2.fmi import generate_model_descriptions
+from pyssp_sysml2.ssd import generate_ssd
 from pyssp_sysml2.ssv import generate_parameter_set
 
 from scripts.common.paths import ARCHITECTURE_DIR, COMPOSITION_NAME, GENERATED_DIR, COMMON_MODEL_DIR, ensure_parent_dir
 from scripts.generation.generate_c_interface_defs import generate_headers
 from scripts.generation.generate_interface_defs import generate_modelica_package
-from scripts.generation.generate_model_descriptions import generate_model_descriptions
-from scripts.generation.generate_ssd import generate_ssd
+from scripts.generation.normalize_generated_metadata import (
+    normalize_model_description_timestamps,
+    normalize_ssd_xml,
+)
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -40,9 +44,15 @@ def main(argv: list[str] | None = None) -> int:
     interface_output.write_text(generate_modelica_package(architecture.port_definitions), encoding="utf-8")
 
     generate_headers(args.architecture, generated_dir / "interfaces")
-    generate_model_descriptions(args.architecture, generated_dir / "model_descriptions", COMPOSITION_NAME)
+    model_descriptions = generate_model_descriptions(
+        args.architecture,
+        generated_dir / "model_descriptions",
+        COMPOSITION_NAME,
+    )
+    normalize_model_description_timestamps(model_descriptions)
     generate_parameter_set(args.architecture, generated_dir / "parameters.ssv", COMPOSITION_NAME)
-    generate_ssd(args.architecture, generated_dir / "SystemStructure.ssd", COMPOSITION_NAME)
+    ssd_path = generate_ssd(args.architecture, generated_dir / "SystemStructure.ssd", COMPOSITION_NAME)
+    normalize_ssd_xml(ssd_path)
     return 0
 
 
