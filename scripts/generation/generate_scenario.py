@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import List
 
-from scripts.common.map_geometry import destination_point, haversine_distance_km
+from scripts.common.geo import destination_point, haversine_distance_km
 
 
 @dataclass

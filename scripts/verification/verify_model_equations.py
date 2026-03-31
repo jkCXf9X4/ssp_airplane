@@ -9,8 +9,7 @@ from typing import Iterable
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from scripts.common.modelica import run_omc
-from scripts.common.modelica_specs import DEFAULT_MODELICA_MODELS, spec_by_model_name
+from scripts.common.modelica import DEFAULT_MODELICA_MODELS, run_omc, spec_by_model_name
 
 DEFAULT_MODELS = DEFAULT_MODELICA_MODELS
 

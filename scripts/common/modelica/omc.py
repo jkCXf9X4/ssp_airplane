@@ -1,5 +1,4 @@
-"""Shared helper utilities for working with SysML architectures."""
-
+"""OpenModelica execution helpers."""
 from __future__ import annotations
 
 import subprocess
@@ -7,12 +6,6 @@ import tempfile
 from pathlib import Path
 
 from scripts.common.paths import REPO_ROOT
-from scripts.common.type_utils import normalize_primitive
-
-
-def map_modelica_type(type_name: object | None, default: str = "Real") -> str:
-    """Return a canonical primitive name (Real/Integer/Boolean/String) for SysML types."""
-    return normalize_primitive(type_name, default)
 
 
 def run_omc(omc_path: str, mos_content: str) -> str:

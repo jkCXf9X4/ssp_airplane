@@ -11,7 +11,7 @@ from pathlib import Path
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from scripts.common.modelica_specs import DEFAULT_MODELICA_MODELS, spec_by_model_name
+from scripts.common.modelica import DEFAULT_MODELICA_MODELS, spec_by_model_name
 from scripts.common.paths import BUILD_DIR, ensure_directory
 from scripts.generation.build_modelica_fmu import build_modelica_fmu
 from scripts.generation.build_native_fmus import build_native_fmus

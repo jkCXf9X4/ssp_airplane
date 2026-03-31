@@ -11,7 +11,7 @@ from pycps_sysmlv2 import NodeType, SysMLParser
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from scripts.common.c_interface_export import (
+from scripts.common.sysml import (
     architecture_part_specs,
     part_instance_fields,
     port_struct_fields,

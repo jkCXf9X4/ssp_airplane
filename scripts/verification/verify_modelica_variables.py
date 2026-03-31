@@ -13,7 +13,7 @@ from pycps_sysmlv2 import NodeType, SysMLParser
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from scripts.common.modelica_specs import MODELICA_MODEL_SPECS
+from scripts.common.modelica import MODELICA_MODEL_SPECS
 from scripts.common.paths import ARCHITECTURE_DIR, COMPOSITION_NAME
 
 DEFAULT_ARCH_DIR = ARCHITECTURE_DIR
