@@ -1,11 +1,11 @@
-"""Native shared-library build helpers for FMUs."""
+"""Compile native shared libraries used for native FMUs."""
 from __future__ import annotations
 
 from pathlib import Path
 import subprocess
 
 from scripts.lib.paths import REPO_ROOT
-from scripts.lib.artifacts.build.native_fmu_project import NativeFmuProject
+from scripts.lib.artifacts.build.native_project import NativeFmuProject
 
 
 def build_native_library(project: NativeFmuProject, build_dir: Path) -> Path:

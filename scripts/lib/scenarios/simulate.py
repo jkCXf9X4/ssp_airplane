@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Simulate a waypoint scenario with ssp4sim and post-process the results."""
+"""Run a scenario simulation and post-process the results."""
 
 from __future__ import annotations
 
@@ -26,12 +26,12 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.lib.paths import BUILD_DIR
-from scripts.lib.geo import (
+from scripts.lib.common.geo import (
     haversine_distance_km,
     local_path_distance_km,
     project_waypoints_to_local_km,
 )
-from scripts.lib.results.csv import numeric_series, read_result_rows, series_from_candidates
+from scripts.lib.common.csv import numeric_series, read_result_rows, series_from_candidates
 from scripts.lib.results.track import extract_track_points
 
 DEFAULT_SSP = BUILD_DIR / "ssp" / "aircraft.ssp"

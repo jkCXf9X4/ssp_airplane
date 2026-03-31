@@ -12,7 +12,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from scripts.lib.artifacts.build.native_fmus import build_flightgear_bridge_fmu  # type: ignore  # noqa: E402
+from scripts.lib.artifacts.build.native import build_flightgear_bridge_fmu  # type: ignore  # noqa: E402
 
 
 class CallbackFunctions(ctypes.Structure):

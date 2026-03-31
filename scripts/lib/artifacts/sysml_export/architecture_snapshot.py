@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Merge the SysML sections and emit a JSON snapshot of the architecture."""
+"""Write a JSON snapshot of the merged SysML architecture."""
 from __future__ import annotations
 
 import argparse

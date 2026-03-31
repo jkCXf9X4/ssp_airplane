@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from typing import Optional
 
-from scripts.lib.sysml.type_utils import normalize_primitive
+from scripts.lib.common.sysml.type_utils import normalize_primitive
 
 
 def fmu_filename(modelica_class: str) -> str:

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run OpenModelica checkModel across the Aircraft package."""
+"""Run OpenModelica `checkModel` across the Aircraft package."""
 from __future__ import annotations
 
 import argparse
@@ -10,7 +10,7 @@ from typing import Iterable
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from scripts.lib.modelica import DEFAULT_MODELICA_MODELS, run_omc, spec_by_model_name
+from scripts.lib.common.modelica import DEFAULT_MODELICA_MODELS, run_omc, spec_by_model_name
 
 DEFAULT_MODELS = DEFAULT_MODELICA_MODELS
 

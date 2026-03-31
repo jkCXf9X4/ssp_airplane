@@ -1,16 +1,23 @@
-"""Project model and shared paths for native FMU builds."""
+"""Project metadata and shared paths for native artifact builds."""
 from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
 
 from scripts.lib.paths import BUILD_DIR, GENERATED_DIR, REPO_ROOT
-from scripts.lib.artifacts.sysml_export.generate_c_interface_defs import common_header_name, part_header_name
 
 DEFAULT_OUTPUT_DIR = BUILD_DIR / "fmus"
 DEFAULT_BUILD_ROOT = BUILD_DIR / "native"
 GENERATED_INTERFACE_DIR = REPO_ROOT / "generated" / "interfaces"
 GENERATED_MODEL_DESCRIPTION_DIR = GENERATED_DIR / "model_descriptions"
+
+
+def common_header_name(package: str) -> str:
+    return f"{package}_InterfaceCommon.h"
+
+
+def part_header_name(package: str, part_name: str) -> str:
+    return f"{package}_{part_name}.h"
 
 
 @dataclass(frozen=True)

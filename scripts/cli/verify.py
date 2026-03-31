@@ -18,17 +18,17 @@ def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args, remaining = parser.parse_known_args(argv)
     if args.command == "model-equations":
-        from scripts.lib.verify import verify_model_equations
+        from scripts.lib.verify import model_equations
 
-        return verify_model_equations.main(remaining)
+        return model_equations.main(remaining)
     if args.command == "modelica-variables":
-        from scripts.lib.verify import verify_modelica_variables
+        from scripts.lib.verify import modelica_variables
 
-        return verify_modelica_variables.main(remaining)
+        return modelica_variables.main(remaining)
     if args.command == "ssd-xml":
-        from scripts.lib.verify import verify_ssd_xml_compliance
+        from scripts.lib.verify import ssd_xml
 
-        return verify_ssd_xml_compliance.main(remaining)
+        return ssd_xml.main(remaining)
     parser.error(f"unsupported command: {args.command}")
     return 2
 

@@ -1,4 +1,4 @@
-"""Native FMU project discovery from the SysML architecture."""
+"""Discover native build projects from the SysML architecture."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -7,7 +7,7 @@ import re
 from pycps_sysmlv2 import NodeType, SysMLParser
 
 from scripts.lib.paths import ARCHITECTURE_DIR, COMPOSITION_NAME, MODELS_DIR
-from scripts.lib.artifacts.build.native_fmu_project import DEFAULT_BUILD_ROOT, NativeFmuProject
+from scripts.lib.artifacts.build.native_project import DEFAULT_BUILD_ROOT, NativeFmuProject
 
 
 def _snake_case(name: str) -> str:

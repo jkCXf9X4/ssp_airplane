@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Emit interface definitions for SysML data-def types as Modelica records."""
+"""Generate Modelica interface definitions from SysML data definitions."""
 
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.lib.paths import ARCHITECTURE_DIR, COMMON_MODEL_DIR, ensure_parent_dir
-from scripts.lib.sysml import modelica_connector_type
+from scripts.lib.common.sysml import modelica_connector_type
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
 DEFAULT_OUTPUT_PATH = COMMON_MODEL_DIR / "modelica" / "AircraftCommon" / "GeneratedInterfaces.mo"

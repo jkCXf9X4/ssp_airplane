@@ -4,7 +4,7 @@ from __future__ import annotations
 import math
 from typing import Dict, List, Tuple
 
-from scripts.lib.results.csv import numeric_series, series_from_candidates
+from scripts.lib.common.csv import numeric_series, series_from_candidates
 
 
 def extract_track_points(

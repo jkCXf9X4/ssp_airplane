@@ -1,11 +1,11 @@
-"""SysML-derived metadata preparation needed by native FMU builds."""
+"""Prepare SysML-derived metadata used by native packaging workflows."""
 from __future__ import annotations
 
 from pathlib import Path
 
 from pyssp_sysml2.fmi import generate_model_descriptions
 
-from scripts.lib.artifacts.sysml_export.normalize_generated_metadata import normalize_model_description_timestamps
+from scripts.lib.common.xml import normalize_model_description_timestamps
 
 
 def generated_model_description_paths(

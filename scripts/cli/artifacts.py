@@ -27,37 +27,37 @@ def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args, remaining = parser.parse_known_args(argv)
     if args.command == "export":
-        from scripts.lib.artifacts.sysml_export import export_artifacts
+        from scripts.lib.artifacts.sysml_export import export
 
-        return export_artifacts.main(remaining)
+        return export.main(remaining)
     if args.command == "save-architecture":
-        from scripts.lib.artifacts.sysml_export import save_architecture
+        from scripts.lib.artifacts.sysml_export import architecture_snapshot
 
-        return save_architecture.main(remaining)
+        return architecture_snapshot.main(remaining)
     if args.command == "generate-interface-defs":
-        from scripts.lib.artifacts.sysml_export import generate_interface_defs
+        from scripts.lib.artifacts.sysml_export import modelica_headers
 
-        return generate_interface_defs.main(remaining)
+        return modelica_headers.main(remaining)
     if args.command == "generate-c-interface-defs":
-        from scripts.lib.artifacts.sysml_export import generate_c_interface_defs
+        from scripts.lib.artifacts.sysml_export import c_headers
 
-        return generate_c_interface_defs.main(remaining)
+        return c_headers.main(remaining)
     if args.command == "build-modelica-fmus":
-        from scripts.lib.artifacts.build import modelica_fmu
+        from scripts.lib.artifacts.build import modelica
 
-        return modelica_fmu.main(remaining)
+        return modelica.main(remaining)
     if args.command == "build-native-fmus":
-        from scripts.lib.artifacts.build import native_fmus
+        from scripts.lib.artifacts.build import native
 
-        return native_fmus.main(remaining)
+        return native.main(remaining)
     if args.command == "package-native-fmus":
-        from scripts.lib.artifacts.package import native_fmu
+        from scripts.lib.artifacts.package import native
 
-        return native_fmu.main(remaining)
+        return native.main(remaining)
     if args.command == "build-flightgear-bridge-fmu":
-        from scripts.lib.artifacts.build import native_fmus
+        from scripts.lib.artifacts.build import native
 
-        output = native_fmus.build_flightgear_bridge_fmu(
+        output = native.build_flightgear_bridge_fmu(
             output_fmu=args.output,
             build_dir=args.build_dir,
         )

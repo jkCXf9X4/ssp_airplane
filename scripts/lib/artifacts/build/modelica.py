@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build one or more Modelica FMUs from package roots."""
+"""Build standalone Modelica FMUs."""
 from __future__ import annotations
 
 import argparse
@@ -12,7 +12,7 @@ from pathlib import Path
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from scripts.lib.modelica import DEFAULT_MODELICA_MODELS, run_omc, spec_by_model_name
+from scripts.lib.common.modelica import DEFAULT_MODELICA_MODELS, run_omc, spec_by_model_name
 from scripts.lib.paths import BUILD_DIR, ensure_directory, ensure_parent_dir
 
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify Modelica interface names/fields match SysML port definitions."""
+"""Check that Modelica interface variables match SysML port definitions."""
 from __future__ import annotations
 
 import argparse
@@ -13,7 +13,7 @@ from pycps_sysmlv2 import NodeType, SysMLParser
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from scripts.lib.modelica import MODELICA_MODEL_SPECS
+from scripts.lib.common.modelica import MODELICA_MODEL_SPECS
 from scripts.lib.paths import ARCHITECTURE_DIR, COMPOSITION_NAME
 
 DEFAULT_ARCH_DIR = ARCHITECTURE_DIR

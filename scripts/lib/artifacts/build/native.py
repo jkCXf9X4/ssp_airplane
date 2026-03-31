@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build native shared libraries discovered from the SysML architecture."""
+"""Build native shared libraries for native FMU packaging."""
 from __future__ import annotations
 
 import shutil
@@ -9,17 +9,14 @@ from pathlib import Path
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from scripts.lib.paths import ARCHITECTURE_DIR, COMPOSITION_NAME, ensure_directory
-from scripts.lib.artifacts.build import (
+from scripts.lib.paths import ARCHITECTURE_DIR, COMPOSITION_NAME, FLIGHTGEAR_BRIDGE_MODEL_DIR, ensure_directory
+from scripts.lib.artifacts.build.native_build import build_native_library
+from scripts.lib.artifacts.build.native_project import (
     DEFAULT_BUILD_ROOT,
     GENERATED_INTERFACE_DIR,
     GENERATED_MODEL_DESCRIPTION_DIR,
     NativeFmuProject,
-    build_native_library,
-    discover_native_projects,
-    generated_model_description_paths,
 )
-from scripts.lib.artifacts.sysml_export.generate_c_interface_defs import generate_headers
 
 
 def _discover_projects(
@@ -28,6 +25,8 @@ def _discover_projects(
     build_root: Path = DEFAULT_BUILD_ROOT,
     models: list[str] | None = None,
 ) -> list[NativeFmuProject]:
+    from scripts.lib.artifacts.build.native_discovery import discover_native_projects
+
     projects = discover_native_projects(architecture_path, composition, build_root)
     if models:
         wanted = set(models)
@@ -54,6 +53,9 @@ def build_native_libraries(
     composition: str = COMPOSITION_NAME,
     models: list[str] | None = None,
 ) -> list[Path]:
+    from scripts.lib.artifacts.sysml_export.c_headers import generate_headers
+    from scripts.lib.artifacts.sysml_export.model_description import generated_model_description_paths
+
     projects = _discover_projects(architecture_path, composition, build_root, models)
     if not projects:
         return []
@@ -75,28 +77,20 @@ def build_flightgear_bridge_fmu(
     output_fmu: Path,
     build_dir: Path = DEFAULT_BUILD_ROOT / "flightgear_bridge",
 ) -> Path:
-    from scripts.lib.artifacts.package import native_fmu as package_native_fmu_cli
+    from scripts.lib.artifacts.package import native as native_package
 
-    for project in discover_native_projects(build_root=DEFAULT_BUILD_ROOT):
-        if project.model_identifier == "FlightGearBridge":
-            project = NativeFmuProject(
-                instance_name=project.instance_name,
-                model_identifier=project.model_identifier,
-                source_root=project.source_root,
-                build_dir=build_dir,
-            )
-            build_native_libraries(
-                architecture_path=ARCHITECTURE_DIR,
-                build_root=DEFAULT_BUILD_ROOT,
-                composition=COMPOSITION_NAME,
-                models=[project.model_identifier],
-            )
-            return package_native_fmu_cli.package_native_fmu_for_project(
-                project,
-                output_fmu=output_fmu,
-                build_dir=build_dir,
-            )
-    raise SystemExit("FlightGearBridge native project not found in architecture/model layout")
+    project = NativeFmuProject(
+        instance_name="flightgear_bridge",
+        model_identifier="FlightGearBridge",
+        source_root=FLIGHTGEAR_BRIDGE_MODEL_DIR / "native",
+        build_dir=build_dir,
+    )
+    build_native_library_for_project(project, build_dir=build_dir)
+    return native_package.package_native_fmu_for_project(
+        project,
+        output_fmu=output_fmu,
+        build_dir=build_dir,
+    )
 
 
 def parse_args(argv: list[str] | None = None):

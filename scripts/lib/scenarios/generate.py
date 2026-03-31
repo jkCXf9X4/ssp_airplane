@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate randomized flight scenarios built from GeodeticLLA waypoints."""
+"""Generate randomized waypoint scenarios."""
 from __future__ import annotations
 
 import argparse
@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import List
 
-from scripts.lib.geo import destination_point, haversine_distance_km
+from scripts.lib.common.geo import destination_point, haversine_distance_km
 
 
 @dataclass

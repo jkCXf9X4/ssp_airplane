@@ -17,13 +17,13 @@ def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args, remaining = parser.parse_known_args(argv)
     if args.command == "generate":
-        from scripts.lib.scenarios import generate_scenario
+        from scripts.lib.scenarios import generate
 
-        return generate_scenario.main(remaining)
+        return generate.main(remaining)
     if args.command == "simulate":
-        from scripts.lib.scenarios import simulate_scenario
+        from scripts.lib.scenarios import simulate
 
-        return simulate_scenario.main(remaining)
+        return simulate.main(remaining)
     parser.error(f"unsupported command: {args.command}")
     return 2
 

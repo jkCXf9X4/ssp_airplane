@@ -1,4 +1,4 @@
-"""Native FMU staging, packaging, and packaging CLI."""
+"""Package built native libraries into native FMUs."""
 from __future__ import annotations
 
 import argparse
@@ -11,11 +11,13 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.lib.paths import ARCHITECTURE_DIR, COMPOSITION_NAME, FMI_HEADERS_DIR, ensure_directory, ensure_parent_dir
-from scripts.lib.artifacts.build import DEFAULT_BUILD_ROOT, DEFAULT_OUTPUT_DIR, GENERATED_INTERFACE_DIR, GENERATED_MODEL_DESCRIPTION_DIR
-from scripts.lib.artifacts.build.native_fmu_discovery import discover_native_projects
-from scripts.lib.artifacts.build.native_fmu_project import NativeFmuProject
-from scripts.lib.artifacts.sysml_export.generate_c_interface_defs import generate_headers
-from scripts.lib.artifacts.sysml_export.native_fmu import generated_model_description_paths
+from scripts.lib.artifacts.build.native_project import (
+    DEFAULT_BUILD_ROOT,
+    DEFAULT_OUTPUT_DIR,
+    GENERATED_INTERFACE_DIR,
+    GENERATED_MODEL_DESCRIPTION_DIR,
+    NativeFmuProject,
+)
 
 FMI_HEADER_NAMES = ("fmi2TypesPlatform.h", "fmi2FunctionTypes.h", "fmi2Functions.h")
 
@@ -74,6 +76,8 @@ def _discover_projects(
     build_root: Path = DEFAULT_BUILD_ROOT,
     models: list[str] | None = None,
 ) -> list[NativeFmuProject]:
+    from scripts.lib.artifacts.build.native_discovery import discover_native_projects
+
     projects = discover_native_projects(architecture_path, composition, build_root)
     if models:
         wanted = set(models)
@@ -116,6 +120,9 @@ def package_native_fmus(
     build_root: Path = DEFAULT_BUILD_ROOT,
     models: list[str] | None = None,
 ) -> list[Path]:
+    from scripts.lib.artifacts.sysml_export.c_headers import generate_headers
+    from scripts.lib.artifacts.sysml_export.model_description import generated_model_description_paths
+
     projects = _discover_projects(architecture_path, composition, build_root, models)
     if not projects:
         return []

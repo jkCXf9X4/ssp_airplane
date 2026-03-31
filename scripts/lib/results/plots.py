@@ -1,4 +1,4 @@
-"""Plot simulation result artifacts."""
+"""Generate plots from simulation result artifacts."""
 from __future__ import annotations
 
 import argparse
@@ -8,8 +8,8 @@ import os
 from pathlib import Path
 from typing import Dict, List, Optional
 
-from scripts.lib.geo import project_waypoints_to_local_km
-from scripts.lib.results.csv import numeric_series, read_result_rows, series_from_candidates
+from scripts.lib.common.geo import project_waypoints_to_local_km
+from scripts.lib.common.csv import numeric_series, read_result_rows, series_from_candidates
 from scripts.lib.results.track import extract_track_points
 
 

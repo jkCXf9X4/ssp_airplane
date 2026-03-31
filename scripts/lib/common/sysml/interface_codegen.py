@@ -7,8 +7,8 @@ from typing import Dict, Iterable, List, Optional
 from pycps_sysmlv2 import NodeType, SysMLPartDefinition, SysMLPortDefinition
 
 from scripts.lib.paths import COMPOSITION_NAME
-from scripts.lib.sysml.type_utils import infer_primitive, normalize_primitive
-from scripts.lib.sysml.values import parse_literal
+from scripts.lib.common.sysml.type_utils import infer_primitive, normalize_primitive
+from scripts.lib.common.sysml.values import parse_literal
 
 
 @dataclass(frozen=True)

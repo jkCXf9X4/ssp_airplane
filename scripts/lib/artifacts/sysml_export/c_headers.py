@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Export architecture-derived C/C++ headers for native component implementations."""
+"""Generate C and C++ interface definitions from the SysML architecture."""
 from __future__ import annotations
 
 import argparse
@@ -11,7 +11,7 @@ from pycps_sysmlv2 import NodeType, SysMLParser
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from scripts.lib.sysml import (
+from scripts.lib.common.sysml import (
     architecture_part_specs,
     part_instance_fields,
     port_struct_fields,

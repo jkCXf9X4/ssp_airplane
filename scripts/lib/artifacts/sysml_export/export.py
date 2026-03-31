@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Export all generated artifacts derived directly from the SysML architecture."""
+"""Export the full set of generated artifacts from the SysML architecture."""
 from __future__ import annotations
 
 import argparse
@@ -15,9 +15,9 @@ from pyssp_sysml2.ssd import generate_ssd
 from pyssp_sysml2.ssv import generate_parameter_set
 
 from scripts.lib.paths import ARCHITECTURE_DIR, COMPOSITION_NAME, GENERATED_DIR, COMMON_MODEL_DIR, ensure_parent_dir
-from scripts.lib.artifacts.sysml_export.generate_c_interface_defs import generate_headers
-from scripts.lib.artifacts.sysml_export.generate_interface_defs import generate_modelica_package
-from scripts.lib.artifacts.sysml_export.normalize_generated_metadata import (
+from scripts.lib.artifacts.sysml_export.c_headers import generate_headers
+from scripts.lib.artifacts.sysml_export.modelica_headers import generate_modelica_package
+from scripts.lib.common.xml import (
     normalize_model_description_timestamps,
     normalize_ssd_xml,
 )

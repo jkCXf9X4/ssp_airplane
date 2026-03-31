@@ -1,1 +1,1 @@
-"""Scenario generation and simulation helpers."""
+"""Helpers for generating scenarios and running scenario simulations."""

@@ -9,8 +9,8 @@ add_custom_command(
           "--build-dir" "${native_build_dir}"
   DEPENDS
           "${PROJECT_SOURCE_DIR}/scripts/cli/artifacts.py"
-          "${PROJECT_SOURCE_DIR}/scripts/lib/artifacts/build/native_fmus.py"
-          "${PROJECT_SOURCE_DIR}/scripts/lib/artifacts/package/native_fmu.py"
+          "${PROJECT_SOURCE_DIR}/scripts/lib/artifacts/build/native.py"
+          "${PROJECT_SOURCE_DIR}/scripts/lib/artifacts/package/native.py"
           "${PROJECT_SOURCE_DIR}/models/flightgear_bridge/native/CMakeLists.txt"
   WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
   VERBATIM
