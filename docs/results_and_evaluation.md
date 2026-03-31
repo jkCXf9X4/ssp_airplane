@@ -48,13 +48,14 @@ When `scripts.workflows.simulate_scenario` runs, it always writes two artifacts 
 ### Waypoint strings and plots
 
 - Each scenario’s waypoints are also exported to `build/results/<scenario>_waypoints.txt` as a comma-separated `x_km,y_km,z_km,...` string, ready for Modelica `stringToRealVector` consumption in the autopilot parameter set.
-- Run `python3 -m scripts.plot_results --results-csv build/results/<scenario>_results.csv --scenario build/scenarios/<scenario>.json --plot-path` to generate `build/results/<scenario>_path.png`, overlaying the simulated local X/Y path against the supplied waypoints for a quick visual verification.
+- Run `python3 -m scripts.plot_results --results-csv build/results/<scenario>_results.csv --scenario resources/scenarios/<scenario>.json --plot-path` to generate `build/results/<scenario>_path.png`, overlaying the simulated local X/Y path against the supplied waypoints for a quick visual verification.
 - Add `--plot-3d` to emit `build/results/<scenario>_path3d.png` and `--plot-fuel-altitude` to emit `build/results/<scenario>_fuel_altitude.png` for altitude and fuel versus time.
 
 ## Reusing results vs. re-simulating
 
 - Use `--reuse-results` to only post-process an existing `<scenario>_results.csv` without invoking ssp4sim. This keeps CI fast and allows offline exploration of prior runs.
 - Drop `--reuse-results` (or delete the CSV) to regenerate results from the SSP; pass `--stop-time` to control simulation horizon.
+- On a clean checkout, `pytest` will seed `build/scenarios/test_scenario.json` and `build/results/test_scenario_results.csv` from `resources/` so the reuse path works without running `ssp4sim`.
 
 ## Scenario provenance
 

@@ -11,4 +11,5 @@
 ## Quick checks without ssp4sim
 
 - `pytest tests/test_autopilot_logic.py` runs the same heading/distance math in Python to guard against regressions in the navigation arithmetic without rebuilding FMUs.
-- `python3 -m scripts.workflows.simulate_scenario --scenario build/scenarios/test_scenario.json --reuse-results` exercises the parameter-injection path and produces `build/results/test_scenario_waypoints.txt` so you can confirm the FMU receives the expected waypoint list (now X/Y/Z kilometers).
+- `python3 -m scripts.workflows.simulate_scenario --scenario resources/scenarios/test_scenario.json --reuse-results` exercises the parameter-injection path and produces `build/results/test_scenario_waypoints.txt` so you can confirm the FMU receives the expected waypoint list.
+- The command above reuses an existing CSV when available. If `build/results/test_scenario_results.csv` does not exist yet, run `pytest` once to seed the reference artifacts copied from `resources/references/`.
