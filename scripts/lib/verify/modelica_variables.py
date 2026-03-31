@@ -1,17 +1,12 @@
-#!/usr/bin/env python3
 """Check that Modelica interface variables match SysML port definitions."""
 from __future__ import annotations
 
-import argparse
 import re
 import sys
 from pathlib import Path
 from typing import Dict, List, Set, Tuple
 
 from pycps_sysmlv2 import NodeType, SysMLParser
-
-if __package__ in {None, ""}:
-    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.lib.common.modelica import MODELICA_MODEL_SPECS
 from scripts.lib.paths import ARCHITECTURE_DIR, COMPOSITION_NAME
@@ -89,22 +84,8 @@ def _scan_file(
                 f"{path}: Port '{var}' type mismatch (Modelica {record}, SysML {expected_payload})."
             )
     return issues
-
-
-def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
-        "--architecture",
-        type=Path,
-        default=DEFAULT_ARCH_DIR,
-        help="Path to the SysML architecture directory or file.",
-    )
-    return parser.parse_args(argv)
-
-
-def main(argv: list[str] | None = None) -> int:
-    args = parse_args(argv)
-    architecture = SysMLParser(args.architecture).parse()
+def verify_modelica_variables(architecture_path: Path = DEFAULT_ARCH_DIR) -> int:
+    architecture = SysMLParser(architecture_path).parse()
     members, part_ports = _collect_architecture_data(architecture)
 
     overall_issues: List[str] = []
@@ -122,7 +103,3 @@ def main(argv: list[str] | None = None) -> int:
 
     print("All Modelica interface variable usages match the architecture.")
     return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())

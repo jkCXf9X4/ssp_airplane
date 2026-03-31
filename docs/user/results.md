@@ -1,6 +1,6 @@
 # Results
 
-When `scripts.cli.scenarios simulate` runs, it writes output artifacts into `build/results/`.
+When `scripts.cli.scenarios_simulate` runs, it writes output artifacts into `build/results/`.
 
 ## Main artifacts
 
@@ -31,7 +31,7 @@ Important fields include:
 Generate a path plot with:
 
 ```bash
-python3 -m scripts.cli.analyze plot \
+python3 -m scripts.cli.analyze_plot \
   --results-csv build/results/<scenario>_results.csv \
   --scenario resources/scenarios/<scenario>.json \
   --plot-path

@@ -1,14 +1,9 @@
 """Package built native libraries into native FMUs."""
 from __future__ import annotations
 
-import argparse
 from pathlib import Path
 import shutil
-import sys
 import zipfile
-
-if __package__ in {None, ""}:
-    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.lib.paths import ARCHITECTURE_DIR, COMPOSITION_NAME, FMI_HEADERS_DIR, ensure_directory, ensure_parent_dir
 from scripts.lib.artifacts.build.native_project import (
@@ -147,38 +142,3 @@ def package_native_fmus(
             )
         )
     return written
-
-
-def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--architecture", type=Path, default=ARCHITECTURE_DIR)
-    parser.add_argument("--composition", default=COMPOSITION_NAME)
-    parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
-    parser.add_argument("--build-root", type=Path, default=DEFAULT_BUILD_ROOT)
-    parser.add_argument(
-        "--models",
-        nargs="+",
-        help="Optional part definition names to package, for example FlightGearBridge",
-    )
-    return parser.parse_args(argv)
-
-
-def main(argv: list[str] | None = None) -> int:
-    args = parse_args(argv)
-    written = package_native_fmus(
-        architecture_path=args.architecture,
-        composition=args.composition,
-        output_dir=args.output_dir,
-        build_root=args.build_root,
-        models=args.models,
-    )
-    if not written:
-        print("No native projects discovered.")
-        return 0
-    for path in written:
-        print(f"Packaged native FMU: {path}")
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())

@@ -27,7 +27,7 @@ python -m pip install -r requirements.txt
 ### First command to run
 
 ```bash
-python3 -m scripts.cli.scenarios simulate \
+python3 -m scripts.cli.scenarios_simulate \
   --scenario resources/scenarios/test_scenario.json \
   --reuse-results
 ```
@@ -43,7 +43,7 @@ After the command completes, inspect:
 If you want a quick plot:
 
 ```bash
-python3 -m scripts.cli.analyze plot \
+python3 -m scripts.cli.analyze_plot \
   --results-csv build/results/test_scenario_results.csv \
   --scenario resources/scenarios/test_scenario.json \
   --plot-path

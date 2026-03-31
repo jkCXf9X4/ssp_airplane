@@ -23,6 +23,6 @@ The scenario workflow emits waypoint parameter values that are injected into the
 ## Quick regression checks
 
 - `pytest tests/test_autopilot_logic.py`
-- `python3 -m scripts.cli.scenarios simulate --scenario resources/scenarios/test_scenario.json --reuse-results`
+- `python3 -m scripts.cli.scenarios_simulate --scenario resources/scenarios/test_scenario.json --reuse-results`
 
 The reuse-results command writes `build/results/test_scenario_waypoints.txt`, which is useful for confirming the generated waypoint sequence.

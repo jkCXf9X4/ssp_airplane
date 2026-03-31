@@ -1,13 +1,10 @@
-#!/usr/bin/env python3
 """Run a scenario simulation and post-process the results."""
 
 from __future__ import annotations
 
-import argparse
 import json
 import math
 import shutil
-import sys
 import zipfile
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -21,9 +18,6 @@ except ImportError:
     raise RuntimeError(
             "pyssp4sim is not available; activate venv, install the ssp4sim Python API or reuse existing results."
         )
-
-if __package__ in {None, ""}:
-    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.lib.paths import BUILD_DIR
 from scripts.lib.common.geo import (
@@ -650,62 +644,21 @@ def simulate_scenario(
     )
 
 
-def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
-        "--scenario", type=Path, required=True, help="Path to scenario JSON file."
-    )
-    parser.add_argument(
-        "--ssp", type=Path, default=DEFAULT_SSP, help="Path to the SSP archive."
-    )
-    parser.add_argument("--results-dir", type=Path, default=DEFAULT_RESULTS)
-    parser.add_argument(
-        "--reuse-results",
-        action="store_true",
-        help="Skip ssp4sim run when a result CSV already exists for the scenario.",
-    )
-    parser.add_argument(
-        "--stop-time",
-        type=float,
-        default=None,
-        help="Override ssp4sim stop time in seconds.",
-    )
 
-    return parser.parse_args(argv)
-
-
-def main(argv: list[str] | None = None) -> int:
-    args = parse_args(argv)
-    result = simulate_scenario(
-        scenario_path=args.scenario,
-        ssp_path=args.ssp,
-        results_dir=args.results_dir,
-        reuse_results=args.reuse_results,
-        stop_time=args.stop_time,
-    )
-    print(
-        json.dumps(
-            {
-                "scenario": str(result.scenario_path),
-                "distance_km": round(result.total_distance_km, 2),
-                "duration_s": round(result.estimated_duration_s, 1),
-                "fuel_required_kg": round(result.fuel_required_kg, 1),
-                "fuel_exhausted": result.fuel_exhausted,
-                "meets_range_requirement": result.meets_range_requirement,
-                "used_oms": result.used_oms,
-                "result_file": str(result.result_file) if result.result_file else None,
-                "scenario_string": result.scenario_string,
-                "parameter_set": str(result.parameter_set_path) if result.parameter_set_path else None,
-                "requirements": [
-                    {"id": eval_.identifier, "passed": eval_.passed}
-                    for eval_ in result.requirement_evaluations
-                ],
-            },
-            indent=2,
-        )
-    )
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
+def scenario_result_summary(result: ScenarioResult) -> dict[str, object]:
+    return {
+        "scenario": str(result.scenario_path),
+        "distance_km": round(result.total_distance_km, 2),
+        "duration_s": round(result.estimated_duration_s, 1),
+        "fuel_required_kg": round(result.fuel_required_kg, 1),
+        "fuel_exhausted": result.fuel_exhausted,
+        "meets_range_requirement": result.meets_range_requirement,
+        "used_oms": result.used_oms,
+        "result_file": str(result.result_file) if result.result_file else None,
+        "scenario_string": result.scenario_string,
+        "parameter_set": str(result.parameter_set_path) if result.parameter_set_path else None,
+        "requirements": [
+            {"id": eval_.identifier, "passed": eval_.passed}
+            for eval_ in result.requirement_evaluations
+        ],
+    }

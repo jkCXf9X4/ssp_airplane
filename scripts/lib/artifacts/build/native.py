@@ -1,13 +1,8 @@
-#!/usr/bin/env python3
 """Build native shared libraries for native FMU packaging."""
 from __future__ import annotations
 
 import shutil
-import sys
 from pathlib import Path
-
-if __package__ in {None, ""}:
-    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.lib.paths import ARCHITECTURE_DIR, COMPOSITION_NAME, FLIGHTGEAR_BRIDGE_MODEL_DIR, ensure_directory
 from scripts.lib.artifacts.build.native_build import build_native_library
@@ -91,38 +86,3 @@ def build_flightgear_bridge_fmu(
         output_fmu=output_fmu,
         build_dir=build_dir,
     )
-
-
-def parse_args(argv: list[str] | None = None):
-    import argparse
-
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--architecture", type=Path, default=ARCHITECTURE_DIR)
-    parser.add_argument("--composition", default=COMPOSITION_NAME)
-    parser.add_argument("--build-root", type=Path, default=DEFAULT_BUILD_ROOT)
-    parser.add_argument(
-        "--models",
-        nargs="+",
-        help="Optional part definition names to build, for example FlightGearBridge",
-    )
-    return parser.parse_args(argv)
-
-
-def main(argv: list[str] | None = None) -> int:
-    args = parse_args(argv)
-    written = build_native_libraries(
-        architecture_path=args.architecture,
-        composition=args.composition,
-        build_root=args.build_root,
-        models=args.models,
-    )
-    if not written:
-        print("No native projects discovered.")
-        return 0
-    for path in written:
-        print(f"Built native library: {path}")
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())

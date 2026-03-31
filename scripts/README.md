@@ -9,8 +9,8 @@ This directory has three roles:
 Use the CLI entrypoints as the canonical interface. Examples:
 
 ```bash
-python3 -m scripts.cli.scenarios simulate --scenario resources/scenarios/test_scenario.json --reuse-results
-python3 -m scripts.cli.analyze plot --results-csv build/results/test_scenario_results.csv --scenario resources/scenarios/test_scenario.json --plot-path
-python3 -m scripts.cli.artifacts export
+python3 -m scripts.cli.scenarios_simulate --scenario resources/scenarios/test_scenario.json --reuse-results
+python3 -m scripts.cli.analyze_plot --results-csv build/results/test_scenario_results.csv --scenario resources/scenarios/test_scenario.json --plot-path
+python3 -m scripts.cli.artifacts_export
 python3 -m scripts.workflows.rebuild_from_source
 ```

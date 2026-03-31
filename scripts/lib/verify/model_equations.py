@@ -1,14 +1,7 @@
-#!/usr/bin/env python3
 """Run OpenModelica `checkModel` across the Aircraft package."""
 from __future__ import annotations
 
-import argparse
-import sys
-from pathlib import Path
 from typing import Iterable
-
-if __package__ in {None, ""}:
-    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.lib.common.modelica import DEFAULT_MODELICA_MODELS, run_omc, spec_by_model_name
 
@@ -39,19 +32,3 @@ def verify_models(omc: str, models: Iterable[str]) -> int:
     if stdout:
         print(stdout, end="")
     return 0
-
-
-def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--omc", default="omc", help="Path to the omc executable.")
-    parser.add_argument("--models", nargs="+", default=DEFAULT_MODELS, help="Fully qualified Modelica classes to check.")
-    return parser.parse_args(argv)
-
-
-def main(argv: list[str] | None = None) -> int:
-    args = parse_args(argv)
-    return verify_models(args.omc, args.models)
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())

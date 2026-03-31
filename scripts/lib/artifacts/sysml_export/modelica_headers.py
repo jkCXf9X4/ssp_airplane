@@ -1,17 +1,11 @@
-#!/usr/bin/env python3
 """Generate Modelica interface definitions from SysML data definitions."""
 
 from __future__ import annotations
 
-import argparse
-import sys
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Dict
 
 from pycps_sysmlv2 import NodeType, SysMLParser, SysMLPortDefinition
-
-if __package__ in {None, ""}:
-    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.lib.paths import ARCHITECTURE_DIR, COMMON_MODEL_DIR, ensure_parent_dir
 from scripts.lib.common.sysml import modelica_connector_type
@@ -36,27 +30,17 @@ def generate_modelica_package(ports: Dict[str, SysMLPortDefinition]) -> str:
 
     lines.append("end GeneratedInterfaces;")
     return "\n".join(lines)
-
-
-def main(argv: Optional[list[str]] = None) -> int:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--architecture", type=Path, default=DEFAULT_ARCH_PATH)
-    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT_PATH)
-    args = parser.parse_args(argv)
-
-    architecture = SysMLParser(args.architecture).parse()
+def write_modelica_interfaces(
+    architecture_path: Path = DEFAULT_ARCH_PATH,
+    output: Path = DEFAULT_OUTPUT_PATH,
+) -> Path:
+    architecture = SysMLParser(architecture_path).parse()
     port_definitions = architecture.port_definitions
 
     if not port_definitions:
         raise SystemExit("No data definitions found; nothing to generate.")
 
-    ensure_parent_dir(args.output)
+    ensure_parent_dir(output)
     content = generate_modelica_package(port_definitions)
-
-    args.output.write_text(content, encoding="utf-8")
-    print(f"Wrote Modelica interfaces to {args.output}")
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
+    output.write_text(content, encoding="utf-8")
+    return output

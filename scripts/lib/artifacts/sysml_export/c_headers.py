@@ -1,15 +1,9 @@
-#!/usr/bin/env python3
 """Generate C and C++ interface definitions from the SysML architecture."""
 from __future__ import annotations
 
-import argparse
-import sys
 from pathlib import Path
 
 from pycps_sysmlv2 import NodeType, SysMLParser
-
-if __package__ in {None, ""}:
-    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.lib.common.sysml import (
     architecture_part_specs,
@@ -153,18 +147,3 @@ def generate_headers(source: Path, output_dir: Path) -> list[Path]:
         written.append(path)
 
     return written
-
-
-def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--architecture", type=Path, default=DEFAULT_ARCH_PATH)
-    parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
-    args = parser.parse_args(argv)
-
-    written = generate_headers(args.architecture, args.output_dir)
-    print(f"Wrote {len(written)} interface headers to {args.output_dir}")
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())

@@ -1,7 +1,6 @@
 """Generate plots from simulation result artifacts."""
 from __future__ import annotations
 
-import argparse
 import json
 import math
 import os
@@ -218,69 +217,33 @@ def _load_scenario_points(scenario_path: Optional[Path]) -> List[Dict[str, float
     return project_waypoints_to_local_km(points) if points else []
 
 
-def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        description="Generate plots from a simulation results CSV."
-    )
-    parser.add_argument(
-        "--results-csv",
-        type=Path,
-        required=True,
-        help="Path to the simulation results CSV.",
-    )
-    parser.add_argument(
-        "--scenario",
-        type=Path,
-        default=None,
-        help="Optional scenario JSON to overlay waypoints on the flight-path plots.",
-    )
-    parser.add_argument(
-        "--output-dir",
-        type=Path,
-        default=None,
-        help="Directory to write plots (defaults to the results CSV directory).",
-    )
-    parser.add_argument(
-        "--plot-path", action="store_true", help="Generate the 2D flight-path plot."
-    )
-    parser.add_argument(
-        "--plot-3d", action="store_true", help="Generate the 3D flight-path plot."
-    )
-    parser.add_argument(
-        "--plot-fuel-altitude",
-        action="store_true",
-        help="Generate the fuel remaining and altitude versus time plot.",
-    )
-    return parser.parse_args(argv)
-
-
-def main(argv: list[str] | None = None) -> int:
-    args = parse_args(argv)
-    output_dir = args.output_dir or args.results_csv.parent
+def generate_plots(
+    results_csv: Path,
+    scenario: Optional[Path] = None,
+    output_dir: Optional[Path] = None,
+    plot_path: bool = False,
+    plot_3d: bool = False,
+    plot_fuel_altitude: bool = False,
+) -> Dict[str, Optional[str]]:
+    output_dir = output_dir or results_csv.parent
     output_dir.mkdir(parents=True, exist_ok=True)
-    scenario_points = _load_scenario_points(args.scenario)
-    stem = args.results_csv.stem.replace("_results", "")
+    scenario_points = _load_scenario_points(scenario)
+    stem = results_csv.stem.replace("_results", "")
 
     generated: Dict[str, Optional[str]] = {}
-    if args.plot_path:
+    if plot_path:
         path_out = output_dir / f"{stem}_path.png"
-        plotted = plot_flight_path(args.results_csv, scenario_points, path_out)
+        plotted = plot_flight_path(results_csv, scenario_points, path_out)
         if plotted:
             generated["plot_path"] = str(plotted)
-    if args.plot_3d:
+    if plot_3d:
         path3d_out = output_dir / f"{stem}_path3d.png"
-        plotted3d = plot_flight_path_3d(args.results_csv, scenario_points, path3d_out)
+        plotted3d = plot_flight_path_3d(results_csv, scenario_points, path3d_out)
         if plotted3d:
             generated["plot3d_path"] = str(plotted3d)
-    if args.plot_fuel_altitude:
+    if plot_fuel_altitude:
         fuel_alt_out = output_dir / f"{stem}_fuel_altitude.png"
-        plotted_fuel = plot_fuel_altitude_time(args.results_csv, fuel_alt_out)
+        plotted_fuel = plot_fuel_altitude_time(results_csv, fuel_alt_out)
         if plotted_fuel:
             generated["plot_fuel_altitude_path"] = str(plotted_fuel)
-
-    print(json.dumps(generated, indent=2))
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
+    return generated
