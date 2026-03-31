@@ -45,8 +45,10 @@ success
 
 
 venv/
-build/
+/build/
 third_party/
 .pip_cache/
 
 tmp_results/
+
+__pycache__/

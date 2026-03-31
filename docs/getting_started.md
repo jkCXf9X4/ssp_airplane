@@ -79,7 +79,7 @@ python -m pip install -r requirements_local.txt
 ### First full build
 
 ```bash
-./scripts/workflows/rebuild_from_source.sh
+./scripts/rebuild_from_source.sh
 ```
 
 That workflow:

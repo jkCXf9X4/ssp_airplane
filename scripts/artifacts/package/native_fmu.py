@@ -6,7 +6,7 @@ import shutil
 import zipfile
 
 from scripts.common.paths import FMI_HEADERS_DIR, ensure_directory, ensure_parent_dir
-from scripts.artifacts.native_fmu.projects import NativeFmuProject
+from scripts.artifacts.build.native_fmu_project import NativeFmuProject
 
 FMI_HEADER_NAMES = ("fmi2TypesPlatform.h", "fmi2FunctionTypes.h", "fmi2Functions.h")
 

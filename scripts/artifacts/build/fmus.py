@@ -13,8 +13,8 @@ if __package__ in {None, ""}:
 
 from scripts.common.modelica import DEFAULT_MODELICA_MODELS, spec_by_model_name
 from scripts.common.paths import BUILD_DIR, ensure_directory
-from scripts.artifacts.build_modelica_fmu import build_modelica_fmu
-from scripts.artifacts.build_native_fmus import build_native_fmus
+from scripts.artifacts.build.modelica_fmu import build_modelica_fmu
+from scripts.artifacts.build.native_fmus import build_native_fmus
 DEFAULT_MODELS = DEFAULT_MODELICA_MODELS
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:

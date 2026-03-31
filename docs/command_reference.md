@@ -14,7 +14,7 @@ This page is reference material. If you are new to the repository, start with `g
 | Task | Command |
 | --- | --- |
 | Reuse existing results | `python3 -m scripts.scenarios.simulate_scenario --scenario resources/scenarios/test_scenario.json --reuse-results` |
-| Run the full architecture-first workflow | `./scripts/workflows/rebuild_from_source.sh` |
+| Run the full architecture-first workflow | `./scripts/rebuild_from_source.sh` |
 | Plot a path overlay | `python3 -m scripts.analyze.plot_results --results-csv build/results/test_scenario_results.csv --scenario resources/scenarios/test_scenario.json --plot-path` |
 | Run tests | `pytest` |
 
@@ -22,15 +22,15 @@ This page is reference material. If you are new to the repository, start with `g
 
 | Task | Command |
 | --- | --- |
-| Export all architecture-derived artifacts | `python3 -m scripts.artifacts.export_artifacts` |
-| Export architecture snapshot | `python3 -m scripts.artifacts.save_architecture --output generated/arch_def.json` |
-| Generate Modelica interfaces | `python3 -m scripts.artifacts.generate_interface_defs` |
+| Export all architecture-derived artifacts | `python3 -m scripts.artifacts.sysml_export.export_artifacts` |
+| Export architecture snapshot | `python3 -m scripts.artifacts.sysml_export.save_architecture --output generated/arch_def.json` |
+| Generate Modelica interfaces | `python3 -m scripts.artifacts.sysml_export.generate_interface_defs` |
 | Generate model descriptions with upstream tooling | `python3 -m pyssp_sysml2.cli generate fmi --architecture architecture --composition AircraftComposition --output-dir generated/model_descriptions` |
 | Generate SSD with upstream tooling | `python3 -m pyssp_sysml2.cli generate ssd --architecture architecture --composition AircraftComposition --output generated/SystemStructure.ssd` |
 | Generate parameter set with upstream tooling | `python3 -m pyssp_sysml2.cli generate ssv --architecture architecture --composition AircraftComposition --output generated/parameters.ssv` |
-| Build FMUs | `python3 -m scripts.artifacts.build_fmus --omc-path omc` |
-| Build native FMUs only | `python3 -m scripts.artifacts.build_native_fmus --output-dir build/fmus` |
-| Package SSP | `python3 -m scripts.artifacts.package_ssp --fmu-dir build/fmus --ssd generated/SystemStructure.ssd --output build/ssp/aircraft.ssp` |
+| Build FMUs | `python3 -m scripts.artifacts.build.fmus --omc-path omc` |
+| Build native FMUs only | `python3 -m scripts.artifacts.build.native_fmus --output-dir build/fmus` |
+| Package SSP | `python3 -m scripts.artifacts.package.ssp --fmu-dir build/fmus --ssd generated/SystemStructure.ssd --output build/ssp/aircraft.ssp` |
 
 ## Verification
 

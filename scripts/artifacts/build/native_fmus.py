@@ -11,8 +11,7 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.common.paths import ARCHITECTURE_DIR, COMPOSITION_NAME, ensure_directory
-from scripts.artifacts.generate_c_interface_defs import generate_headers
-from scripts.artifacts.native_fmu import (
+from scripts.artifacts.build import (
     DEFAULT_BUILD_ROOT,
     DEFAULT_OUTPUT_DIR,
     GENERATED_INTERFACE_DIR,
@@ -23,6 +22,7 @@ from scripts.artifacts.native_fmu import (
     generated_model_description_paths,
     package_native_fmu,
 )
+from scripts.artifacts.sysml_export.generate_c_interface_defs import generate_headers
 
 
 def build_native_fmu(
