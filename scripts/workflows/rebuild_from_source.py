@@ -27,8 +27,14 @@ def main(argv: list[str] | None = None) -> int:
     print("Verifying models...")
     run_step(sys.executable, "-m", "scripts.cli.verify", "model-equations")
 
-    print("Building FMUs...")
-    run_step(sys.executable, "-m", "scripts.cli.artifacts", "build-fmus")
+    print("Building Modelica FMUs...")
+    run_step(sys.executable, "-m", "scripts.cli.artifacts", "build-modelica-fmus")
+
+    print("Building native shared libraries...")
+    run_step(sys.executable, "-m", "scripts.cli.artifacts", "build-native-fmus")
+
+    print("Packaging native FMUs...")
+    run_step(sys.executable, "-m", "scripts.cli.artifacts", "package-native-fmus")
 
     print("Testing native FlightGear bridge FMU...")
     run_step("pytest", "-q", "tests/test_flightgear_bridge_fmu.py")

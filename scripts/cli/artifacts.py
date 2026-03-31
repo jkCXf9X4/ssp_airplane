@@ -13,8 +13,9 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers.add_parser("save-architecture", help="Write a JSON snapshot of the architecture.")
     subparsers.add_parser("generate-interface-defs", help="Generate Modelica interface definitions.")
     subparsers.add_parser("generate-c-interface-defs", help="Generate native C/C++ interface headers.")
-    subparsers.add_parser("build-fmus", help="Build Modelica and native FMUs.")
-    subparsers.add_parser("build-native-fmus", help="Build only native FMUs.")
+    subparsers.add_parser("build-modelica-fmus", help="Build only Modelica FMUs.")
+    subparsers.add_parser("build-native-fmus", help="Build only native shared libraries.")
+    subparsers.add_parser("package-native-fmus", help="Package built native shared libraries into FMUs.")
     bridge = subparsers.add_parser("build-flightgear-bridge-fmu", help="Build only the FlightGear bridge FMU.")
     bridge.add_argument("--output", type=Path, required=True, help="Target FMU path.")
     bridge.add_argument("--build-dir", type=Path, required=True, help="Build directory for the native FMU.")
@@ -41,14 +42,18 @@ def main(argv: list[str] | None = None) -> int:
         from scripts.lib.artifacts.sysml_export import generate_c_interface_defs
 
         return generate_c_interface_defs.main(remaining)
-    if args.command == "build-fmus":
-        from scripts.lib.artifacts.build import fmus as build_fmus
+    if args.command == "build-modelica-fmus":
+        from scripts.lib.artifacts.build import modelica_fmu
 
-        return build_fmus.main(remaining)
+        return modelica_fmu.main(remaining)
     if args.command == "build-native-fmus":
         from scripts.lib.artifacts.build import native_fmus
 
         return native_fmus.main(remaining)
+    if args.command == "package-native-fmus":
+        from scripts.lib.artifacts.package import native_fmu
+
+        return native_fmu.main(remaining)
     if args.command == "build-flightgear-bridge-fmu":
         from scripts.lib.artifacts.build import native_fmus
 

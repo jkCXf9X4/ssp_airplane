@@ -28,8 +28,9 @@ This page is reference material. If you are new to the repository, start with `g
 | Generate model descriptions with upstream tooling | `python3 -m pyssp_sysml2.cli generate fmi --architecture architecture --composition AircraftComposition --output-dir generated/model_descriptions` |
 | Generate SSD with upstream tooling | `python3 -m pyssp_sysml2.cli generate ssd --architecture architecture --composition AircraftComposition --output generated/SystemStructure.ssd` |
 | Generate parameter set with upstream tooling | `python3 -m pyssp_sysml2.cli generate ssv --architecture architecture --composition AircraftComposition --output generated/parameters.ssv` |
-| Build FMUs | `python3 -m scripts.cli.artifacts build-fmus --omc-path omc` |
-| Build native FMUs only | `python3 -m scripts.cli.artifacts build-native-fmus --output-dir build/fmus` |
+| Build Modelica FMUs | `python3 -m scripts.cli.artifacts build-modelica-fmus --omc-path omc` |
+| Build native shared libraries only | `python3 -m scripts.cli.artifacts build-native-fmus --build-root build/native` |
+| Package native FMUs | `python3 -m scripts.cli.artifacts package-native-fmus --output-dir build/fmus --build-root build/native` |
 | Package SSP | `python3 -m scripts.cli.artifacts package-ssp --fmu-dir build/fmus --ssd generated/SystemStructure.ssd --output build/ssp/aircraft.ssp` |
 
 ## Verification
