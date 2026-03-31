@@ -3,17 +3,14 @@
 from __future__ import annotations
 
 import argparse
-import subprocess
 import sys
-import tempfile
-from pathlib import Path
 from typing import Iterable
 
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
+from scripts.common.modelica import run_omc
 from scripts.common.modelica_specs import DEFAULT_MODELICA_MODELS, spec_by_model_name
-from scripts.common.paths import REPO_ROOT
 
 DEFAULT_MODELS = DEFAULT_MODELICA_MODELS
 
@@ -37,19 +34,10 @@ def build_script(models: Iterable[str]) -> str:
     return "\n".join(lines)
 
 
-def run_omc(omc: str, models: Iterable[str]) -> int:
-    script = build_script(models)
-    with tempfile.NamedTemporaryFile("w", suffix=".mos", delete=False) as handle:
-        handle.write(script)
-        mos_path = Path(handle.name)
-    try:
-        subprocess.run([omc, str(mos_path)], check=True, cwd=REPO_ROOT)
-    except FileNotFoundError as exc:
-        raise SystemExit("OpenModelica 'omc' executable not found. Install OpenModelica or pass --omc.") from exc
-    except subprocess.CalledProcessError as exc:
-        raise SystemExit(exc)
-    finally:
-        mos_path.unlink(missing_ok=True)
+def verify_models(omc: str, models: Iterable[str]) -> int:
+    stdout = run_omc(omc, build_script(models))
+    if stdout:
+        print(stdout, end="")
     return 0
 
 
@@ -62,7 +50,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
-    return run_omc(args.omc, args.models)
+    return verify_models(args.omc, args.models)
 
 
 if __name__ == "__main__":

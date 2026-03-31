@@ -6,15 +6,14 @@ import argparse
 import os
 import re
 import shutil
-import subprocess
 import sys
-import tempfile
 from pathlib import Path
 
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from scripts.common.paths import BUILD_DIR, REPO_ROOT, ensure_parent_dir
+from scripts.common.modelica import run_omc
+from scripts.common.paths import BUILD_DIR, ensure_parent_dir
 
 
 def build_mos_script(package_files: list[Path], model_name: str, work_dir: Path) -> str:
@@ -29,29 +28,6 @@ filename := OpenModelica.Scripting.buildModelFMU({model_name}, version="2.0", fm
 filename;
 getErrorString();
 """
-
-
-def run_omc(omc_path: str, mos_content: str) -> str:
-    with tempfile.NamedTemporaryFile("w", suffix=".mos", delete=False) as handle:
-        handle.write(mos_content)
-        mos_file = Path(handle.name)
-
-    try:
-        proc = subprocess.run(
-            [omc_path, str(mos_file)],
-            check=True,
-            cwd=REPO_ROOT,
-            capture_output=True,
-            text=True,
-        )
-    except FileNotFoundError as exc:
-        raise SystemExit("omc executable not found. Install OpenModelica or pass --omc-path") from exc
-    except subprocess.CalledProcessError as exc:
-        raise SystemExit(exc.stderr or exc.stdout) from exc
-    finally:
-        mos_file.unlink(missing_ok=True)
-
-    return proc.stdout
 
 
 def extract_fmu_path(output: str) -> Path | None:
