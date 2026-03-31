@@ -10,7 +10,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from scripts.artifacts.sysml_export.normalize_generated_metadata import normalize_ssd_xml  # type: ignore  # noqa: E402
+from scripts.lib.artifacts.sysml_export.normalize_generated_metadata import normalize_ssd_xml  # type: ignore  # noqa: E402
 
 
 def _read_components(output_path: Path):

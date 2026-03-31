@@ -28,7 +28,7 @@ python3.11 -m venv venv
 . venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
-python3 -m scripts.scenarios.simulate_scenario \
+python3 -m scripts.cli.scenarios simulate \
   --scenario resources/scenarios/test_scenario.json \
   --reuse-results
 ```
@@ -41,7 +41,7 @@ That command reuses the reference CSV when present and writes derived outputs in
 - `models/`: Modelica and native FMU implementations
 - `resources/scenarios/`: curated mission scenarios
 - `resources/references/`: reference results used for reuse and tests
-- `scripts/`: workflow-oriented tooling for artifacts, scenarios, analysis, verification, and shared helpers
+- `scripts/`: command entrypoints in `scripts/cli/`, workflows in `scripts/workflows/`, and internal modules in `scripts/lib/`
 - `docs/`: focused user, developer, and integration documentation
 
 ## Documentation

@@ -1,10 +1,7 @@
-"""Workflow-oriented script packages.
+"""Workflow tooling with a command-oriented public surface.
 
 Top-level groups:
-- `scripts.artifacts`: export, build, and package commands
-- `scripts.scenarios`: scenario generation and execution
-- `scripts.analyze`: result plotting and analysis
-- `scripts.verify`: validation and consistency checks
-- `scripts.workflows`: multi-step orchestration scripts
-- `scripts.common`: shared library code used by the entrypoints above
+- `scripts.cli`: supported user-facing commands
+- `scripts.workflows`: multi-step orchestration entrypoints
+- `scripts.lib`: internal implementation modules grouped by domain
 """
