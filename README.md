@@ -49,3 +49,4 @@ That command reuses the reference CSV when present and writes derived outputs in
 - Getting started: `docs/getting_started.md`
 - Documentation index: `docs/index.md`
 - Command reference: `docs/command_reference.md`
+- Workflow methodology: `docs/dev/workflow_methodology.md`

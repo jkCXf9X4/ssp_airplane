@@ -20,6 +20,14 @@ Agents should start from the CLI or workflow entrypoint that matches the task, t
 - Plotting commands live in `cli/analyze_plot.py` and delegate to `lib/results/`
 - End-to-end rebuild orchestration lives in `workflows/rebuild_from_source.py`
 
+## Phase Ownership
+
+- Python generation and verification own `architecture/ -> generated/`
+- CMake owns `generated/ + models/ -> packaged FMUs + baseline SSP`
+- Python simulation owns `baseline SSP + scenario -> results` through `ssp4sim`
+
+Python packaging commands under `cli/artifacts_*package*` are compatibility tooling, not the canonical workflow.
+
 ## Edit Rules
 
 - Do not add new top-level command families under `cli/` when an existing family already owns the task.
@@ -27,6 +35,8 @@ Agents should start from the CLI or workflow entrypoint that matches the task, t
 - Only add a new file when the existing file would otherwise mix unrelated responsibilities or abstraction levels.
 - Avoid compatibility wrappers, alias modules, and thin pass-through helpers. Change references directly.
 - Keep command parsing in `cli/` and business logic in `lib/`.
+- Do not move packaging responsibilities into scenario or analysis code.
+- Do not make Python the canonical build/package path when CMake is the clearer owner.
 
 ## Search First
 

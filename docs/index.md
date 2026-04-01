@@ -19,6 +19,7 @@ Keep pages short, focused, and audience-specific.
 ## Developer docs
 
 - `dev/autopilot.md`: waypoint handling and quick regression checks
+- `dev/workflow_methodology.md`: phase ownership for Python generation, CMake build/package, and Python simulation
 
 ## Integration docs
 

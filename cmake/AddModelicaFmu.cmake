@@ -15,9 +15,20 @@ function(add_modelica_fmu)
   endif()
 
   string(REGEX REPLACE "^.*\\." "" model_class "${AMF_MODEL}")
-  set(output_fmu "${CMAKE_BINARY_DIR}/fmus/${AMF_OUTPUT_NAME}.fmu")
-  set(work_dir "${CMAKE_BINARY_DIR}/tmp/${AMF_TARGET}")
-  set(mos_file "${CMAKE_BINARY_DIR}/tmp/${AMF_TARGET}.mos")
+  if(DEFINED AIRPLANE_FMU_OUTPUT_DIR)
+    set(output_root "${AIRPLANE_FMU_OUTPUT_DIR}")
+  else()
+    set(output_root "${CMAKE_BINARY_DIR}/fmus")
+  endif()
+  if(DEFINED AIRPLANE_TMP_DIR)
+    set(tmp_root "${AIRPLANE_TMP_DIR}")
+  else()
+    set(tmp_root "${CMAKE_BINARY_DIR}/tmp")
+  endif()
+
+  set(output_fmu "${output_root}/${AMF_OUTPUT_NAME}.fmu")
+  set(work_dir "${tmp_root}/${AMF_TARGET}")
+  set(mos_file "${tmp_root}/${AMF_TARGET}.mos")
   set(load_lines "")
   set(package_deps "")
 
@@ -45,7 +56,8 @@ getErrorString();
 
   add_custom_command(
     OUTPUT "${output_fmu}"
-    COMMAND "${CMAKE_COMMAND}" -E make_directory "${CMAKE_BINARY_DIR}/fmus"
+    COMMAND "${CMAKE_COMMAND}" -E make_directory "${output_root}"
+    COMMAND "${CMAKE_COMMAND}" -E make_directory "${tmp_root}"
     COMMAND "${CMAKE_COMMAND}" -E make_directory "${work_dir}"
     COMMAND "${OMC_EXECUTABLE}" "${mos_file}"
     COMMAND "${CMAKE_COMMAND}" -E rm -f "${output_fmu}"

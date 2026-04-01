@@ -18,6 +18,16 @@ This is an experimental software, this means:
 - Use the repo-local `venv` for Python commands, test runs, and workflow scripts when it exists.
 - Prefer `. venv/bin/activate && <command>` over the system Python for `pytest`, `python -m ...`, and related tooling.
 
+## Workflow Methodology
+
+- Keep a clear phase split:
+  Python generates artifacts into `generated/`,
+  CMake builds and packages FMUs and the baseline SSP,
+  Python runs simulations through `ssp4sim` and analyzes results.
+- Treat Python packaging commands as compatibility tooling, not the canonical workflow.
+- Keep run-specific scenario parameter injection in the simulation phase, not in the baseline build/package phase.
+- Prefer changes that strengthen this phase boundary over changes that blur it.
+
 ## Documentation Guidelines
 
 - Keep docs short, focused, and single-purpose.

@@ -13,12 +13,10 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from tests.artifacts_build_native_fmus import main as build_native_fmus_main  # type: ignore  # noqa: E402
-from scripts.cli.artifacts_package_native_fmus import main as package_native_fmus_main  # type: ignore  # noqa: E402
 
 
 def _build_flightgear_bridge_fmu(tmp_path: Path) -> Path:
     build_root = tmp_path / "native"
-    output_dir = tmp_path / "fmus"
 
     assert build_native_fmus_main(
         [
@@ -28,18 +26,8 @@ def _build_flightgear_bridge_fmu(tmp_path: Path) -> Path:
             "FlightGearBridge",
         ]
     ) == 0
-    assert package_native_fmus_main(
-        [
-            "--build-root",
-            str(build_root),
-            "--output-dir",
-            str(output_dir),
-            "--models",
-            "FlightGearBridge",
-        ]
-    ) == 0
 
-    return output_dir / "FlightGearBridge.fmu"
+    return build_root / "fmus" / "FlightGearBridge.fmu"
 
 
 

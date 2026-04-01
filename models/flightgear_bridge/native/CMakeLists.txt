@@ -24,3 +24,14 @@ target_include_directories(FlightGearBridge PRIVATE
 )
 
 target_compile_options(FlightGearBridge PRIVATE -Wall -Wextra -Wpedantic)
+
+add_native_fmu_package(
+  TARGET FlightGearBridge_fmu
+  LIBRARY_TARGET FlightGearBridge
+  MODEL_IDENTIFIER FlightGearBridge
+  OUTPUT_NAME FlightGearBridge.fmu
+  SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}
+  MODEL_DESCRIPTION ${AIRPLANE_REPO_ROOT}/generated/model_descriptions/FlightGearBridge/modelDescription.xml
+  GENERATED_COMMON_HEADER ${AIRPLANE_REPO_ROOT}/generated/interfaces/Aircraft_InterfaceCommon.h
+  GENERATED_MODEL_HEADER ${AIRPLANE_REPO_ROOT}/generated/interfaces/Aircraft_FlightGearBridge.h
+)

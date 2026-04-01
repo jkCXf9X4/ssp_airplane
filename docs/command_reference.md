@@ -2,6 +2,12 @@
 
 This page is reference material. If you are new to the repository, start with `getting_started.md`.
 
+Methodology summary:
+
+- Python is the canonical tool for generating architecture-derived artifacts and for running simulations with `ssp4sim`.
+- CMake is the canonical tool for building and packaging FMUs and the baseline SSP.
+- Python packaging commands listed below are compatibility commands, not the preferred workflow.
+
 ## Setup
 
 | Task | Command |
@@ -23,10 +29,19 @@ This page is reference material. If you are new to the repository, start with `g
 
 | Task | Command |
 | --- | --- |
-| Build Modelica FMUs | `cmake --build build/cmake --target adaptive_wing_system_fmu autopilot_module_fmu composite_airframe_fmu control_interface_fmu environment_fmu fuel_system_fmu input_output_fmu mission_computer_fmu turbofan_propulsion_fmu` |
+| Export architecture-derived artifacts | `. venv/bin/activate && python -m scripts.cli.artifacts_export` |
+| Verify SysML versus Modelica interfaces | `. venv/bin/activate && python -m scripts.cli.verify_modelica_variables` |
+| Verify Modelica equations | `. venv/bin/activate && python -m scripts.cli.verify_model_equations` |
+| Build and package all FMUs plus the baseline SSP | `cmake --build build/cmake` |
+| Package all simulation artifacts explicitly | `cmake --build build/cmake --target package_simulation_artifacts` |
+| Build Modelica FMUs only | `cmake --build build/cmake --target adaptive_wing_system_fmu autopilot_module_fmu composite_airframe_fmu control_interface_fmu environment_fmu fuel_system_fmu input_output_fmu mission_computer_fmu turbofan_propulsion_fmu` |
 | Build the native shared library only | `cmake --build build/cmake --target FlightGearBridge` |
+| Package the native FMU from CMake outputs | `cmake --build build/cmake --target FlightGearBridge_fmu` |
+| Package the baseline SSP from built FMUs | `cmake --build build/cmake --target aircraft_ssp` |
 | Package the native FMU | `. venv/bin/activate && python -m scripts.cli.artifacts_package_native_fmus --output-dir build/fmus --build-root build/native` |
 | Package SSP | `. venv/bin/activate && python -m scripts.cli.artifacts_package_ssp --fmu-dir build/fmus --ssd generated/SystemStructure.ssd --output build/ssp/aircraft.ssp` |
+
+The last two packaging commands are compatibility commands. Prefer the CMake packaging targets above.
 
 ## Verification
 

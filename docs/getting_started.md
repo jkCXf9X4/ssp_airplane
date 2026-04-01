@@ -7,6 +7,12 @@ This repository supports two distinct workflows:
 
 Choose one path and ignore the other until you need it.
 
+Methodology note:
+
+- Python generates architecture-derived artifacts and runs simulations.
+- CMake is the preferred build and packaging path for FMUs and the baseline SSP.
+- Simulation runs use the packaged SSP through the `ssp4sim` Python module.
+
 ## Path 1: Reuse Existing Results
 
 Use this path if your goal is to understand the repository quickly with the least setup.
@@ -78,7 +84,13 @@ This builds the default `build_fmus` target, which:
 1. exports each Modelica package to an FMU under `fmus/`
 2. builds the native `FlightGearBridge` shared library
 
-Native FMU packaging remains on the Python tooling path. This path uses the checked-in `generated/` metadata for the native library build. If you change architecture-derived interfaces or model descriptions, regenerate those artifacts before rebuilding.
+This path uses the checked-in `generated/` metadata for the native library build and packages FMUs plus the baseline SSP through CMake. If you change architecture-derived interfaces or model descriptions, regenerate those artifacts before rebuilding.
+
+The long-term preferred methodology is:
+
+1. Python generates artifacts into `generated/`
+2. CMake builds and packages FMUs and the baseline SSP
+3. Python runs simulations against that packaged SSP
 
 ## Which path should I use?
 
@@ -90,3 +102,4 @@ Native FMU packaging remains on the Python tooling path. This path uses the chec
 - Scenario intent: `user/scenarios.md`
 - Result interpretation: `user/results.md`
 - Full command list: `command_reference.md`
+- Workflow structure: `dev/workflow_methodology.md`

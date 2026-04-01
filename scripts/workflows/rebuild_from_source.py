@@ -41,26 +41,14 @@ def main(argv: list[str] | None = None) -> int:
     print("Configuring CMake build...")
     run_step("cmake", "-S", ".", "-B", str(cmake_build_dir), f"-DOMC_EXECUTABLE={omc_path}")
 
-    print("Building Modelica FMUs and native shared libraries...")
+    print("Building and packaging FMUs and the baseline SSP...")
     run_step("cmake", "--build", str(cmake_build_dir))
-
-    print("Packaging native FMUs...")
-    run_step(
-        sys.executable,
-        "-m",
-        "scripts.cli.artifacts_package_native_fmus",
-        "--build-root",
-        str(cmake_build_dir),
-    )
 
     print("Testing native FlightGear bridge FMU...")
     run_step("pytest", "-q", "tests/test_flightgear_bridge_fmu.py")
 
     print("Validating SSD schema...")
     run_step(sys.executable, "-m", "scripts.cli.verify_ssd_xml")
-
-    print("Packaging SSP...")
-    run_step(sys.executable, "-m", "scripts.cli.artifacts_package_ssp")
 
     print("Running reference simulation...")
     run_step(

@@ -1,7 +1,7 @@
 add_modelica_fmu(
   TARGET turbofan_propulsion_fmu
   MODEL TurbofanPropulsionFMU.TurbofanPropulsion
-  OUTPUT_NAME Aircraft_TurbofanPropulsion
+  OUTPUT_NAME TurbofanPropulsion
   PACKAGE_FILES
     "${PROJECT_SOURCE_DIR}/generated/modelica/AircraftCommon/package.mo"
     "${PROJECT_SOURCE_DIR}/models/turbofan_propulsion/modelica/TurbofanPropulsionFMU/package.mo"
