@@ -8,6 +8,11 @@ try to generate code by the common code guidelines
  - Keep files small and focused
  - Any unit or function should try and contain a common level of abstraction  
 
+This is an experimental software, this means:
+- Interfaces do not need to be stable, prioritize code clarity and ease of use
+- Avoid creating thin shims or wrappers, change the references directly  
+
+
 ## Environment Guidelines
 
 - Use the repo-local `venv` for Python commands, test runs, and workflow scripts when it exists.

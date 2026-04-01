@@ -16,6 +16,7 @@ from scripts.lib.paths import BUILD_DIR, REPO_ROOT
 
 
 def run_step(*args: str) -> None:
+    print(" ".join(args))
     subprocess.run(args, cwd=REPO_ROOT, check=True)
 
 
@@ -42,9 +43,6 @@ def main(argv: list[str] | None = None) -> int:
 
     print("Building Modelica FMUs and native shared libraries...")
     run_step("cmake", "--build", str(cmake_build_dir))
-
-    print("Building native FMU shared libraries...")
-    run_step(sys.executable, "-m", "scripts.cli.artifacts_build_native_fmus")
 
     print("Packaging native FMUs...")
     run_step(sys.executable, "-m", "scripts.cli.artifacts_package_native_fmus")
