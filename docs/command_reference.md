@@ -13,11 +13,11 @@ This page is reference material. If you are new to the repository, start with `g
 
 | Task | Command |
 | --- | --- |
-| Reuse existing results | `python3 -m scripts.cli.scenarios_simulate --scenario resources/scenarios/test_scenario.json --reuse-results` |
+| Reuse existing results | `. venv/bin/activate && python -m scripts.cli.scenarios_simulate --scenario resources/scenarios/test_scenario.json --reuse-results` |
 | Configure source builds under `build/cmake` | `cmake -S . -B build/cmake` |
 | Build all FMUs from `build/cmake` | `cmake --build build/cmake` |
-| Plot a path overlay | `python3 -m scripts.cli.analyze_plot --results-csv build/results/test_scenario_results.csv --scenario resources/scenarios/test_scenario.json --plot-path` |
-| Run tests | `pytest` |
+| Plot a path overlay | `. venv/bin/activate && python -m scripts.cli.analyze_plot --results-csv build/results/test_scenario_results.csv --scenario resources/scenarios/test_scenario.json --plot-path` |
+| Run tests | `. venv/bin/activate && pytest` |
 
 ## Generation and packaging
 
@@ -25,13 +25,13 @@ This page is reference material. If you are new to the repository, start with `g
 | --- | --- |
 | Build Modelica FMUs | `cmake --build build/cmake --target adaptive_wing_system_fmu autopilot_module_fmu composite_airframe_fmu control_interface_fmu environment_fmu fuel_system_fmu input_output_fmu mission_computer_fmu turbofan_propulsion_fmu` |
 | Build the native shared library only | `cmake --build build/cmake --target FlightGearBridge` |
-| Package the native FMU | `python3 -m scripts.cli.artifacts_package_native_fmus --output-dir build/fmus --build-root build/native` |
-| Package SSP | `python3 -m scripts.cli.artifacts_package_ssp --fmu-dir build/fmus --ssd generated/SystemStructure.ssd --output build/ssp/aircraft.ssp` |
+| Package the native FMU | `. venv/bin/activate && python -m scripts.cli.artifacts_package_native_fmus --output-dir build/fmus --build-root build/native` |
+| Package SSP | `. venv/bin/activate && python -m scripts.cli.artifacts_package_ssp --fmu-dir build/fmus --ssd generated/SystemStructure.ssd --output build/ssp/aircraft.ssp` |
 
 ## Verification
 
 | Task | Command |
 | --- | --- |
-| Validate SSD XML | `python3 -m scripts.cli.verify_ssd_xml --ssd generated/SystemStructure.ssd` |
-| Check autopilot waypoint math | `pytest tests/test_autopilot_logic.py` |
-| Check FlightGear bridge FMU packaging | `pytest -q tests/test_flightgear_bridge_fmu.py` |
+| Validate SSD XML | `. venv/bin/activate && python -m scripts.cli.verify_ssd_xml --ssd generated/SystemStructure.ssd` |
+| Check autopilot waypoint math | `. venv/bin/activate && pytest tests/test_autopilot_logic.py` |
+| Check FlightGear bridge FMU packaging | `. venv/bin/activate && pytest -q tests/test_flightgear_bridge_fmu.py` |

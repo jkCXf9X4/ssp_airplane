@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+
+venv/
+.pytest_cache/
+
+build/
+tmp/
+
+CMakeFiles/
+
+3rd_party/
