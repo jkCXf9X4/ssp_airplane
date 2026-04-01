@@ -86,7 +86,7 @@ def _discover_projects(
 def find_built_library(project: NativeFmuProject, build_dir: Path) -> Path:
     candidates = sorted(
         path for path in build_dir.rglob("*.so")
-        if path.is_file() and "CMakeFiles" not in path.parts
+        if path.is_file() and "CMakeFiles" not in path.parts and "stage" not in path.parts
     )
     if not candidates:
         raise SystemExit(f"Native library not found under {build_dir}")

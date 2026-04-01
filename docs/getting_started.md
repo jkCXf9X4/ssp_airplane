@@ -69,8 +69,8 @@ sudo apt-get install -y cmake build-essential openmodelica
 ### First full build
 
 ```bash
-cmake .
-cmake --build .
+cmake -S . -B build/cmake
+cmake --build build/cmake
 ```
 
 This builds the default `build_fmus` target, which:

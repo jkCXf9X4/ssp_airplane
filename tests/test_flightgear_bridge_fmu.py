@@ -12,7 +12,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from scripts.cli.artifacts_build_native_fmus import main as build_native_fmus_main  # type: ignore  # noqa: E402
+from tests.artifacts_build_native_fmus import main as build_native_fmus_main  # type: ignore  # noqa: E402
 from scripts.cli.artifacts_package_native_fmus import main as package_native_fmus_main  # type: ignore  # noqa: E402
 
 

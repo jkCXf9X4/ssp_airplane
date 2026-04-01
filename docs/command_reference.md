@@ -14,8 +14,8 @@ This page is reference material. If you are new to the repository, start with `g
 | Task | Command |
 | --- | --- |
 | Reuse existing results | `python3 -m scripts.cli.scenarios_simulate --scenario resources/scenarios/test_scenario.json --reuse-results` |
-| Configure source builds at the repo root | `cmake .` |
-| Build all FMUs from the repo root | `cmake --build .` |
+| Configure source builds under `build/cmake` | `cmake -S . -B build/cmake` |
+| Build all FMUs from `build/cmake` | `cmake --build build/cmake` |
 | Plot a path overlay | `python3 -m scripts.cli.analyze_plot --results-csv build/results/test_scenario_results.csv --scenario resources/scenarios/test_scenario.json --plot-path` |
 | Run tests | `pytest` |
 
@@ -23,8 +23,8 @@ This page is reference material. If you are new to the repository, start with `g
 
 | Task | Command |
 | --- | --- |
-| Build Modelica FMUs | `cmake --build . --target adaptive_wing_system_fmu autopilot_module_fmu composite_airframe_fmu control_interface_fmu environment_fmu fuel_system_fmu input_output_fmu mission_computer_fmu turbofan_propulsion_fmu` |
-| Build the native shared library only | `cmake --build . --target FlightGearBridge` |
+| Build Modelica FMUs | `cmake --build build/cmake --target adaptive_wing_system_fmu autopilot_module_fmu composite_airframe_fmu control_interface_fmu environment_fmu fuel_system_fmu input_output_fmu mission_computer_fmu turbofan_propulsion_fmu` |
+| Build the native shared library only | `cmake --build build/cmake --target FlightGearBridge` |
 | Package the native FMU | `python3 -m scripts.cli.artifacts_package_native_fmus --output-dir build/fmus --build-root build/native` |
 | Package SSP | `python3 -m scripts.cli.artifacts_package_ssp --fmu-dir build/fmus --ssd generated/SystemStructure.ssd --output build/ssp/aircraft.ssp` |
 

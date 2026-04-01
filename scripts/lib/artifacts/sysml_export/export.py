@@ -8,13 +8,21 @@ from pyssp_sysml2.fmi import generate_model_descriptions
 from pyssp_sysml2.ssd import generate_ssd
 from pyssp_sysml2.ssv import generate_parameter_set
 
-from scripts.lib.paths import ARCHITECTURE_DIR, COMPOSITION_NAME, GENERATED_DIR, COMMON_MODEL_DIR, ensure_parent_dir
+from scripts.lib.paths import (
+    ARCHITECTURE_DIR,
+    COMPOSITION_NAME,
+    GENERATED_DIR,
+    GENERATED_MODELICA_INTERFACE_FILE,
+    ensure_parent_dir,
+)
 from scripts.lib.artifacts.sysml_export.c_headers import generate_headers
 from scripts.lib.artifacts.sysml_export.modelica_headers import generate_modelica_package
 from scripts.lib.common.xml import (
     normalize_model_description_timestamps,
     normalize_ssd_xml,
 )
+
+
 def export_artifacts(
     architecture_path: Path = ARCHITECTURE_DIR,
     generated_dir: Path = GENERATED_DIR,
@@ -25,7 +33,22 @@ def export_artifacts(
     ensure_parent_dir(arch_snapshot)
     arch_snapshot.write_text(json_dumps(architecture, []))
 
-    interface_output = COMMON_MODEL_DIR / "modelica" / "AircraftCommon" / "GeneratedInterfaces.mo"
+    common_modelica_dir = generated_dir / GENERATED_MODELICA_INTERFACE_FILE.parent.relative_to(GENERATED_DIR)
+    ensure_parent_dir(common_modelica_dir / "package.mo")
+    (common_modelica_dir / "package.mo").write_text(
+        "within ;\npackage AircraftCommon\n  annotation(uses(Modelica(version=\"4.0.0\")));\nend AircraftCommon;\n",
+        encoding="utf-8",
+    )
+    (common_modelica_dir / "package.order").write_text(
+        "Interfaces\nGeneratedInterfaces\n",
+        encoding="utf-8",
+    )
+    (common_modelica_dir / "Interfaces.mo").write_text(
+        "within AircraftCommon;\npackage Interfaces\n  connector RealInput = input Real;\n  connector RealOutput = output Real;\nend Interfaces;\n",
+        encoding="utf-8",
+    )
+
+    interface_output = common_modelica_dir / GENERATED_MODELICA_INTERFACE_FILE.name
     ensure_parent_dir(interface_output)
     interface_output.write_text(generate_modelica_package(architecture.port_definitions), encoding="utf-8")
 

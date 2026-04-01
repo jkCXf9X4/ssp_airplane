@@ -5,9 +5,9 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from scripts.lib.paths import ARCHITECTURE_DIR, COMMON_MODEL_DIR
+from scripts.lib.paths import ARCHITECTURE_DIR, GENERATED_MODELICA_INTERFACE_FILE
 
-DEFAULT_OUTPUT_PATH = COMMON_MODEL_DIR / "modelica" / "AircraftCommon" / "GeneratedInterfaces.mo"
+DEFAULT_OUTPUT_PATH = GENERATED_MODELICA_INTERFACE_FILE
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:

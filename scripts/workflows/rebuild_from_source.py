@@ -4,11 +4,15 @@ from __future__ import annotations
 
 import argparse
 import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
 
-from scripts.lib.paths import REPO_ROOT
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
+from scripts.lib.paths import BUILD_DIR, REPO_ROOT
 
 
 def run_step(*args: str) -> None:
@@ -18,6 +22,11 @@ def run_step(*args: str) -> None:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.parse_args(argv)
+
+    omc_path = os.environ.get("OMC") or shutil.which("omc")
+    if not omc_path:
+        raise SystemExit("omc executable not found. Install OpenModelica or set OMC to its full path.")
+    cmake_build_dir = BUILD_DIR / "cmake"
 
     print("Exporting architecture-derived artifacts...")
     run_step(sys.executable, "-m", "scripts.cli.artifacts_export")
@@ -29,10 +38,13 @@ def main(argv: list[str] | None = None) -> int:
     run_step(sys.executable, "-m", "scripts.cli.verify_model_equations")
 
     print("Configuring CMake build...")
-    run_step("cmake", ".", f"-DOMC_EXECUTABLE={os.environ.get('OMC', 'omc')}")
+    run_step("cmake", "-S", ".", "-B", str(cmake_build_dir), f"-DOMC_EXECUTABLE={omc_path}")
 
     print("Building Modelica FMUs and native shared libraries...")
-    run_step("cmake", "--build", ".")
+    run_step("cmake", "--build", str(cmake_build_dir))
+
+    print("Building native FMU shared libraries...")
+    run_step(sys.executable, "-m", "scripts.cli.artifacts_build_native_fmus")
 
     print("Packaging native FMUs...")
     run_step(sys.executable, "-m", "scripts.cli.artifacts_package_native_fmus")

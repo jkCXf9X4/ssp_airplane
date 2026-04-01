@@ -1,5 +1,18 @@
 # AGENTS
 
+## Guidelines
+
+try to generate code by the common code guidelines
+ - Keep it simple
+ - Minimize duplication
+ - Keep files small and focused
+ - Any unit or function should try and contain a common level of abstraction  
+
+## Environment Guidelines
+
+- Use the repo-local `venv` for Python commands, test runs, and workflow scripts when it exists.
+- Prefer `. venv/bin/activate && <command>` over the system Python for `pytest`, `python -m ...`, and related tooling.
+
 ## Documentation Guidelines
 
 - Keep docs short, focused, and single-purpose.

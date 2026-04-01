@@ -10,7 +10,6 @@ ARCHITECTURE_DIR = REPO_ROOT / "architecture"
 GENERATED_DIR = REPO_ROOT / "generated"
 BUILD_DIR = REPO_ROOT / "build"
 MODELS_DIR = REPO_ROOT / "models"
-COMMON_MODEL_DIR = MODELS_DIR / "common"
 RESOURCES_DIR = REPO_ROOT / "resources"
 THIRD_PARTY_DIR = REPO_ROOT / "3rd_party"
 FMI_HEADERS_DIR = THIRD_PARTY_DIR / "fmi_headers"
@@ -21,6 +20,9 @@ COMPOSITION_NAME = "AircraftComposition"
 DEFAULT_FMU_OUTPUT_DIR = BUILD_DIR / "fmus"
 DEFAULT_NATIVE_BUILD_ROOT = BUILD_DIR / "native"
 GENERATED_INTERFACE_DIR = GENERATED_DIR / "interfaces"
+GENERATED_MODELICA_DIR = GENERATED_DIR / "modelica"
+GENERATED_MODELICA_COMMON_DIR = GENERATED_MODELICA_DIR / "AircraftCommon"
+GENERATED_MODELICA_INTERFACE_FILE = GENERATED_MODELICA_COMMON_DIR / "GeneratedInterfaces.mo"
 GENERATED_MODEL_DESCRIPTION_DIR = GENERATED_DIR / "model_descriptions"
 
 
@@ -104,7 +106,7 @@ class ModelicaModelSpec:
 
     @property
     def package_files(self) -> list[Path]:
-        return [COMMON_PACKAGE_FILE, self.package_file]
+        return [COMMON_PACKAGE_FILE, GENERATED_MODELICA_INTERFACE_FILE, self.package_file]
 
 
 @dataclass(frozen=True)
@@ -206,7 +208,7 @@ DEFAULT_MODELS = [
     if spec.folder_name != "common"
 ]
 
-COMMON_PACKAGE_FILE = COMMON_MODEL_DIR / "modelica" / "AircraftCommon" / "package.mo"
+COMMON_PACKAGE_FILE = GENERATED_MODELICA_COMMON_DIR / "package.mo"
 
 MODELICA_MODEL_SPECS = [
     ModelicaModelSpec(

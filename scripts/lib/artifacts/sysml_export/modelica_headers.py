@@ -7,11 +7,11 @@ from typing import Dict
 
 from pycps_sysmlv2 import NodeType, SysMLParser, SysMLPortDefinition
 
-from scripts.lib.paths import ARCHITECTURE_DIR, COMMON_MODEL_DIR, ensure_parent_dir
+from scripts.lib.paths import ARCHITECTURE_DIR, GENERATED_MODELICA_INTERFACE_FILE, ensure_parent_dir
 from scripts.lib.common.sysml import modelica_connector_type
 
 DEFAULT_ARCH_PATH = ARCHITECTURE_DIR
-DEFAULT_OUTPUT_PATH = COMMON_MODEL_DIR / "modelica" / "AircraftCommon" / "GeneratedInterfaces.mo"
+DEFAULT_OUTPUT_PATH = GENERATED_MODELICA_INTERFACE_FILE
 
 
 def generate_modelica_package(ports: Dict[str, SysMLPortDefinition]) -> str:
@@ -30,6 +30,8 @@ def generate_modelica_package(ports: Dict[str, SysMLPortDefinition]) -> str:
 
     lines.append("end GeneratedInterfaces;")
     return "\n".join(lines)
+
+
 def write_modelica_interfaces(
     architecture_path: Path = DEFAULT_ARCH_PATH,
     output: Path = DEFAULT_OUTPUT_PATH,
