@@ -45,7 +45,13 @@ def main(argv: list[str] | None = None) -> int:
     run_step("cmake", "--build", str(cmake_build_dir))
 
     print("Packaging native FMUs...")
-    run_step(sys.executable, "-m", "scripts.cli.artifacts_package_native_fmus")
+    run_step(
+        sys.executable,
+        "-m",
+        "scripts.cli.artifacts_package_native_fmus",
+        "--build-root",
+        str(cmake_build_dir),
+    )
 
     print("Testing native FlightGear bridge FMU...")
     run_step("pytest", "-q", "tests/test_flightgear_bridge_fmu.py")

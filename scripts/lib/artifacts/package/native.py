@@ -14,6 +14,7 @@ from scripts.lib.paths import (
     GENERATED_INTERFACE_DIR,
     GENERATED_MODEL_DESCRIPTION_DIR,
     NativeFmuProject,
+    REPO_ROOT,
     discover_native_projects,
     ensure_directory,
     ensure_parent_dir,
@@ -100,15 +101,41 @@ def find_built_library(project: NativeFmuProject, build_dir: Path) -> Path:
     )
 
 
+def candidate_build_dirs(project: NativeFmuProject, build_root: Path) -> list[Path]:
+    candidates = [project.build_dir]
+    try:
+        source_relative = project.source_root.relative_to(REPO_ROOT)
+    except ValueError:
+        return candidates
+
+    top_level_cmake_dir = build_root / source_relative
+    if top_level_cmake_dir not in candidates:
+        candidates.append(top_level_cmake_dir)
+    return candidates
+
+
 def package_native_fmu_for_project(
     project: NativeFmuProject,
     output_fmu: Path | None = None,
     build_dir: Path | None = None,
+    build_root: Path = DEFAULT_NATIVE_BUILD_ROOT,
 ) -> Path:
-    build_dir = build_dir or project.build_dir
+    resolved_build_dir = build_dir
+    if resolved_build_dir is None:
+        for candidate in candidate_build_dirs(project, build_root):
+            try:
+                find_built_library(project, candidate)
+            except SystemExit:
+                continue
+            resolved_build_dir = candidate
+            break
+    if resolved_build_dir is None:
+        searched = ", ".join(str(path) for path in candidate_build_dirs(project, build_root))
+        raise SystemExit(f"Native library not found for {project.model_identifier}. Searched: {searched}")
+
     output_fmu = output_fmu or (DEFAULT_FMU_OUTPUT_DIR / project.output_name)
-    built_library = find_built_library(project, build_dir)
-    return package_native_fmu(project, built_library, output_fmu, build_dir)
+    built_library = find_built_library(project, resolved_build_dir)
+    return package_native_fmu(project, built_library, output_fmu, resolved_build_dir)
 
 
 def package_native_fmus(
@@ -141,7 +168,7 @@ def package_native_fmus(
             package_native_fmu_for_project(
                 project,
                 output_fmu=output_dir / project.output_name,
-                build_dir=project.build_dir,
+                build_root=build_root,
             )
         )
     return written
