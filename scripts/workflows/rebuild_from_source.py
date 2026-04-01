@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -27,11 +28,11 @@ def main(argv: list[str] | None = None) -> int:
     print("Verifying models...")
     run_step(sys.executable, "-m", "scripts.cli.verify_model_equations")
 
-    print("Building Modelica FMUs...")
-    run_step(sys.executable, "-m", "scripts.cli.artifacts_build_modelica_fmus")
+    print("Configuring CMake build...")
+    run_step("cmake", ".", f"-DOMC_EXECUTABLE={os.environ.get('OMC', 'omc')}")
 
-    print("Building native shared libraries...")
-    run_step(sys.executable, "-m", "scripts.cli.artifacts_build_native_fmus")
+    print("Building Modelica FMUs and native shared libraries...")
+    run_step("cmake", "--build", ".")
 
     print("Packaging native FMUs...")
     run_step(sys.executable, "-m", "scripts.cli.artifacts_package_native_fmus")
