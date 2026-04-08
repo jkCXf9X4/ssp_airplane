@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<fmiModelDescription fmiVersion="2.0" modelName="AircraftComposition.FlightGearBridge" guid="{74c5781a-27ff-58c7-8a3b-16e408ea44fe}" description="Adapter component for visual/frontend coupling to FlightGear using generic socket communication." version="1.0" generationTool="pyssp_sysml2 tooling" generationDateAndTime="2000-01-01T00:00:00" variableNamingConvention="structured" numberOfEventIndicators="0">
+<fmiModelDescription fmiVersion="2.0" modelName="AircraftComposition.FlightGearBridge" guid="{74c5781a-27ff-58c7-8a3b-16e408ea44fe}" description="Adapter component for ROS 2 visualization/control coupling via a UDP companion runtime." version="1.0" generationTool="pyssp_sysml2 tooling" generationDateAndTime="2000-01-01T00:00:00" variableNamingConvention="structured" numberOfEventIndicators="0">
   <CoSimulation modelIdentifier="FlightGearBridge" />
   <ModelVariables>
     <ScalarVariable name="transport" valueReference="0" causality="parameter" variability="fixed">
-      <String start="FlightGearGeneric" />
+      <String start="Ros2UdpBridge" />
     </ScalarVariable>
     <ScalarVariable name="reference_latitude_deg" valueReference="1" causality="parameter" variability="fixed">
       <Real start="0" />
@@ -41,64 +41,64 @@
     <ScalarVariable name="stateOrientation.yaw_deg" valueReference="12" causality="input" description="Aircraft attitude from the simulated environment.">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="flightStatus.airspeed_mps" valueReference="13" causality="input" description="Flight status exported for overlays and diagnostics.">
+    <ScalarVariable name="flightStatus.airspeed_mps" valueReference="13" causality="input" description="Flight status exported for ROS 2 telemetry and diagnostics.">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="flightStatus.energy_state_norm" valueReference="14" causality="input" description="Flight status exported for overlays and diagnostics.">
+    <ScalarVariable name="flightStatus.energy_state_norm" valueReference="14" causality="input" description="Flight status exported for ROS 2 telemetry and diagnostics.">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="flightStatus.angle_of_attack_deg" valueReference="15" causality="input" description="Flight status exported for overlays and diagnostics.">
+    <ScalarVariable name="flightStatus.angle_of_attack_deg" valueReference="15" causality="input" description="Flight status exported for ROS 2 telemetry and diagnostics.">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="flightStatus.climb_rate" valueReference="16" causality="input" description="Flight status exported for overlays and diagnostics.">
+    <ScalarVariable name="flightStatus.climb_rate" valueReference="16" causality="input" description="Flight status exported for ROS 2 telemetry and diagnostics.">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="flightStatus.health_code" valueReference="17" causality="input" description="Flight status exported for overlays and diagnostics.">
+    <ScalarVariable name="flightStatus.health_code" valueReference="17" causality="input" description="Flight status exported for ROS 2 telemetry and diagnostics.">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="missionStatus.waypoint_index" valueReference="18" causality="input" description="Mission/autopilot status exported for overlays and diagnostics.">
+    <ScalarVariable name="missionStatus.waypoint_index" valueReference="18" causality="input" description="Mission/autopilot status exported for ROS 2 telemetry and diagnostics.">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="missionStatus.total_waypoints" valueReference="19" causality="input" description="Mission/autopilot status exported for overlays and diagnostics.">
+    <ScalarVariable name="missionStatus.total_waypoints" valueReference="19" causality="input" description="Mission/autopilot status exported for ROS 2 telemetry and diagnostics.">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="missionStatus.distance_to_waypoint_km" valueReference="20" causality="input" description="Mission/autopilot status exported for overlays and diagnostics.">
+    <ScalarVariable name="missionStatus.distance_to_waypoint_km" valueReference="20" causality="input" description="Mission/autopilot status exported for ROS 2 telemetry and diagnostics.">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="missionStatus.arrived" valueReference="21" causality="input" description="Mission/autopilot status exported for overlays and diagnostics.">
+    <ScalarVariable name="missionStatus.arrived" valueReference="21" causality="input" description="Mission/autopilot status exported for ROS 2 telemetry and diagnostics.">
       <Boolean />
     </ScalarVariable>
-    <ScalarVariable name="missionStatus.complete" valueReference="22" causality="input" description="Mission/autopilot status exported for overlays and diagnostics.">
+    <ScalarVariable name="missionStatus.complete" valueReference="22" causality="input" description="Mission/autopilot status exported for ROS 2 telemetry and diagnostics.">
       <Boolean />
     </ScalarVariable>
-    <ScalarVariable name="pilotCommand.stick_pitch_norm" valueReference="23" causality="output" description="Pilot command returned from the interactive frontend into the vehicle control path.">
+    <ScalarVariable name="pilotCommand.stick_pitch_norm" valueReference="23" causality="output" description="Pilot command returned from the ROS 2 control frontend into the vehicle control path.">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="pilotCommand.stick_roll_norm" valueReference="24" causality="output" description="Pilot command returned from the interactive frontend into the vehicle control path.">
+    <ScalarVariable name="pilotCommand.stick_roll_norm" valueReference="24" causality="output" description="Pilot command returned from the ROS 2 control frontend into the vehicle control path.">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="pilotCommand.rudder_norm" valueReference="25" causality="output" description="Pilot command returned from the interactive frontend into the vehicle control path.">
+    <ScalarVariable name="pilotCommand.rudder_norm" valueReference="25" causality="output" description="Pilot command returned from the ROS 2 control frontend into the vehicle control path.">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="pilotCommand.throttle_norm" valueReference="26" causality="output" description="Pilot command returned from the interactive frontend into the vehicle control path.">
+    <ScalarVariable name="pilotCommand.throttle_norm" valueReference="26" causality="output" description="Pilot command returned from the ROS 2 control frontend into the vehicle control path.">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="pilotCommand.throttle_aux_norm" valueReference="27" causality="output" description="Pilot command returned from the interactive frontend into the vehicle control path.">
+    <ScalarVariable name="pilotCommand.throttle_aux_norm" valueReference="27" causality="output" description="Pilot command returned from the ROS 2 control frontend into the vehicle control path.">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="pilotCommand.button_mask" valueReference="28" causality="output" description="Pilot command returned from the interactive frontend into the vehicle control path.">
+    <ScalarVariable name="pilotCommand.button_mask" valueReference="28" causality="output" description="Pilot command returned from the ROS 2 control frontend into the vehicle control path.">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="pilotCommand.hat_x" valueReference="29" causality="output" description="Pilot command returned from the interactive frontend into the vehicle control path.">
+    <ScalarVariable name="pilotCommand.hat_x" valueReference="29" causality="output" description="Pilot command returned from the ROS 2 control frontend into the vehicle control path.">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="pilotCommand.hat_y" valueReference="30" causality="output" description="Pilot command returned from the interactive frontend into the vehicle control path.">
+    <ScalarVariable name="pilotCommand.hat_y" valueReference="30" causality="output" description="Pilot command returned from the ROS 2 control frontend into the vehicle control path.">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="pilotCommand.mode_switch" valueReference="31" causality="output" description="Pilot command returned from the interactive frontend into the vehicle control path.">
+    <ScalarVariable name="pilotCommand.mode_switch" valueReference="31" causality="output" description="Pilot command returned from the ROS 2 control frontend into the vehicle control path.">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="pilotCommand.reserved" valueReference="32" causality="output" description="Pilot command returned from the interactive frontend into the vehicle control path.">
+    <ScalarVariable name="pilotCommand.reserved" valueReference="32" causality="output" description="Pilot command returned from the ROS 2 control frontend into the vehicle control path.">
       <Integer />
     </ScalarVariable>
   </ModelVariables>

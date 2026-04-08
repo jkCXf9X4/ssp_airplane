@@ -9,6 +9,7 @@ model ControlInterface
 protected
   Real effectiveCommand;
   Real rollSweep;
+  Boolean bridgeActive;
   GI.PilotCommand scriptedPilotCommand;
 equation
   effectiveCommand = (1 - inputLag) * manualCommandDefault + inputLag * manualCommandDefault;
@@ -23,15 +24,16 @@ equation
   scriptedPilotCommand.hat_y = 0;
   scriptedPilotCommand.mode_switch = 0;
   scriptedPilotCommand.reserved = 0;
+  bridgeActive = useBridgeInput and bridgeInput.mode_switch >= 0;
 
-  pilotCommand.stick_pitch_norm = if useBridgeInput then bridgeInput.stick_pitch_norm else scriptedPilotCommand.stick_pitch_norm;
-  pilotCommand.stick_roll_norm = if useBridgeInput then bridgeInput.stick_roll_norm else scriptedPilotCommand.stick_roll_norm;
-  pilotCommand.rudder_norm = if useBridgeInput then bridgeInput.rudder_norm else scriptedPilotCommand.rudder_norm;
-  pilotCommand.throttle_norm = if useBridgeInput then bridgeInput.throttle_norm else scriptedPilotCommand.throttle_norm;
-  pilotCommand.throttle_aux_norm = if useBridgeInput then bridgeInput.throttle_aux_norm else scriptedPilotCommand.throttle_aux_norm;
-  pilotCommand.button_mask = if useBridgeInput then bridgeInput.button_mask else scriptedPilotCommand.button_mask;
-  pilotCommand.hat_x = if useBridgeInput then bridgeInput.hat_x else scriptedPilotCommand.hat_x;
-  pilotCommand.hat_y = if useBridgeInput then bridgeInput.hat_y else scriptedPilotCommand.hat_y;
-  pilotCommand.mode_switch = if useBridgeInput then bridgeInput.mode_switch else scriptedPilotCommand.mode_switch;
-  pilotCommand.reserved = if useBridgeInput then bridgeInput.reserved else scriptedPilotCommand.reserved;
+  pilotCommand.stick_pitch_norm = if bridgeActive then bridgeInput.stick_pitch_norm else scriptedPilotCommand.stick_pitch_norm;
+  pilotCommand.stick_roll_norm = if bridgeActive then bridgeInput.stick_roll_norm else scriptedPilotCommand.stick_roll_norm;
+  pilotCommand.rudder_norm = if bridgeActive then bridgeInput.rudder_norm else scriptedPilotCommand.rudder_norm;
+  pilotCommand.throttle_norm = if bridgeActive then bridgeInput.throttle_norm else scriptedPilotCommand.throttle_norm;
+  pilotCommand.throttle_aux_norm = if bridgeActive then bridgeInput.throttle_aux_norm else scriptedPilotCommand.throttle_aux_norm;
+  pilotCommand.button_mask = if bridgeActive then bridgeInput.button_mask else scriptedPilotCommand.button_mask;
+  pilotCommand.hat_x = if bridgeActive then bridgeInput.hat_x else scriptedPilotCommand.hat_x;
+  pilotCommand.hat_y = if bridgeActive then bridgeInput.hat_y else scriptedPilotCommand.hat_y;
+  pilotCommand.mode_switch = if bridgeActive then bridgeInput.mode_switch else scriptedPilotCommand.mode_switch;
+  pilotCommand.reserved = if bridgeActive then bridgeInput.reserved else scriptedPilotCommand.reserved;
 end ControlInterface;

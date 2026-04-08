@@ -16,8 +16,8 @@ package Aircraft {
   }
 
   part def FlightGearBridge {
-    doc /* Adapter component for visual/frontend coupling to FlightGear using generic socket communication. */
-    attribute transport = "FlightGearGeneric";
+    doc /* Adapter component for ROS 2 visualization/control coupling via a UDP companion runtime. */
+    attribute transport = "Ros2UdpBridge";
     attribute reference_latitude_deg = 0.0;
     attribute reference_longitude_deg = 0.0;
     attribute reference_altitude_m = 0.0;
@@ -31,13 +31,13 @@ package Aircraft {
     doc /* Aircraft attitude from the simulated environment. */
     in port stateOrientation : OrientationEuler;
 
-    doc /* Flight status exported for overlays and diagnostics. */
+    doc /* Flight status exported for ROS 2 telemetry and diagnostics. */
     in port flightStatus : FlightStatusPacket;
 
-    doc /* Mission/autopilot status exported for overlays and diagnostics. */
+    doc /* Mission/autopilot status exported for ROS 2 telemetry and diagnostics. */
     in port missionStatus : MissionStatus;
 
-    doc /* Pilot command returned from the interactive frontend into the vehicle control path. */
+    doc /* Pilot command returned from the ROS 2 control frontend into the vehicle control path. */
     out port pilotCommand : PilotCommand;
   }
 

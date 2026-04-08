@@ -46,7 +46,7 @@ inline constexpr size_t Aircraft_FlightGearBridge_VrCount = 33;
 
 struct Aircraft_FlightGearBridge_Instance {
   Aircraft_VrMapping vr_map[33] = {};
-  std::string transport = "FlightGearGeneric";
+  std::string transport = "Ros2UdpBridge";
   double reference_latitude_deg = 0.0;
   double reference_longitude_deg = 0.0;
   double reference_altitude_m = 0.0;

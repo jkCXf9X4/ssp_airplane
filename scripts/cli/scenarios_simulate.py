@@ -41,6 +41,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default=None,
         help="Optional path to write the simulator config JSON to before launching.",
     )
+    parser.add_argument(
+        "--bridge-input",
+        action="store_true",
+        help="Enable interactive bridge/manual input with scripted fallback when no live command stream is present.",
+    )
     return parser.parse_args(argv)
 
 
@@ -54,6 +59,7 @@ def main(argv: list[str] | None = None) -> int:
         stop_time=args.stop_time,
         realtime=args.realtime,
         config_path=args.config_path,
+        bridge_input=args.bridge_input,
     )
     print(json.dumps(scenario_result_summary(result), indent=2))
     return 0

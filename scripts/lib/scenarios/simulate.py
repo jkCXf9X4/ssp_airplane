@@ -123,6 +123,7 @@ def emit_waypoint_parameter_set(
     local_points: List[Dict[str, float]],
     output_path: Path,
     component: str = "AutopilotModule",
+    enable_bridge_input: bool = False,
 ) -> Path:
     ns = "http://ssp-standard.org/SSP1/ParameterValues"
     ET.register_namespace("ssv", ns)
@@ -133,6 +134,8 @@ def emit_waypoint_parameter_set(
         param_elem = ET.SubElement(params, f"{{{ns}}}Parameter", attrib={"name": name})
         value_elem = ET.SubElement(param_elem, f"{{{ns}}}{type_tag}")
         value_elem.set("value", value)
+
+    add_param("ControlInterface.useBridgeInput", "Boolean", "true" if enable_bridge_input else "false")
 
     if local_points:
         first = local_points[0]
@@ -532,6 +535,7 @@ def simulate_scenario(
     stop_time: Optional[float] = None,
     realtime: bool = False,
     config_path: Optional[Path] = None,
+    bridge_input: bool = False,
 ) -> ScenarioResult:
     scenario = json.loads(scenario_path.read_text())
     if "points" not in scenario:
@@ -551,7 +555,7 @@ def simulate_scenario(
     waypoints_file = results_dir / f"{scenario_path.stem}_waypoints.txt"
     waypoints_file.write_text(scenario_string)
     parameter_set_path = results_dir / f"{scenario_path.stem}_waypoints.ssv"
-    emit_waypoint_parameter_set(local_points, parameter_set_path)
+    emit_waypoint_parameter_set(local_points, parameter_set_path, enable_bridge_input=bridge_input)
     prepared_ssp = prepare_ssp_with_parameters(ssp_path or DEFAULT_SSP, parameter_set_path, scenario_path.stem, results_dir)
 
     if stop_time is None:

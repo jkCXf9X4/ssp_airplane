@@ -11,7 +11,7 @@
       <ssv:Boolean value="false"/>
     </ssv:Parameter>
     <ssv:Parameter name="flightgear_bridge.transport">
-      <ssv:String value="FlightGearGeneric"/>
+      <ssv:String value="Ros2UdpBridge"/>
     </ssv:Parameter>
     <ssv:Parameter name="flightgear_bridge.reference_latitude_deg">
       <ssv:Real value="0"/>

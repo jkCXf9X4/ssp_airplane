@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import ctypes
+import json
 import socket
 import sys
 import threading
@@ -216,7 +217,21 @@ def test_native_flightgear_bridge_fmu_exchanges_udp_packets(tmp_path: Path):
 
         control_sender = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         control_sender.sendto(
-            b"0.250000,-0.500000,0.100000,0.800000,0.820000,7,1,-1,3,9\n",
+            json.dumps(
+                {
+                    "stick_pitch_norm": 0.25,
+                    "stick_roll_norm": -0.5,
+                    "rudder_norm": 0.1,
+                    "throttle_norm": 0.8,
+                    "throttle_aux_norm": 0.82,
+                    "button_mask": 7,
+                    "hat_x": 1,
+                    "hat_y": -1,
+                    "mode_switch": 3,
+                    "reserved": 9,
+                }
+            ).encode()
+            + b"\n",
             ("127.0.0.1", control_port),
         )
         control_sender.close()
@@ -226,14 +241,17 @@ def test_native_flightgear_bridge_fmu_exchanges_udp_packets(tmp_path: Path):
         listener.join(timeout=3.0)
         assert received_packets, "Expected telemetry packet from native bridge FMU"
 
-        telemetry_fields = received_packets[0].split(",")
-        assert len(telemetry_fields) == 16
-        assert abs(float(telemetry_fields[0]) - 57.8) < 0.01
-        assert abs(float(telemetry_fields[1]) - 12.044) < 0.02
-        assert abs(float(telemetry_fields[2]) - 4140.419) < 0.5
-        assert abs(float(telemetry_fields[6]) - 485.961) < 0.5
-        assert int(telemetry_fields[11]) == 3
-        assert int(telemetry_fields[12]) == 9
+        telemetry_packet = json.loads(received_packets[0])
+        assert telemetry_packet["transport"] == "Ros2UdpBridge"
+        assert abs(telemetry_packet["reference_latitude_deg"] - 57.7) < 0.01
+        assert abs(telemetry_packet["reference_longitude_deg"] - 11.95) < 0.01
+        assert abs(telemetry_packet["reference_altitude_m"] - 12.0) < 0.01
+        assert abs(telemetry_packet["state"]["x_km"] - 11.1) < 0.001
+        assert abs(telemetry_packet["state"]["y_km"] - 5.55) < 0.001
+        assert abs(telemetry_packet["state"]["z_km"] - 1.25) < 0.001
+        assert abs(telemetry_packet["flight_status"]["airspeed_mps"] - 250.0) < 0.001
+        assert telemetry_packet["mission_status"]["waypoint_index"] == 3
+        assert telemetry_packet["mission_status"]["total_waypoints"] == 9
 
         output_real_refs = (ctypes.c_uint * 5)(
             refs["pilotCommand.stick_pitch_norm"],

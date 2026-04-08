@@ -2,6 +2,7 @@
 
 #include <netinet/in.h>
 
+#include <chrono>
 #include <string>
 
 #include "fmi2Functions.h"
@@ -18,6 +19,8 @@ struct ModelInstance : public Aircraft_FlightGearBridge_Instance {
   int rx_socket = -1;
   sockaddr_in tx_address {};
   bool sockets_ready = false;
+  std::chrono::steady_clock::time_point last_control_update {};
+  bool control_active = false;
 };
 
 ModelInstance* create_instance();

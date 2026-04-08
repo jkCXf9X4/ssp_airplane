@@ -5,41 +5,23 @@
 #include <unistd.h>
 
 #include <cerrno>
+#include <chrono>
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include <sstream>
 #include <string>
-#include <vector>
 
 namespace fgbridge {
 namespace {
 
-constexpr double kPi = 3.14159265358979323846;
+constexpr double kControlTimeoutSec = 1.0;
 
 void close_socket_if_open(int& fd) {
   if (fd >= 0) {
     close(fd);
     fd = -1;
   }
-}
-
-std::vector<std::string> split_csv(const std::string& payload) {
-  std::vector<std::string> parts;
-  std::stringstream stream(payload);
-  std::string item;
-  while (std::getline(stream, item, ',')) {
-    while (!item.empty() && (item.back() == '\n' || item.back() == '\r' || item.back() == ' ' || item.back() == '\t')) {
-      item.pop_back();
-    }
-    std::size_t start = 0;
-    while (start < item.size() && (item[start] == ' ' || item[start] == '\t')) {
-      ++start;
-    }
-    parts.emplace_back(item.substr(start));
-  }
-  return parts;
 }
 
 bool parse_double(const std::string& text, double& value) {
@@ -60,6 +42,73 @@ bool parse_int(const std::string& text, int& value) {
   }
   value = static_cast<int>(parsed);
   return true;
+}
+
+bool extract_json_value(const std::string& payload, const char* key, std::string& value) {
+  const std::string quoted_key = std::string("\"") + key + "\"";
+  const std::size_t key_pos = payload.find(quoted_key);
+  if (key_pos == std::string::npos) {
+    return false;
+  }
+  const std::size_t colon = payload.find(':', key_pos + quoted_key.size());
+  if (colon == std::string::npos) {
+    return false;
+  }
+
+  std::size_t start = colon + 1;
+  while (start < payload.size() && (payload[start] == ' ' || payload[start] == '\t')) {
+    ++start;
+  }
+  std::size_t end = start;
+  if (start < payload.size() && payload[start] == '"') {
+    ++start;
+    end = start;
+    while (end < payload.size() && payload[end] != '"') {
+      ++end;
+    }
+    if (end >= payload.size()) {
+      return false;
+    }
+    value = payload.substr(start, end - start);
+    return true;
+  }
+
+  while (end < payload.size() && payload[end] != ',' && payload[end] != '}' && payload[end] != '\n' &&
+         payload[end] != '\r') {
+    ++end;
+  }
+  while (end > start && (payload[end - 1] == ' ' || payload[end - 1] == '\t')) {
+    --end;
+  }
+  if (end <= start) {
+    return false;
+  }
+  value = payload.substr(start, end - start);
+  return true;
+}
+
+bool extract_json_double(const std::string& payload, const char* key, double& value) {
+  std::string raw;
+  return extract_json_value(payload, key, raw) && parse_double(raw, value);
+}
+
+bool extract_json_int(const std::string& payload, const char* key, int& value) {
+  std::string raw;
+  return extract_json_value(payload, key, raw) && parse_int(raw, value);
+}
+
+void set_inactive_command(ModelInstance* instance) {
+  instance->control_active = false;
+  instance->pilotCommand.stick_pitch_norm = 0.0;
+  instance->pilotCommand.stick_roll_norm = 0.0;
+  instance->pilotCommand.rudder_norm = 0.0;
+  instance->pilotCommand.throttle_norm = 0.6;
+  instance->pilotCommand.throttle_aux_norm = 0.6;
+  instance->pilotCommand.button_mask = 0;
+  instance->pilotCommand.hat_x = 0;
+  instance->pilotCommand.hat_y = 0;
+  instance->pilotCommand.mode_switch = -1;
+  instance->pilotCommand.reserved = 0;
 }
 
 bool ensure_sockets(ModelInstance* instance) {
@@ -117,12 +166,36 @@ void reset_sockets(ModelInstance* instance) {
   close_socket_if_open(instance->rx_socket);
 }
 
+void apply_control_json(ModelInstance* instance, const std::string& payload) {
+  Aircraft_PilotCommand next = {};
+  next.throttle_norm = 0.6;
+  next.throttle_aux_norm = 0.6;
+  next.mode_switch = 0;
+
+  extract_json_double(payload, "stick_pitch_norm", next.stick_pitch_norm);
+  extract_json_double(payload, "stick_roll_norm", next.stick_roll_norm);
+  extract_json_double(payload, "rudder_norm", next.rudder_norm);
+  extract_json_double(payload, "throttle_norm", next.throttle_norm);
+  next.throttle_aux_norm = next.throttle_norm;
+  extract_json_double(payload, "throttle_aux_norm", next.throttle_aux_norm);
+  extract_json_int(payload, "button_mask", next.button_mask);
+  extract_json_int(payload, "hat_x", next.hat_x);
+  extract_json_int(payload, "hat_y", next.hat_y);
+  extract_json_int(payload, "mode_switch", next.mode_switch);
+  extract_json_int(payload, "reserved", next.reserved);
+
+  instance->pilotCommand = next;
+  instance->control_active = true;
+  instance->last_control_update = std::chrono::steady_clock::now();
+}
+
 void receive_control_packet(ModelInstance* instance) {
   if (!ensure_sockets(instance)) {
     return;
   }
 
-  char buffer[1024];
+  char buffer[2048];
+  bool received_valid_packet = false;
   for (;;) {
     ssize_t received = recv(instance->rx_socket, buffer, sizeof(buffer) - 1, 0);
     if (received < 0) {
@@ -136,70 +209,67 @@ void receive_control_packet(ModelInstance* instance) {
     }
 
     buffer[received] = '\0';
-    const auto fields = split_csv(buffer);
-    if (fields.size() < 4) {
+    const std::string payload(buffer);
+    if (payload.find('{') == std::string::npos) {
       continue;
     }
+    apply_control_json(instance, payload);
+    received_valid_packet = true;
+  }
 
-    parse_double(fields[0], instance->pilotCommand.stick_pitch_norm);
-    parse_double(fields[1], instance->pilotCommand.stick_roll_norm);
-    parse_double(fields[2], instance->pilotCommand.rudder_norm);
-    parse_double(fields[3], instance->pilotCommand.throttle_norm);
-    instance->pilotCommand.throttle_aux_norm = instance->pilotCommand.throttle_norm;
+  if (received_valid_packet) {
+    return;
+  }
 
-    if (fields.size() >= 5) {
-      parse_double(fields[4], instance->pilotCommand.throttle_aux_norm);
-    }
-    if (fields.size() >= 6) {
-      parse_int(fields[5], instance->pilotCommand.button_mask);
-    }
-    if (fields.size() >= 7) {
-      parse_int(fields[6], instance->pilotCommand.hat_x);
-    }
-    if (fields.size() >= 8) {
-      parse_int(fields[7], instance->pilotCommand.hat_y);
-    }
-    if (fields.size() >= 9) {
-      parse_int(fields[8], instance->pilotCommand.mode_switch);
-    }
-    if (fields.size() >= 10) {
-      parse_int(fields[9], instance->pilotCommand.reserved);
-    }
+  if (!instance->control_active) {
+    return;
+  }
+
+  const auto age =
+      std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::steady_clock::now() - instance->last_control_update)
+          .count();
+  if (age > kControlTimeoutSec) {
+    set_inactive_command(instance);
   }
 }
 
 std::string telemetry_packet(const ModelInstance* instance) {
-  constexpr double km_per_degree = 111.0;
-  const double lat_rad = instance->reference_latitude_deg * kPi / 180.0;
-  const double latitude_deg = instance->reference_latitude_deg + (instance->statePosition.x_km / km_per_degree);
-  const double longitude_scale = km_per_degree * (std::abs(std::cos(lat_rad)) < 1e-9 ? 1.0 : std::cos(lat_rad));
-  const double longitude_deg = instance->reference_longitude_deg + (instance->statePosition.y_km / longitude_scale);
-  const double altitude_m = instance->reference_altitude_m + (instance->statePosition.z_km * 1000.0);
-  const double altitude_ft = altitude_m * 3.28083989501312;
-  const double airspeed_kt = instance->flightStatus.airspeed_mps * 1.9438444924406;
-  const double climb_rate_fps = instance->flightStatus.climb_rate * 3.28083989501312;
-
-  char buffer[512];
+  char buffer[1024];
   const int written = std::snprintf(
       buffer,
       sizeof(buffer),
-      "%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%d,%d,%d,%.6f,%d,%d\n",
-      latitude_deg,
-      longitude_deg,
-      altitude_ft,
+      "{"
+      "\"transport\":\"%s\","
+      "\"reference_latitude_deg\":%.6f,"
+      "\"reference_longitude_deg\":%.6f,"
+      "\"reference_altitude_m\":%.6f,"
+      "\"state\":{\"x_km\":%.6f,\"y_km\":%.6f,\"z_km\":%.6f},"
+      "\"orientation\":{\"roll_deg\":%.6f,\"pitch_deg\":%.6f,\"yaw_deg\":%.6f},"
+      "\"flight_status\":{\"airspeed_mps\":%.6f,\"energy_state_norm\":%.6f,\"angle_of_attack_deg\":%.6f,\"climb_rate\":%.6f,"
+      "\"health_code\":%d},"
+      "\"mission_status\":{\"waypoint_index\":%d,\"total_waypoints\":%d,\"distance_to_waypoint_km\":%.6f,\"arrived\":%s,"
+      "\"complete\":%s}"
+      "}\n",
+      instance->transport.c_str(),
+      instance->reference_latitude_deg,
+      instance->reference_longitude_deg,
+      instance->reference_altitude_m,
+      instance->statePosition.x_km,
+      instance->statePosition.y_km,
+      instance->statePosition.z_km,
       instance->stateOrientation.roll_deg,
       instance->stateOrientation.pitch_deg,
       instance->stateOrientation.yaw_deg,
-      airspeed_kt,
+      instance->flightStatus.airspeed_mps,
       instance->flightStatus.energy_state_norm,
       instance->flightStatus.angle_of_attack_deg,
-      climb_rate_fps,
+      instance->flightStatus.climb_rate,
       instance->flightStatus.health_code,
       instance->missionStatus.waypoint_index,
       instance->missionStatus.total_waypoints,
       instance->missionStatus.distance_to_waypoint_km,
-      instance->missionStatus.arrived ? 1 : 0,
-      instance->missionStatus.complete ? 1 : 0);
+      instance->missionStatus.arrived ? "true" : "false",
+      instance->missionStatus.complete ? "true" : "false");
   if (written <= 0) {
     return {};
   }
@@ -224,7 +294,9 @@ void send_telemetry_packet(ModelInstance* instance) {
 }  // namespace
 
 ModelInstance* create_instance() {
-  return new ModelInstance();
+  auto* instance = new ModelInstance();
+  set_inactive_command(instance);
+  return instance;
 }
 
 void destroy_instance(ModelInstance* instance) {
@@ -236,14 +308,16 @@ void destroy_instance(ModelInstance* instance) {
 }
 
 fmi2Status enter_initialization(ModelInstance* instance) {
+  if (!instance->transport.empty() && instance->transport != "Ros2UdpBridge") {
+    instance->transport = "Ros2UdpBridge";
+  }
+  set_inactive_command(instance);
   return ensure_sockets(instance) ? fmi2OK : fmi2Warning;
 }
 
 fmi2Status reset_instance(ModelInstance* instance) {
   reset_sockets(instance);
-  instance->pilotCommand = {};
-  instance->pilotCommand.throttle_norm = 0.6;
-  instance->pilotCommand.throttle_aux_norm = 0.6;
+  set_inactive_command(instance);
   return fmi2OK;
 }
 
