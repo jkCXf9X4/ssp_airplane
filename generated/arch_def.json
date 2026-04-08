@@ -1555,7 +1555,7 @@
                       "parent": null,
                       "source_file": null,
                       "type": "__ref__",
-                      "value": "FlightGearGeneric",
+                      "value": "Ros2UdpBridge",
                       "value_type": "<class 'pycps_sysmlv2.definitions.attributes.SysMLAttribute'>"
                     }
                   },
@@ -1581,7 +1581,7 @@
                   "NodeType.Port": {
                     "flightStatus": {
                       "direction": "in",
-                      "doc": "Flight status exported for overlays and diagnostics.",
+                      "doc": "Flight status exported for ROS 2 telemetry and diagnostics.",
                       "name": "flightStatus",
                       "parent": null,
                       "ref_node": {
@@ -1674,7 +1674,7 @@
                     },
                     "missionStatus": {
                       "direction": "in",
-                      "doc": "Mission/autopilot status exported for overlays and diagnostics.",
+                      "doc": "Mission/autopilot status exported for ROS 2 telemetry and diagnostics.",
                       "name": "missionStatus",
                       "parent": null,
                       "ref_node": {
@@ -1767,7 +1767,7 @@
                     },
                     "pilotCommand": {
                       "direction": "out",
-                      "doc": "Pilot command returned from the interactive frontend into the vehicle control path.",
+                      "doc": "Pilot command returned from the ROS 2 control frontend into the vehicle control path.",
                       "name": "pilotCommand",
                       "parent": null,
                       "ref_node": "__ref__",
@@ -1940,7 +1940,7 @@
                   "NodeType.Port": [],
                   "NodeType.Requirement": []
                 },
-                "doc": "Adapter component for visual/frontend coupling to FlightGear using generic socket communication.",
+                "doc": "Adapter component for ROS 2 visualization/control coupling via a UDP companion runtime.",
                 "name": "FlightGearBridge",
                 "parent": null,
                 "source_file": "part_definition.sysml",
