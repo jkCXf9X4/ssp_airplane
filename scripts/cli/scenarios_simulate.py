@@ -30,6 +30,17 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default=None,
         help="Override ssp4sim stop time in seconds.",
     )
+    parser.add_argument(
+        "--realtime",
+        action="store_true",
+        help="Enable ssp4sim realtime pacing.",
+    )
+    parser.add_argument(
+        "--config-path",
+        type=Path,
+        default=None,
+        help="Optional path to write the simulator config JSON to before launching.",
+    )
     return parser.parse_args(argv)
 
 
@@ -41,6 +52,8 @@ def main(argv: list[str] | None = None) -> int:
         results_dir=args.results_dir,
         reuse_results=args.reuse_results,
         stop_time=args.stop_time,
+        realtime=args.realtime,
+        config_path=args.config_path,
     )
     print(json.dumps(scenario_result_summary(result), indent=2))
     return 0

@@ -456,8 +456,16 @@ def evaluate_requirements(
 
 
 # toggle log_fmu for more extensive logs
-def run_with_simulator(ssp_path: Path, result_file: Path, stop_time: float, log_fmu=False) -> None:
+def run_with_simulator(
+    ssp_path: Path,
+    result_file: Path,
+    stop_time: float,
+    log_fmu: bool = False,
+    realtime: bool = False,
+    config_path: Optional[Path] = None,
+) -> None:
     log_fmu = "true" if log_fmu else "false"
+    realtime = "true" if realtime else "false"
 
     config = f"""
 {{
@@ -469,6 +477,7 @@ def run_with_simulator(ssp_path: Path, result_file: Path, stop_time: float, log_
         "stop_time":{stop_time},
         "timestep": 1.0,
         "tolerance": 1e-4,
+        "realtime": {realtime},
 
         "executor": 
         {{
@@ -505,7 +514,8 @@ def run_with_simulator(ssp_path: Path, result_file: Path, stop_time: float, log_
     }}
 }}
 """
-    temp_config = result_file.parent / "config.json"
+    temp_config = config_path or (result_file.parent / "config.json")
+    temp_config.parent.mkdir(parents=True, exist_ok=True)
     with open(temp_config, "w") as f:
         f.write(config)
 
@@ -520,6 +530,8 @@ def simulate_scenario(
     results_dir: Path = DEFAULT_RESULTS,
     reuse_results: bool = True,
     stop_time: Optional[float] = None,
+    realtime: bool = False,
+    config_path: Optional[Path] = None,
 ) -> ScenarioResult:
     scenario = json.loads(scenario_path.read_text())
     if "points" not in scenario:
@@ -557,7 +569,13 @@ def simulate_scenario(
     if needs_simulation:
         if not prepared_ssp.exists():
             raise FileNotFoundError(f"Prepared SSP file not found: {prepared_ssp}")
-        run_with_simulator(prepared_ssp, result_file, stop_time)
+        run_with_simulator(
+            prepared_ssp,
+            result_file,
+            stop_time,
+            realtime=realtime,
+            config_path=config_path,
+        )
 
     metrics = summarize_result_file(result_file, scenario_points=local_points)
     metrics["total_distance_km"] = total_distance
