@@ -475,7 +475,7 @@ def run_with_simulator(
         "ssd": "SystemStructure.ssd",
         "start_time":0.0,
         "stop_time":{stop_time},
-        "timestep": 1.0,
+        "timestep": 0.1,
         "tolerance": 1e-4,
         "realtime": {realtime},
 
