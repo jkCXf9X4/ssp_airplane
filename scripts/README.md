@@ -6,6 +6,12 @@ This directory has three roles:
 - `scripts/workflows/`: multi-step orchestration entrypoints
 - `scripts/lib/`: internal implementation modules used by the command entrypoints
 
+Phase ownership:
+
+- Python owns generation and verification into `generated/`
+- CMake owns build and packaging of FMUs plus the baseline SSP
+- Python owns simulation and analysis through `ssp4sim`
+
 Use the CLI entrypoints as the canonical interface. Examples:
 
 ```bash
@@ -14,6 +20,8 @@ Use the CLI entrypoints as the canonical interface. Examples:
 . venv/bin/activate && python -m scripts.cli.artifacts_export
 . venv/bin/activate && python -m scripts.workflows.rebuild_from_source
 ```
+
+Avoid adding new Python wrappers for CMake build or packaging steps. Prefer direct `cmake` targets for those phases.
 
 Canonical command-to-library ownership:
 
@@ -26,6 +34,4 @@ Canonical command-to-library ownership:
 
 Within `scripts/lib/artifacts/`, prefer the existing subpackage that already owns the task:
 
-- `build/` for builds
-- `package/` for packaging
 - `sysml_export/` for generated export artifacts

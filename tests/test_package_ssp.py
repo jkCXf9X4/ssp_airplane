@@ -1,17 +1,13 @@
 from __future__ import annotations
 
-import sys
+import subprocess
 import zipfile
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-if str(REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(REPO_ROOT))
-
-from scripts.lib.artifacts.package.ssp import package_ssp  # type: ignore  # noqa: E402
 
 
-def test_package_ssp_resolves_modelica_fmu_prefix(tmp_path: Path):
+def test_package_ssp_collects_fmus_referenced_by_ssd(tmp_path: Path):
     ssd = tmp_path / "SystemStructure.ssd"
     ssd.write_text(
         """<?xml version="1.0" encoding="UTF-8"?>
@@ -30,13 +26,21 @@ def test_package_ssp_resolves_modelica_fmu_prefix(tmp_path: Path):
     native_dir = tmp_path / "fmus"
     native_dir.mkdir()
     (native_dir / "FlightGearBridge.fmu").write_text("native", encoding="utf-8")
-
-    modelica_dir = tmp_path / "cmake" / "fmus"
-    modelica_dir.mkdir(parents=True)
-    (modelica_dir / "Aircraft_ControlInterface.fmu").write_text("modelica", encoding="utf-8")
+    (native_dir / "ControlInterface.fmu").write_text("modelica", encoding="utf-8")
 
     output = tmp_path / "aircraft.ssp"
-    package_ssp(fmu_dir=native_dir, ssd=ssd, output=output)
+    subprocess.run(
+        [
+            "cmake",
+            f"-DSSD_PATH={ssd}",
+            f"-DFMU_DIR={native_dir}",
+            f"-DOUTPUT_PATH={output}",
+            f"-DSTAGE_DIR={tmp_path / 'stage'}",
+            "-P",
+            str(REPO_ROOT / "cmake" / "PackageSsp.cmake"),
+        ],
+        check=True,
+    )
 
     with zipfile.ZipFile(output) as archive:
         names = set(archive.namelist())

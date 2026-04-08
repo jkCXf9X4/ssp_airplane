@@ -1,1 +1,1 @@
-"""Internal artifact generation, build, and packaging modules."""
+"""Internal modules for architecture-derived artifact generation."""

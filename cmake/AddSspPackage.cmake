@@ -20,10 +20,10 @@ function(add_ssp_package)
   add_custom_command(
     OUTPUT "${output_ssp}"
     COMMAND "${CMAKE_COMMAND}"
-      -DSSD_PATH="${ASP_SSD}"
-      -DFMU_DIR="${ASP_FMU_DIR}"
-      -DOUTPUT_PATH="${output_ssp}"
-      -DSTAGE_DIR="${stage_dir}"
+      -DSSD_PATH=${ASP_SSD}
+      -DFMU_DIR=${ASP_FMU_DIR}
+      -DOUTPUT_PATH=${output_ssp}
+      -DSTAGE_DIR=${stage_dir}
       -P "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/PackageSsp.cmake"
     DEPENDS
       "${ASP_SSD}"

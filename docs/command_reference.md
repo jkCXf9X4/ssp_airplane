@@ -38,10 +38,6 @@ Methodology summary:
 | Build the native shared library only | `cmake --build build/cmake --target FlightGearBridge` |
 | Package the native FMU from CMake outputs | `cmake --build build/cmake --target FlightGearBridge_fmu` |
 | Package the baseline SSP from built FMUs | `cmake --build build/cmake --target aircraft_ssp` |
-| Package the native FMU | `. venv/bin/activate && python -m scripts.cli.artifacts_package_native_fmus --output-dir build/fmus --build-root build/native` |
-| Package SSP | `. venv/bin/activate && python -m scripts.cli.artifacts_package_ssp --fmu-dir build/fmus --ssd generated/SystemStructure.ssd --output build/ssp/aircraft.ssp` |
-
-The last two packaging commands are compatibility commands. Prefer the CMake packaging targets above.
 
 ## Verification
 

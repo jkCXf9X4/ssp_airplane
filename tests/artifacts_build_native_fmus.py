@@ -7,19 +7,17 @@ import subprocess
 from pathlib import Path
 
 from scripts.lib.paths import (
-    ARCHITECTURE_DIR,
-    COMPOSITION_NAME,
-    DEFAULT_NATIVE_BUILD_ROOT,
+    BUILD_DIR,
     REPO_ROOT,
     ensure_directory,
 )
 
+DEFAULT_TEST_NATIVE_BUILD_ROOT = BUILD_DIR / "native"
+
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Build native FMU shared libraries for tests.")
-    parser.add_argument("--architecture", type=Path, default=ARCHITECTURE_DIR)
-    parser.add_argument("--composition", default=COMPOSITION_NAME)
-    parser.add_argument("--build-root", type=Path, default=DEFAULT_NATIVE_BUILD_ROOT)
+    parser.add_argument("--build-root", type=Path, default=DEFAULT_TEST_NATIVE_BUILD_ROOT)
     parser.add_argument(
         "--models",
         nargs="+",
@@ -29,13 +27,9 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 
 def build_native_fmus(
-    architecture_path: Path = ARCHITECTURE_DIR,
-    composition: str = COMPOSITION_NAME,
-    build_root: Path = DEFAULT_NATIVE_BUILD_ROOT,
+    build_root: Path = DEFAULT_TEST_NATIVE_BUILD_ROOT,
     models: list[str] | None = None,
 ) -> list[Path]:
-    del architecture_path, composition
-
     wanted = set(models or ["FlightGearBridge"])
     supported_targets = {
         "FlightGearBridge": "FlightGearBridge_fmu",
@@ -69,8 +63,6 @@ def build_native_fmus(
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     built = build_native_fmus(
-        architecture_path=args.architecture,
-        composition=args.composition,
         build_root=args.build_root,
         models=args.models,
     )

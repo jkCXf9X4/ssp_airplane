@@ -17,17 +17,9 @@ FMI_HEADERS_DIR = THIRD_PARTY_DIR / "fmi_headers"
 PACKAGE_NAME = "Aircraft"
 COMPOSITION_NAME = "AircraftComposition"
 
-DEFAULT_FMU_OUTPUT_DIR = BUILD_DIR / "fmus"
-DEFAULT_NATIVE_BUILD_ROOT = BUILD_DIR / "native"
-GENERATED_INTERFACE_DIR = GENERATED_DIR / "interfaces"
 GENERATED_MODELICA_DIR = GENERATED_DIR / "modelica"
 GENERATED_MODELICA_COMMON_DIR = GENERATED_MODELICA_DIR / "AircraftCommon"
 GENERATED_MODELICA_INTERFACE_FILE = GENERATED_MODELICA_COMMON_DIR / "GeneratedInterfaces.mo"
-GENERATED_MODEL_DESCRIPTION_DIR = GENERATED_DIR / "model_descriptions"
-
-
-def _snake_case(name: str) -> str:
-    return re.sub(r"(?<!^)(?=[A-Z])", "_", name).lower()
 
 
 def _camel_case(name: str) -> str:
@@ -109,30 +101,6 @@ class ModelicaModelSpec:
         return [COMMON_PACKAGE_FILE, GENERATED_MODELICA_INTERFACE_FILE, self.package_file]
 
 
-@dataclass(frozen=True)
-class NativeFmuProject:
-    instance_name: str
-    model_identifier: str
-    source_root: Path
-    build_dir: Path
-
-    @property
-    def output_name(self) -> str:
-        return f"{self.model_identifier}.fmu"
-
-    @property
-    def generated_model_header(self) -> Path:
-        return GENERATED_INTERFACE_DIR / part_header_name(PACKAGE_NAME, self.model_identifier)
-
-    @property
-    def generated_common_header(self) -> Path:
-        return GENERATED_INTERFACE_DIR / common_header_name(PACKAGE_NAME)
-
-    @property
-    def model_description_path(self) -> Path:
-        return GENERATED_MODEL_DESCRIPTION_DIR / self.model_identifier / "modelDescription.xml"
-
-
 def _select_modelica_package_dir(modelica_dir: Path) -> tuple[Path | None, str | None]:
     package_dirs = sorted(
         path for path in modelica_dir.iterdir()
@@ -199,8 +167,6 @@ def _discover_repository_model_specs() -> list[RepositoryModelSpec]:
 
 
 REPOSITORY_MODEL_SPECS = _discover_repository_model_specs()
-REPOSITORY_MODELS_BY_FOLDER = {spec.folder_name: spec for spec in REPOSITORY_MODEL_SPECS}
-REPOSITORY_MODELS_BY_COMPONENT = {spec.component_name: spec for spec in REPOSITORY_MODEL_SPECS}
 
 DEFAULT_MODELS = [
     spec.component_name
@@ -229,38 +195,6 @@ def spec_by_model_name(model_name: str) -> ModelicaModelSpec:
         if spec.model_name == model_name:
             return spec
     raise KeyError(model_name)
-
-
-def native_model_spec(instance_name: str, model_identifier: str) -> RepositoryModelSpec | None:
-    for folder_name in (instance_name, _snake_case(model_identifier)):
-        spec = REPOSITORY_MODELS_BY_FOLDER.get(folder_name)
-        if spec and spec.has_native:
-            return spec
-    return None
-
-
-def discover_native_projects(
-    architecture_path: Path = ARCHITECTURE_DIR,
-    composition: str = COMPOSITION_NAME,
-    build_root: Path = DEFAULT_NATIVE_BUILD_ROOT,
-) -> list[NativeFmuProject]:
-    from pycps_sysmlv2 import NodeType, SysMLParser
-
-    system = SysMLParser(architecture_path).parse().get_def(NodeType.Part, composition)
-    projects: list[NativeFmuProject] = []
-    for instance_name, part_ref in system.refs(NodeType.Part).items():
-        spec = native_model_spec(instance_name, part_ref.type)
-        if spec is None or spec.native_source_dir is None:
-            continue
-        projects.append(
-            NativeFmuProject(
-                instance_name=instance_name,
-                model_identifier=part_ref.type,
-                source_root=spec.native_source_dir,
-                build_dir=build_root / spec.folder_name,
-            )
-        )
-    return projects
 
 
 def ensure_directory(path: Path) -> Path:
