@@ -52,7 +52,7 @@ equation
   der(yaw_deg)   = (target_yaw_deg   - yaw_deg)   / tauDirection_s;
 
   // Orientation/telemetry outputs follow the current attitude
-  orientation.roll_deg  = roll_deg;
+  orientation.roll_deg  = 0; //roll_deg
   orientation.pitch_deg = pitch_deg;
   orientation.yaw_deg   = yaw_deg;
 
