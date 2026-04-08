@@ -36,7 +36,7 @@ Methodology summary:
 | Package all simulation artifacts explicitly | `cmake --build build/cmake --target package_simulation_artifacts` |
 | Build Modelica FMUs only | `cmake --build build/cmake --target adaptive_wing_system_fmu autopilot_module_fmu composite_airframe_fmu control_interface_fmu environment_fmu fuel_system_fmu input_output_fmu mission_computer_fmu turbofan_propulsion_fmu` |
 | Build the native shared library only | `cmake --build build/cmake --target FlightGearBridge` |
-| Package the native FMU from CMake outputs | `cmake --build build/cmake --target FlightGearBridge_fmu` |
+| Package the native bridge FMU from CMake outputs | `cmake --build build/cmake --target FlightGearBridge_fmu` |
 | Package the baseline SSP from built FMUs | `cmake --build build/cmake --target aircraft_ssp` |
 
 ## Verification
@@ -45,4 +45,4 @@ Methodology summary:
 | --- | --- |
 | Validate SSD XML | `. venv/bin/activate && python -m scripts.cli.verify_ssd_xml --ssd generated/SystemStructure.ssd` |
 | Check autopilot waypoint math | `. venv/bin/activate && pytest tests/test_autopilot_logic.py` |
-| Check FlightGear bridge FMU packaging | `. venv/bin/activate && pytest -q tests/test_flightgear_bridge_fmu.py` |
+| Check native bridge FMU packaging | `. venv/bin/activate && pytest -q tests/test_flightgear_bridge_fmu.py` |

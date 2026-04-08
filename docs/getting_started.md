@@ -82,7 +82,7 @@ cmake --build build/cmake
 This builds the default `build_fmus` target, which:
 
 1. exports each Modelica package to an FMU under `fmus/`
-2. builds the native `FlightGearBridge` shared library
+2. builds the native bridge shared library
 
 This path uses the checked-in `generated/` metadata for the native library build and packages FMUs plus the baseline SSP through CMake. If you change architecture-derived interfaces or model descriptions, regenerate those artifacts before rebuilding.
 

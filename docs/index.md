@@ -21,12 +21,6 @@ Keep pages short, focused, and audience-specific.
 - `dev/autopilot.md`: waypoint handling and quick regression checks
 - `dev/workflow_methodology.md`: phase ownership for Python generation, CMake build/package, and Python simulation
 
-## Integration docs
-
-- `integrations/flightgear/overview.md`: what the FlightGear bridge is and where it fits
-- `integrations/flightgear/decision.md`: architecture decision record for the integration
-- `integrations/flightgear/status.md`: current implementation status and remaining work
-
 ## Reading Order
 
 For most readers, the shortest useful path is:
@@ -35,4 +29,4 @@ For most readers, the shortest useful path is:
 2. `user/scenarios.md`
 3. `user/results.md`
 
-Read the developer and integration sections only when you are working on those areas.
+Read the developer sections only when you are working on those areas.
