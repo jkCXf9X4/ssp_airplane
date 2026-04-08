@@ -10,14 +10,11 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from scripts.lib.common.geo import project_waypoints_to_local_km  # type: ignore  # noqa: E402
 from scripts.lib.results.plots import plot_flight_path, plot_flight_path_3d, plot_fuel_altitude_time  # type: ignore  # noqa: E402
-from scripts.lib.scenarios.simulate import (  # type: ignore  # noqa: E402
-    evaluate_requirements,
-    project_waypoints_to_local_km,
-    scenario_to_string,
-    simulate_scenario,
-    summarize_result_file,
-)
+from scripts.lib.scenarios.packaging import package_ssp_with_parameters  # type: ignore  # noqa: E402
+from scripts.lib.scenarios.preparation import prepare_scenario_for_simulation, scenario_to_string  # type: ignore  # noqa: E402
+from scripts.lib.scenarios.results import analyze_scenario_results, evaluate_requirements, summarize_result_file  # type: ignore  # noqa: E402
 
 
 def test_result_postprocessing_extracts_requirement_metrics():
@@ -51,7 +48,7 @@ def test_scenario_string_round_trip():
     assert s.count(",") == len(s.split(",")) - 1
 
 
-def test_simulation_reuse_produces_summary_and_requirements(tmp_path):
+def test_prepare_and_analyze_produce_summary_and_requirements(tmp_path):
     scenario_path = REPO_ROOT / "build" / "scenarios" / "test_scenario.json"
     source_results = REPO_ROOT / "build" / "results" / "test_scenario_results.csv"
     results_dir = tmp_path / "results"
@@ -59,23 +56,54 @@ def test_simulation_reuse_produces_summary_and_requirements(tmp_path):
     target_results = results_dir / source_results.name
     shutil.copy(source_results, target_results)
 
-    result = simulate_scenario(
+    prepared = prepare_scenario_for_simulation(
         scenario_path=scenario_path,
-        ssp_path=REPO_ROOT / "build" / "ssp" / "aircraft.ssp",
         results_dir=results_dir,
-        reuse_results=True,
-        stop_time=120.0,
     )
+    prepared_ssp_path = package_ssp_with_parameters(
+        ssp_path=REPO_ROOT / "build" / "ssp" / "aircraft.ssp",
+        parameter_set_path=prepared.parameter_set_path,
+        scenario_stem=scenario_path.stem,
+        results_dir=results_dir,
+    )
+    result = analyze_scenario_results(
+        scenario_path=scenario_path,
+        result_file=target_results,
+    )
+    result.parameter_set_path = prepared.parameter_set_path
+    result.prepared_ssp_path = prepared_ssp_path
 
     assert result.result_file == target_results
     assert result.used_oms
     assert result.requirement_evaluations
     assert result.scenario_string
+    assert result.parameter_set_path == prepared.parameter_set_path
+    assert result.prepared_ssp_path == prepared_ssp_path
+    assert prepared_ssp_path.exists()
 
     requirement_ids = {req.identifier for req in result.requirement_evaluations}
     assert {"REQ_Performance", "REQ_Fuel", "REQ_Control", "REQ_Mission", "REQ_Propulsion"} <= requirement_ids
 
     summary_path = results_dir / f"{scenario_path.stem}_summary.json"
+    assert summary_path.exists()
+
+
+def test_analyze_scenario_results_writes_summary(tmp_path):
+    scenario_path = REPO_ROOT / "build" / "scenarios" / "test_scenario.json"
+    source_results = REPO_ROOT / "build" / "results" / "test_scenario_results.csv"
+    results_dir = tmp_path / "results"
+    results_dir.mkdir()
+    target_results = results_dir / source_results.name
+    summary_path = results_dir / "evaluated_summary.json"
+    shutil.copy(source_results, target_results)
+
+    result = analyze_scenario_results(
+        scenario_path=scenario_path,
+        result_file=target_results,
+        summary_path=summary_path,
+    )
+
+    assert result.requirement_evaluations
     assert summary_path.exists()
 
 

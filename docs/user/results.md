@@ -1,6 +1,6 @@
 # Results
 
-When `scripts.cli.scenarios_simulate` runs, it writes output artifacts into `build/results/`.
+The scenario preparation, SSP packaging, config writing, simulation, and result-evaluation CLIs write output artifacts into `build/results/`.
 
 ## Main artifacts
 

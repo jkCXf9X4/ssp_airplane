@@ -2,8 +2,22 @@
 from __future__ import annotations
 
 import csv
+import sys
 from pathlib import Path
 from typing import Dict, List, Sequence
+
+
+def _set_max_csv_field_size() -> None:
+    field_limit = sys.maxsize
+    while True:
+        try:
+            csv.field_size_limit(field_limit)
+            return
+        except OverflowError:
+            field_limit //= 10
+
+
+_set_max_csv_field_size()
 
 
 def numeric_series(

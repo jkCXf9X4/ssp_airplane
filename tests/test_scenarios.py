@@ -10,7 +10,8 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from scripts.lib.scenarios.generate import generate_scenario  # type: ignore  # noqa: E402
-from scripts.lib.scenarios.simulate import simulate_scenario  # type: ignore  # noqa: E402
+from scripts.lib.scenarios.preparation import prepare_scenario_for_simulation  # type: ignore  # noqa: E402
+from scripts.lib.scenarios.results import analyze_scenario_results  # type: ignore  # noqa: E402
 
 USE_CASE_DIR = REPO_ROOT / "resources" / "scenarios"
 
@@ -39,10 +40,13 @@ def test_high_altitude_intercept_meets_performance_requirement(tmp_path):
     if not target_results.exists():
         shutil.copy(source_results, target_results)
 
-    result = simulate_scenario(
+    prepare_scenario_for_simulation(
         scenario_path=path,
         results_dir=results_dir,
-        reuse_results=True,
+    )
+    result = analyze_scenario_results(
+        scenario_path=path,
+        result_file=target_results,
     )
     performance_eval = next(req for req in result.requirement_evaluations if req.identifier == "REQ_Performance")
     fuel_eval = next(req for req in result.requirement_evaluations if req.identifier == "REQ_Fuel")

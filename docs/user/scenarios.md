@@ -18,7 +18,11 @@ The curated scenarios in `resources/scenarios/` connect mission intent to requir
 
 ## How scenarios are used
 
-- `scripts.cli.scenarios_simulate` reads the scenario JSON and produces result artifacts in `build/results/`.
+- `scripts.cli.scenarios_prepare_waypoints` reads the scenario JSON and emits the waypoint artifacts in `build/results/`.
+- `scripts.cli.scenarios_package_ssp` injects the generated parameter set into a prepared run SSP.
+- `scripts.cli.scenarios_write_config` writes the simulator config for the prepared SSP.
+- `scripts.cli.scenarios_run_ssp4sim` runs the simulation from that config.
+- `scripts.cli.scenarios_evaluate_results` compares the results CSV against requirement metrics and writes the summary JSON.
 - Tests reuse the curated scenarios and canned reference data to catch regressions without always running a full simulation.
 
 ## Next Doc

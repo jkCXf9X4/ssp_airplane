@@ -19,7 +19,11 @@ Methodology summary:
 
 | Task | Command |
 | --- | --- |
-| Reuse existing results | `. venv/bin/activate && python -m scripts.cli.scenarios_simulate --scenario resources/scenarios/test_scenario.json --reuse-results` |
+| Prepare scenario waypoints | `. venv/bin/activate && python -m scripts.cli.scenarios_prepare_waypoints --scenario resources/scenarios/test_scenario.json` |
+| Package scenario SSP | `. venv/bin/activate && python -m scripts.cli.scenarios_package_ssp --parameter-set build/results/test_scenario_waypoints.ssv --scenario-stem test_scenario` |
+| Write simulator config | `. venv/bin/activate && python -m scripts.cli.scenarios_write_config --prepared-ssp build/results/test_scenario_run/test_scenario.ssp --result-file build/results/test_scenario_results.csv --stop-time 120` |
+| Run simulator | `. venv/bin/activate && python -m scripts.cli.scenarios_run_ssp4sim --config-path build/results/config.json` |
+| Evaluate results against requirements | `. venv/bin/activate && python -m scripts.cli.scenarios_evaluate_results --scenario resources/scenarios/test_scenario.json --results-csv build/results/test_scenario_results.csv` |
 | Configure source builds under `build/cmake` | `cmake -S . -B build/cmake` |
 | Build all FMUs from `build/cmake` | `cmake --build build/cmake` |
 | Plot a path overlay | `. venv/bin/activate && python -m scripts.cli.analyze_plot --results-csv build/results/test_scenario_results.csv --scenario resources/scenarios/test_scenario.json --plot-path` |

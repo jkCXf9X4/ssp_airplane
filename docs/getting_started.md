@@ -33,9 +33,20 @@ python -m pip install -r requirements.txt
 ### First command to run
 
 ```bash
-. venv/bin/activate && python -m scripts.cli.scenarios_simulate \
+. venv/bin/activate && python -m scripts.cli.scenarios_prepare_waypoints \
+  --scenario resources/scenarios/test_scenario.json
+. venv/bin/activate && python -m scripts.cli.scenarios_package_ssp \
+  --parameter-set build/results/test_scenario_waypoints.ssv \
+  --scenario-stem test_scenario
+. venv/bin/activate && python -m scripts.cli.scenarios_write_config \
+  --prepared-ssp build/results/test_scenario_run/test_scenario.ssp \
+  --result-file build/results/test_scenario_results.csv \
+  --stop-time 120
+. venv/bin/activate && python -m scripts.cli.scenarios_run_ssp4sim \
+  --config-path build/results/config.json
+. venv/bin/activate && python -m scripts.cli.scenarios_evaluate_results \
   --scenario resources/scenarios/test_scenario.json \
-  --reuse-results
+  --results-csv build/results/test_scenario_results.csv
 ```
 
 ### Expected outputs
