@@ -28,9 +28,7 @@ python3.11 -m venv venv
 . venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
-python -m scripts.cli.scenarios_simulate \
-  --scenario resources/scenarios/test_scenario.json \
-  --reuse-results
+python ./scripts/workflows/rebuild_from_source.py 
 ```
 
 That command reuses the reference CSV when present and writes derived outputs into `build/results/`.
