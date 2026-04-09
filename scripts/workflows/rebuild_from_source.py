@@ -23,7 +23,13 @@ def run_step(*args: str) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.parse_args(argv)
+    parser.add_argument(
+        "--run-simulation",
+        action="store_true",
+        help="Run simulation",
+    )
+
+    args = parser.parse_args(argv)
 
     omc_path = os.environ.get("OMC") or shutil.which("omc")
     if not omc_path:
@@ -120,22 +126,23 @@ def main(argv: list[str] | None = None) -> int:
         "--config-path",
         str(config_path),
     )
-    run_step(
-        sys.executable,
-        "-m",
-        "scripts.cli.scenarios_run_ssp4sim",
-        "--config-path",
-        str(config_path),
-    )
-    run_step(
-        sys.executable,
-        "-m",
-        "scripts.cli.scenarios_evaluate_results",
-        "--scenario",
-        str(scenario_path),
-        "--results-csv",
-        str(result_file),
-    )
+    if args.run_simulation:
+        run_step(
+            sys.executable,
+            "-m",
+            "scripts.cli.scenarios_run_ssp4sim",
+            "--config-path",
+            str(config_path),
+        )
+        run_step(
+            sys.executable,
+            "-m",
+            "scripts.cli.scenarios_evaluate_results",
+            "--scenario",
+            str(scenario_path),
+            "--results-csv",
+            str(result_file),
+        )
     return 0
 
 
