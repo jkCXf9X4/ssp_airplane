@@ -5,6 +5,7 @@
 
 * Type: Single-engine multirole fighter
 * Crew: 1
+* Subsonic cruise (fuel-efficient flight): 250 m/s
 
 ---
 
@@ -25,12 +26,13 @@
 
 ## Performance
 
-* Maximum speed: Mach 2.0+ (~2,120 km/h at altitude)
+* Maximum speed: Mach 2.0+ (~2,120 km/h or 650m/s at altitude)
 * Combat radius: 550–800 km (depending on mission type)
 * Ferry range: ~3,700 km with external tanks
 * Service ceiling: 15,240+ m
 * Rate of climb: ~15,240 m/min
 * Load factor: +9 g
+
 
 ---
 

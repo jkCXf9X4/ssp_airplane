@@ -8,10 +8,10 @@ model AutopilotModule
   constant Real radToDeg = 180 / Constants.pi;
 
   parameter Real updateRateHz = 40;
-  parameter Real defaultThrottle = 0.7;
-  parameter Real targetAirspeed_mps = 75 "Nominal airspeed to hold during cruise/climb";
+  parameter Real defaultThrottle = 0.5;
+  parameter Real targetAirspeed_mps = 200 "Nominal airspeed to hold during cruise/climb";
   parameter Real airspeedToThrottleGain = 0.003 "Throttle gain per m/s airspeed error";
-  parameter Real climbRateToThrottleGain = 0.01 "Throttle gain per m/s climb to counter speed bleed";
+  parameter Real climbRateToThrottleGain = 0.001 "Throttle gain per m/s climb to counter speed bleed";
   parameter Real minThrottleCommand = 0.2 "Lower bound for throttle command";
 
   // Heading and altitude control gains
@@ -138,8 +138,10 @@ equation
                    max(-1.0,
                        min(1.0, pitchAngleGain * pitchError_deg)));
 
+// Simple solution, should most likely switch to pid regulated, good enough for now
   // Throttle: bias toward cruise throttle, add airspeed deficit + climb feed-forward
   throttleFromAirspeed = airspeedToThrottleGain * (targetAirspeed_mps - feedbackBus.airspeed_mps);
+  // throttleFromClimb most likely give way to much, fine for now
   throttleFromClimb = climbRateToThrottleGain * max(0, feedbackBus.climb_rate);
   throttleCmd_raw = noEvent(
                          max(minThrottleCommand, min(1.0, defaultThrottle + throttleFromAirspeed + throttleFromClimb)));
