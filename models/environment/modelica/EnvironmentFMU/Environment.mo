@@ -60,11 +60,8 @@ equation
   heading_rad  = yaw_deg * Modelica.Constants.pi / 180;
   pitch_heading_rad = pitch_deg * Modelica.Constants.pi / 180;
 
-  base_speed_ms = max(minAirspeed_mps,
-                      thrust_in.thrust_kn * thrustToSpeedGain);
-  ground_speed_unclamped_ms = base_speed_ms *
-                              max(0.5,
-                                  1 - climbBleedFraction * max(0, sin(pitch_heading_rad)));
+  base_speed_ms = max(minAirspeed_mps, thrust_in.thrust_kn * thrustToSpeedGain);
+  ground_speed_unclamped_ms = base_speed_ms * max(0.5, 1 - climbBleedFraction * max(0, sin(pitch_heading_rad)));
   ground_speed_ms = max(minAirspeed_mps, ground_speed_unclamped_ms);
 
   climb_rate = ground_speed_ms * sin(pitch_heading_rad);

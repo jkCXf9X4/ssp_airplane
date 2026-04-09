@@ -64,7 +64,9 @@ def validate_scenario_points(points: List[Dict[str, float]]) -> None:
 def emit_waypoint_parameter_set(
     local_points: List[Dict[str, float]],
     output_path: Path,
-    component: str = "AutopilotModule",
+    component: str = "autopilot_module",
+    environment_component: str = "environment",
+    control_component: str = "control_interface",
     enable_bridge_input: bool = False,
 ) -> Path:
     ns = "http://ssp-standard.org/SSP1/ParameterValues"
@@ -77,15 +79,18 @@ def emit_waypoint_parameter_set(
         value_elem = ET.SubElement(param_elem, f"{{{ns}}}{type_tag}")
         value_elem.set("value", value)
 
-    add_param("ControlInterface.useBridgeInput", "Boolean", "true" if enable_bridge_input else "false")
+    add_param(f"{control_component}.useBridgeInput", "Boolean", "true" if enable_bridge_input else "false")
 
     if local_points:
         first = local_points[0]
-        add_param("Environment.initX_km", "Real", f"{float(first['x_km']):.3f}")
-        add_param("Environment.initY_km", "Real", f"{float(first['y_km']):.3f}")
-        add_param("Environment.initZ_km", "Real", f"{float(first.get('z_km', 0.0)):.3f}")
+        add_param(f"{environment_component}.initX_km", "Real", f"{float(first['x_km']):.3f}")
+        add_param(f"{environment_component}.initY_km", "Real", f"{float(first['y_km']):.3f}")
+        add_param(f"{environment_component}.initZ_km", "Real", f"{float(first.get('z_km', 0.0)):.3f}")
 
-        for idx, point in enumerate(local_points[1:], start=1):
+        # SSP connectors for list-valued parameters are exposed with zero-based indices.
+        # local_points[0] is the initial aircraft position, so the first target waypoint
+        # must bind to index 0.
+        for idx, point in enumerate(local_points[1:]):
             add_param(f"{component}.waypointX_km[{idx}]", "Real", f"{float(point['x_km']):.3f}")
             add_param(f"{component}.waypointY_km[{idx}]", "Real", f"{float(point['y_km']):.3f}")
             add_param(f"{component}.waypointZ_km[{idx}]", "Real", f"{float(point.get('z_km', 0.0)):.3f}")
