@@ -1,5 +1,5 @@
 package Aircraft {
-  doc /* Reconfigured to model an F-16 Fighting Falcon multirole fighter with single-engine propulsion and manned cockpit. *
+  doc /* Reconfigured to model an F-16 Fighting Falcon multirole fighter with single-engine propulsion and manned cockpit. */
 
 
   part def ControlInterface {
