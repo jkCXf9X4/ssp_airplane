@@ -1,6 +1,6 @@
 package Aircraft {
 
-  import Aircraft_Subsystems::*;
+  import Aircraft::Subsystems::*;
 
 
   part def Composition {
