@@ -1,9 +1,13 @@
 
 // Document simulation specific requirements and choices
 
-package Aircraft {
-  requirement def Requirement_REQ_Simulation_1 { doc /* The system should be packaged and simulated as a SSP (system structure and parameterization) artifact */ }
-  requirement def Requirement_REQ_Simulation_2 { doc /* All models should be packaged as FMUs */ }
+package SimulationRequirements {
+  requirement def Requirement_REQ_Simulation_1 {
+    doc /* The system should be packaged and simulated as a SSP (system structure and parameterization) artifact */
+  }
+  requirement def Requirement_REQ_Simulation_2 {
+    doc /* All models should be packaged as FMUs */
+  }
 
   // --- Solution specific choices ---
 

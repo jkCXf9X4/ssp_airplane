@@ -1,16 +1,40 @@
-package Aircraft {
+package Aircraft_Interfaces {
+
+  import ScalarValues::*;
+
   port def PilotCommand {
     doc /* HOTAS-style control payload shared across control surfaces and mission computer consumers. */
-    attribute stick_pitch_norm: Real;   /* -1..1, aft pull positive */
-    attribute stick_roll_norm: Real;    /* -1..1, left deflection positive */
-    attribute rudder_norm: Real;        /* -1..1, pedal/twist input */
-    attribute throttle_norm: Real;      /* 0..1 primary throttle */
-    attribute throttle_aux_norm: Real;  /* 0..1 aux slider or second throttle */
-    attribute button_mask: Integer;     /* bitfield: trigger1, trigger2, weapon_release, gear, master_arm, autopilot, comms, countermeasure, flaps_up, flaps_down */
-    attribute hat_x: Integer;           /* -1=left,0=center,1=right */
-    attribute hat_y: Integer;           /* -1=down,0=center,1=up */
-    attribute mode_switch: Integer;     /* 0=Manual,1=Assist,2=RTB,3=Auto */
-    attribute reserved: Integer;        /* alignment / future discrete inputs */
+    attribute stick_pitch_norm: Real {
+      /* -1..1, aft pull positive */
+      doc /* Primary pitch axis input for the HOTAS payload. */
+    }
+    attribute stick_roll_norm: Real {
+      /* -1..1, left deflection positive */
+    }
+    attribute rudder_norm: Real {
+      /* -1..1, pedal/twist input */
+    }
+    attribute throttle_norm: Real {
+      /* 0..1 primary throttle */
+    }
+    attribute throttle_aux_norm: Real {
+      /* 0..1 aux slider or second throttle */
+    }
+    attribute button_mask: Integer {
+      /* bitfield: trigger1, trigger2, weapon_release, gear, master_arm, autopilot, comms, countermeasure, flaps_up, flaps_down */
+    }
+    attribute hat_x: Integer {
+      /* -1=left,0=center,1=right */
+    }
+    attribute hat_y: Integer {
+      /* -1=down,0=center,1=up */
+    }
+    attribute mode_switch: Integer {
+      /* 0=Manual,1=Assist,2=RTB,3=Auto */
+    }
+    attribute reserved: Integer {
+      /* alignment / future discrete inputs */
+    }
   }
 
   port def OrientationEuler {
@@ -86,7 +110,5 @@ package Aircraft {
     attribute arrived: Boolean;
     attribute complete: Boolean;
   }
-
-
 
 }
