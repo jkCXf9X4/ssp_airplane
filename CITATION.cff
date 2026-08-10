@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "ssp_airplane"
+abstract: "System structure and simulation workflow for an F-16-inspired aircraft model, combining SysML architecture sources, Modelica and native FMU implementations, and Python generation, verification, and workflow tooling."
+authors:
+  - family-names: "Rosenlund"
+    given-names: "Erik"
+    orcid: "https://orcid.org/0009-0000-4238-3271"
+date-released: "2025-01-01"
+version: "0.1.0"
+license: "MIT"
+keywords:
+  - "system structure and parametrization"
+  - "SSP"
+  - "FMU"
+  - "FMI"
+  - "SysML"
+  - "aircraft simulation"
+  - "Modelica"
+url: "https://github.com/jkCXf9X4/ssp_airplane"
+repository-code: "https://github.com/jkCXf9X4/ssp_airplane"
