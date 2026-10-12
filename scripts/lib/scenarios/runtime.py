@@ -48,10 +48,12 @@ def create_simulation_config(
                 },
             },
             "recording": {
-                "enable": True,
                 "wait_for": True,
-                "interval": 0.25,
-                "result_file": result_file.as_posix(),
+                "csv": {
+                    "enable": True,
+                    "file": result_file.as_posix(),
+                    "interval": 0.25,
+                },
             },
             "log": {
                 "file": "./build/results/sim.log",

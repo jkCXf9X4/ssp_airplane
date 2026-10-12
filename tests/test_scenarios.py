@@ -54,7 +54,7 @@ def test_high_altitude_intercept_meets_performance_requirement(tmp_path):
     assert fuel_eval.passed
 
 
-def test_emit_waypoint_parameter_set_uses_instance_names_and_zero_based_indices(tmp_path: Path) -> None:
+def test_emit_waypoint_parameter_set_uses_instance_names_and_one_based_indices(tmp_path: Path) -> None:
     output = tmp_path / "waypoints.ssv"
     emit_waypoint_parameter_set(
         [
@@ -63,6 +63,8 @@ def test_emit_waypoint_parameter_set_uses_instance_names_and_zero_based_indices(
             {"x_km": 20.0, "y_km": 4.0, "z_km": 2.5},
         ],
         output,
+        waypoint_proximity_km=2.5,
+        target_airspeed_mps=240.0,
     )
 
     text = output.read_text(encoding="utf-8")
@@ -70,12 +72,17 @@ def test_emit_waypoint_parameter_set_uses_instance_names_and_zero_based_indices(
     assert 'name="environment.initX_km"' in text
     assert 'name="environment.initY_km"' in text
     assert 'name="environment.initZ_km"' in text
-    assert 'name="autopilot_module.waypointX_km[0]"' in text
-    assert 'name="autopilot_module.waypointY_km[0]"' in text
-    assert 'name="autopilot_module.waypointZ_km[0]"' in text
-    assert 'value="12.500"' in text
+    assert 'name="autopilot_module.waypointX_km[0]"' not in text
     assert 'name="autopilot_module.waypointX_km[1]"' in text
-    assert 'name="autopilot_module.waypointCount"' in text
-    assert 'value="2"' in text
+    assert 'value="12.500"' in text
+    assert 'name="autopilot_module.waypointX_km[2]"' in text
+    assert 'value="20.000"' in text
+    # The FMU array is a fixed size, so short missions are padded to fill every slot.
+    assert 'name="autopilot_module.waypointX_km[10]"' in text
+    assert "waypointCount" not in text
+    assert 'name="autopilot_module.waypointProximity_km"' in text
+    assert 'value="2.500"' in text
+    assert 'name="autopilot_module.targetAirspeed_mps"' in text
+    assert 'value="240.000"' in text
     assert 'name="AutopilotModule.waypointX_km[1]"' not in text
     assert 'name="Environment.initX_km"' not in text
