@@ -4,9 +4,20 @@ import json
 import sys
 from pathlib import Path
 
-REPO_TOP = Path(__file__).resolve().parents[3]
-if str(REPO_TOP) not in sys.path:
-    sys.path.insert(0, str(REPO_TOP))
+import pytest
+
+_TEST_FILE = Path(__file__).resolve()
+_CANDIDATE_ROOTS = (
+    _TEST_FILE.parents[3],  # embedded layout: test_flight_simulator/3rd_party/airplane/tests
+    _TEST_FILE.parents[2] / "test_flight_simulator",  # standalone layout: sibling workspace
+)
+ROS2_BRIDGE_ROOT = next((root for root in _CANDIDATE_ROOTS if (root / "ros2_bridge").is_dir()), None)
+
+if ROS2_BRIDGE_ROOT is None:
+    pytest.skip("ros2_bridge package not found (expected in the flight simulator workspace)", allow_module_level=True)
+
+if str(ROS2_BRIDGE_ROOT) not in sys.path:
+    sys.path.insert(0, str(ROS2_BRIDGE_ROOT))
 
 from ros2_bridge.common import encode_control_packet, load_local_waypoints, parse_state_packet  # noqa: E402
 
