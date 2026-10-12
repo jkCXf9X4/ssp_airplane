@@ -61,6 +61,41 @@ def validate_scenario_points(points: List[Dict[str, float]]) -> None:
                 raise ValueError(f"Point {idx} has implausible altitude: {alt}")
 
 
+WAYPOINT_ARRAY_SIZE = 10  # AutopilotModule.mo fixed waypoint array size.
+WAYPOINT_PROXIMITY_KM = 10.0  # AutopilotModule.mo default arrival radius.
+
+
+def _pad_waypoint_hops(
+    local_points: List[Dict[str, float]], targets: List[Dict[str, float]], proximity_km: float
+) -> List[Dict[str, float]]:
+    """Extend the target list to the FMU's fixed array size.
+
+    Arrivals only retrigger once the aircraft leaves the arrival radius of the
+    next waypoint, so the padding continues along the final leg with hops that
+    exceed the proximity threshold.
+    """
+    last = targets[-1] if targets else local_points[0]
+    if len(targets) > 1:
+        previous = targets[-2]
+    else:
+        previous = {"x_km": last["x_km"] - 1.0, "y_km": last["y_km"]}
+    dx = last["x_km"] - previous["x_km"]
+    dy = last["y_km"] - previous["y_km"]
+    norm = math.hypot(dx, dy) or 1.0
+    hop_km = proximity_km + 2.0
+    padded = list(targets)
+    for step in range(1, WAYPOINT_ARRAY_SIZE - len(targets) + 1):
+        distance = hop_km * step
+        padded.append(
+            {
+                "x_km": last["x_km"] + dx / norm * distance,
+                "y_km": last["y_km"] + dy / norm * distance,
+                "z_km": last.get("z_km", 0.0),
+            }
+        )
+    return padded
+
+
 def emit_waypoint_parameter_set(
     local_points: List[Dict[str, float]],
     output_path: Path,
@@ -68,6 +103,8 @@ def emit_waypoint_parameter_set(
     environment_component: str = "environment",
     control_component: str = "control_interface",
     enable_bridge_input: bool = False,
+    waypoint_proximity_km: float | None = None,
+    target_airspeed_mps: float | None = None,
 ) -> Path:
     ns = "http://ssp-standard.org/SSP1/ParameterValues"
     ET.register_namespace("ssv", ns)
@@ -87,15 +124,25 @@ def emit_waypoint_parameter_set(
         add_param(f"{environment_component}.initY_km", "Real", f"{float(first['y_km']):.3f}")
         add_param(f"{environment_component}.initZ_km", "Real", f"{float(first.get('z_km', 0.0)):.3f}")
 
-        # SSP connectors for list-valued parameters are exposed with zero-based indices.
-        # local_points[0] is the initial aircraft position, so the first target waypoint
-        # must bind to index 0.
-        for idx, point in enumerate(local_points[1:]):
+        targets = local_points[1:]
+        if len(targets) > WAYPOINT_ARRAY_SIZE:
+            raise ValueError(
+                f"Scenario has {len(targets)} waypoints but the autopilot array holds at most {WAYPOINT_ARRAY_SIZE}."
+            )
+        targets = _pad_waypoint_hops(local_points, targets, float(waypoint_proximity_km or WAYPOINT_PROXIMITY_KM))
+
+        # Modelica arrays are one-based: waypointX_km[1] is the first target.
+        # waypointCount is a calculatedParameter in the FMU (fixed at WAYPOINT_ARRAY_SIZE)
+        # and cannot be overridden from the parameter set.
+        for idx, point in enumerate(targets, start=1):
             add_param(f"{component}.waypointX_km[{idx}]", "Real", f"{float(point['x_km']):.3f}")
             add_param(f"{component}.waypointY_km[{idx}]", "Real", f"{float(point['y_km']):.3f}")
             add_param(f"{component}.waypointZ_km[{idx}]", "Real", f"{float(point.get('z_km', 0.0)):.3f}")
 
-    add_param(f"{component}.waypointCount", "Integer", str(len(local_points) - 1))
+    if waypoint_proximity_km is not None:
+        add_param(f"{component}.waypointProximity_km", "Real", f"{float(waypoint_proximity_km):.3f}")
+    if target_airspeed_mps is not None:
+        add_param(f"{component}.targetAirspeed_mps", "Real", f"{float(target_airspeed_mps):.3f}")
 
     tree = ET.ElementTree(root)
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -129,7 +176,13 @@ def prepare_scenario_for_simulation(
     waypoints_file.write_text(scenario_string)
 
     parameter_set_path = results_dir / f"{scenario_path.stem}_waypoints.ssv"
-    emit_waypoint_parameter_set(local_points, parameter_set_path, enable_bridge_input=bridge_input)
+    emit_waypoint_parameter_set(
+        local_points,
+        parameter_set_path,
+        enable_bridge_input=bridge_input,
+        waypoint_proximity_km=overrides.get("waypoint_proximity_km"),
+        target_airspeed_mps=overrides.get("target_airspeed_mps"),
+    )
 
     return PreparedScenario(
         scenario=scenario,
