@@ -4,6 +4,7 @@ import json
 import sys
 from pathlib import Path
 import shutil
+import zipfile
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
@@ -54,7 +55,7 @@ def test_high_altitude_intercept_meets_performance_requirement(tmp_path):
     assert fuel_eval.passed
 
 
-def test_emit_waypoint_parameter_set_uses_bare_names_and_zero_based_indices(tmp_path: Path) -> None:
+def test_emit_waypoint_parameter_set_uses_bare_names_and_one_based_indices(tmp_path: Path) -> None:
     output = tmp_path / "waypoints.ssv"
     emit_waypoint_parameter_set(
         [
@@ -72,16 +73,17 @@ def test_emit_waypoint_parameter_set_uses_bare_names_and_zero_based_indices(tmp_
     assert 'name="initX_km"' in text
     assert 'name="initY_km"' in text
     assert 'name="initZ_km"' in text
-    assert 'name="waypointX_km[0]"' in text
-    assert 'value="12.500"' in text
+    assert 'name="waypointX_km[0]"' not in text
     assert 'name="waypointX_km[1]"' in text
+    assert 'value="12.500"' in text
+    assert 'name="waypointX_km[2]"' in text
     assert 'value="20.000"' in text
     # The scenario parameter set carries bare member names; component qualification
     # is applied later by the SSM mapping at bind time (packaging).
-    assert 'name="autopilot_module.waypointX_km[0]"' not in text
+    assert 'name="autopilot_module.waypointX_km[1]"' not in text
     assert 'name="control_interface.useBridgeInput"' not in text
-    # Zero-based indices matching the analysis SSM targets.
-    assert 'name="waypointX_km[10]"' not in text
+    # One-based indices matching the analysis SSM targets.
+    assert 'name="waypointX_km[10]"' in text
     assert "waypointCount" not in text
     assert 'name="waypointProximity_km"' in text
     assert 'value="2.500"' in text
@@ -91,9 +93,8 @@ def test_emit_waypoint_parameter_set_uses_bare_names_and_zero_based_indices(tmp_
     assert 'name="Environment.initX_km"' not in text
 
 
-def test_packaging_shifts_modelica_array_indices_to_one_based(tmp_path: Path) -> None:
+def test_packaging_binds_one_based_scenario_set(tmp_path: Path) -> None:
     from scripts.lib.scenarios.packaging import package_ssp_with_parameters  # type: ignore  # noqa: F401
-    from pyssp_standard import SSV
 
     output = tmp_path / "waypoints.ssv"
     emit_waypoint_parameter_set(
@@ -123,12 +124,12 @@ def test_packaging_shifts_modelica_array_indices_to_one_based(tmp_path: Path) ->
         analysis_descriptor_path=REPO_ROOT / "generated" / "analysis" / "analysis.json",
     )
 
-    bound_ssv = results_dir / "mission_run" / "MissionScenario.ssv"
-    with SSV(bound_ssv) as ssv:
-        names = set(ssv.parameters_by_name())
-    # Zero-based in the emitted set become one-based on the bound Modelica FMUs.
-    assert "waypointX_km[0]" not in names
-    assert "waypointX_km[1]" in names
-    assert "waypointX_km[10]" in names
-    assert "initX_km" in names
-    assert "useBridgeInput" in names
+    prepared_ssp = results_dir / "mission_run" / "mission.ssp"
+    with zipfile.ZipFile(prepared_ssp) as archive:
+        text = archive.read("resources/MissionScenario.ssv").decode()
+    # Emitted and bound sets are natively one-based.
+    assert "waypointX_km[0]" not in text
+    assert 'name="waypointX_km[1]"' in text
+    assert 'name="waypointX_km[10]"' in text
+    assert 'name="initX_km"' in text
+    assert 'name="useBridgeInput"' in text

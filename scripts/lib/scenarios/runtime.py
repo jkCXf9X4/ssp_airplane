@@ -25,6 +25,7 @@ def create_simulation_config(
     stop_time: float,
     log_fmu: bool = False,
     realtime: bool = False,
+    recording_interval: float = 0.25,
 ) -> dict[str, Any]:
     return {
         "simulation": {
@@ -52,7 +53,7 @@ def create_simulation_config(
                 "csv": {
                     "enable": True,
                     "file": result_file.as_posix(),
-                    "interval": 0.25,
+                    "interval": recording_interval,
                 },
             },
             "log": {

@@ -55,6 +55,10 @@ wd/
 
 __pycache__/
 
+## CMake in-source build artefacts (canonical build dir is /build/cmake)
 CMakeFiles/
-
 CMakeCache.txt
+Makefile
+cmake_install.cmake
+*.so
+*.so.*

@@ -23,7 +23,7 @@ def _read_components(output_path: Path):
 
 def test_parameter_connectors_emitted_for_attributes(tmp_path: Path):
     output = tmp_path / "SystemStructure.ssd"
-    generate_ssd(REPO_ROOT / "architecture", output, COMPOSITION)
+    generate_ssd(REPO_ROOT / "architecture", output, COMPOSITION, base_index=1)
     normalize_ssd_xml(output)
     components = _read_components(output)
 
@@ -42,7 +42,7 @@ def test_parameter_connectors_emitted_for_attributes(tmp_path: Path):
 
 def test_string_parameters_preserve_type(tmp_path: Path):
     output = tmp_path / "SystemStructure.ssd"
-    generate_ssd(REPO_ROOT / "architecture", output, COMPOSITION)
+    generate_ssd(REPO_ROOT / "architecture", output, COMPOSITION, base_index=1)
     normalize_ssd_xml(output)
     components = _read_components(output)
 
@@ -59,7 +59,7 @@ def test_string_parameters_preserve_type(tmp_path: Path):
 
 def test_list_parameters_infer_numeric_type(tmp_path: Path):
     output = tmp_path / "SystemStructure.ssd"
-    generate_ssd(REPO_ROOT / "architecture", output, COMPOSITION)
+    generate_ssd(REPO_ROOT / "architecture", output, COMPOSITION, base_index=1)
     normalize_ssd_xml(output)
     components = _read_components(output)
 
@@ -69,14 +69,14 @@ def test_list_parameters_infer_numeric_type(tmp_path: Path):
         for connector in autopilot.connectors
         if connector.kind == "parameter" and connector.type_name == "Real"
     }
-    expected = {f"waypoint{axis}_km[{idx}]" for axis in ("X", "Y", "Z") for idx in range(10)}
+    expected = {f"waypoint{axis}_km[{idx}]" for axis in ("X", "Y", "Z") for idx in range(1, 11)}
     missing = expected - real_arrays
     assert not missing, f"Waypoint vector parameters should be exposed as Real connectors, missing: {sorted(missing)}"
 
 
 def test_composition_name_is_aircraft_model(tmp_path: Path):
     output = tmp_path / "SystemStructure.ssd"
-    generate_ssd(REPO_ROOT / "architecture", output, COMPOSITION)
+    generate_ssd(REPO_ROOT / "architecture", output, COMPOSITION, base_index=1)
     with SSD(output, mode="r") as ssd:
         assert ssd.system is not None
         assert ssd.system.name == "AircraftModel"

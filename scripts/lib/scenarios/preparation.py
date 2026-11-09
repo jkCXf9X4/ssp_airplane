@@ -117,12 +117,12 @@ def emit_waypoint_parameter_set(
     """Clone the generated scenario parameter set and override the waypoints.
 
     The baseline ``GENERATED_SCENARIO_SSV`` carries the architecture's bare
-    scenario member names (``waypointX_km[0..9]``, ``initX_km``,
+    scenario member names (``waypointX_km[1..10]``, ``initX_km``,
     ``useBridgeInput``, ...) that the analysis SSM maps onto component
     parameters. This helper copies the baseline to ``output_path`` and
     overrides the members the scenario drives, so the result stays on the bare
-    name scheme the SSM applies. Waypoint indices are zero-based to match the
-    SSM mapping targets.
+    name scheme the SSM applies. Waypoint indices are one-based to match the
+    SSM mapping targets and the FMU-declared array indices.
     """
     if not baseline_path.is_file():
         raise FileNotFoundError(
@@ -156,9 +156,9 @@ def emit_waypoint_parameter_set(
                 )
             targets = _pad_waypoint_hops(local_points, targets, float(waypoint_proximity_km or WAYPOINT_PROXIMITY_KM))
 
-            # Zero-based indices matching the analysis SSM targets, e.g.
-            # source="waypointX_km[0]" -> target="autopilot_module.waypointX_km[0]".
-            for idx, point in enumerate(targets, start=0):
+            # One-based indices matching the analysis SSM targets, e.g.
+            # source="waypointX_km[1]" -> target="autopilot_module.waypointX_km[1]".
+            for idx, point in enumerate(targets, start=1):
                 add_or_override(ssv, f"waypointX_km[{idx}]", f"{float(point['x_km']):.3f}", "Real")
                 add_or_override(ssv, f"waypointY_km[{idx}]", f"{float(point['y_km']):.3f}", "Real")
                 add_or_override(ssv, f"waypointZ_km[{idx}]", f"{float(point.get('z_km', 0.0)):.3f}", "Real")

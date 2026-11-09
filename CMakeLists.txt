@@ -2,6 +2,16 @@ cmake_minimum_required(VERSION 3.16)
 
 project(ssp_airplane LANGUAGES CXX)
 
+# All build outputs must live under build/. Configure out-of-source only:
+#   cmake -S . -B build/cmake
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
+  message(FATAL_ERROR
+    "In-source builds are not allowed; they would pollute the source tree.\n"
+    "Configure out-of-source instead:\n"
+    "  cmake -S . -B build/cmake")
+endif()
+
+
 set(AIRPLANE_REPO_ROOT "${PROJECT_SOURCE_DIR}")
 set(AIRPLANE_BUILD_ROOT "${PROJECT_SOURCE_DIR}/build")
 set(AIRPLANE_FMU_OUTPUT_DIR "${AIRPLANE_BUILD_ROOT}/fmus")

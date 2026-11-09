@@ -16,6 +16,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--stop-time", type=float, required=True, help="Simulation stop time in seconds.")
     parser.add_argument("--config-path", type=Path, default=None, help="Path to write the config JSON.")
     parser.add_argument("--realtime", action="store_true", help="Enable realtime pacing.")
+    parser.add_argument("--recording-interval", type=float, default=0.25, help="CSV recording interval in seconds.")
     parser.add_argument("--log-fmu", action="store_true", help="Enable FMU logging in the config.")
     return parser.parse_args(argv)
 
@@ -27,6 +28,7 @@ def main(argv: list[str] | None = None) -> int:
         result_file=args.result_file,
         stop_time=args.stop_time,
         realtime=args.realtime,
+        recording_interval=args.recording_interval,
         log_fmu=args.log_fmu,
     )
     config_path = write_simulation_config(

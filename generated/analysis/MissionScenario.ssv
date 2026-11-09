@@ -19,9 +19,6 @@
     <ssv:Parameter name="targetAirspeed_mps">
       <ssv:Real value="200" />
     </ssv:Parameter>
-    <ssv:Parameter name="waypointX_km[0]">
-      <ssv:Real value="0" />
-    </ssv:Parameter>
     <ssv:Parameter name="waypointX_km[1]">
       <ssv:Real value="0" />
     </ssv:Parameter>
@@ -49,7 +46,7 @@
     <ssv:Parameter name="waypointX_km[9]">
       <ssv:Real value="0" />
     </ssv:Parameter>
-    <ssv:Parameter name="waypointY_km[0]">
+    <ssv:Parameter name="waypointX_km[10]">
       <ssv:Real value="0" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointY_km[1]">
@@ -79,8 +76,8 @@
     <ssv:Parameter name="waypointY_km[9]">
       <ssv:Real value="0" />
     </ssv:Parameter>
-    <ssv:Parameter name="waypointZ_km[0]">
-      <ssv:Real value="1" />
+    <ssv:Parameter name="waypointY_km[10]">
+      <ssv:Real value="0" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointZ_km[1]">
       <ssv:Real value="1" />
@@ -107,6 +104,9 @@
       <ssv:Real value="1" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointZ_km[9]">
+      <ssv:Real value="1" />
+    </ssv:Parameter>
+    <ssv:Parameter name="waypointZ_km[10]">
       <ssv:Real value="1" />
     </ssv:Parameter>
   </ssv:Parameters>

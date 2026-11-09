@@ -35,94 +35,94 @@
     <ScalarVariable name="waypointCount" valueReference="10" causality="parameter" variability="fixed">
       <Integer start="10" />
     </ScalarVariable>
-    <ScalarVariable name="waypointX_km[0]" valueReference="11" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointX_km[1]" valueReference="11" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointX_km[1]" valueReference="12" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointX_km[2]" valueReference="12" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointX_km[2]" valueReference="13" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointX_km[3]" valueReference="13" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointX_km[3]" valueReference="14" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointX_km[4]" valueReference="14" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointX_km[4]" valueReference="15" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointX_km[5]" valueReference="15" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointX_km[5]" valueReference="16" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointX_km[6]" valueReference="16" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointX_km[6]" valueReference="17" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointX_km[7]" valueReference="17" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointX_km[7]" valueReference="18" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointX_km[8]" valueReference="18" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointX_km[8]" valueReference="19" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointX_km[9]" valueReference="19" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointX_km[9]" valueReference="20" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointX_km[10]" valueReference="20" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointY_km[0]" valueReference="21" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointY_km[1]" valueReference="21" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointY_km[1]" valueReference="22" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointY_km[2]" valueReference="22" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointY_km[2]" valueReference="23" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointY_km[3]" valueReference="23" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointY_km[3]" valueReference="24" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointY_km[4]" valueReference="24" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointY_km[4]" valueReference="25" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointY_km[5]" valueReference="25" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointY_km[5]" valueReference="26" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointY_km[6]" valueReference="26" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointY_km[6]" valueReference="27" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointY_km[7]" valueReference="27" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointY_km[7]" valueReference="28" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointY_km[8]" valueReference="28" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointY_km[8]" valueReference="29" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointY_km[9]" valueReference="29" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointY_km[9]" valueReference="30" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointY_km[10]" valueReference="30" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointZ_km[0]" valueReference="31" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointZ_km[1]" valueReference="31" causality="parameter" variability="fixed">
       <Real start="1" />
     </ScalarVariable>
-    <ScalarVariable name="waypointZ_km[1]" valueReference="32" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointZ_km[2]" valueReference="32" causality="parameter" variability="fixed">
       <Real start="1" />
     </ScalarVariable>
-    <ScalarVariable name="waypointZ_km[2]" valueReference="33" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointZ_km[3]" valueReference="33" causality="parameter" variability="fixed">
       <Real start="1" />
     </ScalarVariable>
-    <ScalarVariable name="waypointZ_km[3]" valueReference="34" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointZ_km[4]" valueReference="34" causality="parameter" variability="fixed">
       <Real start="1" />
     </ScalarVariable>
-    <ScalarVariable name="waypointZ_km[4]" valueReference="35" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointZ_km[5]" valueReference="35" causality="parameter" variability="fixed">
       <Real start="1" />
     </ScalarVariable>
-    <ScalarVariable name="waypointZ_km[5]" valueReference="36" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointZ_km[6]" valueReference="36" causality="parameter" variability="fixed">
       <Real start="1" />
     </ScalarVariable>
-    <ScalarVariable name="waypointZ_km[6]" valueReference="37" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointZ_km[7]" valueReference="37" causality="parameter" variability="fixed">
       <Real start="1" />
     </ScalarVariable>
-    <ScalarVariable name="waypointZ_km[7]" valueReference="38" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointZ_km[8]" valueReference="38" causality="parameter" variability="fixed">
       <Real start="1" />
     </ScalarVariable>
-    <ScalarVariable name="waypointZ_km[8]" valueReference="39" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointZ_km[9]" valueReference="39" causality="parameter" variability="fixed">
       <Real start="1" />
     </ScalarVariable>
-    <ScalarVariable name="waypointZ_km[9]" valueReference="40" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointZ_km[10]" valueReference="40" causality="parameter" variability="fixed">
       <Real start="1" />
     </ScalarVariable>
     <ScalarVariable name="waypointProximity_km" valueReference="41" causality="parameter" variability="fixed">

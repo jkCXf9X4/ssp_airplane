@@ -297,9 +297,6 @@
           <ssd:Connector name="waypointCount" kind="parameter">
             <ssc:Integer />
           </ssd:Connector>
-          <ssd:Connector name="waypointX_km[0]" kind="parameter">
-            <ssc:Real />
-          </ssd:Connector>
           <ssd:Connector name="waypointX_km[1]" kind="parameter">
             <ssc:Real />
           </ssd:Connector>
@@ -327,7 +324,7 @@
           <ssd:Connector name="waypointX_km[9]" kind="parameter">
             <ssc:Real />
           </ssd:Connector>
-          <ssd:Connector name="waypointY_km[0]" kind="parameter">
+          <ssd:Connector name="waypointX_km[10]" kind="parameter">
             <ssc:Real />
           </ssd:Connector>
           <ssd:Connector name="waypointY_km[1]" kind="parameter">
@@ -357,7 +354,7 @@
           <ssd:Connector name="waypointY_km[9]" kind="parameter">
             <ssc:Real />
           </ssd:Connector>
-          <ssd:Connector name="waypointZ_km[0]" kind="parameter">
+          <ssd:Connector name="waypointY_km[10]" kind="parameter">
             <ssc:Real />
           </ssd:Connector>
           <ssd:Connector name="waypointZ_km[1]" kind="parameter">
@@ -385,6 +382,9 @@
             <ssc:Real />
           </ssd:Connector>
           <ssd:Connector name="waypointZ_km[9]" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="waypointZ_km[10]" kind="parameter">
             <ssc:Real />
           </ssd:Connector>
           <ssd:Connector name="waypointProximity_km" kind="parameter">

@@ -99,18 +99,29 @@ def export_artifacts(
     ensure_parent_dir(interface_output)
     interface_output.write_text(generate_modelica_package(architecture), encoding="utf-8")
 
-    generate_c_headers(architecture, generated_dir / "interfaces", composition=MODEL_COMPOSITION)
+    generate_c_headers(
+        architecture,
+        generated_dir / "interfaces",
+        composition=MODEL_COMPOSITION,
+        base_index=1,
+    )
 
     model_descriptions = generate_model_description(
         architecture,
         generated_dir / "model_descriptions",
         composition=MODEL_COMPOSITION,
         generation_time=FIXED_GENERATION_TIME,
+        base_index=1,
     )
     normalize_model_description_timestamps(model_descriptions)
     _write_guid_headers(generated_dir, model_descriptions, architecture.package_name)
 
-    ssd_path = generate_ssd(architecture_path, generated_dir / "SystemStructure.ssd", MODEL_COMPOSITION)
+    ssd_path = generate_ssd(
+        architecture_path,
+        generated_dir / "SystemStructure.ssd",
+        MODEL_COMPOSITION,
+        base_index=1,
+    )
     normalize_ssd_xml(ssd_path)
 
     generate_analysis(
@@ -118,4 +129,5 @@ def export_artifacts(
         generated_dir / "analysis",
         ANALYSIS_COMPOSITION,
         model_name="aircraft",
+        base_index=1,
     )
