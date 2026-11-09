@@ -17,7 +17,6 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 from pathlib import Path
-import xml.etree.ElementTree as ET
 
 from pycps_sysml2 import load
 from pyfmi_sysml2.c_interface import generate_c_headers
@@ -26,10 +25,6 @@ from pyssp_sysml2.artifacts.analysis import generate_analysis
 from pyssp_sysml2.artifacts.ssd import generate_ssd
 
 from scripts.lib.artifacts.sysml_export.modelica_headers import generate_modelica_package
-from scripts.lib.common.xml import (
-    normalize_model_description_timestamps,
-    normalize_ssd_xml,
-)
 from scripts.lib.paths import (
     ANALYSIS_COMPOSITION,
     ARCHITECTURE_DIR,
@@ -40,7 +35,7 @@ from scripts.lib.paths import (
 )
 
 # Fixed, timezone-aware generation stamp so modelDescription.xml output is
-# reproducible before normalize_model_description_timestamps rewrites it.
+# reproducible.
 FIXED_GENERATION_TIME = datetime(2000, 1, 1, tzinfo=timezone.utc)
 
 _PACKAGE_MO = (
@@ -67,27 +62,6 @@ def _write_modelica_package(generated_dir: Path) -> None:
     (common_dir / "Interfaces.mo").write_text(_INTERFACES_MO, encoding="utf-8")
 
 
-def _write_guid_headers(generated_dir: Path, model_descriptions: list[Path], package: str) -> None:
-    """Emit one generated GUID header per component next to the C interface headers.
-
-    The FMI guid is read back from the ``modelDescription.xml`` just written
-    (the XML is the single source of truth); the header is the build-time link
-    between the native FMU's ``kGuid`` and the packaged model description.
-    Component naming matches the model_description generator's subdirs, and
-    re-running export is idempotent because every header depends only on the
-    guid already on disk.
-    """
-    for description in model_descriptions:
-        component = description.parent.name
-        guid = ET.parse(description).getroot().get("guid")
-        if not guid:
-            raise ValueError(f"Model description carries no guid: {description}")
-        header_path = generated_dir / "interfaces" / f"{package}_{component}_guid.h"
-        macro = f"{package}_{component}".upper() + "_GUID"
-        header_path.parent.mkdir(parents=True, exist_ok=True)
-        header_path.write_text(f"#pragma once\n\n#define {macro} \"{guid}\"\n", encoding="utf-8")
-
-
 def export_artifacts(
     architecture_path: Path = ARCHITECTURE_DIR,
     generated_dir: Path = GENERATED_DIR,
@@ -106,23 +80,20 @@ def export_artifacts(
         base_index=1,
     )
 
-    model_descriptions = generate_model_description(
+    generate_model_description(
         architecture,
         generated_dir / "model_descriptions",
         composition=MODEL_COMPOSITION,
         generation_time=FIXED_GENERATION_TIME,
         base_index=1,
     )
-    normalize_model_description_timestamps(model_descriptions)
-    _write_guid_headers(generated_dir, model_descriptions, architecture.package_name)
 
-    ssd_path = generate_ssd(
+    generate_ssd(
         architecture_path,
         generated_dir / "SystemStructure.ssd",
         MODEL_COMPOSITION,
         base_index=1,
     )
-    normalize_ssd_xml(ssd_path)
 
     generate_analysis(
         architecture_path,

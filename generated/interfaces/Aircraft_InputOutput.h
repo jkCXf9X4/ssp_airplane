@@ -5,6 +5,8 @@
 
 /* Generated interface for Aircraft.InputOutput. Do not edit manually. */
 
+#define AIRCRAFT_INPUTOUTPUT_GUID "{7fd60fd4-8022-5544-93c4-e64c5380aed3}"
+
 typedef enum Aircraft_InputOutput_ValueReference {
   AIRCRAFT_INPUTOUTPUT_VR_LOCATIONXYZ_X_KM = 0,
   AIRCRAFT_INPUTOUTPUT_VR_LOCATIONXYZ_Y_KM = 1,

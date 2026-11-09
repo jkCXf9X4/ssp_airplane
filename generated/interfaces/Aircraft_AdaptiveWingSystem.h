@@ -5,6 +5,8 @@
 
 /* Generated interface for Aircraft.AdaptiveWingSystem. Do not edit manually. */
 
+#define AIRCRAFT_ADAPTIVEWINGSYSTEM_GUID "{8fa06bf4-c120-5d50-99f6-883f9ac468a4}"
+
 typedef enum Aircraft_AdaptiveWingSystem_ValueReference {
   AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_REFERENCE_AREA_M2 = 0,
   AIRCRAFT_ADAPTIVEWINGSYSTEM_VR_SPAN_M = 1,

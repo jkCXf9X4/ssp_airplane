@@ -5,6 +5,8 @@
 
 /* Generated interface for Aircraft.FlightGearBridge. Do not edit manually. */
 
+#define AIRCRAFT_FLIGHTGEARBRIDGE_GUID "{7281e011-54a9-5a70-820d-f88628ced349}"
+
 typedef enum Aircraft_FlightGearBridge_ValueReference {
   AIRCRAFT_FLIGHTGEARBRIDGE_VR_TRANSPORT = 0,
   AIRCRAFT_FLIGHTGEARBRIDGE_VR_REFERENCE_LATITUDE_DEG = 1,

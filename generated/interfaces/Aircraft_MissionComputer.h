@@ -5,6 +5,8 @@
 
 /* Generated interface for Aircraft.MissionComputer. Do not edit manually. */
 
+#define AIRCRAFT_MISSIONCOMPUTER_GUID "{fcc7ebf3-7548-5f8f-85d6-9335f4fdaea5}"
+
 typedef enum Aircraft_MissionComputer_ValueReference {
   AIRCRAFT_MISSIONCOMPUTER_VR_FLYBYWIRECHANNELS = 0,
   AIRCRAFT_MISSIONCOMPUTER_VR_ROLLAUTHORITY_DEG = 1,

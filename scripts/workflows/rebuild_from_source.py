@@ -13,6 +13,7 @@ from pathlib import Path
 if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
+from scripts.lib.common.modelica import build_modelica_fmus
 from scripts.lib.paths import (
     BUILD_DIR,
     GENERATED_ANALYSIS_DESCRIPTOR,
@@ -41,6 +42,14 @@ def main(argv: list[str] | None = None) -> int:
         raise SystemExit(
             "omc executable not found. Install OpenModelica or set OMC to its full path."
         )
+    pyfmi_path = Path(sys.executable).with_name("pyfmi")
+    if not pyfmi_path.is_file():
+        pyfmi_path = shutil.which("pyfmi")
+        if not pyfmi_path:
+            raise SystemExit(
+                "pyfmi executable not found next to the Python interpreter. "
+                "Install pyfmi_sysml2 into the venv or set PYFMI to its full path."
+            )
     cmake_build_dir = BUILD_DIR / "cmake"
 
     print("Exporting architecture-derived artifacts...")
@@ -62,7 +71,12 @@ def main(argv: list[str] | None = None) -> int:
         sys.executable,
         "-m",
         "scripts.cli.verify_model_equations",
+        "--omc",
+        omc_path,
     )
+
+    print("Building standalone Modelica FMUs...")
+    build_modelica_fmus(omc=omc_path)
 
     print("Configuring CMake build...")
     run_step(
@@ -71,7 +85,7 @@ def main(argv: list[str] | None = None) -> int:
         ".",
         "-B",
         str(cmake_build_dir),
-        f"-DOMC_EXECUTABLE={omc_path}",
+        f"-DPYFMI_EXECUTABLE={pyfmi_path}",
     )
 
     print("Building and packaging FMUs and the baseline SSP...")
@@ -83,6 +97,8 @@ def main(argv: list[str] | None = None) -> int:
 
     print("Testing native FlightGear bridge FMU...")
     run_step(
+        sys.executable,
+        "-m",
         "pytest",
         "-q",
         "tests/test_flightgear_bridge_fmu.py",

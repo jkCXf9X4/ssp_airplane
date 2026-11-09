@@ -5,6 +5,8 @@
 
 /* Generated interface for Aircraft.ControlInterface. Do not edit manually. */
 
+#define AIRCRAFT_CONTROLINTERFACE_GUID "{e78e04c7-294e-56c1-926d-f1129b1f1ce8}"
+
 typedef enum Aircraft_ControlInterface_ValueReference {
   AIRCRAFT_CONTROLINTERFACE_VR_INPUT_SCHEME = 0,
   AIRCRAFT_CONTROLINTERFACE_VR_TELEMETRY_RATE_HZ = 1,

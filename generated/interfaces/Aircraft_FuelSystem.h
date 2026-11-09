@@ -5,6 +5,8 @@
 
 /* Generated interface for Aircraft.FuelSystem. Do not edit manually. */
 
+#define AIRCRAFT_FUELSYSTEM_GUID "{b87caacc-58c6-554f-b21c-e3c8054a4c52}"
+
 typedef enum Aircraft_FuelSystem_ValueReference {
   AIRCRAFT_FUELSYSTEM_VR_FUEL_CAPACITY_KG = 0,
   AIRCRAFT_FUELSYSTEM_VR_RESERVE_FRACTION = 1,

@@ -5,9 +5,9 @@ import json
 import socket
 import sys
 import threading
-import xml.etree.ElementTree as ET
-import zipfile
 from pathlib import Path
+
+from pyssp_standard import ModelDescription, unpack_archive
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
@@ -51,18 +51,12 @@ def _free_udp_port() -> int:
     return port
 
 
-def _extract_fmu(fmu_path: Path, target: Path) -> tuple[Path, ET.ElementTree]:
-    with zipfile.ZipFile(fmu_path) as archive:
-        archive.extractall(target)
-    tree = ET.parse(target / "modelDescription.xml")
-    return target / "binaries" / "linux64" / "FlightGearBridge.so", tree
-
-
-def _value_refs(tree: ET.ElementTree) -> dict[str, int]:
-    refs: dict[str, int] = {}
-    for scalar in tree.iterfind(".//ScalarVariable"):
-        refs[scalar.attrib["name"]] = int(scalar.attrib["valueReference"])
-    return refs
+def _extract_fmu(fmu_path: Path, target: Path) -> tuple[Path, ModelDescription]:
+    unpack_dir = unpack_archive(fmu_path, target)
+    return (
+        unpack_dir / "binaries" / "linux64" / "FlightGearBridge.so",
+        ModelDescription(unpack_dir / "modelDescription.xml"),
+    )
 
 
 def _load_library(path: Path) -> ctypes.CDLL:
@@ -137,8 +131,12 @@ def test_native_flightgear_bridge_fmu_exchanges_udp_packets(tmp_path: Path):
 
     extract_dir = tmp_path / "extracted"
     library_path, model_description = _extract_fmu(fmu_path, extract_dir)
-    refs = _value_refs(model_description)
-    guid = model_description.getroot().attrib["guid"]
+    with model_description:
+        refs = {
+            variable.name: variable.value_reference
+            for variable in model_description.xml.variables
+        }
+        guid = model_description.xml.guid
 
     received_packets: list[str] = []
     telemetry_ready = threading.Event()

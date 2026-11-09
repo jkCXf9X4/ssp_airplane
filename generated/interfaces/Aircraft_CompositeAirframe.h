@@ -5,6 +5,8 @@
 
 /* Generated interface for Aircraft.CompositeAirframe. Do not edit manually. */
 
+#define AIRCRAFT_COMPOSITEAIRFRAME_GUID "{4bc096f0-85e9-5bdc-afeb-8ac882a8f51e}"
+
 typedef enum Aircraft_CompositeAirframe_ValueReference {
   AIRCRAFT_COMPOSITEAIRFRAME_VR_LENGTH_M = 0,
   AIRCRAFT_COMPOSITEAIRFRAME_VR_FUSELAGE_WIDTH_M = 1,

@@ -5,6 +5,8 @@
 
 /* Generated interface for Aircraft.Environment. Do not edit manually. */
 
+#define AIRCRAFT_ENVIRONMENT_GUID "{32e4ace2-e13b-5600-a950-af6c6ad7d4ec}"
+
 typedef enum Aircraft_Environment_ValueReference {
   AIRCRAFT_ENVIRONMENT_VR_INITX_KM = 0,
   AIRCRAFT_ENVIRONMENT_VR_INITY_KM = 1,

@@ -10,8 +10,6 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from scripts.lib.common.xml import normalize_ssd_xml  # type: ignore  # noqa: E402
-
 COMPOSITION = "AircraftModel"
 
 
@@ -24,7 +22,6 @@ def _read_components(output_path: Path):
 def test_parameter_connectors_emitted_for_attributes(tmp_path: Path):
     output = tmp_path / "SystemStructure.ssd"
     generate_ssd(REPO_ROOT / "architecture", output, COMPOSITION, base_index=1)
-    normalize_ssd_xml(output)
     components = _read_components(output)
 
     propulsion = components["turbofan_propulsion"]
@@ -43,7 +40,6 @@ def test_parameter_connectors_emitted_for_attributes(tmp_path: Path):
 def test_string_parameters_preserve_type(tmp_path: Path):
     output = tmp_path / "SystemStructure.ssd"
     generate_ssd(REPO_ROOT / "architecture", output, COMPOSITION, base_index=1)
-    normalize_ssd_xml(output)
     components = _read_components(output)
 
     control = components["control_interface"]
@@ -60,7 +56,6 @@ def test_string_parameters_preserve_type(tmp_path: Path):
 def test_list_parameters_infer_numeric_type(tmp_path: Path):
     output = tmp_path / "SystemStructure.ssd"
     generate_ssd(REPO_ROOT / "architecture", output, COMPOSITION, base_index=1)
-    normalize_ssd_xml(output)
     components = _read_components(output)
 
     autopilot = components["autopilot_module"]

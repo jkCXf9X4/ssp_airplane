@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 
 from scripts.lib.paths import (
@@ -39,8 +40,16 @@ def build_native_fmus(
         return []
 
     cmake_build_dir = ensure_directory(build_root / "cmake")
+    pyfmi_executable = Path(sys.executable).with_name("pyfmi")
     subprocess.run(
-        ["cmake", "-S", str(REPO_ROOT), "-B", str(cmake_build_dir)],
+        [
+            "cmake",
+            "-S",
+            str(REPO_ROOT),
+            "-B",
+            str(cmake_build_dir),
+            f"-DPYFMI_EXECUTABLE={pyfmi_executable}",
+        ],
         check=True,
     )
     subprocess.run(

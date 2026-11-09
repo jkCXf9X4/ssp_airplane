@@ -7,7 +7,6 @@
 
 #include "fmi2Functions.h"
 #include "Aircraft_FlightGearBridge.h"
-#include "Aircraft_FlightGearBridge_guid.h"
 
 namespace fgbridge {
 

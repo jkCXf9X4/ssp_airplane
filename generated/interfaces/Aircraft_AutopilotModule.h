@@ -5,6 +5,8 @@
 
 /* Generated interface for Aircraft.AutopilotModule. Do not edit manually. */
 
+#define AIRCRAFT_AUTOPILOTMODULE_GUID "{641be6d1-c687-5c23-8900-8c118bc39062}"
+
 typedef enum Aircraft_AutopilotModule_ValueReference {
   AIRCRAFT_AUTOPILOTMODULE_VR_UPDATERATEHZ = 0,
   AIRCRAFT_AUTOPILOTMODULE_VR_DEFAULTTHROTTLE = 1,

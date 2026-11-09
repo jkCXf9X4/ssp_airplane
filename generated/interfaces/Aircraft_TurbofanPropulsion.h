@@ -5,6 +5,8 @@
 
 /* Generated interface for Aircraft.TurbofanPropulsion. Do not edit manually. */
 
+#define AIRCRAFT_TURBOFANPROPULSION_GUID "{1433e8b0-9577-57b4-982c-7ef1d1cc7009}"
+
 typedef enum Aircraft_TurbofanPropulsion_ValueReference {
   AIRCRAFT_TURBOFANPROPULSION_VR_MAX_THRUST_KN = 0,
   AIRCRAFT_TURBOFANPROPULSION_VR_DRY_THRUST_KN = 1,
