@@ -34,4 +34,5 @@ add_native_fmu_package(
   MODEL_DESCRIPTION ${AIRPLANE_REPO_ROOT}/generated/model_descriptions/FlightGearBridge/modelDescription.xml
   GENERATED_COMMON_HEADER ${AIRPLANE_REPO_ROOT}/generated/interfaces/Aircraft_InterfaceCommon.h
   GENERATED_MODEL_HEADER ${AIRPLANE_REPO_ROOT}/generated/interfaces/Aircraft_FlightGearBridge.h
+  GENERATED_GUID_HEADER ${AIRPLANE_REPO_ROOT}/generated/interfaces/Aircraft_FlightGearBridge_guid.h
 )

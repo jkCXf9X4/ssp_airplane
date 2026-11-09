@@ -1,36 +1,42 @@
 <?xml version='1.0' encoding='utf-8'?>
-<fmiModelDescription fmiVersion="2.0" modelName="AircraftComposition.FuelSystem" guid="{1de8781f-7abb-5a78-8850-9665acb147bf}" description="Internal + conformal fuel storage management with transfer pumps feeding engine feed tanks." version="1.0" generationTool="pyssp_sysml2 tooling" generationDateAndTime="2000-01-01T00:00:00" variableNamingConvention="structured" numberOfEventIndicators="0">
+<fmiModelDescription fmiVersion="2.0" modelName="AircraftModel.FuelSystem" guid="{b87caacc-58c6-554f-b21c-e3c8054a4c52}" description="Internal + conformal fuel storage management with transfer pumps feeding engine feed tanks." generationTool="pyfmi_sysml2 tooling" generationDateAndTime="2000-01-01T00:00:00" variableNamingConvention="structured">
   <CoSimulation modelIdentifier="FuelSystem" />
   <ModelVariables>
     <ScalarVariable name="fuel_capacity_kg" valueReference="0" causality="parameter" variability="fixed">
-      <Integer start="3160" />
+      <Real start="3160" />
     </ScalarVariable>
     <ScalarVariable name="reserve_fraction" valueReference="1" causality="parameter" variability="fixed">
       <Real start="0.08" />
     </ScalarVariable>
-    <ScalarVariable name="fuel_consumption_rate.mass_flow_kgps" valueReference="2" causality="input" description="Propulsion-requested fuel mass flow entering storage manager.">
+    <ScalarVariable name="fuelCapacityKg" valueReference="2" causality="parameter" variability="fixed">
+      <Real start="3160" />
+    </ScalarVariable>
+    <ScalarVariable name="reserveFraction" valueReference="3" causality="parameter" variability="fixed">
+      <Real start="0.08" />
+    </ScalarVariable>
+    <ScalarVariable name="fuel_consumption_rate.mass_flow_kgps" valueReference="4" description="Mass flow request or telemetry for turbofan fuel usage (kg/s)." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="fuelState.fuel_remaining_kg" valueReference="3" causality="output" description="Telemetry describing remaining fuel mass/normalized level.">
+    <ScalarVariable name="fuelState.fuel_remaining_kg" valueReference="5" description="Remaining fuel mass and normalized level for availability tracking." causality="output">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="fuelState.fuel_level_norm" valueReference="4" causality="output" description="Telemetry describing remaining fuel mass/normalized level.">
+    <ScalarVariable name="fuelState.fuel_level_norm" valueReference="6" description="Remaining fuel mass and normalized level for availability tracking." causality="output">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="fuelState.fuel_starved" valueReference="5" causality="output" description="Telemetry describing remaining fuel mass/normalized level.">
+    <ScalarVariable name="fuelState.fuel_starved" valueReference="7" description="Remaining fuel mass and normalized level for availability tracking." causality="output">
       <Boolean />
     </ScalarVariable>
   </ModelVariables>
   <ModelStructure>
     <Outputs>
-      <Unknown index="4" />
-      <Unknown index="5" />
       <Unknown index="6" />
+      <Unknown index="7" />
+      <Unknown index="8" />
     </Outputs>
     <InitialUnknowns>
-      <Unknown index="4" />
-      <Unknown index="5" />
       <Unknown index="6" />
+      <Unknown index="7" />
+      <Unknown index="8" />
     </InitialUnknowns>
   </ModelStructure>
 </fmiModelDescription>

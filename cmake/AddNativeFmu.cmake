@@ -11,6 +11,7 @@ function(add_native_fmu_package)
     MODEL_DESCRIPTION
     GENERATED_COMMON_HEADER
     GENERATED_MODEL_HEADER
+    GENERATED_GUID_HEADER
   )
   cmake_parse_arguments(ANF "${options}" "${one_value_args}" "" ${ARGN})
 
@@ -23,6 +24,7 @@ function(add_native_fmu_package)
     OR NOT ANF_MODEL_DESCRIPTION
     OR NOT ANF_GENERATED_COMMON_HEADER
     OR NOT ANF_GENERATED_MODEL_HEADER
+    OR NOT ANF_GENERATED_GUID_HEADER
   )
     message(FATAL_ERROR "add_native_fmu_package requires all declared arguments")
   endif()
@@ -33,6 +35,7 @@ function(add_native_fmu_package)
 
   get_filename_component(common_header_name "${ANF_GENERATED_COMMON_HEADER}" NAME)
   get_filename_component(model_header_name "${ANF_GENERATED_MODEL_HEADER}" NAME)
+  get_filename_component(guid_header_name "${ANF_GENERATED_GUID_HEADER}" NAME)
   set(output_fmu "${AIRPLANE_FMU_OUTPUT_DIR}/${ANF_OUTPUT_NAME}")
   set(stage_dir "${AIRPLANE_TMP_DIR}/${ANF_TARGET}_stage")
 
@@ -48,6 +51,7 @@ function(add_native_fmu_package)
     COMMAND "${CMAKE_COMMAND}" -E copy "${ANF_MODEL_DESCRIPTION}" "${stage_dir}/modelDescription.xml"
     COMMAND "${CMAKE_COMMAND}" -E copy "${ANF_GENERATED_COMMON_HEADER}" "${stage_dir}/sources/generated/${common_header_name}"
     COMMAND "${CMAKE_COMMAND}" -E copy "${ANF_GENERATED_MODEL_HEADER}" "${stage_dir}/sources/generated/${model_header_name}"
+    COMMAND "${CMAKE_COMMAND}" -E copy "${ANF_GENERATED_GUID_HEADER}" "${stage_dir}/sources/generated/${guid_header_name}"
     COMMAND "${CMAKE_COMMAND}" -E copy "${AIRPLANE_REPO_ROOT}/3rd_party/fmi_headers/fmi2TypesPlatform.h" "${stage_dir}/sources/include/fmi2TypesPlatform.h"
     COMMAND "${CMAKE_COMMAND}" -E copy "${AIRPLANE_REPO_ROOT}/3rd_party/fmi_headers/fmi2FunctionTypes.h" "${stage_dir}/sources/include/fmi2FunctionTypes.h"
     COMMAND "${CMAKE_COMMAND}" -E copy "${AIRPLANE_REPO_ROOT}/3rd_party/fmi_headers/fmi2Functions.h" "${stage_dir}/sources/include/fmi2Functions.h"
@@ -58,6 +62,7 @@ function(add_native_fmu_package)
       "${ANF_MODEL_DESCRIPTION}"
       "${ANF_GENERATED_COMMON_HEADER}"
       "${ANF_GENERATED_MODEL_HEADER}"
+      "${ANF_GENERATED_GUID_HEADER}"
     VERBATIM
   )
 

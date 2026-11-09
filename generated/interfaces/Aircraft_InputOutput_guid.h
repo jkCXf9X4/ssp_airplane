@@ -1,0 +1,3 @@
+#pragma once
+
+#define AIRCRAFT_INPUTOUTPUT_GUID "{7fd60fd4-8022-5544-93c4-e64c5380aed3}"

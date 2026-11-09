@@ -1,4 +1,5 @@
-#pragma once
+#ifndef AIRCRAFT_FUELSYSTEM_H
+#define AIRCRAFT_FUELSYSTEM_H
 
 #include "Aircraft_InterfaceCommon.h"
 
@@ -7,20 +8,25 @@
 typedef enum Aircraft_FuelSystem_ValueReference {
   AIRCRAFT_FUELSYSTEM_VR_FUEL_CAPACITY_KG = 0,
   AIRCRAFT_FUELSYSTEM_VR_RESERVE_FRACTION = 1,
-  AIRCRAFT_FUELSYSTEM_VR_FUEL_CONSUMPTION_RATE_MASS_FLOW_KGPS = 2,
-  AIRCRAFT_FUELSYSTEM_VR_FUELSTATE_FUEL_REMAINING_KG = 3,
-  AIRCRAFT_FUELSYSTEM_VR_FUELSTATE_FUEL_LEVEL_NORM = 4,
-  AIRCRAFT_FUELSYSTEM_VR_FUELSTATE_FUEL_STARVED = 5,
+  AIRCRAFT_FUELSYSTEM_VR_FUELCAPACITYKG = 2,
+  AIRCRAFT_FUELSYSTEM_VR_RESERVEFRACTION = 3,
+  AIRCRAFT_FUELSYSTEM_VR_FUEL_CONSUMPTION_RATE_MASS_FLOW_KGPS = 4,
+  AIRCRAFT_FUELSYSTEM_VR_FUELSTATE_FUEL_REMAINING_KG = 5,
+  AIRCRAFT_FUELSYSTEM_VR_FUELSTATE_FUEL_LEVEL_NORM = 6,
+  AIRCRAFT_FUELSYSTEM_VR_FUELSTATE_FUEL_STARVED = 7,
 } Aircraft_FuelSystem_ValueReference;
 
-#ifdef __cplusplus
+enum { Aircraft_FuelSystem_VrCount = 8 };
 
-inline constexpr size_t Aircraft_FuelSystem_VrCount = 6;
+#ifdef __cplusplus
+#include <string>
 
 struct Aircraft_FuelSystem_Instance {
-  Aircraft_VrMapping vr_map[6] = {};
-  int fuel_capacity_kg = 3160;
+  Aircraft_VrMapping vr_map[8] = {};
+  double fuel_capacity_kg = 3160;
   double reserve_fraction = 0.08;
+  double fuelCapacityKg = 3160;
+  double reserveFraction = 0.08;
   Aircraft_FuelConsumptionRate fuel_consumption_rate = {};
   Aircraft_FuelLevelState fuelState = {};
 };
@@ -29,8 +35,10 @@ inline void Aircraft_FuelSystem_initialize_vr_map(Aircraft_FuelSystem_Instance* 
   for (size_t i = 0; i < Aircraft_FuelSystem_VrCount; ++i) {
     instance->vr_map[i] = {nullptr, AIRCRAFT_DATA_NONE, false};
   }
-  instance->vr_map[AIRCRAFT_FUELSYSTEM_VR_FUEL_CAPACITY_KG] = {&instance->fuel_capacity_kg, AIRCRAFT_DATA_INTEGER, true};
+  instance->vr_map[AIRCRAFT_FUELSYSTEM_VR_FUEL_CAPACITY_KG] = {&instance->fuel_capacity_kg, AIRCRAFT_DATA_REAL, true};
   instance->vr_map[AIRCRAFT_FUELSYSTEM_VR_RESERVE_FRACTION] = {&instance->reserve_fraction, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_FUELSYSTEM_VR_FUELCAPACITYKG] = {&instance->fuelCapacityKg, AIRCRAFT_DATA_REAL, true};
+  instance->vr_map[AIRCRAFT_FUELSYSTEM_VR_RESERVEFRACTION] = {&instance->reserveFraction, AIRCRAFT_DATA_REAL, true};
   instance->vr_map[AIRCRAFT_FUELSYSTEM_VR_FUEL_CONSUMPTION_RATE_MASS_FLOW_KGPS] = {&instance->fuel_consumption_rate.mass_flow_kgps, AIRCRAFT_DATA_REAL, true};
   instance->vr_map[AIRCRAFT_FUELSYSTEM_VR_FUELSTATE_FUEL_REMAINING_KG] = {&instance->fuelState.fuel_remaining_kg, AIRCRAFT_DATA_REAL, false};
   instance->vr_map[AIRCRAFT_FUELSYSTEM_VR_FUELSTATE_FUEL_LEVEL_NORM] = {&instance->fuelState.fuel_level_norm, AIRCRAFT_DATA_REAL, false};
@@ -38,3 +46,4 @@ inline void Aircraft_FuelSystem_initialize_vr_map(Aircraft_FuelSystem_Instance* 
 }
 
 #endif  /* __cplusplus */
+#endif  /* AIRCRAFT_FUELSYSTEM_H */

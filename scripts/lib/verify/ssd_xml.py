@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from pyssp_standard.ssd import SSD
+from pyssp_standard import SSD
 
 from scripts.lib.paths import GENERATED_DIR
 
@@ -14,6 +14,6 @@ def verify_ssd_xml(ssd_path: Path) -> int:
     if not ssd_path.exists():
         raise SystemExit(f"SSD file not found: {ssd_path}")
     with SSD(ssd_path) as handle:
-        handle.__check_compliance__()
+        handle.check_compliance()
     print(f"SSD XML compliance verified for {ssd_path}")
     return 0

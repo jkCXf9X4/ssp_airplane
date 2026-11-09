@@ -1,0 +1,3 @@
+#pragma once
+
+#define AIRCRAFT_CONTROLINTERFACE_GUID "{e78e04c7-294e-56c1-926d-f1129b1f1ce8}"

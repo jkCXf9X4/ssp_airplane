@@ -1,0 +1,18 @@
+{
+  "analysis": "HighAltitudeIntercept",
+  "composition": "AircraftModel",
+  "experiment": {
+    "name": "experiment_baseline",
+    "start_time": 0.0,
+    "step_size": 0.1,
+    "stop_time": 120.0
+  },
+  "model": "aircraft",
+  "scenario": {
+    "set": "MissionScenario",
+    "ssm": "HighAltitudeIntercept.ssm",
+    "ssv": "MissionScenario.ssv"
+  },
+  "sut": "sut",
+  "target_ssd": "SystemStructure.ssd"
+}

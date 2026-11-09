@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 
 from scripts.lib.scenarios.preparation import DEFAULT_RESULTS, prepare_scenario_for_simulation
+from scripts.lib.paths import GENERATED_SCENARIO_SSV
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -18,6 +19,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         action="store_true",
         help="Enable interactive bridge/manual input with scripted fallback when no live command stream is present.",
     )
+    parser.add_argument(
+        "--baseline-ssv",
+        type=Path,
+        default=GENERATED_SCENARIO_SSV,
+        help="Baseline scenario parameter set (.ssv) whose bare scenario members are overridden.",
+    )
     return parser.parse_args(argv)
 
 
@@ -27,6 +34,7 @@ def main(argv: list[str] | None = None) -> int:
         scenario_path=args.scenario,
         results_dir=args.results_dir,
         bridge_input=args.bridge_input,
+        baseline_path=args.baseline_ssv,
     )
     print(
         json.dumps(
@@ -38,6 +46,8 @@ def main(argv: list[str] | None = None) -> int:
                 "result_file": str(prepared.result_file),
                 "waypoints_file": str(prepared.waypoints_file),
                 "parameter_set": str(prepared.parameter_set_path),
+                "ssm": str(prepared.ssm_path),
+                "analysis_descriptor": str(prepared.analysis_descriptor_path),
                 "scenario_string": prepared.scenario_string,
             },
             indent=2,

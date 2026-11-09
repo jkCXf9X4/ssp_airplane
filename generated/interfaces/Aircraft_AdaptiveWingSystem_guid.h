@@ -1,0 +1,3 @@
+#pragma once
+
+#define AIRCRAFT_ADAPTIVEWINGSYSTEM_GUID "{8fa06bf4-c120-5d50-99f6-883f9ac468a4}"

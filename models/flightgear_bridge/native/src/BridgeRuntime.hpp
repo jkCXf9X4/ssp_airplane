@@ -7,10 +7,11 @@
 
 #include "fmi2Functions.h"
 #include "Aircraft_FlightGearBridge.h"
+#include "Aircraft_FlightGearBridge_guid.h"
 
 namespace fgbridge {
 
-constexpr const char* kGuid = "{74c5781a-27ff-58c7-8a3b-16e408ea44fe}";
+constexpr const char* kGuid = AIRCRAFT_FLIGHTGEARBRIDGE_GUID;
 constexpr const char* kTypesPlatform = fmi2TypesPlatform;
 constexpr const char* kVersion = fmi2Version;
 

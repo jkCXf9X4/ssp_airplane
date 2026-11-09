@@ -1,109 +1,133 @@
 <?xml version='1.0' encoding='utf-8'?>
-<fmiModelDescription fmiVersion="2.0" modelName="AircraftComposition.Environment" guid="{d3964b09-08b1-5a96-bb83-b3271dfcb9f7}" description="Tracking position and velocities of the aircraft and feeds the sensors" version="1.0" generationTool="pyssp_sysml2 tooling" generationDateAndTime="2000-01-01T00:00:00" variableNamingConvention="structured" numberOfEventIndicators="0">
+<fmiModelDescription fmiVersion="2.0" modelName="AircraftModel.Environment" guid="{32e4ace2-e13b-5600-a950-af6c6ad7d4ec}" description="Tracking position and velocities of the aircraft and feeds the sensors." generationTool="pyfmi_sysml2 tooling" generationDateAndTime="2000-01-01T00:00:00" variableNamingConvention="structured">
   <CoSimulation modelIdentifier="Environment" />
   <ModelVariables>
-    <ScalarVariable name="actuation_command.left_aileron_deg" valueReference="0" causality="input" description="Reads the actuation and thrust commands to calculate the position, rotation and velocities">
+    <ScalarVariable name="initX_km" valueReference="0" causality="parameter" variability="fixed">
+      <Real start="0" />
+    </ScalarVariable>
+    <ScalarVariable name="initY_km" valueReference="1" causality="parameter" variability="fixed">
+      <Real start="0" />
+    </ScalarVariable>
+    <ScalarVariable name="initZ_km" valueReference="2" causality="parameter" variability="fixed">
+      <Real start="1" />
+    </ScalarVariable>
+    <ScalarVariable name="tauDirection_s" valueReference="3" causality="parameter" variability="fixed">
+      <Real start="2" />
+    </ScalarVariable>
+    <ScalarVariable name="thrustToSpeedGain" valueReference="4" causality="parameter" variability="fixed">
+      <Real start="4" />
+    </ScalarVariable>
+    <ScalarVariable name="climbBleedFraction" valueReference="5" causality="parameter" variability="fixed">
+      <Real start="0.35" />
+    </ScalarVariable>
+    <ScalarVariable name="minAirspeed_mps" valueReference="6" causality="parameter" variability="fixed">
+      <Real start="50" />
+    </ScalarVariable>
+    <ScalarVariable name="referenceEnergySpeed_mps" valueReference="7" causality="parameter" variability="fixed">
+      <Real start="300" />
+    </ScalarVariable>
+    <ScalarVariable name="actuation_command.left_aileron_deg" valueReference="8" description="Commanded surface deflections in degrees for co-simulation with aerodynamic models." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="actuation_command.right_aileron_deg" valueReference="1" causality="input" description="Reads the actuation and thrust commands to calculate the position, rotation and velocities">
+    <ScalarVariable name="actuation_command.right_aileron_deg" valueReference="9" description="Commanded surface deflections in degrees for co-simulation with aerodynamic models." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="actuation_command.elevator_deg" valueReference="2" causality="input" description="Reads the actuation and thrust commands to calculate the position, rotation and velocities">
+    <ScalarVariable name="actuation_command.elevator_deg" valueReference="10" description="Commanded surface deflections in degrees for co-simulation with aerodynamic models." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="actuation_command.rudder_deg" valueReference="3" causality="input" description="Reads the actuation and thrust commands to calculate the position, rotation and velocities">
+    <ScalarVariable name="actuation_command.rudder_deg" valueReference="11" description="Commanded surface deflections in degrees for co-simulation with aerodynamic models." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="actuation_command.flaperon_deg" valueReference="4" causality="input" description="Reads the actuation and thrust commands to calculate the position, rotation and velocities">
+    <ScalarVariable name="actuation_command.flaperon_deg" valueReference="12" description="Commanded surface deflections in degrees for co-simulation with aerodynamic models." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="direction_command.roll_deg" valueReference="5" causality="input" description="Air vehicle orientation expressed as Euler angles in degrees.">
+    <ScalarVariable name="direction_command.roll_deg" valueReference="13" description="Air vehicle orientation expressed as Euler angles in degrees." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="direction_command.pitch_deg" valueReference="6" causality="input" description="Air vehicle orientation expressed as Euler angles in degrees.">
+    <ScalarVariable name="direction_command.pitch_deg" valueReference="14" description="Air vehicle orientation expressed as Euler angles in degrees." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="direction_command.yaw_deg" valueReference="7" causality="input" description="Air vehicle orientation expressed as Euler angles in degrees.">
+    <ScalarVariable name="direction_command.yaw_deg" valueReference="15" description="Air vehicle orientation expressed as Euler angles in degrees." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="lift.lift_kn" valueReference="8" causality="input" description="Aerodynamic state summary exported from wing solver.">
+    <ScalarVariable name="lift.lift_kn" valueReference="16" description="Aerodynamic state summary exported from wing solver." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="lift.drag_kn" valueReference="9" causality="input" description="Aerodynamic state summary exported from wing solver.">
+    <ScalarVariable name="lift.drag_kn" valueReference="17" description="Aerodynamic state summary exported from wing solver." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="lift.pitching_moment_knm" valueReference="10" causality="input" description="Aerodynamic state summary exported from wing solver.">
+    <ScalarVariable name="lift.pitching_moment_knm" valueReference="18" description="Aerodynamic state summary exported from wing solver." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="thrust_in.thrust_kn" valueReference="11" causality="input" description="Propulsion output shared with performance models.">
+    <ScalarVariable name="thrust_in.thrust_kn" valueReference="19" description="Propulsion output shared with performance models." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="thrust_in.mass_flow_kgps" valueReference="12" causality="input" description="Propulsion output shared with performance models.">
+    <ScalarVariable name="thrust_in.mass_flow_kgps" valueReference="20" description="Propulsion output shared with performance models." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="thrust_in.exhaust_velocity_mps" valueReference="13" causality="input" description="Propulsion output shared with performance models.">
+    <ScalarVariable name="thrust_in.exhaust_velocity_mps" valueReference="21" description="Propulsion output shared with performance models." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="orientation.roll_deg" valueReference="14" causality="output" description="Feedback for simulated sensors">
+    <ScalarVariable name="orientation.roll_deg" valueReference="22" description="Air vehicle orientation expressed as Euler angles in degrees." causality="output">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="orientation.pitch_deg" valueReference="15" causality="output" description="Feedback for simulated sensors">
+    <ScalarVariable name="orientation.pitch_deg" valueReference="23" description="Air vehicle orientation expressed as Euler angles in degrees." causality="output">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="orientation.yaw_deg" valueReference="16" causality="output" description="Feedback for simulated sensors">
+    <ScalarVariable name="orientation.yaw_deg" valueReference="24" description="Air vehicle orientation expressed as Euler angles in degrees." causality="output">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="location.x_km" valueReference="17" causality="output" description="Local navigation frame expressed in kilometers (x=North, y=East, z=Up).">
+    <ScalarVariable name="location.x_km" valueReference="25" description="Local navigation frame expressed in kilometers (x=North, y=East, z=Up)." causality="output">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="location.y_km" valueReference="18" causality="output" description="Local navigation frame expressed in kilometers (x=North, y=East, z=Up).">
+    <ScalarVariable name="location.y_km" valueReference="26" description="Local navigation frame expressed in kilometers (x=North, y=East, z=Up)." causality="output">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="location.z_km" valueReference="19" causality="output" description="Local navigation frame expressed in kilometers (x=North, y=East, z=Up).">
+    <ScalarVariable name="location.z_km" valueReference="27" description="Local navigation frame expressed in kilometers (x=North, y=East, z=Up)." causality="output">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="flight_status.airspeed_mps" valueReference="20" causality="output" description="Mission computer status feedback consumed by autonomy and analysis models.">
+    <ScalarVariable name="flight_status.airspeed_mps" valueReference="28" description="Mission computer status feedback consumed by autonomy and analysis models." causality="output">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="flight_status.energy_state_norm" valueReference="21" causality="output" description="Mission computer status feedback consumed by autonomy and analysis models.">
+    <ScalarVariable name="flight_status.energy_state_norm" valueReference="29" description="Mission computer status feedback consumed by autonomy and analysis models." causality="output">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="flight_status.angle_of_attack_deg" valueReference="22" causality="output" description="Mission computer status feedback consumed by autonomy and analysis models.">
+    <ScalarVariable name="flight_status.angle_of_attack_deg" valueReference="30" description="Mission computer status feedback consumed by autonomy and analysis models." causality="output">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="flight_status.climb_rate" valueReference="23" causality="output" description="Mission computer status feedback consumed by autonomy and analysis models.">
+    <ScalarVariable name="flight_status.climb_rate" valueReference="31" description="Mission computer status feedback consumed by autonomy and analysis models." causality="output">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="flight_status.health_code" valueReference="24" causality="output" description="Mission computer status feedback consumed by autonomy and analysis models.">
+    <ScalarVariable name="flight_status.health_code" valueReference="32" description="Mission computer status feedback consumed by autonomy and analysis models." causality="output">
       <Integer />
     </ScalarVariable>
   </ModelVariables>
   <ModelStructure>
     <Outputs>
-      <Unknown index="15" />
-      <Unknown index="16" />
-      <Unknown index="17" />
-      <Unknown index="18" />
-      <Unknown index="19" />
-      <Unknown index="20" />
-      <Unknown index="21" />
-      <Unknown index="22" />
       <Unknown index="23" />
       <Unknown index="24" />
       <Unknown index="25" />
+      <Unknown index="26" />
+      <Unknown index="27" />
+      <Unknown index="28" />
+      <Unknown index="29" />
+      <Unknown index="30" />
+      <Unknown index="31" />
+      <Unknown index="32" />
+      <Unknown index="33" />
     </Outputs>
     <InitialUnknowns>
-      <Unknown index="15" />
-      <Unknown index="16" />
-      <Unknown index="17" />
-      <Unknown index="18" />
-      <Unknown index="19" />
-      <Unknown index="20" />
-      <Unknown index="21" />
-      <Unknown index="22" />
       <Unknown index="23" />
       <Unknown index="24" />
       <Unknown index="25" />
+      <Unknown index="26" />
+      <Unknown index="27" />
+      <Unknown index="28" />
+      <Unknown index="29" />
+      <Unknown index="30" />
+      <Unknown index="31" />
+      <Unknown index="32" />
+      <Unknown index="33" />
     </InitialUnknowns>
   </ModelStructure>
 </fmiModelDescription>

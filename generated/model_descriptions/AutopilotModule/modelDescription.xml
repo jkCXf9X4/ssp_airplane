@@ -1,219 +1,252 @@
 <?xml version='1.0' encoding='utf-8'?>
-<fmiModelDescription fmiVersion="2.0" modelName="AircraftComposition.AutopilotModule" guid="{4f4f78f4-565e-5e59-acf0-365690fb6d3e}" description="F-16 autopilot, takes in sensor data and translates it into a equivalent hotas command." version="1.0" generationTool="pyssp_sysml2 tooling" generationDateAndTime="2000-01-01T00:00:00" variableNamingConvention="structured" numberOfEventIndicators="0">
+<fmiModelDescription fmiVersion="2.0" modelName="AircraftModel.AutopilotModule" guid="{641be6d1-c687-5c23-8900-8c118bc39062}" description="F-16 autopilot, takes in sensor data and translates it into a equivalent hotas command." generationTool="pyfmi_sysml2 tooling" generationDateAndTime="2000-01-01T00:00:00" variableNamingConvention="structured">
   <CoSimulation modelIdentifier="AutopilotModule" />
   <ModelVariables>
-    <ScalarVariable name="comment" valueReference="0" causality="parameter" variability="fixed">
-      <String start="uses waypoint tracking" />
+    <ScalarVariable name="updateRateHz" valueReference="0" causality="parameter" variability="fixed">
+      <Real start="40" />
     </ScalarVariable>
-    <ScalarVariable name="waypointCount" valueReference="1" causality="parameter" variability="fixed">
+    <ScalarVariable name="defaultThrottle" valueReference="1" causality="parameter" variability="fixed">
+      <Real start="0.5" />
+    </ScalarVariable>
+    <ScalarVariable name="targetAirspeed_mps" valueReference="2" causality="parameter" variability="fixed">
+      <Real start="200" />
+    </ScalarVariable>
+    <ScalarVariable name="airspeedToThrottleGain" valueReference="3" causality="parameter" variability="fixed">
+      <Real start="0.003" />
+    </ScalarVariable>
+    <ScalarVariable name="climbRateToThrottleGain" valueReference="4" causality="parameter" variability="fixed">
+      <Real start="0.001" />
+    </ScalarVariable>
+    <ScalarVariable name="minThrottleCommand" valueReference="5" causality="parameter" variability="fixed">
+      <Real start="0.2" />
+    </ScalarVariable>
+    <ScalarVariable name="headingGain" valueReference="6" causality="parameter" variability="fixed">
+      <Real start="0.016666666666666666" />
+    </ScalarVariable>
+    <ScalarVariable name="altitudeToPitchGain" valueReference="7" causality="parameter" variability="fixed">
+      <Real start="10" />
+    </ScalarVariable>
+    <ScalarVariable name="pitchAngleGain" valueReference="8" causality="parameter" variability="fixed">
+      <Real start="0.05" />
+    </ScalarVariable>
+    <ScalarVariable name="maxPitchCommand_deg" valueReference="9" causality="parameter" variability="fixed">
+      <Real start="20" />
+    </ScalarVariable>
+    <ScalarVariable name="waypointCount" valueReference="10" causality="parameter" variability="fixed">
       <Integer start="10" />
     </ScalarVariable>
-    <ScalarVariable name="waypointProximity_km" valueReference="2" causality="parameter" variability="fixed">
-      <Integer start="10" />
-    </ScalarVariable>
-    <ScalarVariable name="waypointX_km[0]" valueReference="3" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointX_km[0]" valueReference="11" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointX_km[1]" valueReference="4" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointX_km[1]" valueReference="12" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointX_km[2]" valueReference="5" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointX_km[2]" valueReference="13" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointX_km[3]" valueReference="6" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointX_km[3]" valueReference="14" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointX_km[4]" valueReference="7" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointX_km[4]" valueReference="15" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointX_km[5]" valueReference="8" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointX_km[5]" valueReference="16" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointX_km[6]" valueReference="9" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointX_km[6]" valueReference="17" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointX_km[7]" valueReference="10" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointX_km[7]" valueReference="18" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointX_km[8]" valueReference="11" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointX_km[8]" valueReference="19" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointX_km[9]" valueReference="12" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointX_km[9]" valueReference="20" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointY_km[0]" valueReference="13" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointY_km[0]" valueReference="21" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointY_km[1]" valueReference="14" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointY_km[1]" valueReference="22" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointY_km[2]" valueReference="15" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointY_km[2]" valueReference="23" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointY_km[3]" valueReference="16" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointY_km[3]" valueReference="24" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointY_km[4]" valueReference="17" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointY_km[4]" valueReference="25" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointY_km[5]" valueReference="18" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointY_km[5]" valueReference="26" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointY_km[6]" valueReference="19" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointY_km[6]" valueReference="27" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointY_km[7]" valueReference="20" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointY_km[7]" valueReference="28" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointY_km[8]" valueReference="21" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointY_km[8]" valueReference="29" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointY_km[9]" valueReference="22" causality="parameter" variability="fixed">
+    <ScalarVariable name="waypointY_km[9]" valueReference="30" causality="parameter" variability="fixed">
       <Real start="0" />
     </ScalarVariable>
-    <ScalarVariable name="waypointZ_km[0]" valueReference="23" causality="parameter" variability="fixed">
-      <Real start="0" />
+    <ScalarVariable name="waypointZ_km[0]" valueReference="31" causality="parameter" variability="fixed">
+      <Real start="1" />
     </ScalarVariable>
-    <ScalarVariable name="waypointZ_km[1]" valueReference="24" causality="parameter" variability="fixed">
-      <Real start="0" />
+    <ScalarVariable name="waypointZ_km[1]" valueReference="32" causality="parameter" variability="fixed">
+      <Real start="1" />
     </ScalarVariable>
-    <ScalarVariable name="waypointZ_km[2]" valueReference="25" causality="parameter" variability="fixed">
-      <Real start="0" />
+    <ScalarVariable name="waypointZ_km[2]" valueReference="33" causality="parameter" variability="fixed">
+      <Real start="1" />
     </ScalarVariable>
-    <ScalarVariable name="waypointZ_km[3]" valueReference="26" causality="parameter" variability="fixed">
-      <Real start="0" />
+    <ScalarVariable name="waypointZ_km[3]" valueReference="34" causality="parameter" variability="fixed">
+      <Real start="1" />
     </ScalarVariable>
-    <ScalarVariable name="waypointZ_km[4]" valueReference="27" causality="parameter" variability="fixed">
-      <Real start="0" />
+    <ScalarVariable name="waypointZ_km[4]" valueReference="35" causality="parameter" variability="fixed">
+      <Real start="1" />
     </ScalarVariable>
-    <ScalarVariable name="waypointZ_km[5]" valueReference="28" causality="parameter" variability="fixed">
-      <Real start="0" />
+    <ScalarVariable name="waypointZ_km[5]" valueReference="36" causality="parameter" variability="fixed">
+      <Real start="1" />
     </ScalarVariable>
-    <ScalarVariable name="waypointZ_km[6]" valueReference="29" causality="parameter" variability="fixed">
-      <Real start="0" />
+    <ScalarVariable name="waypointZ_km[6]" valueReference="37" causality="parameter" variability="fixed">
+      <Real start="1" />
     </ScalarVariable>
-    <ScalarVariable name="waypointZ_km[7]" valueReference="30" causality="parameter" variability="fixed">
-      <Real start="0" />
+    <ScalarVariable name="waypointZ_km[7]" valueReference="38" causality="parameter" variability="fixed">
+      <Real start="1" />
     </ScalarVariable>
-    <ScalarVariable name="waypointZ_km[8]" valueReference="31" causality="parameter" variability="fixed">
-      <Real start="0" />
+    <ScalarVariable name="waypointZ_km[8]" valueReference="39" causality="parameter" variability="fixed">
+      <Real start="1" />
     </ScalarVariable>
-    <ScalarVariable name="waypointZ_km[9]" valueReference="32" causality="parameter" variability="fixed">
-      <Real start="0" />
+    <ScalarVariable name="waypointZ_km[9]" valueReference="40" causality="parameter" variability="fixed">
+      <Real start="1" />
     </ScalarVariable>
-    <ScalarVariable name="feedbackBus.airspeed_mps" valueReference="33" causality="input" description="Mission-computer flight status back into autopilot.">
+    <ScalarVariable name="waypointProximity_km" valueReference="41" causality="parameter" variability="fixed">
+      <Real start="10" />
+    </ScalarVariable>
+    <ScalarVariable name="waypointAltitudeProximity_km" valueReference="42" causality="parameter" variability="fixed">
+      <Real start="1" />
+    </ScalarVariable>
+    <ScalarVariable name="tauCmd" valueReference="43" causality="parameter" variability="fixed">
+      <Real start="1" />
+    </ScalarVariable>
+    <ScalarVariable name="feedbackBus.airspeed_mps" valueReference="44" description="Mission computer status feedback consumed by autonomy and analysis models." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="feedbackBus.energy_state_norm" valueReference="34" causality="input" description="Mission-computer flight status back into autopilot.">
+    <ScalarVariable name="feedbackBus.energy_state_norm" valueReference="45" description="Mission computer status feedback consumed by autonomy and analysis models." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="feedbackBus.angle_of_attack_deg" valueReference="35" causality="input" description="Mission-computer flight status back into autopilot.">
+    <ScalarVariable name="feedbackBus.angle_of_attack_deg" valueReference="46" description="Mission computer status feedback consumed by autonomy and analysis models." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="feedbackBus.climb_rate" valueReference="36" causality="input" description="Mission-computer flight status back into autopilot.">
+    <ScalarVariable name="feedbackBus.climb_rate" valueReference="47" description="Mission computer status feedback consumed by autonomy and analysis models." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="feedbackBus.health_code" valueReference="37" causality="input" description="Mission-computer flight status back into autopilot.">
+    <ScalarVariable name="feedbackBus.health_code" valueReference="48" description="Mission computer status feedback consumed by autonomy and analysis models." causality="input">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="currentLocation.x_km" valueReference="38" causality="input" description="Current local position from sensors">
+    <ScalarVariable name="currentLocation.x_km" valueReference="49" description="Local navigation frame expressed in kilometers (x=North, y=East, z=Up)." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="currentLocation.y_km" valueReference="39" causality="input" description="Current local position from sensors">
+    <ScalarVariable name="currentLocation.y_km" valueReference="50" description="Local navigation frame expressed in kilometers (x=North, y=East, z=Up)." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="currentLocation.z_km" valueReference="40" causality="input" description="Current local position from sensors">
+    <ScalarVariable name="currentLocation.z_km" valueReference="51" description="Local navigation frame expressed in kilometers (x=North, y=East, z=Up)." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="currentOrientation.roll_deg" valueReference="41" causality="input" description="Current attitude from sensors.">
+    <ScalarVariable name="currentOrientation.roll_deg" valueReference="52" description="Air vehicle orientation expressed as Euler angles in degrees." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="currentOrientation.pitch_deg" valueReference="42" causality="input" description="Current attitude from sensors.">
+    <ScalarVariable name="currentOrientation.pitch_deg" valueReference="53" description="Air vehicle orientation expressed as Euler angles in degrees." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="currentOrientation.yaw_deg" valueReference="43" causality="input" description="Current attitude from sensors.">
+    <ScalarVariable name="currentOrientation.yaw_deg" valueReference="54" description="Air vehicle orientation expressed as Euler angles in degrees." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="autopilotCmd.stick_pitch_norm" valueReference="44" causality="output" description="HOTAS-equivalent command stream for mission computer blending.">
+    <ScalarVariable name="autopilotCmd.stick_pitch_norm" valueReference="55" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="output">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="autopilotCmd.stick_roll_norm" valueReference="45" causality="output" description="HOTAS-equivalent command stream for mission computer blending.">
+    <ScalarVariable name="autopilotCmd.stick_roll_norm" valueReference="56" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="output">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="autopilotCmd.rudder_norm" valueReference="46" causality="output" description="HOTAS-equivalent command stream for mission computer blending.">
+    <ScalarVariable name="autopilotCmd.rudder_norm" valueReference="57" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="output">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="autopilotCmd.throttle_norm" valueReference="47" causality="output" description="HOTAS-equivalent command stream for mission computer blending.">
+    <ScalarVariable name="autopilotCmd.throttle_norm" valueReference="58" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="output">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="autopilotCmd.throttle_aux_norm" valueReference="48" causality="output" description="HOTAS-equivalent command stream for mission computer blending.">
+    <ScalarVariable name="autopilotCmd.throttle_aux_norm" valueReference="59" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="output">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="autopilotCmd.button_mask" valueReference="49" causality="output" description="HOTAS-equivalent command stream for mission computer blending.">
+    <ScalarVariable name="autopilotCmd.button_mask" valueReference="60" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="output">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="autopilotCmd.hat_x" valueReference="50" causality="output" description="HOTAS-equivalent command stream for mission computer blending.">
+    <ScalarVariable name="autopilotCmd.hat_x" valueReference="61" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="output">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="autopilotCmd.hat_y" valueReference="51" causality="output" description="HOTAS-equivalent command stream for mission computer blending.">
+    <ScalarVariable name="autopilotCmd.hat_y" valueReference="62" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="output">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="autopilotCmd.mode_switch" valueReference="52" causality="output" description="HOTAS-equivalent command stream for mission computer blending.">
+    <ScalarVariable name="autopilotCmd.mode_switch" valueReference="63" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="output">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="autopilotCmd.reserved" valueReference="53" causality="output" description="HOTAS-equivalent command stream for mission computer blending.">
+    <ScalarVariable name="autopilotCmd.reserved" valueReference="64" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="output">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="missionStatus.waypoint_index" valueReference="54" causality="output" description="Waypoint progression for logging and verification.">
+    <ScalarVariable name="missionStatus.waypoint_index" valueReference="65" description="Waypoint-tracking status produced by the autopilot for logging and requirement evaluation." causality="output">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="missionStatus.total_waypoints" valueReference="55" causality="output" description="Waypoint progression for logging and verification.">
+    <ScalarVariable name="missionStatus.total_waypoints" valueReference="66" description="Waypoint-tracking status produced by the autopilot for logging and requirement evaluation." causality="output">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="missionStatus.distance_to_waypoint_km" valueReference="56" causality="output" description="Waypoint progression for logging and verification.">
+    <ScalarVariable name="missionStatus.distance_to_waypoint_km" valueReference="67" description="Waypoint-tracking status produced by the autopilot for logging and requirement evaluation." causality="output">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="missionStatus.arrived" valueReference="57" causality="output" description="Waypoint progression for logging and verification.">
+    <ScalarVariable name="missionStatus.arrived" valueReference="68" description="Waypoint-tracking status produced by the autopilot for logging and requirement evaluation." causality="output">
       <Boolean />
     </ScalarVariable>
-    <ScalarVariable name="missionStatus.complete" valueReference="58" causality="output" description="Waypoint progression for logging and verification.">
+    <ScalarVariable name="missionStatus.complete" valueReference="69" description="Waypoint-tracking status produced by the autopilot for logging and requirement evaluation." causality="output">
       <Boolean />
     </ScalarVariable>
   </ModelVariables>
   <ModelStructure>
     <Outputs>
-      <Unknown index="45" />
-      <Unknown index="46" />
-      <Unknown index="47" />
-      <Unknown index="48" />
-      <Unknown index="49" />
-      <Unknown index="50" />
-      <Unknown index="51" />
-      <Unknown index="52" />
-      <Unknown index="53" />
-      <Unknown index="54" />
-      <Unknown index="55" />
       <Unknown index="56" />
       <Unknown index="57" />
       <Unknown index="58" />
       <Unknown index="59" />
+      <Unknown index="60" />
+      <Unknown index="61" />
+      <Unknown index="62" />
+      <Unknown index="63" />
+      <Unknown index="64" />
+      <Unknown index="65" />
+      <Unknown index="66" />
+      <Unknown index="67" />
+      <Unknown index="68" />
+      <Unknown index="69" />
+      <Unknown index="70" />
     </Outputs>
     <InitialUnknowns>
-      <Unknown index="45" />
-      <Unknown index="46" />
-      <Unknown index="47" />
-      <Unknown index="48" />
-      <Unknown index="49" />
-      <Unknown index="50" />
-      <Unknown index="51" />
-      <Unknown index="52" />
-      <Unknown index="53" />
-      <Unknown index="54" />
-      <Unknown index="55" />
       <Unknown index="56" />
       <Unknown index="57" />
       <Unknown index="58" />
       <Unknown index="59" />
+      <Unknown index="60" />
+      <Unknown index="61" />
+      <Unknown index="62" />
+      <Unknown index="63" />
+      <Unknown index="64" />
+      <Unknown index="65" />
+      <Unknown index="66" />
+      <Unknown index="67" />
+      <Unknown index="68" />
+      <Unknown index="69" />
+      <Unknown index="70" />
     </InitialUnknowns>
   </ModelStructure>
 </fmiModelDescription>

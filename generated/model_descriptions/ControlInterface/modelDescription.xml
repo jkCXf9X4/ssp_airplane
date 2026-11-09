@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<fmiModelDescription fmiVersion="2.0" modelName="AircraftComposition.ControlInterface" guid="{ebd8909c-193d-5580-9696-5ef31ddc4bc0}" description="F-16 HOTAS + side-stick interface for pilot inputs and trim switches." version="1.0" generationTool="pyssp_sysml2 tooling" generationDateAndTime="2000-01-01T00:00:00" variableNamingConvention="structured" numberOfEventIndicators="0">
+<fmiModelDescription fmiVersion="2.0" modelName="AircraftModel.ControlInterface" guid="{e78e04c7-294e-56c1-926d-f1129b1f1ce8}" description="F-16 HOTAS + side-stick interface for pilot inputs and trim switches." generationTool="pyfmi_sysml2 tooling" generationDateAndTime="2000-01-01T00:00:00" variableNamingConvention="structured">
   <CoSimulation modelIdentifier="ControlInterface" />
   <ModelVariables>
     <ScalarVariable name="input_scheme" valueReference="0" causality="parameter" variability="fixed">
@@ -11,71 +11,75 @@
     <ScalarVariable name="useBridgeInput" valueReference="2" causality="parameter" variability="fixed">
       <Boolean start="false" />
     </ScalarVariable>
-    <ScalarVariable name="bridgeInput.stick_pitch_norm" valueReference="3" causality="input" description="External pilot command provided by an interactive bridge/frontend adapter.">
+    <ScalarVariable name="inputLag" valueReference="3" causality="parameter" variability="fixed">
+      <Real start="0.05" />
+    </ScalarVariable>
+    <ScalarVariable name="manualCommandDefault" valueReference="4" causality="parameter" variability="fixed">
+      <Real start="0.6" />
+    </ScalarVariable>
+    <ScalarVariable name="bridgeInput.stick_pitch_norm" valueReference="5" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="bridgeInput.stick_roll_norm" valueReference="4" causality="input" description="External pilot command provided by an interactive bridge/frontend adapter.">
+    <ScalarVariable name="bridgeInput.stick_roll_norm" valueReference="6" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="bridgeInput.rudder_norm" valueReference="5" causality="input" description="External pilot command provided by an interactive bridge/frontend adapter.">
+    <ScalarVariable name="bridgeInput.rudder_norm" valueReference="7" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="bridgeInput.throttle_norm" valueReference="6" causality="input" description="External pilot command provided by an interactive bridge/frontend adapter.">
+    <ScalarVariable name="bridgeInput.throttle_norm" valueReference="8" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="bridgeInput.throttle_aux_norm" valueReference="7" causality="input" description="External pilot command provided by an interactive bridge/frontend adapter.">
+    <ScalarVariable name="bridgeInput.throttle_aux_norm" valueReference="9" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="bridgeInput.button_mask" valueReference="8" causality="input" description="External pilot command provided by an interactive bridge/frontend adapter.">
+    <ScalarVariable name="bridgeInput.button_mask" valueReference="10" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="input">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="bridgeInput.hat_x" valueReference="9" causality="input" description="External pilot command provided by an interactive bridge/frontend adapter.">
+    <ScalarVariable name="bridgeInput.hat_x" valueReference="11" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="input">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="bridgeInput.hat_y" valueReference="10" causality="input" description="External pilot command provided by an interactive bridge/frontend adapter.">
+    <ScalarVariable name="bridgeInput.hat_y" valueReference="12" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="input">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="bridgeInput.mode_switch" valueReference="11" causality="input" description="External pilot command provided by an interactive bridge/frontend adapter.">
+    <ScalarVariable name="bridgeInput.mode_switch" valueReference="13" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="input">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="bridgeInput.reserved" valueReference="12" causality="input" description="External pilot command provided by an interactive bridge/frontend adapter.">
+    <ScalarVariable name="bridgeInput.reserved" valueReference="14" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="input">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="pilotCommand.stick_pitch_norm" valueReference="13" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
+    <ScalarVariable name="pilotCommand.stick_pitch_norm" valueReference="15" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="output">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="pilotCommand.stick_roll_norm" valueReference="14" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
+    <ScalarVariable name="pilotCommand.stick_roll_norm" valueReference="16" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="output">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="pilotCommand.rudder_norm" valueReference="15" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
+    <ScalarVariable name="pilotCommand.rudder_norm" valueReference="17" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="output">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="pilotCommand.throttle_norm" valueReference="16" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
+    <ScalarVariable name="pilotCommand.throttle_norm" valueReference="18" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="output">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="pilotCommand.throttle_aux_norm" valueReference="17" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
+    <ScalarVariable name="pilotCommand.throttle_aux_norm" valueReference="19" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="output">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="pilotCommand.button_mask" valueReference="18" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
+    <ScalarVariable name="pilotCommand.button_mask" valueReference="20" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="output">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="pilotCommand.hat_x" valueReference="19" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
+    <ScalarVariable name="pilotCommand.hat_x" valueReference="21" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="output">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="pilotCommand.hat_y" valueReference="20" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
+    <ScalarVariable name="pilotCommand.hat_y" valueReference="22" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="output">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="pilotCommand.mode_switch" valueReference="21" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
+    <ScalarVariable name="pilotCommand.mode_switch" valueReference="23" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="output">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="pilotCommand.reserved" valueReference="22" causality="output" description="HOTAS-control bundle forwarded for mission computer sensor fusion.">
+    <ScalarVariable name="pilotCommand.reserved" valueReference="24" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="output">
       <Integer />
     </ScalarVariable>
   </ModelVariables>
   <ModelStructure>
     <Outputs>
-      <Unknown index="14" />
-      <Unknown index="15" />
       <Unknown index="16" />
       <Unknown index="17" />
       <Unknown index="18" />
@@ -84,10 +88,10 @@
       <Unknown index="21" />
       <Unknown index="22" />
       <Unknown index="23" />
+      <Unknown index="24" />
+      <Unknown index="25" />
     </Outputs>
     <InitialUnknowns>
-      <Unknown index="14" />
-      <Unknown index="15" />
       <Unknown index="16" />
       <Unknown index="17" />
       <Unknown index="18" />
@@ -96,6 +100,8 @@
       <Unknown index="21" />
       <Unknown index="22" />
       <Unknown index="23" />
+      <Unknown index="24" />
+      <Unknown index="25" />
     </InitialUnknowns>
   </ModelStructure>
 </fmiModelDescription>

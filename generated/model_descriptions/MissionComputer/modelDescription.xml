@@ -1,111 +1,123 @@
 <?xml version='1.0' encoding='utf-8'?>
-<fmiModelDescription fmiVersion="2.0" modelName="AircraftComposition.MissionComputer" guid="{2323fcc8-7d47-57c6-9ea4-3c319ef28f4a}" description="F-16C/D mission computer blending pilot HOTAS inputs with fly-by-wire control laws and stores management." version="1.0" generationTool="pyssp_sysml2 tooling" generationDateAndTime="2000-01-01T00:00:00" variableNamingConvention="structured" numberOfEventIndicators="0">
+<fmiModelDescription fmiVersion="2.0" modelName="AircraftModel.MissionComputer" guid="{fcc7ebf3-7548-5f8f-85d6-9335f4fdaea5}" description="F-16C/D mission computer blending pilot HOTAS inputs with fly-by-wire control laws and stores management." generationTool="pyfmi_sysml2 tooling" generationDateAndTime="2000-01-01T00:00:00" variableNamingConvention="structured">
   <CoSimulation modelIdentifier="MissionComputer" />
   <ModelVariables>
-    <ScalarVariable name="manualInput.stick_pitch_norm" valueReference="0" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
+    <ScalarVariable name="flyByWireChannels" valueReference="0" causality="parameter" variability="fixed">
+      <Integer start="3" />
+    </ScalarVariable>
+    <ScalarVariable name="rollAuthority_deg" valueReference="1" causality="parameter" variability="fixed">
+      <Real start="25" />
+    </ScalarVariable>
+    <ScalarVariable name="pitchAuthority_deg" valueReference="2" causality="parameter" variability="fixed">
+      <Real start="20" />
+    </ScalarVariable>
+    <ScalarVariable name="yawAuthority_deg" valueReference="3" causality="parameter" variability="fixed">
+      <Real start="10" />
+    </ScalarVariable>
+    <ScalarVariable name="manualInput.stick_pitch_norm" valueReference="4" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="manualInput.stick_roll_norm" valueReference="1" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
+    <ScalarVariable name="manualInput.stick_roll_norm" valueReference="5" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="manualInput.rudder_norm" valueReference="2" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
+    <ScalarVariable name="manualInput.rudder_norm" valueReference="6" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="manualInput.throttle_norm" valueReference="3" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
+    <ScalarVariable name="manualInput.throttle_norm" valueReference="7" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="manualInput.throttle_aux_norm" valueReference="4" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
+    <ScalarVariable name="manualInput.throttle_aux_norm" valueReference="8" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="manualInput.button_mask" valueReference="5" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
+    <ScalarVariable name="manualInput.button_mask" valueReference="9" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="input">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="manualInput.hat_x" valueReference="6" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
+    <ScalarVariable name="manualInput.hat_x" valueReference="10" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="input">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="manualInput.hat_y" valueReference="7" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
+    <ScalarVariable name="manualInput.hat_y" valueReference="11" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="input">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="manualInput.mode_switch" valueReference="8" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
+    <ScalarVariable name="manualInput.mode_switch" valueReference="12" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="input">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="manualInput.reserved" valueReference="9" causality="input" description="Manual HOTAS command bundle from cockpit controls.">
+    <ScalarVariable name="manualInput.reserved" valueReference="13" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="input">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="autopilotInput.stick_pitch_norm" valueReference="10" causality="input" description="Autopilot command bundle using same HOTAS signal structure.">
+    <ScalarVariable name="autopilotInput.stick_pitch_norm" valueReference="14" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="autopilotInput.stick_roll_norm" valueReference="11" causality="input" description="Autopilot command bundle using same HOTAS signal structure.">
+    <ScalarVariable name="autopilotInput.stick_roll_norm" valueReference="15" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="autopilotInput.rudder_norm" valueReference="12" causality="input" description="Autopilot command bundle using same HOTAS signal structure.">
+    <ScalarVariable name="autopilotInput.rudder_norm" valueReference="16" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="autopilotInput.throttle_norm" valueReference="13" causality="input" description="Autopilot command bundle using same HOTAS signal structure.">
+    <ScalarVariable name="autopilotInput.throttle_norm" valueReference="17" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="autopilotInput.throttle_aux_norm" valueReference="14" causality="input" description="Autopilot command bundle using same HOTAS signal structure.">
+    <ScalarVariable name="autopilotInput.throttle_aux_norm" valueReference="18" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="autopilotInput.button_mask" valueReference="15" causality="input" description="Autopilot command bundle using same HOTAS signal structure.">
+    <ScalarVariable name="autopilotInput.button_mask" valueReference="19" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="input">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="autopilotInput.hat_x" valueReference="16" causality="input" description="Autopilot command bundle using same HOTAS signal structure.">
+    <ScalarVariable name="autopilotInput.hat_x" valueReference="20" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="input">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="autopilotInput.hat_y" valueReference="17" causality="input" description="Autopilot command bundle using same HOTAS signal structure.">
+    <ScalarVariable name="autopilotInput.hat_y" valueReference="21" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="input">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="autopilotInput.mode_switch" valueReference="18" causality="input" description="Autopilot command bundle using same HOTAS signal structure.">
+    <ScalarVariable name="autopilotInput.mode_switch" valueReference="22" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="input">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="autopilotInput.reserved" valueReference="19" causality="input" description="Autopilot command bundle using same HOTAS signal structure.">
+    <ScalarVariable name="autopilotInput.reserved" valueReference="23" description="HOTAS-style control payload shared across control surfaces and mission computer consumers." causality="input">
       <Integer />
     </ScalarVariable>
-    <ScalarVariable name="fuelStatus.fuel_remaining_kg" valueReference="20" causality="input" description="Fuel telemetry used for command blending and power limiting.">
+    <ScalarVariable name="fuelStatus.fuel_remaining_kg" valueReference="24" description="Remaining fuel mass and normalized level for availability tracking." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="fuelStatus.fuel_level_norm" valueReference="21" causality="input" description="Fuel telemetry used for command blending and power limiting.">
+    <ScalarVariable name="fuelStatus.fuel_level_norm" valueReference="25" description="Remaining fuel mass and normalized level for availability tracking." causality="input">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="fuelStatus.fuel_starved" valueReference="22" causality="input" description="Fuel telemetry used for command blending and power limiting.">
+    <ScalarVariable name="fuelStatus.fuel_starved" valueReference="26" description="Remaining fuel mass and normalized level for availability tracking." causality="input">
       <Boolean />
     </ScalarVariable>
-    <ScalarVariable name="engineThrottle.throttle_norm" valueReference="23" causality="output" description="Structured throttle/fuel enable command to propulsion.">
+    <ScalarVariable name="engineThrottle.throttle_norm" valueReference="27" description="Engine throttle and fuel-enable bit for turbofan co-simulation." causality="output">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="engineThrottle.fuel_enable" valueReference="24" causality="output" description="Structured throttle/fuel enable command to propulsion.">
+    <ScalarVariable name="engineThrottle.fuel_enable" valueReference="28" description="Engine throttle and fuel-enable bit for turbofan co-simulation." causality="output">
       <Boolean />
     </ScalarVariable>
-    <ScalarVariable name="engineThrottle.afterburner_enable" valueReference="25" causality="output" description="Structured throttle/fuel enable command to propulsion.">
+    <ScalarVariable name="engineThrottle.afterburner_enable" valueReference="29" description="Engine throttle and fuel-enable bit for turbofan co-simulation." causality="output">
       <Boolean />
     </ScalarVariable>
-    <ScalarVariable name="direction_command.roll_deg" valueReference="26" causality="output" description="Command how to alter the current velocity vector, pith, yaw, roll">
+    <ScalarVariable name="direction_command.roll_deg" valueReference="30" description="Air vehicle orientation expressed as Euler angles in degrees." causality="output">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="direction_command.pitch_deg" valueReference="27" causality="output" description="Command how to alter the current velocity vector, pith, yaw, roll">
+    <ScalarVariable name="direction_command.pitch_deg" valueReference="31" description="Air vehicle orientation expressed as Euler angles in degrees." causality="output">
       <Real />
     </ScalarVariable>
-    <ScalarVariable name="direction_command.yaw_deg" valueReference="28" causality="output" description="Command how to alter the current velocity vector, pith, yaw, roll">
+    <ScalarVariable name="direction_command.yaw_deg" valueReference="32" description="Air vehicle orientation expressed as Euler angles in degrees." causality="output">
       <Real />
     </ScalarVariable>
   </ModelVariables>
   <ModelStructure>
     <Outputs>
-      <Unknown index="24" />
-      <Unknown index="25" />
-      <Unknown index="26" />
-      <Unknown index="27" />
       <Unknown index="28" />
       <Unknown index="29" />
+      <Unknown index="30" />
+      <Unknown index="31" />
+      <Unknown index="32" />
+      <Unknown index="33" />
     </Outputs>
     <InitialUnknowns>
-      <Unknown index="24" />
-      <Unknown index="25" />
-      <Unknown index="26" />
-      <Unknown index="27" />
       <Unknown index="28" />
       <Unknown index="29" />
+      <Unknown index="30" />
+      <Unknown index="31" />
+      <Unknown index="32" />
+      <Unknown index="33" />
     </InitialUnknowns>
   </ModelStructure>
 </fmiModelDescription>

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef AIRCRAFT_FLIGHTGEARBRIDGE_H
+#define AIRCRAFT_FLIGHTGEARBRIDGE_H
 
 #include "Aircraft_InterfaceCommon.h"
 
@@ -40,16 +41,17 @@ typedef enum Aircraft_FlightGearBridge_ValueReference {
   AIRCRAFT_FLIGHTGEARBRIDGE_VR_PILOTCOMMAND_RESERVED = 32,
 } Aircraft_FlightGearBridge_ValueReference;
 
-#ifdef __cplusplus
+enum { Aircraft_FlightGearBridge_VrCount = 33 };
 
-inline constexpr size_t Aircraft_FlightGearBridge_VrCount = 33;
+#ifdef __cplusplus
+#include <string>
 
 struct Aircraft_FlightGearBridge_Instance {
   Aircraft_VrMapping vr_map[33] = {};
   std::string transport = "Ros2UdpBridge";
-  double reference_latitude_deg = 0.0;
-  double reference_longitude_deg = 0.0;
-  double reference_altitude_m = 0.0;
+  double reference_latitude_deg = 0;
+  double reference_longitude_deg = 0;
+  double reference_altitude_m = 0;
   std::string remote_host = "127.0.0.1";
   int telemetry_port = 5501;
   int control_port = 5502;
@@ -100,3 +102,4 @@ inline void Aircraft_FlightGearBridge_initialize_vr_map(Aircraft_FlightGearBridg
 }
 
 #endif  /* __cplusplus */
+#endif  /* AIRCRAFT_FLIGHTGEARBRIDGE_H */

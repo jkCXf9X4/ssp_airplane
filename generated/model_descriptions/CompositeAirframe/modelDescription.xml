@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<fmiModelDescription fmiVersion="2.0" modelName="AircraftComposition.CompositeAirframe" guid="{194c90d7-83ff-5a14-b2dd-89f22b324a10}" description="F-16 aluminum/composite fuselage sized for high-supersonic operations with dorsal spine for avionics." version="1.0" generationTool="pyssp_sysml2 tooling" generationDateAndTime="2000-01-01T00:00:00" variableNamingConvention="structured" numberOfEventIndicators="0">
+<fmiModelDescription fmiVersion="2.0" modelName="AircraftModel.CompositeAirframe" guid="{4bc096f0-85e9-5bdc-afeb-8ac882a8f51e}" description="F-16 aluminum/composite fuselage sized for high-supersonic operations with dorsal spine for avionics." generationTool="pyfmi_sysml2 tooling" generationDateAndTime="2000-01-01T00:00:00" variableNamingConvention="structured">
   <CoSimulation modelIdentifier="CompositeAirframe" />
   <ModelVariables>
     <ScalarVariable name="length_m" valueReference="0" causality="parameter" variability="fixed">
@@ -12,17 +12,35 @@
       <Real start="10" />
     </ScalarVariable>
     <ScalarVariable name="empty_weight_kg" valueReference="3" causality="parameter" variability="fixed">
-      <Integer start="8573" />
+      <Real start="8573" />
     </ScalarVariable>
     <ScalarVariable name="payload_capacity_kg" valueReference="4" causality="parameter" variability="fixed">
-      <Integer start="7700" />
+      <Real start="7700" />
     </ScalarVariable>
     <ScalarVariable name="hardpoint_count" valueReference="5" causality="parameter" variability="fixed">
       <Integer start="9" />
     </ScalarVariable>
+    <ScalarVariable name="length" valueReference="6" causality="parameter" variability="fixed">
+      <Real start="15" />
+    </ScalarVariable>
+    <ScalarVariable name="fuselageWidth" valueReference="7" causality="parameter" variability="fixed">
+      <Real start="3" />
+    </ScalarVariable>
+    <ScalarVariable name="wingspan" valueReference="8" causality="parameter" variability="fixed">
+      <Real start="10" />
+    </ScalarVariable>
+    <ScalarVariable name="payloadScale" valueReference="9" causality="parameter" variability="fixed">
+      <Real start="1" />
+    </ScalarVariable>
+    <ScalarVariable name="maxPayload" valueReference="10" causality="parameter" variability="fixed">
+      <Real start="7700" />
+    </ScalarVariable>
+    <ScalarVariable name="emptyMass" valueReference="11" causality="parameter" variability="fixed">
+      <Real start="8573" />
+    </ScalarVariable>
+    <ScalarVariable name="wettedAreaFactor" valueReference="12" causality="parameter" variability="fixed">
+      <Real start="2.2" />
+    </ScalarVariable>
   </ModelVariables>
-  <ModelStructure>
-    <Outputs />
-    <InitialUnknowns />
-  </ModelStructure>
+  <ModelStructure />
 </fmiModelDescription>

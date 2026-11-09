@@ -8,6 +8,7 @@ from pathlib import Path
 
 from scripts.lib.scenarios.packaging import package_ssp_with_parameters
 from scripts.lib.scenarios.preparation import DEFAULT_RESULTS, DEFAULT_SSP
+from scripts.lib.paths import GENERATED_ANALYSIS_DESCRIPTOR, GENERATED_SCENARIO_SSM
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -20,6 +21,18 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="Scenario stem used for naming the prepared SSP run directory and archive.",
     )
     parser.add_argument("--results-dir", type=Path, default=DEFAULT_RESULTS, help="Directory for generated artifacts.")
+    parser.add_argument(
+        "--ssm",
+        type=Path,
+        default=GENERATED_SCENARIO_SSM,
+        help="Analysis scenario mapping (.ssm) applied to the bound parameter set.",
+    )
+    parser.add_argument(
+        "--analysis-descriptor",
+        type=Path,
+        default=GENERATED_ANALYSIS_DESCRIPTOR,
+        help="Analysis descriptor (analysis.json) copied next to the prepared run output.",
+    )
     return parser.parse_args(argv)
 
 
@@ -30,6 +43,8 @@ def main(argv: list[str] | None = None) -> int:
         parameter_set_path=args.parameter_set,
         scenario_stem=args.scenario_stem,
         results_dir=args.results_dir,
+        ssm_path=args.ssm,
+        analysis_descriptor_path=args.analysis_descriptor,
     )
     print(
         json.dumps(

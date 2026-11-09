@@ -13,7 +13,12 @@ from pathlib import Path
 if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from scripts.lib.paths import BUILD_DIR, REPO_ROOT
+from scripts.lib.paths import (
+    BUILD_DIR,
+    GENERATED_ANALYSIS_DESCRIPTOR,
+    GENERATED_SCENARIO_SSM,
+    REPO_ROOT,
+)
 
 
 def run_step(*args: str) -> None:
@@ -112,6 +117,10 @@ def main(argv: list[str] | None = None) -> int:
         str(parameter_set_path),
         "--scenario-stem",
         "test_scenario",
+        "--ssm",
+        str(GENERATED_SCENARIO_SSM),
+        "--analysis-descriptor",
+        str(GENERATED_ANALYSIS_DESCRIPTOR),
     )
     run_step(
         sys.executable,

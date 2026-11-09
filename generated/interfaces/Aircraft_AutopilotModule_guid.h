@@ -1,0 +1,3 @@
+#pragma once
+
+#define AIRCRAFT_AUTOPILOTMODULE_GUID "{641be6d1-c687-5c23-8900-8c118bc39062}"

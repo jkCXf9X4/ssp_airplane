@@ -3,38 +3,39 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-from pycps_sysmlv2 import NodeType, SysMLParser
+import pycps_sysml2
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 
+def _architecture():
+    return pycps_sysml2.load(REPO_ROOT / "architecture")
+
+
 def test_parser_collects_parts_and_ports():
-    architecture = SysMLParser(REPO_ROOT / "architecture").parse()
-    assert architecture.package == "Aircraft"
+    architecture = _architecture()
+    assert architecture.package_name == "Aircraft"
     assert "MissionComputer" in architecture.part_definitions
 
     mission_computer = architecture.part_definitions["MissionComputer"]
-    manual_input = mission_computer.refs(NodeType.Port)["manualInput"]
+    manual_input = mission_computer.ports["manualInput"]
     assert manual_input.direction == "in"
-    assert manual_input.type == "PilotCommand"
-    assert manual_input.ref_node is not None
-    assert "throttle_norm" in manual_input.ref_node.defs(NodeType.Attribute)
+    assert manual_input.type_name == "PilotCommand"
 
     pilot_command = architecture.port_definitions["PilotCommand"]
-    assert "hat_x" in pilot_command.defs(NodeType.Attribute)
-    assert pilot_command.defs(NodeType.Attribute)["hat_x"].type.as_string() == "Integer"
-
+    assert "throttle_norm" in pilot_command.attributes
+    assert pilot_command.attributes["hat_x"].type_name == "Integer"
 
 
 def test_connections_are_parsed():
-    architecture = SysMLParser(REPO_ROOT / "architecture").parse()
-    system = architecture.get_def(NodeType.Part, "AircraftComposition")
+    architecture = _architecture()
+    aircraft_model = architecture.part_definitions["AircraftModel"]
     assert any(
-        conn.src_part_node.ref_node.name == "Environment"
-        and conn.src_port == "flight_status"
-        and conn.dst_part_node.ref_node.name == "AutopilotModule"
-        and conn.dst_port == "feedbackBus"
-        for conn in system.defs(NodeType.Connection).values()
+        conn.source_part == "environment"
+        and conn.source_port == "flight_status"
+        and conn.destination_part == "autopilot_module"
+        and conn.destination_port == "feedbackBus"
+        for conn in aircraft_model.connections.values()
     )

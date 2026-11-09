@@ -1,4 +1,5 @@
-#pragma once
+#ifndef AIRCRAFT_INPUTOUTPUT_H
+#define AIRCRAFT_INPUTOUTPUT_H
 
 #include "Aircraft_InterfaceCommon.h"
 
@@ -33,9 +34,10 @@ typedef enum Aircraft_InputOutput_ValueReference {
   AIRCRAFT_INPUTOUTPUT_VR_MISSIONSTATUS_COMPLETE = 25,
 } Aircraft_InputOutput_ValueReference;
 
-#ifdef __cplusplus
+enum { Aircraft_InputOutput_VrCount = 26 };
 
-inline constexpr size_t Aircraft_InputOutput_VrCount = 26;
+#ifdef __cplusplus
+#include <string>
 
 struct Aircraft_InputOutput_Instance {
   Aircraft_VrMapping vr_map[26] = {};
@@ -79,3 +81,4 @@ inline void Aircraft_InputOutput_initialize_vr_map(Aircraft_InputOutput_Instance
 }
 
 #endif  /* __cplusplus */
+#endif  /* AIRCRAFT_INPUTOUTPUT_H */
