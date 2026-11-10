@@ -5,16 +5,16 @@
 namespace
 {
 
-  inline fgbridge::ModelInstance *as_instance(fmi2Component component) { return reinterpret_cast<fgbridge::ModelInstance *>(component); }
+  inline ros2udpbridge::ModelInstance *as_instance(fmi2Component component) { return reinterpret_cast<ros2udpbridge::ModelInstance *>(component); }
 
-  inline const Aircraft_VrMapping *lookup_mapping(const fgbridge::ModelInstance *instance, fmi2ValueReference vr)
+  inline const Aircraft_VrMapping *lookup_mapping(const ros2udpbridge::ModelInstance *instance, fmi2ValueReference vr)
   {
-    return vr < Aircraft_FlightGearBridge_VrCount ? &instance->vr_map[vr] : nullptr;
+    return vr < Aircraft_Ros2UdpBridge_VrCount ? &instance->vr_map[vr] : nullptr;
   }
 
-  inline Aircraft_VrMapping *lookup_mapping(fgbridge::ModelInstance *instance, fmi2ValueReference vr)
+  inline Aircraft_VrMapping *lookup_mapping(ros2udpbridge::ModelInstance *instance, fmi2ValueReference vr)
   {
-    return vr < Aircraft_FlightGearBridge_VrCount ? &instance->vr_map[vr] : nullptr;
+    return vr < Aircraft_Ros2UdpBridge_VrCount ? &instance->vr_map[vr] : nullptr;
   }
 
   template <typename T>
@@ -34,9 +34,9 @@ namespace
 extern "C"
 {
 
-  const char *fmi2GetTypesPlatform() { return fgbridge::kTypesPlatform; }
+  const char *fmi2GetTypesPlatform() { return ros2udpbridge::kTypesPlatform; }
 
-  const char *fmi2GetVersion() { return fgbridge::kVersion; }
+  const char *fmi2GetVersion() { return ros2udpbridge::kVersion; }
 
   fmi2Status fmi2SetDebugLogging(fmi2Component, fmi2Boolean, size_t, const fmi2String[]) { return fmi2OK; }
 
@@ -53,14 +53,14 @@ extern "C"
     {
       return nullptr;
     }
-    if (fmuGUID == nullptr || std::strcmp(fmuGUID, fgbridge::kGuid) != 0)
+    if (fmuGUID == nullptr || std::strcmp(fmuGUID, ros2udpbridge::kGuid) != 0)
     {
       return nullptr;
     }
-    return reinterpret_cast<fmi2Component>(fgbridge::create_instance());
+    return reinterpret_cast<fmi2Component>(ros2udpbridge::create_instance());
   }
 
-  void fmi2FreeInstance(fmi2Component component) { fgbridge::destroy_instance(as_instance(component)); }
+  void fmi2FreeInstance(fmi2Component component) { ros2udpbridge::destroy_instance(as_instance(component)); }
 
   fmi2Status fmi2SetupExperiment(
       fmi2Component,
@@ -75,19 +75,19 @@ extern "C"
 
   fmi2Status fmi2EnterInitializationMode(fmi2Component component)
   {
-    Aircraft_FlightGearBridge_initialize_vr_map(as_instance(component));
+    Aircraft_Ros2UdpBridge_initialize_vr_map(as_instance(component));
     return fmi2OK;
   }
 
-  fmi2Status fmi2ExitInitializationMode(fmi2Component component) { return fgbridge::enter_initialization(as_instance(component)); }
+  fmi2Status fmi2ExitInitializationMode(fmi2Component component) { return ros2udpbridge::enter_initialization(as_instance(component)); }
 
-  fmi2Status fmi2Terminate(fmi2Component component) { return fgbridge::reset_instance(as_instance(component)); }
+  fmi2Status fmi2Terminate(fmi2Component component) { return ros2udpbridge::reset_instance(as_instance(component)); }
 
   fmi2Status fmi2Reset(fmi2Component component)
   {
     auto *instance = as_instance(component);
-    auto status = fgbridge::reset_instance(instance);
-    Aircraft_FlightGearBridge_initialize_vr_map(instance);
+    auto status = ros2udpbridge::reset_instance(instance);
+    Aircraft_Ros2UdpBridge_initialize_vr_map(instance);
     return status;
   }
 
@@ -178,11 +178,11 @@ extern "C"
         return fmi2Error;
       }
       *mapping_ptr<int>(mapping) = value[i];
-      network_param_changed = network_param_changed || vr[i] == AIRCRAFT_FLIGHTGEARBRIDGE_VR_TELEMETRY_PORT || vr[i] == AIRCRAFT_FLIGHTGEARBRIDGE_VR_CONTROL_PORT;
+      network_param_changed = network_param_changed || vr[i] == AIRCRAFT_ROS2UDPBRIDGE_VR_TELEMETRY_PORT || vr[i] == AIRCRAFT_ROS2UDPBRIDGE_VR_CONTROL_PORT;
     }
     if (network_param_changed)
     {
-      fgbridge::invalidate_network(instance);
+      ros2udpbridge::invalidate_network(instance);
     }
     return fmi2OK;
   }
@@ -214,16 +214,16 @@ extern "C"
         return fmi2Error;
       }
       *mapping_ptr<std::string>(mapping) = value[i] ? value[i] : "";
-      network_param_changed = network_param_changed || vr[i] == AIRCRAFT_FLIGHTGEARBRIDGE_VR_REMOTE_HOST;
+      network_param_changed = network_param_changed || vr[i] == AIRCRAFT_ROS2UDPBRIDGE_VR_REMOTE_HOST;
     }
     if (network_param_changed)
     {
-      fgbridge::invalidate_network(instance);
+      ros2udpbridge::invalidate_network(instance);
     }
     return fmi2OK;
   }
 
-  fmi2Status fmi2DoStep(fmi2Component component, fmi2Real, fmi2Real, fmi2Boolean) { return fgbridge::do_step(as_instance(component)); }
+  fmi2Status fmi2DoStep(fmi2Component component, fmi2Real, fmi2Real, fmi2Boolean) { return ros2udpbridge::do_step(as_instance(component)); }
 
   fmi2Status fmi2CancelStep(fmi2Component) { return fmi2OK; }
 

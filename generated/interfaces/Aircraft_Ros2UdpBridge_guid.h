@@ -1,0 +1,3 @@
+#pragma once
+
+#define AIRCRAFT_ROS2UDPBRIDGE_GUID "{7281e011-54a9-5a70-820d-f88628ced349}"

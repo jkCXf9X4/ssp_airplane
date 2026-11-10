@@ -22,7 +22,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--models",
         nargs="+",
-        help="Optional part definition names to build, for example FlightGearBridge",
+        help="Optional part definition names to build, for example Ros2UdpBridge",
     )
     return parser.parse_args(argv)
 
@@ -31,9 +31,9 @@ def build_native_fmus(
     build_root: Path = DEFAULT_TEST_NATIVE_BUILD_ROOT,
     models: list[str] | None = None,
 ) -> list[Path]:
-    wanted = set(models or ["FlightGearBridge"])
+    wanted = set(models or ["Ros2UdpBridge"])
     supported_targets = {
-        "FlightGearBridge": "FlightGearBridge_fmu",
+        "Ros2UdpBridge": "Ros2UdpBridge_fmu",
     }
     targets = [supported_targets[model] for model in sorted(wanted) if model in supported_targets]
     if not targets:

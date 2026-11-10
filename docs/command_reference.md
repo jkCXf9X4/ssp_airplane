@@ -39,7 +39,7 @@ Methodology summary:
 | Build the native bridge FMU and package the baseline SSP | `cmake --build build/cmake` |
 | Package all simulation artifacts explicitly | `cmake --build build/cmake --target package_simulation_artifacts` |
 | Build Modelica FMUs | Modelica FMUs are not CMake targets. They are built by `scripts/lib/common/modelica/build.py`, run as part of `. venv/bin/activate && python -m scripts.workflows.rebuild_from_source` |
-| Build the native bridge FMU only | `cmake --build build/cmake --target FlightGearBridge_fmu` |
+| Build the native bridge FMU only | `cmake --build build/cmake --target Ros2UdpBridge_fmu` |
 | Package the baseline SSP from built FMUs | `cmake --build build/cmake --target aircraft_ssp` |
 
 ## Verification
@@ -48,4 +48,4 @@ Methodology summary:
 | --- | --- |
 | Validate SSD XML | `. venv/bin/activate && python -m scripts.cli.verify_ssd_xml --ssd generated/SystemStructure.ssd` |
 | Check autopilot waypoint math | `. venv/bin/activate && pytest tests/test_autopilot_logic.py` |
-| Check native bridge FMU packaging | `. venv/bin/activate && pytest -q tests/test_flightgear_bridge_fmu.py` |
+| Check native bridge FMU packaging | `. venv/bin/activate && pytest -q tests/test_ros2_udp_bridge_fmu.py` |

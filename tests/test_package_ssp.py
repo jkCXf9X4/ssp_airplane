@@ -73,4 +73,4 @@ def test_package_ssp_collects_fmus_referenced_by_ssd(tmp_path: Path, baseline_ss
         names = set(archive.namelist())
     assert "SystemStructure.ssd" in names
     assert "resources/ControlInterface.fmu" in names
-    assert "resources/FlightGearBridge.fmu" in names
+    assert "resources/Ros2UdpBridge.fmu" in names

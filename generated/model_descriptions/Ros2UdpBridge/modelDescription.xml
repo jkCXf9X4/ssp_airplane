@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<fmiModelDescription fmiVersion="2.0" modelName="AircraftModel.FlightGearBridge" guid="{7281e011-54a9-5a70-820d-f88628ced349}" description="Adapter component for ROS 2 visualization/control coupling via a UDP companion runtime." generationTool="pyfmi_sysml2 tooling" generationDateAndTime="2000-01-01T00:00:00Z" variableNamingConvention="structured">
-  <CoSimulation modelIdentifier="FlightGearBridge" />
+<fmiModelDescription fmiVersion="2.0" modelName="AircraftModel.Ros2UdpBridge" guid="{7281e011-54a9-5a70-820d-f88628ced349}" description="Adapter component for ROS 2 visualization/control coupling via a UDP companion runtime." generationTool="pyfmi_sysml2 tooling" generationDateAndTime="2000-01-01T00:00:00Z" variableNamingConvention="structured">
+  <CoSimulation modelIdentifier="Ros2UdpBridge" />
   <ModelVariables>
     <ScalarVariable name="transport" valueReference="0" causality="parameter" variability="fixed">
       <String start="Ros2UdpBridge" />

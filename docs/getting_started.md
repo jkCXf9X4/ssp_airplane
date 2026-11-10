@@ -94,7 +94,7 @@ This workflow, in order:
 1. exports architecture-derived artifacts into `generated/`
 2. verifies the Modelica interfaces and equations
 3. builds each standalone Modelica FMU into `build/fmus/` via `scripts/lib/common/modelica/build.py`
-4. configures and runs the CMake build, which builds the native bridge FMU (`FlightGearBridge_fmu`) and packages the baseline SSP (`aircraft_ssp`) through the aggregate `build_fmus` and `package_simulation_artifacts` targets
+4. configures and runs the CMake build, which builds the native bridge FMU (`Ros2UdpBridge_fmu`) and packages the baseline SSP (`aircraft_ssp`) through the aggregate `build_fmus` and `package_simulation_artifacts` targets
 
 If you only need to rebuild the CMake outputs, run:
 

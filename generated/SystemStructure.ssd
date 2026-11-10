@@ -81,7 +81,7 @@
           </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
-      <ssd:Component name="flightgear_bridge" source="resources/FlightGearBridge.fmu" type="application/x-fmu-sharedlibrary">
+      <ssd:Component name="ros2_udp_bridge" source="resources/Ros2UdpBridge.fmu" type="application/x-fmu-sharedlibrary">
         <ssd:Connectors>
           <ssd:Connector name="statePosition.x_km" kind="input">
             <ssc:Real />
@@ -902,16 +902,16 @@
       </ssd:Component>
     </ssd:Elements>
     <ssd:Connections>
-      <ssd:Connection startElement="flightgear_bridge" startConnector="pilotCommand.stick_pitch_norm" endElement="control_interface" endConnector="bridgeInput.stick_pitch_norm" />
-      <ssd:Connection startElement="flightgear_bridge" startConnector="pilotCommand.stick_roll_norm" endElement="control_interface" endConnector="bridgeInput.stick_roll_norm" />
-      <ssd:Connection startElement="flightgear_bridge" startConnector="pilotCommand.rudder_norm" endElement="control_interface" endConnector="bridgeInput.rudder_norm" />
-      <ssd:Connection startElement="flightgear_bridge" startConnector="pilotCommand.throttle_norm" endElement="control_interface" endConnector="bridgeInput.throttle_norm" />
-      <ssd:Connection startElement="flightgear_bridge" startConnector="pilotCommand.throttle_aux_norm" endElement="control_interface" endConnector="bridgeInput.throttle_aux_norm" />
-      <ssd:Connection startElement="flightgear_bridge" startConnector="pilotCommand.button_mask" endElement="control_interface" endConnector="bridgeInput.button_mask" />
-      <ssd:Connection startElement="flightgear_bridge" startConnector="pilotCommand.hat_x" endElement="control_interface" endConnector="bridgeInput.hat_x" />
-      <ssd:Connection startElement="flightgear_bridge" startConnector="pilotCommand.hat_y" endElement="control_interface" endConnector="bridgeInput.hat_y" />
-      <ssd:Connection startElement="flightgear_bridge" startConnector="pilotCommand.mode_switch" endElement="control_interface" endConnector="bridgeInput.mode_switch" />
-      <ssd:Connection startElement="flightgear_bridge" startConnector="pilotCommand.reserved" endElement="control_interface" endConnector="bridgeInput.reserved" />
+      <ssd:Connection startElement="ros2_udp_bridge" startConnector="pilotCommand.stick_pitch_norm" endElement="control_interface" endConnector="bridgeInput.stick_pitch_norm" />
+      <ssd:Connection startElement="ros2_udp_bridge" startConnector="pilotCommand.stick_roll_norm" endElement="control_interface" endConnector="bridgeInput.stick_roll_norm" />
+      <ssd:Connection startElement="ros2_udp_bridge" startConnector="pilotCommand.rudder_norm" endElement="control_interface" endConnector="bridgeInput.rudder_norm" />
+      <ssd:Connection startElement="ros2_udp_bridge" startConnector="pilotCommand.throttle_norm" endElement="control_interface" endConnector="bridgeInput.throttle_norm" />
+      <ssd:Connection startElement="ros2_udp_bridge" startConnector="pilotCommand.throttle_aux_norm" endElement="control_interface" endConnector="bridgeInput.throttle_aux_norm" />
+      <ssd:Connection startElement="ros2_udp_bridge" startConnector="pilotCommand.button_mask" endElement="control_interface" endConnector="bridgeInput.button_mask" />
+      <ssd:Connection startElement="ros2_udp_bridge" startConnector="pilotCommand.hat_x" endElement="control_interface" endConnector="bridgeInput.hat_x" />
+      <ssd:Connection startElement="ros2_udp_bridge" startConnector="pilotCommand.hat_y" endElement="control_interface" endConnector="bridgeInput.hat_y" />
+      <ssd:Connection startElement="ros2_udp_bridge" startConnector="pilotCommand.mode_switch" endElement="control_interface" endConnector="bridgeInput.mode_switch" />
+      <ssd:Connection startElement="ros2_udp_bridge" startConnector="pilotCommand.reserved" endElement="control_interface" endConnector="bridgeInput.reserved" />
       <ssd:Connection startElement="control_interface" startConnector="pilotCommand.stick_pitch_norm" endElement="mission_computer" endConnector="manualInput.stick_pitch_norm" />
       <ssd:Connection startElement="control_interface" startConnector="pilotCommand.stick_roll_norm" endElement="mission_computer" endConnector="manualInput.stick_roll_norm" />
       <ssd:Connection startElement="control_interface" startConnector="pilotCommand.rudder_norm" endElement="mission_computer" endConnector="manualInput.rudder_norm" />
@@ -972,22 +972,22 @@
       <ssd:Connection startElement="environment" startConnector="flight_status.angle_of_attack_deg" endElement="adaptive_wing_system" endConnector="flight_speed.angle_of_attack_deg" />
       <ssd:Connection startElement="environment" startConnector="flight_status.climb_rate" endElement="adaptive_wing_system" endConnector="flight_speed.climb_rate" />
       <ssd:Connection startElement="environment" startConnector="flight_status.health_code" endElement="adaptive_wing_system" endConnector="flight_speed.health_code" />
-      <ssd:Connection startElement="environment" startConnector="location.x_km" endElement="flightgear_bridge" endConnector="statePosition.x_km" />
-      <ssd:Connection startElement="environment" startConnector="location.y_km" endElement="flightgear_bridge" endConnector="statePosition.y_km" />
-      <ssd:Connection startElement="environment" startConnector="location.z_km" endElement="flightgear_bridge" endConnector="statePosition.z_km" />
-      <ssd:Connection startElement="environment" startConnector="orientation.roll_deg" endElement="flightgear_bridge" endConnector="stateOrientation.roll_deg" />
-      <ssd:Connection startElement="environment" startConnector="orientation.pitch_deg" endElement="flightgear_bridge" endConnector="stateOrientation.pitch_deg" />
-      <ssd:Connection startElement="environment" startConnector="orientation.yaw_deg" endElement="flightgear_bridge" endConnector="stateOrientation.yaw_deg" />
-      <ssd:Connection startElement="environment" startConnector="flight_status.airspeed_mps" endElement="flightgear_bridge" endConnector="flightStatus.airspeed_mps" />
-      <ssd:Connection startElement="environment" startConnector="flight_status.energy_state_norm" endElement="flightgear_bridge" endConnector="flightStatus.energy_state_norm" />
-      <ssd:Connection startElement="environment" startConnector="flight_status.angle_of_attack_deg" endElement="flightgear_bridge" endConnector="flightStatus.angle_of_attack_deg" />
-      <ssd:Connection startElement="environment" startConnector="flight_status.climb_rate" endElement="flightgear_bridge" endConnector="flightStatus.climb_rate" />
-      <ssd:Connection startElement="environment" startConnector="flight_status.health_code" endElement="flightgear_bridge" endConnector="flightStatus.health_code" />
-      <ssd:Connection startElement="autopilot_module" startConnector="missionStatus.waypoint_index" endElement="flightgear_bridge" endConnector="missionStatus.waypoint_index" />
-      <ssd:Connection startElement="autopilot_module" startConnector="missionStatus.total_waypoints" endElement="flightgear_bridge" endConnector="missionStatus.total_waypoints" />
-      <ssd:Connection startElement="autopilot_module" startConnector="missionStatus.distance_to_waypoint_km" endElement="flightgear_bridge" endConnector="missionStatus.distance_to_waypoint_km" />
-      <ssd:Connection startElement="autopilot_module" startConnector="missionStatus.arrived" endElement="flightgear_bridge" endConnector="missionStatus.arrived" />
-      <ssd:Connection startElement="autopilot_module" startConnector="missionStatus.complete" endElement="flightgear_bridge" endConnector="missionStatus.complete" />
+      <ssd:Connection startElement="environment" startConnector="location.x_km" endElement="ros2_udp_bridge" endConnector="statePosition.x_km" />
+      <ssd:Connection startElement="environment" startConnector="location.y_km" endElement="ros2_udp_bridge" endConnector="statePosition.y_km" />
+      <ssd:Connection startElement="environment" startConnector="location.z_km" endElement="ros2_udp_bridge" endConnector="statePosition.z_km" />
+      <ssd:Connection startElement="environment" startConnector="orientation.roll_deg" endElement="ros2_udp_bridge" endConnector="stateOrientation.roll_deg" />
+      <ssd:Connection startElement="environment" startConnector="orientation.pitch_deg" endElement="ros2_udp_bridge" endConnector="stateOrientation.pitch_deg" />
+      <ssd:Connection startElement="environment" startConnector="orientation.yaw_deg" endElement="ros2_udp_bridge" endConnector="stateOrientation.yaw_deg" />
+      <ssd:Connection startElement="environment" startConnector="flight_status.airspeed_mps" endElement="ros2_udp_bridge" endConnector="flightStatus.airspeed_mps" />
+      <ssd:Connection startElement="environment" startConnector="flight_status.energy_state_norm" endElement="ros2_udp_bridge" endConnector="flightStatus.energy_state_norm" />
+      <ssd:Connection startElement="environment" startConnector="flight_status.angle_of_attack_deg" endElement="ros2_udp_bridge" endConnector="flightStatus.angle_of_attack_deg" />
+      <ssd:Connection startElement="environment" startConnector="flight_status.climb_rate" endElement="ros2_udp_bridge" endConnector="flightStatus.climb_rate" />
+      <ssd:Connection startElement="environment" startConnector="flight_status.health_code" endElement="ros2_udp_bridge" endConnector="flightStatus.health_code" />
+      <ssd:Connection startElement="autopilot_module" startConnector="missionStatus.waypoint_index" endElement="ros2_udp_bridge" endConnector="missionStatus.waypoint_index" />
+      <ssd:Connection startElement="autopilot_module" startConnector="missionStatus.total_waypoints" endElement="ros2_udp_bridge" endConnector="missionStatus.total_waypoints" />
+      <ssd:Connection startElement="autopilot_module" startConnector="missionStatus.distance_to_waypoint_km" endElement="ros2_udp_bridge" endConnector="missionStatus.distance_to_waypoint_km" />
+      <ssd:Connection startElement="autopilot_module" startConnector="missionStatus.arrived" endElement="ros2_udp_bridge" endConnector="missionStatus.arrived" />
+      <ssd:Connection startElement="autopilot_module" startConnector="missionStatus.complete" endElement="ros2_udp_bridge" endConnector="missionStatus.complete" />
       <ssd:Connection startElement="environment" startConnector="location.x_km" endElement="input_output" endConnector="locationXYZ.x_km" />
       <ssd:Connection startElement="environment" startConnector="location.y_km" endElement="input_output" endConnector="locationXYZ.y_km" />
       <ssd:Connection startElement="environment" startConnector="location.z_km" endElement="input_output" endConnector="locationXYZ.z_km" />

@@ -22,11 +22,11 @@ dist/
 ## Simulation files
 *.mat
 
-## Package files
-*.gz
-*.rar
-*.tar
-*.zip
+## Package files (scoped under the canonical build dir /build)
+/build/*.gz
+/build/*.rar
+/build/*.tar
+/build/*.zip
 
 ## Dymola-specific files
 buildlog.txt

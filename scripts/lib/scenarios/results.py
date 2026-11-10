@@ -249,8 +249,8 @@ def summarize_result_file(
                 "Environment.flight_speed.airspeed_mps",
                 "autopilot_module.feedbackBus.airspeed_mps",
                 "AutopilotModule.feedbackBus.airspeed_mps",
-                "flightgear_bridge.flightStatus.airspeed_mps",
-                "FlightGearBridge.flightStatus.airspeed_mps",
+                "ros2_udp_bridge.flightStatus.airspeed_mps",
+                "Ros2UdpBridge.flightStatus.airspeed_mps",
             ],
         )
         mach_series = [airspeed / 340.29 for airspeed in airspeed_series]

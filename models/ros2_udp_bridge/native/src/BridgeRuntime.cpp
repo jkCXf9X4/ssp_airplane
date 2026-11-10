@@ -12,7 +12,7 @@
 #include <cstring>
 #include <string>
 
-namespace fgbridge {
+namespace ros2udpbridge {
 namespace {
 
 constexpr double kControlTimeoutSec = 1.0;
@@ -331,4 +331,4 @@ fmi2Status do_step(ModelInstance* instance) {
   return fmi2OK;
 }
 
-}  // namespace fgbridge
+}  // namespace ros2udpbridge

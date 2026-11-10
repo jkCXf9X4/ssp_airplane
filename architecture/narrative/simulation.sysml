@@ -19,8 +19,8 @@ package SimulationRequirements {
   // Waypoints should be injected into the simulation through an SSP parameter set.
 
   // The recommended interactive solution keeps ssp4sim as the simulation master and connects
-  // the packaged aircraft SSP to FlightGear through a dedicated bridge/adapter component.
-  // FlightGear is used as the visual frontend and pilot I/O frontend.
+  // the packaged aircraft SSP to a ROS 2 / RViz visual companion runtime through a dedicated
+  // UDP telemetry/control bridge/adapter component.
   // Generic socket communication is preferred for the first implementation because it keeps the
   // exchanged signals explicit and easier to debug than a larger native protocol mapping.
   // The first timing solution should use the existing ssp4sim realtime execution option.
