@@ -36,11 +36,10 @@ Methodology summary:
 | Export architecture-derived artifacts | `. venv/bin/activate && python -m scripts.cli.artifacts_export` |
 | Verify SysML versus Modelica interfaces | `. venv/bin/activate && python -m scripts.cli.verify_modelica_variables` |
 | Verify Modelica equations | `. venv/bin/activate && python -m scripts.cli.verify_model_equations` |
-| Build and package all FMUs plus the baseline SSP | `cmake --build build/cmake` |
+| Build the native bridge FMU and package the baseline SSP | `cmake --build build/cmake` |
 | Package all simulation artifacts explicitly | `cmake --build build/cmake --target package_simulation_artifacts` |
-| Build Modelica FMUs only | `cmake --build build/cmake --target adaptive_wing_system_fmu autopilot_module_fmu composite_airframe_fmu control_interface_fmu environment_fmu fuel_system_fmu input_output_fmu mission_computer_fmu turbofan_propulsion_fmu` |
-| Build the native shared library only | `cmake --build build/cmake --target FlightGearBridge` |
-| Package the native bridge FMU from CMake outputs | `cmake --build build/cmake --target FlightGearBridge_fmu` |
+| Build Modelica FMUs | Modelica FMUs are not CMake targets. They are built by `scripts/lib/common/modelica/build.py`, run as part of `. venv/bin/activate && python -m scripts.workflows.rebuild_from_source` |
+| Build the native bridge FMU only | `cmake --build build/cmake --target FlightGearBridge_fmu` |
 | Package the baseline SSP from built FMUs | `cmake --build build/cmake --target aircraft_ssp` |
 
 ## Verification

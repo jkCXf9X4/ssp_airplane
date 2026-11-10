@@ -86,16 +86,24 @@ sudo apt-get install -y cmake build-essential openmodelica
 ### First full build
 
 ```bash
+. venv/bin/activate && python -m scripts.workflows.rebuild_from_source
+```
+
+This workflow, in order:
+
+1. exports architecture-derived artifacts into `generated/`
+2. verifies the Modelica interfaces and equations
+3. builds each standalone Modelica FMU into `build/fmus/` via `scripts/lib/common/modelica/build.py`
+4. configures and runs the CMake build, which builds the native bridge FMU (`FlightGearBridge_fmu`) and packages the baseline SSP (`aircraft_ssp`) through the aggregate `build_fmus` and `package_simulation_artifacts` targets
+
+If you only need to rebuild the CMake outputs, run:
+
+```bash
 cmake -S . -B build/cmake
 cmake --build build/cmake
 ```
 
-This builds the default `build_fmus` target, which:
-
-1. exports each Modelica package to an FMU under `fmus/`
-2. builds the native bridge shared library
-
-This path uses the checked-in `generated/` metadata for the native library build and packages FMUs plus the baseline SSP through CMake. If you change architecture-derived interfaces or model descriptions, regenerate those artifacts before rebuilding.
+CMake builds and packages the native bridge FMU and the baseline SSP only; it does not compile the Modelica FMUs. If you change architecture-derived interfaces or model descriptions, regenerate those artifacts and rebuild the Modelica FMUs before rebuilding the CMake outputs.
 
 The long-term preferred methodology is:
 
