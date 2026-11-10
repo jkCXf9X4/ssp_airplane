@@ -5,7 +5,7 @@
 
 /* Generated interface for Aircraft.Ros2UdpBridge. Do not edit manually. */
 
-#define AIRCRAFT_ROS2UDPBRIDGE_GUID "{7281e011-54a9-5a70-820d-f88628ced349}"
+#define AIRCRAFT_ROS2UDPBRIDGE_GUID "{85a7fa23-1701-51de-b73b-6a677ef62f9b}"
 
 typedef enum Aircraft_Ros2UdpBridge_ValueReference {
   AIRCRAFT_ROS2UDPBRIDGE_VR_TRANSPORT = 0,
