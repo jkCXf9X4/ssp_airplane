@@ -62,6 +62,8 @@ struct Aircraft_Ros2UdpBridge_Instance {
   Aircraft_FlightStatusPacket flightStatus = {};
   Aircraft_MissionStatus missionStatus = {};
   Aircraft_PilotCommand pilotCommand = {};
+  /* Implementer-owned state; the runtime never reads or writes it. */
+  void* user_data = nullptr;
 };
 
 inline void Aircraft_Ros2UdpBridge_initialize_vr_map(Aircraft_Ros2UdpBridge_Instance* instance) {

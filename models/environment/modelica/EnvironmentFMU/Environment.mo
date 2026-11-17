@@ -1,24 +1,6 @@
 within EnvironmentFMU;
 model Environment
-  import GI = AircraftCommon.GeneratedInterfaces;
-
-  parameter Real initX_km = 0;
-  parameter Real initY_km = 0;
-  parameter Real initZ_km = 1.0 "Initial altitude in km";
-  parameter Real tauDirection_s = 2.0 "s, first-order response to direction commands";
-  parameter Real thrustToSpeedGain = 4.0 "m/s per kN of thrust converted to forward speed";
-  parameter Real climbBleedFraction = 0.35 "Fractional speed loss at straight-up climb";
-  parameter Real minAirspeed_mps = 50 "Lower bound on indicated airspeed";
-  parameter Real referenceEnergySpeed_mps = 300 "Speed used to normalize energy_state_norm";
-
-  input GI.SurfaceActuationCommand actuation_command "Unused at the moment, verify function before implementing";
-  input GI.OrientationEuler direction_command "Direct steering command from mission computer";
-  input GI.LiftState lift;
-  input GI.ThrustState thrust_in;
-
-  output GI.OrientationEuler orientation;
-  output GI.PositionXYZ location;
-  output GI.FlightStatusPacket flight_status;
+  extends AircraftCommon.Environment_Interface;
 
 protected 
 

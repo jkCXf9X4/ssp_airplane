@@ -1,3 +1,0 @@
-#pragma once
-
-#define AIRCRAFT_TURBOFANPROPULSION_GUID "{1433e8b0-9577-57b4-982c-7ef1d1cc7009}"

@@ -46,9 +46,9 @@ function(add_native_fmu_package)
       -o "${output_fmu}"
       --model-description "${ANF_MODEL_DESCRIPTION}"
       --binary "$<TARGET_FILE:${ANF_LIBRARY_TARGET}>"
-      --header "${AIRPLANE_REPO_ROOT}/3rd_party/fmi_headers/fmi2TypesPlatform.h"
-      --header "${AIRPLANE_REPO_ROOT}/3rd_party/fmi_headers/fmi2FunctionTypes.h"
-      --header "${AIRPLANE_REPO_ROOT}/3rd_party/fmi_headers/fmi2Functions.h"
+      --header "${AIRPLANE_REPO_ROOT}/generated/interfaces/fmi2/fmi2TypesPlatform.h"
+      --header "${AIRPLANE_REPO_ROOT}/generated/interfaces/fmi2/fmi2FunctionTypes.h"
+      --header "${AIRPLANE_REPO_ROOT}/generated/interfaces/fmi2/fmi2Functions.h"
       --header "${ANF_GENERATED_COMMON_HEADER}"
       --header "${ANF_GENERATED_MODEL_HEADER}"
     DEPENDS

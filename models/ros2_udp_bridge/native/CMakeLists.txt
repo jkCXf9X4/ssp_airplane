@@ -8,19 +8,17 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_library(Ros2UdpBridge SHARED
   src/BridgeRuntime.cpp
-  src/Ros2UdpBridge.cpp
+  ${AIRPLANE_REPO_ROOT}/generated/interfaces/Aircraft_Ros2UdpBridge_fmi.cpp
+  ${AIRPLANE_REPO_ROOT}/generated/interfaces/Aircraft_Ros2UdpBridge_model.cpp
 )
 set_target_properties(Ros2UdpBridge PROPERTIES
   PREFIX ""
   OUTPUT_NAME "Ros2UdpBridge"
 )
 
-set(AIRPLANE_REPO_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../..")
-
 target_include_directories(Ros2UdpBridge PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/src
   ${AIRPLANE_REPO_ROOT}/generated/interfaces
-  ${AIRPLANE_REPO_ROOT}/3rd_party/fmi_headers
 )
 
 target_compile_options(Ros2UdpBridge PRIVATE -Wall -Wextra -Wpedantic)

@@ -1,17 +1,6 @@
 within AdaptiveWingSystemFMU;
 model AdaptiveWingSystem
-  import GI = AircraftCommon.GeneratedInterfaces;
-  parameter Real referenceArea = 28 "m2";
-  parameter Real span = 10 "m";
-  parameter Real wingAreaScale(min=0.7, max=1.3) = 1.0;
-  parameter Real aspectRatio = 3.6;
-  parameter Real liftCoeffBase = 0.75;
-  parameter Real rollAuthority_deg = 25;
-  parameter Real pitchAuthority_deg = 20;
-  input GI.OrientationEuler direction_command "desired change from mission computer";
-  input GI.FlightStatusPacket flight_speed;
-  output GI.SurfaceActuationCommand actuation_command "Commanded surfaces to the environment";
-  output GI.LiftState liftInterface;
+  extends AircraftCommon.AdaptiveWingSystem_Interface;
 protected
   Real liftCommand;
   Real speedFactor;

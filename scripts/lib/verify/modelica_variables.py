@@ -1,105 +1,68 @@
-"""Check that Modelica interface variables match SysML port definitions."""
+"""Check that Modelica models consume the generated interface source of truth."""
 from __future__ import annotations
 
 import re
 import sys
 from pathlib import Path
-from typing import Dict, List, Set, Tuple
+from typing import List
 
 from pycps_sysml2 import load
 
 from scripts.lib.common.modelica import MODELICA_MODEL_SPECS
-from scripts.lib.paths import ARCHITECTURE_DIR, COMPOSITION_NAME
+from scripts.lib.paths import ARCHITECTURE_DIR
 
 DEFAULT_ARCH_DIR = ARCHITECTURE_DIR
 
-INTERFACE_DECL_RE = re.compile(
-    r"\b(?P<direction>input|output)\s+GI\.(?P<record>\w+)\s+(?P<var>\w+)",
-    re.MULTILINE,
-)
+CONNECTOR_DECL_RE = re.compile(r"^\s*(?P<direction>input|output)\b", re.MULTILINE)
 
 
-def _collect_architecture_data(
-    architecture,
-) -> Tuple[Dict[str, Set[str]], Dict[str, Dict[str, Tuple[str, str]]]]:
-    members: Dict[str, Set[str]] = {}
-    part_ports: Dict[str, Dict[str, Tuple[str, str]]] = {}
-
-    for name, definition in architecture.port_definitions.items():
-        members[name] = set(definition.attributes.keys())
-
-    for part_name, part in architecture.part_definitions.items():
-        if part_name == COMPOSITION_NAME:
-            continue
-        part_ports[part_name] = {
-            port.name: (port.direction, port.type_name)
-            for port in part.ports.values()
-        }
-
-    return members, part_ports
+def _line_of(text: str, offset: int) -> int:
+    return text.count("\n", 0, offset) + 1
 
 
-def _scan_file(
-    path: Path,
-    members: Dict[str, Set[str]],
-    part_ports: Dict[str, Dict[str, Tuple[str, str]]],
-) -> List[str]:
+def _scan_file(path: Path, class_name: str) -> List[str]:
     text = path.read_text()
     issues: List[str] = []
-    declarations = list(INTERFACE_DECL_RE.finditer(text))
-    if not declarations:
-        return issues
-    part_name = path.stem
-    ports = part_ports.get(part_name)
-    for match in declarations:
-        direction = match.group("direction")
-        record = match.group("record")
-        var = match.group("var")
-        if record not in members:
-            issues.append(f"{path}: Interface {record} referenced by {var} "
-                          "is not present in architecture definitions.")
-            continue
-        used = set(re.findall(rf"\b{re.escape(var)}\.(\w+)", text))
-        missing = sorted(field for field in used if field not in members[record])
-        if missing:
-            formatted = ", ".join(missing)
-            issues.append(
-                f"{path}: {record} field(s) {formatted} not defined in architecture."
-            )
-        if ports is None:
-            continue
-        if var not in ports:
-            issues.append(
-                f"{path}: Interface variable '{var}' ({record}) not defined on SysML part '{part_name}'."
-            )
-            continue
-        expected_dir, expected_payload = ports[var]
-        dir_map = {"input": "in", "output": "out"}
-        if dir_map.get(direction) != expected_dir:
-            issues.append(
-                f"{path}: Port '{var}' direction mismatch (Modelica {direction}, SysML {expected_dir})."
-            )
-        if record != expected_payload:
-            issues.append(
-                f"{path}: Port '{var}' type mismatch (Modelica {record}, SysML {expected_payload})."
-            )
+    extends_re = re.compile(
+        rf"\bextends\s+AircraftCommon\.{re.escape(class_name)}_Interface\s*;"
+    )
+    match = extends_re.search(text)
+    if match is None:
+        model_re = re.compile(rf"\bmodel\s+{re.escape(class_name)}\b")
+        model_match = model_re.search(text)
+        line = _line_of(text, model_match.start()) if model_match else 1
+        issues.append(
+            f"{path}:{line}: model does not extend AircraftCommon.{class_name}_Interface."
+        )
+    for connector in CONNECTOR_DECL_RE.finditer(text):
+        line = _line_of(text, connector.start())
+        issues.append(
+            f"{path}:{line}: model declares its own {connector.group('direction')} connector."
+        )
     return issues
+
+
 def verify_modelica_variables(architecture_path: Path = DEFAULT_ARCH_DIR) -> int:
     architecture = load(architecture_path)
-    members, part_ports = _collect_architecture_data(architecture)
+    part_names = set(architecture.part_definitions)
 
     overall_issues: List[str] = []
-    for mo_file in (spec.model_file for spec in MODELICA_MODEL_SPECS):
+    for spec in MODELICA_MODEL_SPECS:
+        mo_file = spec.model_file
         if not mo_file.exists():
             print(f"Model file not found: {mo_file}", file=sys.stderr)
             return 1
-        overall_issues.extend(_scan_file(mo_file, members, part_ports))
+        if spec.class_name not in part_names:
+            overall_issues.append(
+                f"{mo_file}: part '{spec.class_name}' is not defined in the architecture."
+            )
+        overall_issues.extend(_scan_file(mo_file, spec.class_name))
 
     if overall_issues:
-        print("Variable naming verification failed:")
+        print("Modelica interface verification failed:")
         for issue in overall_issues:
             print(f" - {issue}")
         return 2
 
-    print("All Modelica interface variable usages match the architecture.")
+    print("All Modelica models extend their generated AircraftCommon interface.")
     return 0

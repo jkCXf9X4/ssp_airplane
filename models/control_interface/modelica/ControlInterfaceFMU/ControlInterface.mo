@@ -1,11 +1,7 @@
 within ControlInterfaceFMU;
 model ControlInterface
+  extends AircraftCommon.ControlInterface_Interface;
   import GI = AircraftCommon.GeneratedInterfaces;
-  parameter Boolean useBridgeInput = false "Prefer external bridge/manual command input";
-  parameter Real inputLag = 0.05 "Blending factor for pilot input smoothing";
-  parameter Real manualCommandDefault(min=0.0, max=1.0) = 0.6 "Nominal throttle stick position";
-  input GI.PilotCommand bridgeInput;
-  output GI.PilotCommand pilotCommand;
 protected
   Real effectiveCommand;
   Real rollSweep;

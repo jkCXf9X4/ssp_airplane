@@ -1,42 +1,12 @@
 within AutopilotModuleFMU;
 model AutopilotModule
-  import GI = AircraftCommon.GeneratedInterfaces;
   import Modelica.Constants;
   import Modelica.Math;
 
+  extends AircraftCommon.AutopilotModule_Interface;
+
   constant Real degToRad = Constants.pi / 180;
   constant Real radToDeg = 180 / Constants.pi;
-
-  parameter Real updateRateHz = 40;
-  parameter Real defaultThrottle = 0.5;
-  parameter Real targetAirspeed_mps = 200 "Nominal airspeed to hold during cruise/climb";
-  parameter Real airspeedToThrottleGain = 0.003 "Throttle gain per m/s airspeed error";
-  parameter Real climbRateToThrottleGain = 0.001 "Throttle gain per m/s climb to counter speed bleed";
-  parameter Real minThrottleCommand = 0.2 "Lower bound for throttle command";
-
-  // Heading and altitude control gains
-  parameter Real headingGain          = 1 / 60.0 "deg^-1 to normalize yaw error into stick roll";
-  parameter Real altitudeToPitchGain  = 10       "deg/km, maps altitude error to desired pitch";
-  parameter Real pitchAngleGain       = 1 / 20.0 "deg^-1, maps pitch error to stick";
-  parameter Real maxPitchCommand_deg  = 20       "Limit for commanded pitch angle";
-
-  parameter Integer waypointCount = 10;
-  parameter Real waypointX_km[waypointCount] = fill(0.0, waypointCount);
-  parameter Real waypointY_km[waypointCount] = fill(0.0, waypointCount);
-  parameter Real waypointZ_km[waypointCount] = fill(1, waypointCount);
-
-  parameter Real waypointProximity_km           = 10   "Distance to trigger waypoint switch";
-  parameter Real waypointAltitudeProximity_km   = 1.0  "Altitude distance to trigger waypoint switch";
-
-  // time constant for smoothing
-  parameter Real tauCmd = 1.0 "s, command filter time constant";
-
-  input GI.FlightStatusPacket feedbackBus;
-  input GI.PositionXYZ currentLocation;
-  input GI.OrientationEuler currentOrientation;
-
-  output GI.PilotCommand autopilotCmd;
-  output GI.MissionStatus missionStatus;
 
 protected
   Integer activeWaypoint;

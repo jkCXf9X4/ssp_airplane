@@ -1,15 +1,6 @@
 within MissionComputerFMU;
 model MissionComputer
-  import GI = AircraftCommon.GeneratedInterfaces;
-  parameter Integer flyByWireChannels = 3;
-  parameter Real rollAuthority_deg = 25;
-  parameter Real pitchAuthority_deg = 20;
-  parameter Real yawAuthority_deg = 10;
-  input GI.PilotCommand manualInput;
-  input GI.PilotCommand autopilotInput;
-  input GI.FuelLevelState fuelStatus;
-  output GI.ThrottleCommand engineThrottle;
-  output GI.OrientationEuler direction_command;
+  extends AircraftCommon.MissionComputer_Interface;
 protected
   Boolean autopilotEngaged;
   Real stateKeeper(start=0) "Dummy continuous state to satisfy co-sim master";

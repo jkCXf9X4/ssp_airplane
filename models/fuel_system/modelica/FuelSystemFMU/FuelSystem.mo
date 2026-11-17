@@ -1,10 +1,6 @@
 within FuelSystemFMU;
 model FuelSystem
-  import GI = AircraftCommon.GeneratedInterfaces;
-  parameter Real fuelCapacityKg = 3160 "Total available fuel mass (kg)";
-  parameter Real reserveFraction(min=0, max=0.5) = 0.08 "Unusable reserve fraction";
-  input GI.FuelConsumptionRate fuel_consumption_rate "Fuel mass flow drawn by propulsion (kg/s)";
-  output GI.FuelLevelState fuelState "Remaining fuel telemetry";
+  extends AircraftCommon.FuelSystem_Interface;
 protected
   parameter Real reserveKg = reserveFraction * fuelCapacityKg;
   Real availableFuelKg(start=fuelCapacityKg, min=0);

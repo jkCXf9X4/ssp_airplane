@@ -7,6 +7,12 @@
 
 /* Generated from architecture package Aircraft. Do not edit manually. */
 
+typedef struct Aircraft_PositionXYZ {
+  double x_km;
+  double y_km;
+  double z_km;
+} Aircraft_PositionXYZ;
+
 typedef struct Aircraft_OrientationEuler {
   double roll_deg;
   double pitch_deg;
@@ -21,25 +27,13 @@ typedef struct Aircraft_FlightStatusPacket {
   int health_code;
 } Aircraft_FlightStatusPacket;
 
-typedef struct Aircraft_SurfaceActuationCommand {
-  double left_aileron_deg;
-  double right_aileron_deg;
-  double elevator_deg;
-  double rudder_deg;
-  double flaperon_deg;
-} Aircraft_SurfaceActuationCommand;
-
-typedef struct Aircraft_LiftState {
-  double lift_kn;
-  double drag_kn;
-  double pitching_moment_knm;
-} Aircraft_LiftState;
-
-typedef struct Aircraft_PositionXYZ {
-  double x_km;
-  double y_km;
-  double z_km;
-} Aircraft_PositionXYZ;
+typedef struct Aircraft_MissionStatus {
+  int waypoint_index;
+  int total_waypoints;
+  double distance_to_waypoint_km;
+  bool arrived;
+  bool complete;
+} Aircraft_MissionStatus;
 
 typedef struct Aircraft_PilotCommand {
   double stick_pitch_norm;
@@ -53,36 +47,6 @@ typedef struct Aircraft_PilotCommand {
   int mode_switch;
   int reserved;
 } Aircraft_PilotCommand;
-
-typedef struct Aircraft_MissionStatus {
-  int waypoint_index;
-  int total_waypoints;
-  double distance_to_waypoint_km;
-  bool arrived;
-  bool complete;
-} Aircraft_MissionStatus;
-
-typedef struct Aircraft_ThrustState {
-  double thrust_kn;
-  double mass_flow_kgps;
-  double exhaust_velocity_mps;
-} Aircraft_ThrustState;
-
-typedef struct Aircraft_FuelConsumptionRate {
-  double mass_flow_kgps;
-} Aircraft_FuelConsumptionRate;
-
-typedef struct Aircraft_FuelLevelState {
-  double fuel_remaining_kg;
-  double fuel_level_norm;
-  bool fuel_starved;
-} Aircraft_FuelLevelState;
-
-typedef struct Aircraft_ThrottleCommand {
-  double throttle_norm;
-  bool fuel_enable;
-  bool afterburner_enable;
-} Aircraft_ThrottleCommand;
 
 typedef enum Aircraft_DataType {
   AIRCRAFT_DATA_NONE = 0,
