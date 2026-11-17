@@ -1,6 +1,7 @@
 {
-  "analysis": "HighAltitudeIntercept",
-  "composition": "AircraftModel",
+  "analysis": "WorkshopMission",
+  "composition": "WorkshopAircraft",
+  "description": "Experiment-only analysis: the scenario set drives every parameter binding.",
   "experiment": {
     "name": "experiment_baseline",
     "start_time": 0.0,
@@ -9,9 +10,9 @@
   },
   "model": "aircraft",
   "scenario": {
-    "set": "MissionScenario",
-    "ssm": "HighAltitudeIntercept.ssm",
-    "ssv": "MissionScenario.ssv"
+    "set": "NominalMission",
+    "ssm": "WorkshopMission.ssm",
+    "ssv": "NominalMission.ssv"
   },
   "sut": "sut",
   "target_ssd": "SystemStructure.ssd"

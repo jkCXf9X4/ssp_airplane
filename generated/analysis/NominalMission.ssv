@@ -1,23 +1,17 @@
 <?xml version='1.0' encoding='utf-8'?>
-<ssv:ParameterSet xmlns:ssv="http://ssp-standard.org/SSP1/SystemStructureParameterValues" version="1.0" name="MissionScenario">
+<ssv:ParameterSet xmlns:ssv="http://ssp-standard.org/SSP1/SystemStructureParameterValues" version="1.0" name="NominalMission">
   <ssv:Parameters>
-    <ssv:Parameter name="useBridgeInput">
-      <ssv:Boolean value="false" />
-    </ssv:Parameter>
-    <ssv:Parameter name="initX_km">
-      <ssv:Real value="0" />
-    </ssv:Parameter>
-    <ssv:Parameter name="initY_km">
-      <ssv:Real value="0" />
-    </ssv:Parameter>
-    <ssv:Parameter name="initZ_km">
-      <ssv:Real value="0" />
-    </ssv:Parameter>
-    <ssv:Parameter name="waypointProximity_km">
-      <ssv:Real value="10" />
-    </ssv:Parameter>
     <ssv:Parameter name="targetAirspeed_mps">
       <ssv:Real value="200" />
+    </ssv:Parameter>
+    <ssv:Parameter name="initZ_km">
+      <ssv:Real value="1" />
+    </ssv:Parameter>
+    <ssv:Parameter name="wingspan_m">
+      <ssv:Real value="10" />
+    </ssv:Parameter>
+    <ssv:Parameter name="empty_weight_kg">
+      <ssv:Real value="8573" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointX_km[1]">
       <ssv:Real value="0" />
@@ -108,6 +102,9 @@
     </ssv:Parameter>
     <ssv:Parameter name="waypointZ_km[10]">
       <ssv:Real value="1" />
+    </ssv:Parameter>
+    <ssv:Parameter name="waypointProximity_km">
+      <ssv:Real value="10" />
     </ssv:Parameter>
   </ssv:Parameters>
 </ssv:ParameterSet>

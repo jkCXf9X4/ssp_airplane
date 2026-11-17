@@ -35,7 +35,9 @@ That command reuses the reference CSV when present and writes derived outputs in
 
 ## Repository Layout
 
-- `architecture/`: SysML source of truth
+- `architecture/`: SysML source of truth; the default composition is the
+  workshop `AircraftWorkshop.WorkshopAircraft` (`aircraft_workshop.sysml`),
+  upstream `Aircraft.AircraftModel` (`aircraft.sysml`) stays available
 - `models/`: Modelica and native FMU implementations
 - `resources/scenarios/`: curated mission scenarios
 - `resources/references/`: reference results used for reuse and tests

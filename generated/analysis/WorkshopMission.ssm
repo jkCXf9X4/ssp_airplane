@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
 <ssm:ParameterMapping xmlns:ssm="http://ssp-standard.org/SSP1/SystemStructureParameterMapping" version="1.0">
-  <ssm:MappingEntry source="waypointProximity_km" target="autopilot_module.waypointProximity_km" />
   <ssm:MappingEntry source="targetAirspeed_mps" target="autopilot_module.targetAirspeed_mps" />
   <ssm:MappingEntry source="waypointX_km[1]" target="autopilot_module.waypointX_km[1]" />
   <ssm:MappingEntry source="waypointX_km[2]" target="autopilot_module.waypointX_km[2]" />
@@ -32,8 +31,8 @@
   <ssm:MappingEntry source="waypointZ_km[8]" target="autopilot_module.waypointZ_km[8]" />
   <ssm:MappingEntry source="waypointZ_km[9]" target="autopilot_module.waypointZ_km[9]" />
   <ssm:MappingEntry source="waypointZ_km[10]" target="autopilot_module.waypointZ_km[10]" />
-  <ssm:MappingEntry source="useBridgeInput" target="control_interface.useBridgeInput" />
-  <ssm:MappingEntry source="initX_km" target="environment.initX_km" />
-  <ssm:MappingEntry source="initY_km" target="environment.initY_km" />
+  <ssm:MappingEntry source="waypointProximity_km" target="autopilot_module.waypointProximity_km" />
+  <ssm:MappingEntry source="wingspan_m" target="composite_airframe.wingspan" />
+  <ssm:MappingEntry source="empty_weight_kg" target="composite_airframe.emptyMass" />
   <ssm:MappingEntry source="initZ_km" target="environment.initZ_km" />
 </ssm:ParameterMapping>

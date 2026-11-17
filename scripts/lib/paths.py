@@ -7,6 +7,11 @@ import re
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 ARCHITECTURE_DIR = REPO_ROOT / "architecture"
+# The architecture directory holds two packages (upstream ``Aircraft`` and the
+# workshop ``AircraftWorkshop``), so a directory load would fail on the package
+# mismatch. The workshop composition is the branch default; the upstream file
+# stays available as an explicit ``--architecture`` target.
+ARCHITECTURE_FILE = ARCHITECTURE_DIR / "aircraft_workshop.sysml"
 GENERATED_DIR = REPO_ROOT / "generated"
 BUILD_DIR = REPO_ROOT / "build"
 MODELS_DIR = REPO_ROOT / "models"
@@ -15,9 +20,9 @@ THIRD_PARTY_DIR = REPO_ROOT / "3rd_party"
 FMI_HEADERS_DIR = THIRD_PARTY_DIR / "fmi_headers"
 
 PACKAGE_NAME = "Aircraft"
-MODEL_COMPOSITION = "AircraftModel"
-ANALYSIS_COMPOSITION = "HighAltitudeIntercept"
-SCENARIO_SET_NAME = "MissionScenario"
+MODEL_COMPOSITION = "WorkshopAircraft"
+ANALYSIS_COMPOSITION = "WorkshopMission"
+SCENARIO_SET_NAME = "NominalMission"
 
 # Compatibility: legacy callers used COMPOSITION_NAME for the top-level model.
 COMPOSITION_NAME = MODEL_COMPOSITION

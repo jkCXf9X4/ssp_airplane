@@ -1,61 +1,37 @@
-"""Export the full set of generated artifacts from the SysML architecture.
+"""Export the generated artifacts for the branch's default composition.
 
 Orchestrator over the pyssp ecosystem generators:
 
 - ``pycps_sysml2.load`` parses the architecture once;
-- ``pyfmi_sysml2`` emits the C interface headers, the C++ runtime with its model
-  seam, the FMI model description, and the Modelica interface package;
+- ``pyfmi_sysml2`` emits the Modelica interface package;
 - ``pyssp_sysml2`` emits the SystemStructure.ssd and the scenario/analysis
-  artifacts (analysis.json + MissionScenario.ssv + HighAltitudeIntercept.ssm).
+  artifacts (analysis.json + NominalMission.ssv + WorkshopMission.ssm).
+
+The bridge is not part of the workshop composition, so no native runtime or
+bridge model description is generated here.
 """
 from __future__ import annotations
 
-from datetime import datetime, timezone
 from pathlib import Path
 
 from pycps_sysml2 import load
-from pyfmi_sysml2 import (
-    generate_c_runtime,
-    generate_model_description,
-    generate_modelica,
-)
+from pyfmi_sysml2 import generate_modelica
 from pyssp_sysml2.artifacts.analysis import generate_analysis
 from pyssp_sysml2.artifacts.ssd import generate_ssd
 
 from scripts.lib.paths import (
     ANALYSIS_COMPOSITION,
-    ARCHITECTURE_DIR,
+    ARCHITECTURE_FILE,
     GENERATED_DIR,
     MODEL_COMPOSITION,
 )
 
-# Fixed, timezone-aware generation stamp so modelDescription.xml output is
-# reproducible.
-FIXED_GENERATION_TIME = datetime(2000, 1, 1, tzinfo=timezone.utc)
-
 
 def export_artifacts(
-    architecture_path: Path = ARCHITECTURE_DIR,
+    architecture_path: Path = ARCHITECTURE_FILE,
     generated_dir: Path = GENERATED_DIR,
 ) -> None:
     architecture = load(architecture_path)
-
-    generate_c_runtime(
-        architecture,
-        generated_dir / "interfaces",
-        composition=MODEL_COMPOSITION,
-        component="Ros2UdpBridge",
-        base_index=1,
-    )
-
-    generate_model_description(
-        architecture,
-        generated_dir / "model_descriptions",
-        composition=MODEL_COMPOSITION,
-        component="Ros2UdpBridge",
-        generation_time=FIXED_GENERATION_TIME,
-        base_index=1,
-    )
 
     generate_modelica(
         architecture,

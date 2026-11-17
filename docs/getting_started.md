@@ -91,7 +91,11 @@ sudo apt-get install -y cmake build-essential openmodelica
 
 This workflow, in order:
 
-1. exports architecture-derived artifacts into `generated/`
+1. exports architecture-derived artifacts into `generated/`; the default
+   composition is `AircraftWorkshop.WorkshopAircraft` from
+   `architecture/aircraft_workshop.sysml`. Upstream `Aircraft.AircraftModel`
+   stays in `architecture/aircraft.sysml`; selecting it means pointing
+   `--architecture` and `MODEL_COMPOSITION` (`scripts/lib/paths.py`) at it.
 2. verifies the Modelica interfaces and equations
 3. builds each standalone Modelica FMU into `build/fmus/` via `scripts/lib/common/modelica/build.py`
 4. configures and runs the CMake build, which builds the native bridge FMU (`Ros2UdpBridge_fmu`) and packages the baseline SSP (`aircraft_ssp`) through the aggregate `build_fmus` and `package_simulation_artifacts` targets

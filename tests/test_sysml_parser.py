@@ -9,14 +9,20 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+# The architecture directory holds two packages, so each root is loaded
+# explicitly: the workshop composition is the branch default, upstream stays a
+# selectable superset.
+WORKSHOP = REPO_ROOT / "architecture" / "aircraft_workshop.sysml"
+UPSTREAM = REPO_ROOT / "architecture" / "aircraft.sysml"
+
 
 def _architecture():
-    return pycps_sysml2.load(REPO_ROOT / "architecture")
+    return pycps_sysml2.load(WORKSHOP)
 
 
 def test_parser_collects_parts_and_ports():
     architecture = _architecture()
-    assert architecture.package_name == "Aircraft"
+    assert architecture.package_name == "AircraftWorkshop"
     assert "MissionComputer" in architecture.part_definitions
 
     mission_computer = architecture.part_definitions["MissionComputer"]
@@ -31,7 +37,7 @@ def test_parser_collects_parts_and_ports():
 
 def test_connections_are_parsed():
     architecture = _architecture()
-    aircraft_model = architecture.part_definitions["AircraftModel"]
+    aircraft_model = architecture.part_definitions["WorkshopAircraft"]
     assert any(
         conn.source_part == "environment"
         and conn.source_port == "flight_status"
@@ -39,3 +45,10 @@ def test_connections_are_parsed():
         and conn.destination_port == "feedbackBus"
         for conn in aircraft_model.connections.values()
     )
+
+
+def test_upstream_composition_stays_available():
+    architecture = pycps_sysml2.load(UPSTREAM)
+    assert architecture.package_name == "Aircraft"
+    assert "AircraftModel" in architecture.part_definitions
+    assert "ControlInterface" in architecture.part_definitions

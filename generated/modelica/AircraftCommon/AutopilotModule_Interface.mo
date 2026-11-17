@@ -11,7 +11,6 @@ partial model AutopilotModule_Interface
   parameter Real altitudeToPitchGain = 10;
   parameter Real pitchAngleGain = 0.05;
   parameter Real maxPitchCommand_deg = 20;
-  parameter Integer waypointCount = 10;
   parameter Real waypointX_km[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   parameter Real waypointY_km[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   parameter Real waypointZ_km[10] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1};

@@ -9,9 +9,9 @@ from typing import List
 from pycps_sysml2 import load
 
 from scripts.lib.common.modelica import MODELICA_MODEL_SPECS
-from scripts.lib.paths import ARCHITECTURE_DIR
+from scripts.lib.paths import ARCHITECTURE_FILE
 
-DEFAULT_ARCH_DIR = ARCHITECTURE_DIR
+DEFAULT_ARCH_DIR = ARCHITECTURE_FILE
 
 CONNECTOR_DECL_RE = re.compile(r"^\s*(?P<direction>input|output)\b", re.MULTILINE)
 

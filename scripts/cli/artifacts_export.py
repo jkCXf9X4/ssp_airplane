@@ -5,12 +5,12 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from scripts.lib.paths import ARCHITECTURE_DIR, GENERATED_DIR
+from scripts.lib.paths import ARCHITECTURE_FILE, GENERATED_DIR
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Export all architecture-derived artifacts.")
-    parser.add_argument("--architecture", type=Path, default=ARCHITECTURE_DIR)
+    parser.add_argument("--architecture", type=Path, default=ARCHITECTURE_FILE)
     parser.add_argument("--generated-dir", type=Path, default=GENERATED_DIR)
     return parser.parse_args(argv)
 

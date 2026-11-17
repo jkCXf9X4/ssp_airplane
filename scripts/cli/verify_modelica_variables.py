@@ -5,7 +5,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from scripts.lib.paths import ARCHITECTURE_DIR
+from scripts.lib.paths import ARCHITECTURE_FILE
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -13,7 +13,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--architecture",
         type=Path,
-        default=ARCHITECTURE_DIR,
+        default=ARCHITECTURE_FILE,
         help="Path to the SysML architecture directory or file.",
     )
     return parser.parse_args(argv)

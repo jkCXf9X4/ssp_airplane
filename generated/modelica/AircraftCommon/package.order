@@ -6,8 +6,6 @@ AutopilotModule_Interface
 AutopilotModule
 CompositeAirframe_Interface
 CompositeAirframe
-ControlInterface_Interface
-ControlInterface
 Environment_Interface
 Environment
 FuelSystem_Interface
@@ -16,7 +14,5 @@ InputOutput_Interface
 InputOutput
 MissionComputer_Interface
 MissionComputer
-Ros2UdpBridge_Interface
-Ros2UdpBridge
 TurbofanPropulsion_Interface
 TurbofanPropulsion

@@ -10,6 +10,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+ARCHITECTURE = REPO_ROOT / "architecture" / "aircraft.sysml"
 COMPOSITION = "AircraftModel"
 
 
@@ -21,7 +22,7 @@ def _read_components(output_path: Path):
 
 def test_parameter_connectors_emitted_for_attributes(tmp_path: Path):
     output = tmp_path / "SystemStructure.ssd"
-    generate_ssd(REPO_ROOT / "architecture", output, COMPOSITION, base_index=1)
+    generate_ssd(ARCHITECTURE, output, COMPOSITION, base_index=1)
     components = _read_components(output)
 
     propulsion = components["turbofan_propulsion"]
@@ -39,7 +40,7 @@ def test_parameter_connectors_emitted_for_attributes(tmp_path: Path):
 
 def test_string_parameters_preserve_type(tmp_path: Path):
     output = tmp_path / "SystemStructure.ssd"
-    generate_ssd(REPO_ROOT / "architecture", output, COMPOSITION, base_index=1)
+    generate_ssd(ARCHITECTURE, output, COMPOSITION, base_index=1)
     components = _read_components(output)
 
     control = components["control_interface"]
@@ -55,7 +56,7 @@ def test_string_parameters_preserve_type(tmp_path: Path):
 
 def test_list_parameters_infer_numeric_type(tmp_path: Path):
     output = tmp_path / "SystemStructure.ssd"
-    generate_ssd(REPO_ROOT / "architecture", output, COMPOSITION, base_index=1)
+    generate_ssd(ARCHITECTURE, output, COMPOSITION, base_index=1)
     components = _read_components(output)
 
     autopilot = components["autopilot_module"]
@@ -71,7 +72,29 @@ def test_list_parameters_infer_numeric_type(tmp_path: Path):
 
 def test_composition_name_is_aircraft_model(tmp_path: Path):
     output = tmp_path / "SystemStructure.ssd"
-    generate_ssd(REPO_ROOT / "architecture", output, COMPOSITION, base_index=1)
+    generate_ssd(ARCHITECTURE, output, COMPOSITION, base_index=1)
     with SSD(output, mode="r") as ssd:
         assert ssd.system is not None
         assert ssd.system.name == "AircraftModel"
+
+
+WORKSHOP = REPO_ROOT / "architecture" / "aircraft_workshop.sysml"
+
+
+def test_workshop_composition_has_eight_components(tmp_path: Path):
+    output = tmp_path / "SystemStructure.ssd"
+    generate_ssd(WORKSHOP, output, "WorkshopAircraft", base_index=1)
+    components = _read_components(output)
+
+    assert set(components) == {
+        "environment",
+        "composite_airframe",
+        "turbofan_propulsion",
+        "fuel_system",
+        "mission_computer",
+        "autopilot_module",
+        "adaptive_wing_system",
+        "input_output",
+    }
+    assert "control_interface" not in components
+    assert "ros2_udp_bridge" not in components
