@@ -14,94 +14,94 @@
       <ssv:Real value="8573" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointX_km[1]">
-      <ssv:Real value="0" />
+      <ssv:Real value="40" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointX_km[2]">
-      <ssv:Real value="0" />
+      <ssv:Real value="80" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointX_km[3]">
-      <ssv:Real value="0" />
+      <ssv:Real value="120" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointX_km[4]">
-      <ssv:Real value="0" />
+      <ssv:Real value="140" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointX_km[5]">
-      <ssv:Real value="0" />
+      <ssv:Real value="140" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointX_km[6]">
-      <ssv:Real value="0" />
+      <ssv:Real value="140" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointX_km[7]">
-      <ssv:Real value="0" />
+      <ssv:Real value="140" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointX_km[8]">
-      <ssv:Real value="0" />
+      <ssv:Real value="140" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointX_km[9]">
-      <ssv:Real value="0" />
+      <ssv:Real value="140" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointX_km[10]">
-      <ssv:Real value="0" />
+      <ssv:Real value="140" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointY_km[1]">
       <ssv:Real value="0" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointY_km[2]">
-      <ssv:Real value="0" />
+      <ssv:Real value="20" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointY_km[3]">
       <ssv:Real value="0" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointY_km[4]">
-      <ssv:Real value="0" />
+      <ssv:Real value="-20" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointY_km[5]">
-      <ssv:Real value="0" />
+      <ssv:Real value="-20" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointY_km[6]">
-      <ssv:Real value="0" />
+      <ssv:Real value="-20" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointY_km[7]">
-      <ssv:Real value="0" />
+      <ssv:Real value="-20" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointY_km[8]">
-      <ssv:Real value="0" />
+      <ssv:Real value="-20" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointY_km[9]">
-      <ssv:Real value="0" />
+      <ssv:Real value="-20" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointY_km[10]">
-      <ssv:Real value="0" />
+      <ssv:Real value="-20" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointZ_km[1]">
-      <ssv:Real value="1" />
+      <ssv:Real value="3" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointZ_km[2]">
-      <ssv:Real value="1" />
+      <ssv:Real value="5" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointZ_km[3]">
-      <ssv:Real value="1" />
+      <ssv:Real value="2" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointZ_km[4]">
-      <ssv:Real value="1" />
+      <ssv:Real value="2" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointZ_km[5]">
-      <ssv:Real value="1" />
+      <ssv:Real value="2" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointZ_km[6]">
-      <ssv:Real value="1" />
+      <ssv:Real value="2" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointZ_km[7]">
-      <ssv:Real value="1" />
+      <ssv:Real value="2" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointZ_km[8]">
-      <ssv:Real value="1" />
+      <ssv:Real value="2" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointZ_km[9]">
-      <ssv:Real value="1" />
+      <ssv:Real value="2" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointZ_km[10]">
-      <ssv:Real value="1" />
+      <ssv:Real value="2" />
     </ssv:Parameter>
     <ssv:Parameter name="waypointProximity_km">
       <ssv:Real value="10" />

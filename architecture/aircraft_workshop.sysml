@@ -88,9 +88,9 @@ package AircraftWorkshop {
     attribute altitudeToPitchGain : Real = 10.0;
     attribute pitchAngleGain : Real = 0.05;
     attribute maxPitchCommand_deg : Real = 20.0;
-    attribute waypointX_km : Real[10] = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-    attribute waypointY_km : Real[10] = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-    attribute waypointZ_km : Real[10] = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
+    attribute waypointX_km : Real[10] = (40.0, 80.0, 120.0, 140.0, 140.0, 140.0, 140.0, 140.0, 140.0, 140.0);
+    attribute waypointY_km : Real[10] = (0.0, 20.0, 0.0, -20.0, -20.0, -20.0, -20.0, -20.0, -20.0, -20.0);
+    attribute waypointZ_km : Real[10] = (3.0, 5.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0);
     attribute waypointProximity_km : Real = 10.0;
     attribute waypointAltitudeProximity_km : Real = 1.0;
     attribute tauCmd : Real = 1.0;
@@ -131,6 +131,11 @@ package AircraftWorkshop {
     attribute aspectRatio : Real = 3.6;
     attribute wingAreaScale : Real = 1.0;
     attribute liftCoeffBase : Real = 0.75;
+    attribute liftSlopePerDeg : Real = 0.05;
+    attribute dragCoeffBase : Real = 0.05;
+    attribute dragSlopePerDeg : Real = 0.01;
+    attribute pitchMomentGain : Real = 0.1;
+    attribute pitchMomentNormalizer_deg : Real = 20.0;
     attribute rollAuthority_deg : Real = 25.0;
     attribute pitchAuthority_deg : Real = 20.0;
   }
@@ -154,9 +159,9 @@ package AircraftWorkshop {
     attribute initZ_km : Real = 1.0;
     attribute wingspan_m : Real = 10.0;
     attribute empty_weight_kg : Real = 8573.0;
-    attribute waypointX_km : Real[10] = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-    attribute waypointY_km : Real[10] = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-    attribute waypointZ_km : Real[10] = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
+    attribute waypointX_km : Real[10] = (40.0, 80.0, 120.0, 140.0, 140.0, 140.0, 140.0, 140.0, 140.0, 140.0);
+    attribute waypointY_km : Real[10] = (0.0, 20.0, 0.0, -20.0, -20.0, -20.0, -20.0, -20.0, -20.0, -20.0);
+    attribute waypointZ_km : Real[10] = (3.0, 5.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0);
     attribute waypointProximity_km : Real = 10.0;
   }
 
@@ -391,33 +396,5 @@ package AircraftWorkshop {
     bind sut.composite_airframe.parameters.emptyMass = scenario.empty_weight_kg;
   }
 
-  // ==== Ex1: YOUR PART HERE =================================================
-  //
-  // Exercise: add one leaf part, give it a port, and wire it into a
-  // composition without breaking SSD generation.
-  //
-  // 1. Uncomment the part definition and metadata below (or copy them).
-  // 2. Add the part usage inside WorkshopAircraft.
-  // 3. Add the connect line. The Environment output already exists.
-  // 4. Regenerate the SSD (see README) and confirm the new component appears.
-  //
-  // Keep fmu_meta.source pointing at a built FMU so SSP packaging also works.
-  // This example reuses the InputOutput FMU and one of its input variables.
-  //
-  // attribute def ParticipantProbeFmu :> FmuMetadata {
-  //   attribute source = "build/fmus/InputOutput.fmu";
-  //   attribute implementation = "CoSimulation";
-  // }
-  //
-  // part def ParticipantProbe {
-  //   attribute fmu_meta : ParticipantProbeFmu;
-  //   in port flightStatus : FlightStatusPacket;
-  // }
-  //
-  // Inside WorkshopAircraft:
-  //   part participant_probe : ParticipantProbe;
-  //   connect environment.flight_status to participant_probe.flightStatus;
-  //
-  // ==== end Ex1 =============================================================
 
 }

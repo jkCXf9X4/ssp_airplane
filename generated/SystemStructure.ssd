@@ -568,6 +568,21 @@
           <ssd:Connector name="liftCoeffBase" kind="parameter">
             <ssc:Real />
           </ssd:Connector>
+          <ssd:Connector name="liftSlopePerDeg" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="dragCoeffBase" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="dragSlopePerDeg" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="pitchMomentGain" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="pitchMomentNormalizer_deg" kind="parameter">
+            <ssc:Real />
+          </ssd:Connector>
           <ssd:Connector name="rollAuthority_deg" kind="parameter">
             <ssc:Real />
           </ssd:Connector>
