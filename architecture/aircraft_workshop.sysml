@@ -355,6 +355,18 @@ package AircraftWorkshop {
     part adaptive_wing_system : AdaptiveWingSystem;
     part input_output : InputOutput;
 
+    // The exported model owns the mission scenario: `pyssp generate ssp` only
+    // packages parameter sets applied to the exported composition.
+    attribute nominal : NominalMission;
+    bind autopilot_module.parameters.targetAirspeed_mps = nominal.targetAirspeed_mps;
+    bind autopilot_module.parameters.waypointX_km = nominal.waypointX_km;
+    bind autopilot_module.parameters.waypointY_km = nominal.waypointY_km;
+    bind autopilot_module.parameters.waypointZ_km = nominal.waypointZ_km;
+    bind autopilot_module.parameters.waypointProximity_km = nominal.waypointProximity_km;
+    bind environment.parameters.initZ_km = nominal.initZ_km;
+    bind composite_airframe.parameters.wingspan = nominal.wingspan_m;
+    bind composite_airframe.parameters.emptyMass = nominal.empty_weight_kg;
+
     connect turbofan_propulsion.thrustOut to environment.thrust_in;
     connect turbofan_propulsion.fuel_consumption to fuel_system.fuel_consumption_rate;
     connect mission_computer.engineThrottle to turbofan_propulsion.throttleCmd;
@@ -381,19 +393,9 @@ package AircraftWorkshop {
   // ---- analysis: a scenario connected to an experiment ----
 
   part def WorkshopMission :> Analysis {
-    doc /* Experiment-only analysis: the scenario set drives every parameter binding. */
+    doc /* Experiment-only analysis: the model composition owns NominalMission. */
     attribute experiment_baseline : BaselineExperiment;
-    attribute scenario : NominalMission;
     part sut : WorkshopAircraft;
-
-    bind sut.autopilot_module.parameters.targetAirspeed_mps = scenario.targetAirspeed_mps;
-    bind sut.autopilot_module.parameters.waypointX_km = scenario.waypointX_km;
-    bind sut.autopilot_module.parameters.waypointY_km = scenario.waypointY_km;
-    bind sut.autopilot_module.parameters.waypointZ_km = scenario.waypointZ_km;
-    bind sut.autopilot_module.parameters.waypointProximity_km = scenario.waypointProximity_km;
-    bind sut.environment.parameters.initZ_km = scenario.initZ_km;
-    bind sut.composite_airframe.parameters.wingspan = scenario.wingspan_m;
-    bind sut.composite_airframe.parameters.emptyMass = scenario.empty_weight_kg;
   }
 
 
