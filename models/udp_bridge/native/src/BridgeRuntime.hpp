@@ -6,12 +6,12 @@
 #include <string>
 
 #include "fmi2/fmi2Functions.h"
-#include "Aircraft_Ros2UdpBridge.h"
+#include "Aircraft_UdpBridge.h"
 
-namespace ros2udpbridge {
+namespace udpbridge {
 
 struct BridgeState {
-  Aircraft_Ros2UdpBridge_Instance* instance = nullptr;
+  Aircraft_UdpBridge_Instance* instance = nullptr;
   int tx_socket = -1;
   int rx_socket = -1;
   sockaddr_in tx_address {};
@@ -20,11 +20,11 @@ struct BridgeState {
   bool control_active = false;
 };
 
-BridgeState* create_state(Aircraft_Ros2UdpBridge_Instance* instance);
+BridgeState* create_state(Aircraft_UdpBridge_Instance* instance);
 void destroy_state(BridgeState* state);
 
 fmi2Status enter_initialization(BridgeState* state);
 fmi2Status reset_instance(BridgeState* state);
 fmi2Status do_step(BridgeState* state);
 
-}  // namespace ros2udpbridge
+}  // namespace udpbridge

@@ -30,8 +30,8 @@ package Aircraft {
     attribute source = "build/fmus/ControlInterface.fmu";
   }
 
-  attribute def Ros2UdpBridgeFmu :> FmuMetadata {
-    attribute source = "build/fmus/Ros2UdpBridge.fmu";
+  attribute def UdpBridgeFmu :> FmuMetadata {
+    attribute source = "build/fmus/UdpBridge.fmu";
   }
 
   attribute def AutopilotModuleFmu :> FmuMetadata {
@@ -76,8 +76,8 @@ package Aircraft {
     attribute manualCommandDefault : Real = 0.6;
   }
 
-  port def Ros2UdpParameters :> ParameterInterface {
-    attribute transport : String = "Ros2UdpBridge";
+  port def UdpParameters :> ParameterInterface {
+    attribute transport : String = "UdpBridge";
     attribute reference_latitude_deg : Real = 0.0;
     attribute reference_longitude_deg : Real = 0.0;
     attribute reference_altitude_m : Real = 0.0;
@@ -289,10 +289,10 @@ package Aircraft {
     out port pilotCommand : PilotCommand;
   }
 
-  part def Ros2UdpBridge {
-    doc /* Adapter component for ROS 2 visualization/control coupling via a UDP companion runtime. */
-    attribute fmu_meta : Ros2UdpBridgeFmu;
-    in port parameters : Ros2UdpParameters;
+  part def UdpBridge {
+    doc /* Adapter component carrying UDP telemetry and control to a companion runtime. */
+    attribute fmu_meta : UdpBridgeFmu;
+    in port parameters : UdpParameters;
     in port statePosition : PositionXYZ;
     in port stateOrientation : OrientationEuler;
     in port flightStatus : FlightStatusPacket;
@@ -382,7 +382,7 @@ package Aircraft {
 
   part def AircraftModel :> SspModel {
     part control_interface : ControlInterface;
-    part ros2_udp_bridge : Ros2UdpBridge;
+    part udp_bridge : UdpBridge;
     part autopilot_module : AutopilotModule;
     part composite_airframe : CompositeAirframe;
     part turbofan_propulsion : TurbofanPropulsion;
@@ -392,7 +392,7 @@ package Aircraft {
     part environment : Environment;
     part input_output : InputOutput;
 
-    connect ros2_udp_bridge.pilotCommand to control_interface.bridgeInput;
+    connect udp_bridge.pilotCommand to control_interface.bridgeInput;
     connect control_interface.pilotCommand to mission_computer.manualInput;
     connect autopilot_module.autopilotCmd to mission_computer.autopilotInput;
     connect turbofan_propulsion.thrustOut to environment.thrust_in;
@@ -407,10 +407,10 @@ package Aircraft {
     connect environment.location to autopilot_module.currentLocation;
     connect environment.flight_status to autopilot_module.feedbackBus;
     connect environment.flight_status to adaptive_wing_system.flight_speed;
-    connect environment.location to ros2_udp_bridge.statePosition;
-    connect environment.orientation to ros2_udp_bridge.stateOrientation;
-    connect environment.flight_status to ros2_udp_bridge.flightStatus;
-    connect autopilot_module.missionStatus to ros2_udp_bridge.missionStatus;
+    connect environment.location to udp_bridge.statePosition;
+    connect environment.orientation to udp_bridge.stateOrientation;
+    connect environment.flight_status to udp_bridge.flightStatus;
+    connect autopilot_module.missionStatus to udp_bridge.missionStatus;
     connect environment.location to input_output.locationXYZ;
     connect environment.orientation to input_output.orientation;
     connect autopilot_module.autopilotCmd to input_output.autopilotCmd;

@@ -13,7 +13,7 @@
 #include <cstring>
 #include <string>
 
-namespace ros2udpbridge {
+namespace udpbridge {
 namespace {
 
 constexpr double kControlTimeoutSec = 1.0;
@@ -294,7 +294,7 @@ void send_telemetry_packet(BridgeState* state) {
 
 }  // namespace
 
-BridgeState* create_state(Aircraft_Ros2UdpBridge_Instance* instance) {
+BridgeState* create_state(Aircraft_UdpBridge_Instance* instance) {
   auto* state = new (std::nothrow) BridgeState();
   if (state == nullptr) {
     return nullptr;
@@ -314,8 +314,8 @@ void destroy_state(BridgeState* state) {
 }
 
 fmi2Status enter_initialization(BridgeState* state) {
-  if (!state->instance->transport.empty() && state->instance->transport != "Ros2UdpBridge") {
-    state->instance->transport = "Ros2UdpBridge";
+  if (!state->instance->transport.empty() && state->instance->transport != "UdpBridge") {
+    state->instance->transport = "UdpBridge";
   }
   set_inactive_command(state);
   return ensure_sockets(state) ? fmi2OK : fmi2Warning;
@@ -333,4 +333,4 @@ fmi2Status do_step(BridgeState* state) {
   return fmi2OK;
 }
 
-}  // namespace ros2udpbridge
+}  // namespace udpbridge

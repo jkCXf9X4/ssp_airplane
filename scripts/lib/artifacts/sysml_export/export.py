@@ -44,7 +44,7 @@ def export_artifacts(
         architecture,
         generated_dir / "interfaces",
         composition=MODEL_COMPOSITION,
-        component="Ros2UdpBridge",
+        component="UdpBridge",
         base_index=1,
     )
 
@@ -52,7 +52,7 @@ def export_artifacts(
         architecture,
         generated_dir / "model_descriptions",
         composition=MODEL_COMPOSITION,
-        component="Ros2UdpBridge",
+        component="UdpBridge",
         generation_time=FIXED_GENERATION_TIME,
         base_index=1,
     )

@@ -16,7 +16,7 @@ InputOutput_Interface
 InputOutput
 MissionComputer_Interface
 MissionComputer
-Ros2UdpBridge_Interface
-Ros2UdpBridge
 TurbofanPropulsion_Interface
 TurbofanPropulsion
+UdpBridge_Interface
+UdpBridge

@@ -1,7 +1,7 @@
 within AircraftCommon;
 
-partial model Ros2UdpBridge_Interface
-  parameter String transport = "Ros2UdpBridge";
+partial model UdpBridge_Interface
+  parameter String transport = "UdpBridge";
   parameter Real reference_latitude_deg = 0;
   parameter Real reference_longitude_deg = 0;
   parameter Real reference_altitude_m = 0;
@@ -13,4 +13,4 @@ partial model Ros2UdpBridge_Interface
   input GeneratedInterfaces.FlightStatusPacket flightStatus;
   input GeneratedInterfaces.MissionStatus missionStatus;
   output GeneratedInterfaces.PilotCommand pilotCommand;
-end Ros2UdpBridge_Interface;
+end UdpBridge_Interface;

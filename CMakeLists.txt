@@ -32,11 +32,11 @@ include(AddNativeFmu)
 include(AddSspPackage)
 
 # The standalone Modelica FMUs are built by scripts.lib.common.modelica.
-add_subdirectory(models/ros2_udp_bridge)
+add_subdirectory(models/udp_bridge)
 
 add_custom_target(build_fmus ALL
   DEPENDS
-    Ros2UdpBridge_fmu
+    UdpBridge_fmu
 )
 
 add_ssp_package(

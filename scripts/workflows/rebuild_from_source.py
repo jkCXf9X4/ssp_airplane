@@ -95,13 +95,13 @@ def main(argv: list[str] | None = None) -> int:
         str(cmake_build_dir),
     )
 
-    print("Testing native Ros2UdpBridge bridge FMU...")
+    print("Testing native UdpBridge bridge FMU...")
     run_step(
         sys.executable,
         "-m",
         "pytest",
         "-q",
-        "tests/test_ros2_udp_bridge_fmu.py",
+        "tests/test_udp_bridge_fmu.py",
     )
 
     print("Validating SSD schema...")

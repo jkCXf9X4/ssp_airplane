@@ -16,7 +16,7 @@ if str(REPO_ROOT) not in sys.path:
 from tests.artifacts_build_native_fmus import main as build_native_fmus_main  # type: ignore  # noqa: E402
 
 
-def _build_ros2_udp_bridge_fmu(tmp_path: Path) -> Path:
+def _build_udp_bridge_fmu(tmp_path: Path) -> Path:
     build_root = tmp_path / "native"
 
     assert build_native_fmus_main(
@@ -24,11 +24,11 @@ def _build_ros2_udp_bridge_fmu(tmp_path: Path) -> Path:
             "--build-root",
             str(build_root),
             "--models",
-            "Ros2UdpBridge",
+            "UdpBridge",
         ]
     ) == 0
 
-    return build_root / "fmus" / "Ros2UdpBridge.fmu"
+    return build_root / "fmus" / "UdpBridge.fmu"
 
 
 
@@ -54,7 +54,7 @@ def _free_udp_port() -> int:
 def _extract_fmu(fmu_path: Path, target: Path) -> tuple[Path, ModelDescription]:
     unpack_dir = unpack_archive(fmu_path, target)
     return (
-        unpack_dir / "binaries" / "linux64" / "Ros2UdpBridge.so",
+        unpack_dir / "binaries" / "linux64" / "UdpBridge.so",
         ModelDescription(unpack_dir / "modelDescription.xml"),
     )
 
@@ -123,10 +123,10 @@ def _load_library(path: Path) -> ctypes.CDLL:
     return lib
 
 
-def test_native_ros2_udp_bridge_fmu_exchanges_udp_packets(tmp_path: Path):
+def test_native_udp_bridge_fmu_exchanges_udp_packets(tmp_path: Path):
     telemetry_port = _free_udp_port()
     control_port = _free_udp_port()
-    fmu_path = _build_ros2_udp_bridge_fmu(tmp_path)
+    fmu_path = _build_udp_bridge_fmu(tmp_path)
     assert fmu_path.exists()
 
     extract_dir = tmp_path / "extracted"
@@ -240,7 +240,7 @@ def test_native_ros2_udp_bridge_fmu_exchanges_udp_packets(tmp_path: Path):
         assert received_packets, "Expected telemetry packet from native bridge FMU"
 
         telemetry_packet = json.loads(received_packets[0])
-        assert telemetry_packet["transport"] == "Ros2UdpBridge"
+        assert telemetry_packet["transport"] == "UdpBridge"
         assert abs(telemetry_packet["reference_latitude_deg"] - 57.7) < 0.01
         assert abs(telemetry_packet["reference_longitude_deg"] - 11.95) < 0.01
         assert abs(telemetry_packet["reference_altitude_m"] - 12.0) < 0.01

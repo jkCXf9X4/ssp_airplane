@@ -11,22 +11,22 @@ _CANDIDATE_ROOTS = (
     _TEST_FILE.parents[3],  # embedded layout: test_flight_simulator/3rd_party/airplane/tests
     _TEST_FILE.parents[2] / "test_flight_simulator",  # standalone layout: sibling workspace
 )
-ROS2_BRIDGE_ROOT = next((root for root in _CANDIDATE_ROOTS if (root / "ros2_bridge").is_dir()), None)
+BRIDGE_CONTRACT_ROOT = next((root for root in _CANDIDATE_ROOTS if (root / "bridge_contract").is_dir()), None)
 
-if ROS2_BRIDGE_ROOT is None:
-    pytest.skip("ros2_bridge package not found (expected in the flight simulator workspace)", allow_module_level=True)
+if BRIDGE_CONTRACT_ROOT is None:
+    pytest.skip("bridge_contract package not found (expected in the flight simulator workspace)", allow_module_level=True)
 
-if str(ROS2_BRIDGE_ROOT) not in sys.path:
-    sys.path.insert(0, str(ROS2_BRIDGE_ROOT))
+if str(BRIDGE_CONTRACT_ROOT) not in sys.path:
+    sys.path.insert(0, str(BRIDGE_CONTRACT_ROOT))
 
-from ros2_bridge.common import encode_control_packet, load_local_waypoints, parse_state_packet  # noqa: E402
+from bridge_contract.common import encode_control_packet, load_local_waypoints, parse_state_packet  # noqa: E402
 
 
 def test_parse_state_packet_converts_local_km_to_meters() -> None:
     packet = parse_state_packet(
         json.dumps(
             {
-                "transport": "Ros2UdpBridge",
+                "transport": "UdpBridge",
                 "reference_latitude_deg": 57.7,
                 "reference_longitude_deg": 11.95,
                 "reference_altitude_m": 12.0,
