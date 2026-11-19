@@ -18,6 +18,7 @@ struct BridgeState {
   bool sockets_ready = false;
   std::chrono::steady_clock::time_point last_control_update {};
   bool control_active = false;
+  bool telemetry_started = false;
 };
 
 BridgeState* create_state(Aircraft_UdpBridge_Instance* instance);

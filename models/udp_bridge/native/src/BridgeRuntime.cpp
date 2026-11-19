@@ -329,6 +329,13 @@ fmi2Status reset_instance(BridgeState* state) {
 
 fmi2Status do_step(BridgeState* state) {
   receive_control_packet(state);
+  // The first communication step runs before the connected inputs carry the
+  // initial aircraft state; publishing it would emit an all-zero record and
+  // corrupt the receiver's finite-difference rates.
+  if (!state->telemetry_started) {
+    state->telemetry_started = true;
+    return fmi2OK;
+  }
   send_telemetry_packet(state);
   return fmi2OK;
 }
