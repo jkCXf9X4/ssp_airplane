@@ -6,7 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
-from scripts.lib.scenarios.runtime import run_simulation_with_pyssp4sim
+from pyssp_simulate import replay_ssp4sim_config
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -17,7 +17,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
-    run_simulation_with_pyssp4sim(args.config_path)
+    replay_ssp4sim_config(args.config_path)
     print(json.dumps({"config_path": str(args.config_path), "status": "completed"}, indent=2))
     return 0
 

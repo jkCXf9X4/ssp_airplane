@@ -1,22 +1,33 @@
-"""Simulation runtime helpers around pyssp4sim."""
+"""Simulation runtime helpers built on pyssp_simulate."""
 
 from __future__ import annotations
 
+import copy
 import json
 from pathlib import Path
 from typing import Any, Optional
 
-try:
-    import pyssp4sim
-except ImportError:
-    pyssp4sim = None
+from pyssp_simulate import SimulationSpec
 
-
-def require_pyssp4sim() -> None:
-    if pyssp4sim is None:
-        raise RuntimeError(
-            "pyssp4sim is not available; activate venv, install the ssp4sim Python API or reuse existing results."
-        )
+# Airplane scenario defaults. The spec carries every value pyssp_simulate
+# models (paths, times, step, tolerance, realtime, recording, logging); the
+# executor block is the one engine setting the public SimulationSpec surface
+# does not expose, so it is named once here instead of inline in the payload.
+_SSP4SIM_TIMESTEP = 0.1
+_SSP4SIM_TOLERANCE = 1e-4
+_SSP4SIM_RECORDING_INTERVAL = 0.25
+_SSP4SIM_EXECUTOR: dict[str, Any] = {
+    "method": "jacobi",
+    "thread_pool_workers": 5,
+    "forward_derivatives": True,
+    "jacobi": {
+        "parallel": True,
+        "method": 1,
+    },
+    "seidel": {
+        "parallel": False,
+    },
+}
 
 
 def create_simulation_config(
@@ -25,40 +36,39 @@ def create_simulation_config(
     stop_time: float,
     log_fmu: bool = False,
     realtime: bool = False,
-    recording_interval: float = 0.25,
+    recording_interval: float = _SSP4SIM_RECORDING_INTERVAL,
 ) -> dict[str, Any]:
+    spec = SimulationSpec(
+        ssp=ssp_path,
+        stop_time=stop_time,
+        step_size=_SSP4SIM_TIMESTEP,
+        tolerance=_SSP4SIM_TOLERANCE,
+        result_file=result_file,
+        realtime=realtime,
+        recording_interval=recording_interval,
+        log_fmu=log_fmu,
+    )
     return {
         "simulation": {
-            "ssp": ssp_path.as_posix(),
+            "ssp": spec.ssp.as_posix(),
             "ssd": "SystemStructure.ssd",
-            "start_time": 0.0,
-            "stop_time": stop_time,
-            "timestep": 0.1,
-            "tolerance": 1e-4,
-            "realtime": realtime,
-            "executor": {
-                "method": "jacobi",
-                "thread_pool_workers": 5,
-                "forward_derivatives": True,
-                "jacobi": {
-                    "parallel": True,
-                    "method": 1,
-                },
-                "seidel": {
-                    "parallel": False,
-                },
-            },
+            "start_time": spec.start_time,
+            "stop_time": spec.stop_time,
+            "timestep": spec.effective_step_size(),
+            "tolerance": spec.tolerance,
+            "realtime": spec.realtime,
+            "executor": copy.deepcopy(_SSP4SIM_EXECUTOR),
             "recording": {
                 "wait_for": True,
                 "csv": {
                     "enable": True,
-                    "file": result_file.as_posix(),
-                    "interval": recording_interval,
+                    "file": spec.result_file.as_posix(),
+                    "interval": spec.recording_interval,
                 },
             },
             "log": {
                 "file": "./build/results/sim.log",
-                "fmu": log_fmu,
+                "fmu": spec.log_fmu,
             },
         }
     }
@@ -73,10 +83,3 @@ def write_simulation_config(
     resolved_config_path.parent.mkdir(parents=True, exist_ok=True)
     resolved_config_path.write_text(json.dumps(config, indent=2))
     return resolved_config_path
-
-
-def run_simulation_with_pyssp4sim(config_path: Path) -> None:
-    require_pyssp4sim()
-    simulator = pyssp4sim.Simulator(config_path.as_posix())
-    simulator.init()
-    simulator.simulate()
