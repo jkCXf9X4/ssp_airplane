@@ -234,7 +234,11 @@ def test_native_udp_bridge_fmu_exchanges_udp_packets(tmp_path: Path):
         )
         control_sender.close()
 
+        # The bridge publishes from the second communication step: the first
+        # one runs before the connected aircraft inputs carry their values, so
+        # it would emit an all-zero record (see BridgeRuntime::do_step).
         assert lib.fmi2DoStep(component, 0.0, 0.1, 1) == 0
+        assert lib.fmi2DoStep(component, 0.1, 0.1, 1) == 0
 
         listener.join(timeout=3.0)
         assert received_packets, "Expected telemetry packet from native bridge FMU"
