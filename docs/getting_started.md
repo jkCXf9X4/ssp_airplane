@@ -94,7 +94,7 @@ This workflow, in order:
 1. exports architecture-derived artifacts into `generated/`
 2. verifies the Modelica interfaces and equations
 3. builds each standalone Modelica FMU into `build/fmus/` via `scripts/lib/common/modelica/build.py`
-4. configures and runs the CMake build, which builds the native bridge FMU (`UdpBridge_fmu`) and packages the baseline SSP (`aircraft_ssp`) through the aggregate `build_fmus` and `package_simulation_artifacts` targets
+4. configures and runs the CMake build, which packages the built FMUs into the baseline SSP (`aircraft_ssp`) through the aggregate `package_simulation_artifacts` target
 
 If you only need to rebuild the CMake outputs, run:
 
@@ -103,12 +103,12 @@ cmake -S . -B build/cmake
 cmake --build build/cmake
 ```
 
-CMake builds and packages the native bridge FMU and the baseline SSP only; it does not compile the Modelica FMUs. If you change architecture-derived interfaces or model descriptions, regenerate those artifacts and rebuild the Modelica FMUs before rebuilding the CMake outputs.
+CMake packages the already built FMUs into the baseline SSP only; it does not compile the Modelica FMUs. If you change architecture-derived interfaces or model descriptions, regenerate those artifacts and rebuild the Modelica FMUs before rebuilding the CMake outputs.
 
 The long-term preferred methodology is:
 
 1. Python generates artifacts into `generated/`
-2. CMake builds and packages FMUs and the baseline SSP
+2. CMake packages the built FMUs into the baseline SSP
 3. Python runs simulations against that packaged SSP
 
 ## Which path should I use?

@@ -88,20 +88,11 @@ def main(argv: list[str] | None = None) -> int:
         f"-DPYFMI_EXECUTABLE={pyfmi_path}",
     )
 
-    print("Building and packaging FMUs and the baseline SSP...")
+    print("Packaging the baseline SSP from the built FMUs...")
     run_step(
         "cmake",
         "--build",
         str(cmake_build_dir),
-    )
-
-    print("Testing native UdpBridge bridge FMU...")
-    run_step(
-        sys.executable,
-        "-m",
-        "pytest",
-        "-q",
-        "tests/test_udp_bridge_fmu.py",
     )
 
     print("Validating SSD schema...")

@@ -81,24 +81,24 @@
           </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
-      <ssd:Component name="udp_bridge" source="resources/UdpBridge.fmu" type="application/x-fmu-sharedlibrary">
+      <ssd:Component name="rpr_state_source" source="resources/RprStateSource.fmu" type="application/x-fmu-sharedlibrary" implementation="CoSimulation">
         <ssd:Connectors>
-          <ssd:Connector name="statePosition.x_km" kind="input">
+          <ssd:Connector name="position.x_km" kind="input">
             <ssc:Real />
           </ssd:Connector>
-          <ssd:Connector name="statePosition.y_km" kind="input">
+          <ssd:Connector name="position.y_km" kind="input">
             <ssc:Real />
           </ssd:Connector>
-          <ssd:Connector name="statePosition.z_km" kind="input">
+          <ssd:Connector name="position.z_km" kind="input">
             <ssc:Real />
           </ssd:Connector>
-          <ssd:Connector name="stateOrientation.roll_deg" kind="input">
+          <ssd:Connector name="orientation.roll_deg" kind="input">
             <ssc:Real />
           </ssd:Connector>
-          <ssd:Connector name="stateOrientation.pitch_deg" kind="input">
+          <ssd:Connector name="orientation.pitch_deg" kind="input">
             <ssc:Real />
           </ssd:Connector>
-          <ssd:Connector name="stateOrientation.yaw_deg" kind="input">
+          <ssd:Connector name="orientation.yaw_deg" kind="input">
             <ssc:Real />
           </ssd:Connector>
           <ssd:Connector name="flightStatus.airspeed_mps" kind="input">
@@ -116,53 +116,95 @@
           <ssd:Connector name="flightStatus.health_code" kind="input">
             <ssc:Integer />
           </ssd:Connector>
-          <ssd:Connector name="missionStatus.waypoint_index" kind="input">
+          <ssd:Connector name="entityState.entity_identifier_site" kind="output">
             <ssc:Integer />
           </ssd:Connector>
-          <ssd:Connector name="missionStatus.total_waypoints" kind="input">
+          <ssd:Connector name="entityState.entity_identifier_application" kind="output">
             <ssc:Integer />
           </ssd:Connector>
-          <ssd:Connector name="missionStatus.distance_to_waypoint_km" kind="input">
-            <ssc:Real />
-          </ssd:Connector>
-          <ssd:Connector name="missionStatus.arrived" kind="input">
-            <ssc:Boolean />
-          </ssd:Connector>
-          <ssd:Connector name="missionStatus.complete" kind="input">
-            <ssc:Boolean />
-          </ssd:Connector>
-          <ssd:Connector name="pilotCommand.stick_pitch_norm" kind="output">
-            <ssc:Real />
-          </ssd:Connector>
-          <ssd:Connector name="pilotCommand.stick_roll_norm" kind="output">
-            <ssc:Real />
-          </ssd:Connector>
-          <ssd:Connector name="pilotCommand.rudder_norm" kind="output">
-            <ssc:Real />
-          </ssd:Connector>
-          <ssd:Connector name="pilotCommand.throttle_norm" kind="output">
-            <ssc:Real />
-          </ssd:Connector>
-          <ssd:Connector name="pilotCommand.throttle_aux_norm" kind="output">
-            <ssc:Real />
-          </ssd:Connector>
-          <ssd:Connector name="pilotCommand.button_mask" kind="output">
+          <ssd:Connector name="entityState.entity_identifier_entity" kind="output">
             <ssc:Integer />
           </ssd:Connector>
-          <ssd:Connector name="pilotCommand.hat_x" kind="output">
+          <ssd:Connector name="entityState.entity_type_kind" kind="output">
             <ssc:Integer />
           </ssd:Connector>
-          <ssd:Connector name="pilotCommand.hat_y" kind="output">
+          <ssd:Connector name="entityState.entity_type_domain" kind="output">
             <ssc:Integer />
           </ssd:Connector>
-          <ssd:Connector name="pilotCommand.mode_switch" kind="output">
+          <ssd:Connector name="entityState.entity_type_country" kind="output">
             <ssc:Integer />
           </ssd:Connector>
-          <ssd:Connector name="pilotCommand.reserved" kind="output">
+          <ssd:Connector name="entityState.entity_type_category" kind="output">
             <ssc:Integer />
           </ssd:Connector>
-          <ssd:Connector name="transport" kind="parameter">
+          <ssd:Connector name="entityState.entity_type_subcategory" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.entity_type_specific" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.entity_type_extra" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.marking_character_set" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.marking_characters" kind="output">
             <ssc:String />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.force" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_world_location_x" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_world_location_y" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_world_location_z" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_orientation_psi" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_orientation_theta" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_orientation_phi" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_velocity_x" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_velocity_y" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_velocity_z" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_acceleration_x" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_acceleration_y" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_acceleration_z" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_angular_velocity_x" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_angular_velocity_y" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_angular_velocity_z" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_dead_reckoning_algorithm" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_is_frozen" kind="output">
+            <ssc:Boolean />
           </ssd:Connector>
           <ssd:Connector name="reference_latitude_deg" kind="parameter">
             <ssc:Real />
@@ -173,14 +215,237 @@
           <ssd:Connector name="reference_altitude_m" kind="parameter">
             <ssc:Real />
           </ssd:Connector>
-          <ssd:Connector name="remote_host" kind="parameter">
+          <ssd:Connector name="entity_site" kind="parameter">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="entity_application" kind="parameter">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="entity_entity" kind="parameter">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="entity_type_kind" kind="parameter">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="entity_type_domain" kind="parameter">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="entity_type_country" kind="parameter">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="entity_type_category" kind="parameter">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="entity_type_subcategory" kind="parameter">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="entity_type_specific" kind="parameter">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="entity_type_extra" kind="parameter">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="force" kind="parameter">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="marking_character_set" kind="parameter">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="marking_characters" kind="parameter">
             <ssc:String />
           </ssd:Connector>
-          <ssd:Connector name="telemetry_port" kind="parameter">
+        </ssd:Connectors>
+      </ssd:Component>
+      <ssd:Component name="rpr_entity" source="resources/RprEntity.fmu" type="application/x-fmu-sharedlibrary" implementation="CoSimulation">
+        <ssd:Connectors>
+          <ssd:Connector name="entityState.entity_identifier_site" kind="input">
             <ssc:Integer />
           </ssd:Connector>
-          <ssd:Connector name="control_port" kind="parameter">
+          <ssd:Connector name="entityState.entity_identifier_application" kind="input">
             <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.entity_identifier_entity" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.entity_type_kind" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.entity_type_domain" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.entity_type_country" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.entity_type_category" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.entity_type_subcategory" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.entity_type_specific" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.entity_type_extra" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.marking_character_set" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.marking_characters" kind="input">
+            <ssc:String />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.force" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_world_location_x" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_world_location_y" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_world_location_z" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_orientation_psi" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_orientation_theta" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_orientation_phi" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_velocity_x" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_velocity_y" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_velocity_z" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_acceleration_x" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_acceleration_y" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_acceleration_z" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_angular_velocity_x" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_angular_velocity_y" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_angular_velocity_z" kind="input">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_dead_reckoning_algorithm" kind="input">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="entityState.spatial_is_frozen" kind="input">
+            <ssc:Boolean />
+          </ssd:Connector>
+          <ssd:Connector name="peerState.entity_identifier_site" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="peerState.entity_identifier_application" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="peerState.entity_identifier_entity" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="peerState.entity_type_kind" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="peerState.entity_type_domain" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="peerState.entity_type_country" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="peerState.entity_type_category" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="peerState.entity_type_subcategory" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="peerState.entity_type_specific" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="peerState.entity_type_extra" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="peerState.marking_character_set" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="peerState.marking_characters" kind="output">
+            <ssc:String />
+          </ssd:Connector>
+          <ssd:Connector name="peerState.force" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="peerState.spatial_world_location_x" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="peerState.spatial_world_location_y" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="peerState.spatial_world_location_z" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="peerState.spatial_orientation_psi" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="peerState.spatial_orientation_theta" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="peerState.spatial_orientation_phi" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="peerState.spatial_velocity_x" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="peerState.spatial_velocity_y" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="peerState.spatial_velocity_z" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="peerState.spatial_acceleration_x" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="peerState.spatial_acceleration_y" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="peerState.spatial_acceleration_z" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="peerState.spatial_angular_velocity_x" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="peerState.spatial_angular_velocity_y" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="peerState.spatial_angular_velocity_z" kind="output">
+            <ssc:Real />
+          </ssd:Connector>
+          <ssd:Connector name="peerState.spatial_dead_reckoning_algorithm" kind="output">
+            <ssc:Integer />
+          </ssd:Connector>
+          <ssd:Connector name="peerState.spatial_is_frozen" kind="output">
+            <ssc:Boolean />
+          </ssd:Connector>
+          <ssd:Connector name="transport" kind="parameter">
+            <ssc:String />
+          </ssd:Connector>
+          <ssd:Connector name="bind_address" kind="parameter">
+            <ssc:String />
+          </ssd:Connector>
+          <ssd:Connector name="peer_address" kind="parameter">
+            <ssc:String />
           </ssd:Connector>
         </ssd:Connectors>
       </ssd:Component>
@@ -902,16 +1167,6 @@
       </ssd:Component>
     </ssd:Elements>
     <ssd:Connections>
-      <ssd:Connection startElement="udp_bridge" startConnector="pilotCommand.stick_pitch_norm" endElement="control_interface" endConnector="bridgeInput.stick_pitch_norm" />
-      <ssd:Connection startElement="udp_bridge" startConnector="pilotCommand.stick_roll_norm" endElement="control_interface" endConnector="bridgeInput.stick_roll_norm" />
-      <ssd:Connection startElement="udp_bridge" startConnector="pilotCommand.rudder_norm" endElement="control_interface" endConnector="bridgeInput.rudder_norm" />
-      <ssd:Connection startElement="udp_bridge" startConnector="pilotCommand.throttle_norm" endElement="control_interface" endConnector="bridgeInput.throttle_norm" />
-      <ssd:Connection startElement="udp_bridge" startConnector="pilotCommand.throttle_aux_norm" endElement="control_interface" endConnector="bridgeInput.throttle_aux_norm" />
-      <ssd:Connection startElement="udp_bridge" startConnector="pilotCommand.button_mask" endElement="control_interface" endConnector="bridgeInput.button_mask" />
-      <ssd:Connection startElement="udp_bridge" startConnector="pilotCommand.hat_x" endElement="control_interface" endConnector="bridgeInput.hat_x" />
-      <ssd:Connection startElement="udp_bridge" startConnector="pilotCommand.hat_y" endElement="control_interface" endConnector="bridgeInput.hat_y" />
-      <ssd:Connection startElement="udp_bridge" startConnector="pilotCommand.mode_switch" endElement="control_interface" endConnector="bridgeInput.mode_switch" />
-      <ssd:Connection startElement="udp_bridge" startConnector="pilotCommand.reserved" endElement="control_interface" endConnector="bridgeInput.reserved" />
       <ssd:Connection startElement="control_interface" startConnector="pilotCommand.stick_pitch_norm" endElement="mission_computer" endConnector="manualInput.stick_pitch_norm" />
       <ssd:Connection startElement="control_interface" startConnector="pilotCommand.stick_roll_norm" endElement="mission_computer" endConnector="manualInput.stick_roll_norm" />
       <ssd:Connection startElement="control_interface" startConnector="pilotCommand.rudder_norm" endElement="mission_computer" endConnector="manualInput.rudder_norm" />
@@ -972,22 +1227,47 @@
       <ssd:Connection startElement="environment" startConnector="flight_status.angle_of_attack_deg" endElement="adaptive_wing_system" endConnector="flight_speed.angle_of_attack_deg" />
       <ssd:Connection startElement="environment" startConnector="flight_status.climb_rate" endElement="adaptive_wing_system" endConnector="flight_speed.climb_rate" />
       <ssd:Connection startElement="environment" startConnector="flight_status.health_code" endElement="adaptive_wing_system" endConnector="flight_speed.health_code" />
-      <ssd:Connection startElement="environment" startConnector="location.x_km" endElement="udp_bridge" endConnector="statePosition.x_km" />
-      <ssd:Connection startElement="environment" startConnector="location.y_km" endElement="udp_bridge" endConnector="statePosition.y_km" />
-      <ssd:Connection startElement="environment" startConnector="location.z_km" endElement="udp_bridge" endConnector="statePosition.z_km" />
-      <ssd:Connection startElement="environment" startConnector="orientation.roll_deg" endElement="udp_bridge" endConnector="stateOrientation.roll_deg" />
-      <ssd:Connection startElement="environment" startConnector="orientation.pitch_deg" endElement="udp_bridge" endConnector="stateOrientation.pitch_deg" />
-      <ssd:Connection startElement="environment" startConnector="orientation.yaw_deg" endElement="udp_bridge" endConnector="stateOrientation.yaw_deg" />
-      <ssd:Connection startElement="environment" startConnector="flight_status.airspeed_mps" endElement="udp_bridge" endConnector="flightStatus.airspeed_mps" />
-      <ssd:Connection startElement="environment" startConnector="flight_status.energy_state_norm" endElement="udp_bridge" endConnector="flightStatus.energy_state_norm" />
-      <ssd:Connection startElement="environment" startConnector="flight_status.angle_of_attack_deg" endElement="udp_bridge" endConnector="flightStatus.angle_of_attack_deg" />
-      <ssd:Connection startElement="environment" startConnector="flight_status.climb_rate" endElement="udp_bridge" endConnector="flightStatus.climb_rate" />
-      <ssd:Connection startElement="environment" startConnector="flight_status.health_code" endElement="udp_bridge" endConnector="flightStatus.health_code" />
-      <ssd:Connection startElement="autopilot_module" startConnector="missionStatus.waypoint_index" endElement="udp_bridge" endConnector="missionStatus.waypoint_index" />
-      <ssd:Connection startElement="autopilot_module" startConnector="missionStatus.total_waypoints" endElement="udp_bridge" endConnector="missionStatus.total_waypoints" />
-      <ssd:Connection startElement="autopilot_module" startConnector="missionStatus.distance_to_waypoint_km" endElement="udp_bridge" endConnector="missionStatus.distance_to_waypoint_km" />
-      <ssd:Connection startElement="autopilot_module" startConnector="missionStatus.arrived" endElement="udp_bridge" endConnector="missionStatus.arrived" />
-      <ssd:Connection startElement="autopilot_module" startConnector="missionStatus.complete" endElement="udp_bridge" endConnector="missionStatus.complete" />
+      <ssd:Connection startElement="environment" startConnector="location.x_km" endElement="rpr_state_source" endConnector="position.x_km" />
+      <ssd:Connection startElement="environment" startConnector="location.y_km" endElement="rpr_state_source" endConnector="position.y_km" />
+      <ssd:Connection startElement="environment" startConnector="location.z_km" endElement="rpr_state_source" endConnector="position.z_km" />
+      <ssd:Connection startElement="environment" startConnector="orientation.roll_deg" endElement="rpr_state_source" endConnector="orientation.roll_deg" />
+      <ssd:Connection startElement="environment" startConnector="orientation.pitch_deg" endElement="rpr_state_source" endConnector="orientation.pitch_deg" />
+      <ssd:Connection startElement="environment" startConnector="orientation.yaw_deg" endElement="rpr_state_source" endConnector="orientation.yaw_deg" />
+      <ssd:Connection startElement="environment" startConnector="flight_status.airspeed_mps" endElement="rpr_state_source" endConnector="flightStatus.airspeed_mps" />
+      <ssd:Connection startElement="environment" startConnector="flight_status.energy_state_norm" endElement="rpr_state_source" endConnector="flightStatus.energy_state_norm" />
+      <ssd:Connection startElement="environment" startConnector="flight_status.angle_of_attack_deg" endElement="rpr_state_source" endConnector="flightStatus.angle_of_attack_deg" />
+      <ssd:Connection startElement="environment" startConnector="flight_status.climb_rate" endElement="rpr_state_source" endConnector="flightStatus.climb_rate" />
+      <ssd:Connection startElement="environment" startConnector="flight_status.health_code" endElement="rpr_state_source" endConnector="flightStatus.health_code" />
+      <ssd:Connection startElement="rpr_state_source" startConnector="entityState.entity_identifier_site" endElement="rpr_entity" endConnector="entityState.entity_identifier_site" />
+      <ssd:Connection startElement="rpr_state_source" startConnector="entityState.entity_identifier_application" endElement="rpr_entity" endConnector="entityState.entity_identifier_application" />
+      <ssd:Connection startElement="rpr_state_source" startConnector="entityState.entity_identifier_entity" endElement="rpr_entity" endConnector="entityState.entity_identifier_entity" />
+      <ssd:Connection startElement="rpr_state_source" startConnector="entityState.entity_type_kind" endElement="rpr_entity" endConnector="entityState.entity_type_kind" />
+      <ssd:Connection startElement="rpr_state_source" startConnector="entityState.entity_type_domain" endElement="rpr_entity" endConnector="entityState.entity_type_domain" />
+      <ssd:Connection startElement="rpr_state_source" startConnector="entityState.entity_type_country" endElement="rpr_entity" endConnector="entityState.entity_type_country" />
+      <ssd:Connection startElement="rpr_state_source" startConnector="entityState.entity_type_category" endElement="rpr_entity" endConnector="entityState.entity_type_category" />
+      <ssd:Connection startElement="rpr_state_source" startConnector="entityState.entity_type_subcategory" endElement="rpr_entity" endConnector="entityState.entity_type_subcategory" />
+      <ssd:Connection startElement="rpr_state_source" startConnector="entityState.entity_type_specific" endElement="rpr_entity" endConnector="entityState.entity_type_specific" />
+      <ssd:Connection startElement="rpr_state_source" startConnector="entityState.entity_type_extra" endElement="rpr_entity" endConnector="entityState.entity_type_extra" />
+      <ssd:Connection startElement="rpr_state_source" startConnector="entityState.marking_character_set" endElement="rpr_entity" endConnector="entityState.marking_character_set" />
+      <ssd:Connection startElement="rpr_state_source" startConnector="entityState.marking_characters" endElement="rpr_entity" endConnector="entityState.marking_characters" />
+      <ssd:Connection startElement="rpr_state_source" startConnector="entityState.force" endElement="rpr_entity" endConnector="entityState.force" />
+      <ssd:Connection startElement="rpr_state_source" startConnector="entityState.spatial_world_location_x" endElement="rpr_entity" endConnector="entityState.spatial_world_location_x" />
+      <ssd:Connection startElement="rpr_state_source" startConnector="entityState.spatial_world_location_y" endElement="rpr_entity" endConnector="entityState.spatial_world_location_y" />
+      <ssd:Connection startElement="rpr_state_source" startConnector="entityState.spatial_world_location_z" endElement="rpr_entity" endConnector="entityState.spatial_world_location_z" />
+      <ssd:Connection startElement="rpr_state_source" startConnector="entityState.spatial_orientation_psi" endElement="rpr_entity" endConnector="entityState.spatial_orientation_psi" />
+      <ssd:Connection startElement="rpr_state_source" startConnector="entityState.spatial_orientation_theta" endElement="rpr_entity" endConnector="entityState.spatial_orientation_theta" />
+      <ssd:Connection startElement="rpr_state_source" startConnector="entityState.spatial_orientation_phi" endElement="rpr_entity" endConnector="entityState.spatial_orientation_phi" />
+      <ssd:Connection startElement="rpr_state_source" startConnector="entityState.spatial_velocity_x" endElement="rpr_entity" endConnector="entityState.spatial_velocity_x" />
+      <ssd:Connection startElement="rpr_state_source" startConnector="entityState.spatial_velocity_y" endElement="rpr_entity" endConnector="entityState.spatial_velocity_y" />
+      <ssd:Connection startElement="rpr_state_source" startConnector="entityState.spatial_velocity_z" endElement="rpr_entity" endConnector="entityState.spatial_velocity_z" />
+      <ssd:Connection startElement="rpr_state_source" startConnector="entityState.spatial_acceleration_x" endElement="rpr_entity" endConnector="entityState.spatial_acceleration_x" />
+      <ssd:Connection startElement="rpr_state_source" startConnector="entityState.spatial_acceleration_y" endElement="rpr_entity" endConnector="entityState.spatial_acceleration_y" />
+      <ssd:Connection startElement="rpr_state_source" startConnector="entityState.spatial_acceleration_z" endElement="rpr_entity" endConnector="entityState.spatial_acceleration_z" />
+      <ssd:Connection startElement="rpr_state_source" startConnector="entityState.spatial_angular_velocity_x" endElement="rpr_entity" endConnector="entityState.spatial_angular_velocity_x" />
+      <ssd:Connection startElement="rpr_state_source" startConnector="entityState.spatial_angular_velocity_y" endElement="rpr_entity" endConnector="entityState.spatial_angular_velocity_y" />
+      <ssd:Connection startElement="rpr_state_source" startConnector="entityState.spatial_angular_velocity_z" endElement="rpr_entity" endConnector="entityState.spatial_angular_velocity_z" />
+      <ssd:Connection startElement="rpr_state_source" startConnector="entityState.spatial_dead_reckoning_algorithm" endElement="rpr_entity" endConnector="entityState.spatial_dead_reckoning_algorithm" />
+      <ssd:Connection startElement="rpr_state_source" startConnector="entityState.spatial_is_frozen" endElement="rpr_entity" endConnector="entityState.spatial_is_frozen" />
       <ssd:Connection startElement="environment" startConnector="location.x_km" endElement="input_output" endConnector="locationXYZ.x_km" />
       <ssd:Connection startElement="environment" startConnector="location.y_km" endElement="input_output" endConnector="locationXYZ.y_km" />
       <ssd:Connection startElement="environment" startConnector="location.z_km" endElement="input_output" endConnector="locationXYZ.z_km" />

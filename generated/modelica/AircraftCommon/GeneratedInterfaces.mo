@@ -1,5 +1,38 @@
 within AircraftCommon;
 package GeneratedInterfaces
+  connector EntityState
+    Integer entity_identifier_site;
+    Integer entity_identifier_application;
+    Integer entity_identifier_entity;
+    Integer entity_type_kind;
+    Integer entity_type_domain;
+    Integer entity_type_country;
+    Integer entity_type_category;
+    Integer entity_type_subcategory;
+    Integer entity_type_specific;
+    Integer entity_type_extra;
+    Integer marking_character_set;
+    String marking_characters;
+    Integer force;
+    Real spatial_world_location_x;
+    Real spatial_world_location_y;
+    Real spatial_world_location_z;
+    Real spatial_orientation_psi;
+    Real spatial_orientation_theta;
+    Real spatial_orientation_phi;
+    Real spatial_velocity_x;
+    Real spatial_velocity_y;
+    Real spatial_velocity_z;
+    Real spatial_acceleration_x;
+    Real spatial_acceleration_y;
+    Real spatial_acceleration_z;
+    Real spatial_angular_velocity_x;
+    Real spatial_angular_velocity_y;
+    Real spatial_angular_velocity_z;
+    Integer spatial_dead_reckoning_algorithm;
+    Boolean spatial_is_frozen;
+  end EntityState;
+
   connector FlightStatusPacket
     Real airspeed_mps;
     Real energy_state_norm;

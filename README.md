@@ -5,7 +5,7 @@ System structure and simulation workflow for an F-16-inspired aircraft model.
 This repository combines:
 
 - SysML architecture sources in `architecture/`
-- Modelica and native FMU implementations in `models/`
+- Modelica FMU implementations in `models/`
 - Python generation, verification, and workflow tooling in `scripts/`
 
 ## Start Here
@@ -36,7 +36,7 @@ That command reuses the reference CSV when present and writes derived outputs in
 ## Repository Layout
 
 - `architecture/`: SysML source of truth
-- `models/`: Modelica and native FMU implementations
+- `models/`: Modelica FMU implementations
 - `resources/scenarios/`: curated mission scenarios
 - `resources/references/`: reference results used for reuse and tests
 - `scripts/`: command entrypoints in `scripts/cli/`, workflows in `scripts/workflows/`, and internal modules in `scripts/lib/`

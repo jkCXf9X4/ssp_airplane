@@ -32,7 +32,6 @@
   <ssm:MappingEntry source="waypointZ_km[8]" target="autopilot_module.waypointZ_km[8]" />
   <ssm:MappingEntry source="waypointZ_km[9]" target="autopilot_module.waypointZ_km[9]" />
   <ssm:MappingEntry source="waypointZ_km[10]" target="autopilot_module.waypointZ_km[10]" />
-  <ssm:MappingEntry source="useBridgeInput" target="control_interface.useBridgeInput" />
   <ssm:MappingEntry source="initX_km" target="environment.initX_km" />
   <ssm:MappingEntry source="initY_km" target="environment.initY_km" />
   <ssm:MappingEntry source="initZ_km" target="environment.initZ_km" />

@@ -4,6 +4,7 @@ import sys
 from pathlib import Path
 
 import pycps_sysml2
+from pyfmi_rpr import rpr_entity
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
@@ -11,7 +12,9 @@ if str(REPO_ROOT) not in sys.path:
 
 
 def _architecture():
-    return pycps_sysml2.load(REPO_ROOT / "architecture")
+    return pycps_sysml2.load(
+        REPO_ROOT / "architecture", pycps_sysml2.core_definitions(), rpr_entity()
+    )
 
 
 def test_parser_collects_parts_and_ports():
@@ -37,5 +40,27 @@ def test_connections_are_parsed():
         and conn.source_port == "flight_status"
         and conn.destination_part == "autopilot_module"
         and conn.destination_port == "feedbackBus"
+        for conn in aircraft_model.connections.values()
+    )
+
+
+def test_rpr_state_source_feeds_rpr_entity_without_peer_feedback():
+    architecture = _architecture()
+    aircraft_model = architecture.part_definitions["AircraftModel"]
+
+    assert "RprStateSource" in architecture.part_definitions
+    assert any(
+        name.endswith("::RprEntity") for name in architecture.part_definitions
+    )
+    assert any(
+        conn.source_part == "rpr_state_source"
+        and conn.source_port == "entityState"
+        and conn.destination_part == "rpr_entity"
+        and conn.destination_port == "entityState"
+        for conn in aircraft_model.connections.values()
+    )
+    assert not any(
+        conn.destination_part == "control_interface"
+        and conn.destination_port == "bridgeInput"
         for conn in aircraft_model.connections.values()
     )

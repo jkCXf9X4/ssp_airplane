@@ -1,17 +1,7 @@
 package Aircraft {
 
-  // ---- SSP/FMI dialect markers (pyssp ecosystem: pycps_sysml2 core) ----
-
-  part def SspModel;
-  part def Analysis;
-  port def ParameterInterface;
-  attribute def ParameterSet;
-
-  attribute def Experiment {
-    attribute startTime : Real;
-    attribute stopTime : Real;
-    attribute stepSize : Real;
-  }
+  private import PysspCore::*;
+  private import RprEntity::*;
 
   attribute def BaselineExperiment :> Experiment {
     attribute startTime = 0.0;
@@ -19,19 +9,13 @@ package Aircraft {
     attribute stepSize = 0.1;
   }
 
-  // ---- FMU build metadata (SSD component sources are derived from part names) ----
-
-  attribute def FmuMetadata {
-    attribute source : String;
-    attribute implementation : String;
-  }
-
   attribute def ControlInterfaceFmu :> FmuMetadata {
     attribute source = "build/fmus/ControlInterface.fmu";
   }
 
-  attribute def UdpBridgeFmu :> FmuMetadata {
-    attribute source = "build/fmus/UdpBridge.fmu";
+  attribute def RprStateSourceFmu :> FmuMetadata {
+    attribute source = "build/fmus/RprStateSource.fmu";
+    attribute implementation = "CoSimulation";
   }
 
   attribute def AutopilotModuleFmu :> FmuMetadata {
@@ -76,14 +60,25 @@ package Aircraft {
     attribute manualCommandDefault : Real = 0.6;
   }
 
-  port def UdpParameters :> ParameterInterface {
-    attribute transport : String = "UdpBridge";
+  port def RprSourceParameters :> ParameterInterface {
+    // Local ENU frame origin, WGS84 geodetic.
     attribute reference_latitude_deg : Real = 0.0;
     attribute reference_longitude_deg : Real = 0.0;
     attribute reference_altitude_m : Real = 0.0;
-    attribute remote_host : String = "127.0.0.1";
-    attribute telemetry_port : Integer = 5501;
-    attribute control_port : Integer = 5502;
+    // Per-instance RPR entity identity, type, marking and force.
+    attribute entity_site : Integer = 0;
+    attribute entity_application : Integer = 0;
+    attribute entity_entity : Integer = 0;
+    attribute entity_type_kind : Integer = 0;
+    attribute entity_type_domain : Integer = 0;
+    attribute entity_type_country : Integer = 0;
+    attribute entity_type_category : Integer = 0;
+    attribute entity_type_subcategory : Integer = 0;
+    attribute entity_type_specific : Integer = 0;
+    attribute entity_type_extra : Integer = 0;
+    attribute force : Integer = 0;
+    attribute marking_character_set : Integer = 0;
+    attribute marking_characters : String = "";
   }
 
   port def AutopilotParameters :> ParameterInterface {
@@ -178,7 +173,6 @@ package Aircraft {
   // ---- scenario parameter set (the scenario's tunable surface) ----
 
   attribute def MissionScenario :> ParameterSet {
-    attribute useBridgeInput : Boolean = false;
     attribute initX_km : Real = 0.0;
     attribute initY_km : Real = 0.0;
     attribute initZ_km : Real = 0.0;
@@ -281,7 +275,7 @@ package Aircraft {
 
   // ---- part definitions ----
 
-  part def ControlInterface {
+  part def ControlInterface :> FmuModel {
     doc /* F-16 HOTAS + side-stick interface for pilot inputs and trim switches. */
     attribute fmu_meta : ControlInterfaceFmu;
     in port parameters : ControlParameters;
@@ -289,18 +283,17 @@ package Aircraft {
     out port pilotCommand : PilotCommand;
   }
 
-  part def UdpBridge {
-    doc /* Adapter component carrying UDP telemetry and control to a companion runtime. */
-    attribute fmu_meta : UdpBridgeFmu;
-    in port parameters : UdpParameters;
-    in port statePosition : PositionXYZ;
-    in port stateOrientation : OrientationEuler;
+  part def RprStateSource :> FmuModel {
+    doc /* Converts the aircraft's local ENU state into flat RPR entity-state leaves for broadcast. */
+    attribute fmu_meta : RprStateSourceFmu;
+    in port parameters : RprSourceParameters;
+    in port position : PositionXYZ;
+    in port orientation : OrientationEuler;
     in port flightStatus : FlightStatusPacket;
-    in port missionStatus : MissionStatus;
-    out port pilotCommand : PilotCommand;
+    out port entityState : EntityState;
   }
 
-  part def AutopilotModule {
+  part def AutopilotModule :> FmuModel {
     doc /* F-16 autopilot, takes in sensor data and translates it into a equivalent hotas command. */
     attribute fmu_meta : AutopilotModuleFmu;
     in port parameters : AutopilotParameters;
@@ -311,13 +304,13 @@ package Aircraft {
     out port missionStatus : MissionStatus;
   }
 
-  part def CompositeAirframe {
+  part def CompositeAirframe :> FmuModel {
     doc /* F-16 aluminum/composite fuselage sized for high-supersonic operations with dorsal spine for avionics. */
     attribute fmu_meta : CompositeAirframeFmu;
     in port parameters : AirframeParameters;
   }
 
-  part def TurbofanPropulsion {
+  part def TurbofanPropulsion :> FmuModel {
     doc /* Pratt & Whitney F100 / GE F110 class augmented turbofan powering the F-16. */
     attribute fmu_meta : TurbofanPropulsionFmu;
     in port parameters : PropulsionParameters;
@@ -326,7 +319,7 @@ package Aircraft {
     out port fuel_consumption : FuelConsumptionRate;
   }
 
-  part def MissionComputer {
+  part def MissionComputer :> FmuModel {
     doc /* F-16C/D mission computer blending pilot HOTAS inputs with fly-by-wire control laws and stores management. */
     attribute fmu_meta : MissionComputerFmu;
     in port parameters : MissionComputerParameters;
@@ -337,7 +330,7 @@ package Aircraft {
     out port direction_command : OrientationEuler;
   }
 
-  part def FuelSystem {
+  part def FuelSystem :> FmuModel {
     doc /* Internal + conformal fuel storage management with transfer pumps feeding engine feed tanks. */
     attribute fmu_meta : FuelSystemFmu;
     in port parameters : FuelSystemParameters;
@@ -345,7 +338,7 @@ package Aircraft {
     out port fuelState : FuelLevelState;
   }
 
-  part def AdaptiveWingSystem {
+  part def AdaptiveWingSystem :> FmuModel {
     doc /* Leading-edge strake and cropped-delta wing sized to F-16 Block 50 geometry with 9g capability. This model includes the control system. */
     attribute fmu_meta : AdaptiveWingSystemFmu;
     in port parameters : WingParameters;
@@ -355,7 +348,7 @@ package Aircraft {
     out port liftInterface : LiftState;
   }
 
-  part def Environment {
+  part def Environment :> FmuModel {
     doc /* Tracking position and velocities of the aircraft and feeds the sensors. */
     attribute fmu_meta : EnvironmentFmu;
     in port parameters : EnvironmentParameters;
@@ -368,7 +361,7 @@ package Aircraft {
     out port flight_status : FlightStatusPacket;
   }
 
-  part def InputOutput {
+  part def InputOutput :> FmuModel {
     doc /* Simulation sink for debugging and recording mission/autopilot telemetry. */
     attribute fmu_meta : InputOutputFmu;
     in port locationXYZ : PositionXYZ;
@@ -382,7 +375,8 @@ package Aircraft {
 
   part def AircraftModel :> SspModel {
     part control_interface : ControlInterface;
-    part udp_bridge : UdpBridge;
+    part rpr_state_source : RprStateSource;
+    part rpr_entity : RprEntity;
     part autopilot_module : AutopilotModule;
     part composite_airframe : CompositeAirframe;
     part turbofan_propulsion : TurbofanPropulsion;
@@ -392,7 +386,6 @@ package Aircraft {
     part environment : Environment;
     part input_output : InputOutput;
 
-    connect udp_bridge.pilotCommand to control_interface.bridgeInput;
     connect control_interface.pilotCommand to mission_computer.manualInput;
     connect autopilot_module.autopilotCmd to mission_computer.autopilotInput;
     connect turbofan_propulsion.thrustOut to environment.thrust_in;
@@ -407,10 +400,10 @@ package Aircraft {
     connect environment.location to autopilot_module.currentLocation;
     connect environment.flight_status to autopilot_module.feedbackBus;
     connect environment.flight_status to adaptive_wing_system.flight_speed;
-    connect environment.location to udp_bridge.statePosition;
-    connect environment.orientation to udp_bridge.stateOrientation;
-    connect environment.flight_status to udp_bridge.flightStatus;
-    connect autopilot_module.missionStatus to udp_bridge.missionStatus;
+    connect environment.location to rpr_state_source.position;
+    connect environment.orientation to rpr_state_source.orientation;
+    connect environment.flight_status to rpr_state_source.flightStatus;
+    connect rpr_state_source.entityState to rpr_entity.entityState;
     connect environment.location to input_output.locationXYZ;
     connect environment.orientation to input_output.orientation;
     connect autopilot_module.autopilotCmd to input_output.autopilotCmd;
@@ -425,7 +418,6 @@ package Aircraft {
     attribute scenario : MissionScenario;
     part sut : AircraftModel;
 
-    bind sut.control_interface.parameters.useBridgeInput = scenario.useBridgeInput;
     bind sut.environment.parameters.initX_km = scenario.initX_km;
     bind sut.environment.parameters.initY_km = scenario.initY_km;
     bind sut.environment.parameters.initZ_km = scenario.initZ_km;

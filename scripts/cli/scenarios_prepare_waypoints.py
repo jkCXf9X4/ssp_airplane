@@ -15,11 +15,6 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--scenario", type=Path, required=True, help="Path to scenario JSON file.")
     parser.add_argument("--results-dir", type=Path, default=DEFAULT_RESULTS, help="Directory for generated artifacts.")
     parser.add_argument(
-        "--bridge-input",
-        action="store_true",
-        help="Enable interactive bridge/manual input with scripted fallback when no live command stream is present.",
-    )
-    parser.add_argument(
         "--baseline-ssv",
         type=Path,
         default=GENERATED_SCENARIO_SSV,
@@ -33,7 +28,6 @@ def main(argv: list[str] | None = None) -> int:
     prepared = prepare_scenario_for_simulation(
         scenario_path=args.scenario,
         results_dir=args.results_dir,
-        bridge_input=args.bridge_input,
         baseline_path=args.baseline_ssv,
     )
     print(

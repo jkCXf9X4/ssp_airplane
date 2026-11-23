@@ -18,11 +18,9 @@ package SimulationRequirements {
 
   // Waypoints should be injected into the simulation through an SSP parameter set.
 
-  // The recommended interactive solution keeps ssp4sim as the simulation master and connects
-  // the packaged aircraft SSP to a Rerun visual companion runtime through a dedicated
-  // UDP telemetry/control bridge component.
-  // Generic socket communication is preferred for the first implementation because it keeps the
-  // exchanged signals explicit and easier to debug than a larger native protocol mapping.
+  // The aircraft broadcasts its entity state one-way: a state-source FMU converts the local
+  // ENU/orientation state into the flat RPR entity-state leaves, and the generic RPR entity
+  // FMU publishes them. The aircraft consumes no inbound pilot command over that wire.
   // The first timing solution should use the existing ssp4sim realtime execution option.
   // A future Python API doStep(t) method and external package synchronization support are planned,
   // but should not be introduced in the initial integration.

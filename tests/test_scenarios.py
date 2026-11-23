@@ -69,7 +69,7 @@ def test_emit_waypoint_parameter_set_uses_bare_names_and_one_based_indices(tmp_p
     )
 
     text = output.read_text(encoding="utf-8")
-    assert 'name="useBridgeInput"' in text
+    assert 'name="useBridgeInput"' not in text
     assert 'name="initX_km"' in text
     assert 'name="initY_km"' in text
     assert 'name="initZ_km"' in text
@@ -132,4 +132,4 @@ def test_packaging_binds_one_based_scenario_set(tmp_path: Path) -> None:
     assert 'name="waypointX_km[1]"' in text
     assert 'name="waypointX_km[10]"' in text
     assert 'name="initX_km"' in text
-    assert 'name="useBridgeInput"' in text
+    assert 'name="useBridgeInput"' not in text

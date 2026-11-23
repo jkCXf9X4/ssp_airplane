@@ -5,7 +5,7 @@ This page is reference material. If you are new to the repository, start with `g
 Methodology summary:
 
 - Python is the canonical tool for generating architecture-derived artifacts and for running simulations with `ssp4sim`.
-- CMake is the canonical tool for building and packaging FMUs and the baseline SSP.
+- CMake is the canonical tool for packaging the built FMUs into the baseline SSP.
 - Python packaging commands listed below are compatibility commands, not the preferred workflow.
 
 ## Setup
@@ -25,7 +25,7 @@ Methodology summary:
 | Run simulator | `. venv/bin/activate && python -m scripts.cli.scenarios_run_ssp4sim --config-path build/results/config.json` |
 | Evaluate results against requirements | `. venv/bin/activate && python -m scripts.cli.scenarios_evaluate_results --scenario resources/scenarios/test_scenario.json --results-csv build/results/test_scenario_results.csv` |
 | Configure source builds under `build/cmake` | `cmake -S . -B build/cmake` |
-| Build all FMUs from `build/cmake` | `cmake --build build/cmake` |
+| Package the baseline SSP from `build/cmake` | `cmake --build build/cmake` |
 | Plot a path overlay | `. venv/bin/activate && python -m scripts.cli.analyze_plot --results-csv build/results/test_scenario_results.csv --scenario resources/scenarios/test_scenario.json --plot-path` |
 | Run tests | `. venv/bin/activate && pytest` |
 
@@ -36,10 +36,8 @@ Methodology summary:
 | Export architecture-derived artifacts | `. venv/bin/activate && python -m scripts.cli.artifacts_export` |
 | Verify SysML versus Modelica interfaces | `. venv/bin/activate && python -m scripts.cli.verify_modelica_variables` |
 | Verify Modelica equations | `. venv/bin/activate && python -m scripts.cli.verify_model_equations` |
-| Build the native bridge FMU and package the baseline SSP | `cmake --build build/cmake` |
 | Package all simulation artifacts explicitly | `cmake --build build/cmake --target package_simulation_artifacts` |
 | Build Modelica FMUs | Modelica FMUs are not CMake targets. They are built by `scripts/lib/common/modelica/build.py`, run as part of `. venv/bin/activate && python -m scripts.workflows.rebuild_from_source` |
-| Build the native bridge FMU only | `cmake --build build/cmake --target UdpBridge_fmu` |
 | Package the baseline SSP from built FMUs | `cmake --build build/cmake --target aircraft_ssp` |
 
 ## Verification
@@ -48,4 +46,3 @@ Methodology summary:
 | --- | --- |
 | Validate SSD XML | `. venv/bin/activate && python -m scripts.cli.verify_ssd_xml --ssd generated/SystemStructure.ssd` |
 | Check autopilot waypoint math | `. venv/bin/activate && pytest tests/test_autopilot_logic.py` |
-| Check native bridge FMU packaging | `. venv/bin/activate && pytest -q tests/test_udp_bridge_fmu.py` |

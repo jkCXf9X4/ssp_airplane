@@ -31,13 +31,9 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(AddNativeFmu)
 include(AddSspPackage)
 
-# The standalone Modelica FMUs are built by scripts.lib.common.modelica.
-add_subdirectory(models/udp_bridge)
-
-add_custom_target(build_fmus ALL
-  DEPENDS
-    UdpBridge_fmu
-)
+# The standalone Modelica FMUs are built by scripts.lib.common.modelica, so
+# there are no native FMU subdirectories left to add here.
+add_custom_target(build_fmus ALL)
 
 add_ssp_package(
   TARGET aircraft_ssp

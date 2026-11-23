@@ -110,16 +110,14 @@ def emit_waypoint_parameter_set(
     output_path: Path,
     *,
     baseline_path: Path = GENERATED_SCENARIO_SSV,
-    enable_bridge_input: bool = False,
     waypoint_proximity_km: float | None = None,
     target_airspeed_mps: float | None = None,
 ) -> Path:
     """Clone the generated scenario parameter set and override the waypoints.
 
     The baseline ``GENERATED_SCENARIO_SSV`` carries the architecture's bare
-    scenario member names (``waypointX_km[1..10]``, ``initX_km``,
-    ``useBridgeInput``, ...) that the analysis SSM maps onto component
-    parameters. This helper copies the baseline to ``output_path`` and
+    scenario member names (``waypointX_km[1..10]``, ``initX_km``, ...) that the
+    analysis SSM maps onto component parameters. This helper copies the baseline to ``output_path`` and
     overrides the members the scenario drives, so the result stays on the bare
     name scheme the SSM applies. Waypoint indices are one-based to match the
     SSM mapping targets and the FMU-declared array indices.
@@ -141,8 +139,6 @@ def emit_waypoint_parameter_set(
             ssv.add_parameter(name, value, type_name=type_name)
 
     with SSV(output_path, mode="a") as ssv:
-        add_or_override(ssv, "useBridgeInput", "true" if enable_bridge_input else "false", "Boolean")
-
         if local_points:
             first = local_points[0]
             add_or_override(ssv, "initX_km", f"{float(first['x_km']):.3f}", "Real")
@@ -174,7 +170,6 @@ def emit_waypoint_parameter_set(
 def prepare_scenario_for_simulation(
     scenario_path: Path,
     results_dir: Path = DEFAULT_RESULTS,
-    bridge_input: bool = False,
     *,
     baseline_path: Path | None = None,
 ) -> PreparedScenario:
@@ -202,7 +197,6 @@ def prepare_scenario_for_simulation(
         local_points,
         parameter_set_path,
         baseline_path=baseline_path or GENERATED_SCENARIO_SSV,
-        enable_bridge_input=bridge_input,
         waypoint_proximity_km=overrides.get("waypoint_proximity_km"),
         target_airspeed_mps=overrides.get("target_airspeed_mps"),
     )

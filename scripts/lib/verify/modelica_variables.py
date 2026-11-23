@@ -6,7 +6,8 @@ import sys
 from pathlib import Path
 from typing import List
 
-from pycps_sysml2 import load
+from pycps_sysml2 import core_definitions, load
+from pyfmi_rpr import rpr_entity
 
 from scripts.lib.common.modelica import MODELICA_MODEL_SPECS
 from scripts.lib.paths import ARCHITECTURE_DIR
@@ -43,7 +44,7 @@ def _scan_file(path: Path, class_name: str) -> List[str]:
 
 
 def verify_modelica_variables(architecture_path: Path = DEFAULT_ARCH_DIR) -> int:
-    architecture = load(architecture_path)
+    architecture = load(architecture_path, core_definitions(), rpr_entity())
     part_names = set(architecture.part_definitions)
 
     overall_issues: List[str] = []
